@@ -5,7 +5,7 @@ import (
 )
 
 func Init() error {
-	viper.AddConfigPath("./config")
+	viper.AddConfigPath("./config/json")
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
 
