@@ -1,4 +1,4 @@
-package v1handlers
+package v1
 
 import (
 	"legocy-go/pkg/lego/usecase"
