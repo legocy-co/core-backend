@@ -9,7 +9,7 @@ type LegoSeriesPostgres struct {
 	Name string `gorm:"unique"`
 }
 
-func ToLegoSeriesPostgres(s *models.LegoSeries) *LegoSeriesPostgres {
+func FromLegoSeries(s *models.LegoSeries) *LegoSeriesPostgres {
 	return &LegoSeriesPostgres{
 		Name: s.Name,
 	}
