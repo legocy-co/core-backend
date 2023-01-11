@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"legocy-go/pkg/lego/models"
+	models "legocy-go/pkg/lego/models"
 )
 
 type LegoSetRepository interface {

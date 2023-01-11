@@ -1,15 +1,15 @@
 package usecase
 
 import (
-	"legocy-go/pkg/auth/repository"
+	r "legocy-go/pkg/auth/repository"
 )
 
 type UserUseCase struct {
-	userRepo repository.UserRepository
+	userRepo r.UserRepository
 }
 
-func NewUserUseCase(r repository.UserRepository) *UserUseCase {
+func NewUserUseCase(repo r.UserRepository) *UserUseCase {
 	return &UserUseCase{
-		userRepo: r,
+		userRepo: repo,
 	}
 }

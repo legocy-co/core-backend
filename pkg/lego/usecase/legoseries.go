@@ -1,15 +1,15 @@
 package usecase
 
 import (
-	"legocy-go/pkg/lego/repository"
+	r "legocy-go/pkg/lego/repository"
 )
 
 type LegoSeriesUseCase struct {
-	legoSeriesRepo repository.LegoSeriesRepository
+	legoSeriesRepo r.LegoSeriesRepository
 }
 
-func NewLegoSeriesUseCase(r repository.LegoSeriesRepository) *LegoSeriesUseCase {
+func NewLegoSeriesUseCase(repo r.LegoSeriesRepository) *LegoSeriesUseCase {
 	return &LegoSeriesUseCase{
-		legoSeriesRepo: r,
+		legoSeriesRepo: repo,
 	}
 }

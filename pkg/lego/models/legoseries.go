@@ -1,4 +1,4 @@
-package models
+package lego
 
 type LegoSeries struct {
 	ID   int    `json:"id"`

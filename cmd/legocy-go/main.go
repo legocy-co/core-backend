@@ -3,13 +3,14 @@ package main
 import (
 	"legocy-go/config"
 	"legocy-go/server"
-	"log"
 )
 
 func main() {
 
-	if err := config.Init(); err != nil {
-		log.Fatalln("Could not Read config")
+	// TODO: Write real logic
+	db := config.POSTGRES_DB
+
+	if db == "" {
 		return
 	}
 

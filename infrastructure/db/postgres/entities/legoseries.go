@@ -1,16 +1,23 @@
 package postgres
 
 import (
-	"legocy-go/pkg/lego/models"
+	models "legocy-go/pkg/lego/models"
 )
 
 type LegoSeriesPostgres struct {
-	Name string
+	Model
+	Name string `gorm:"unique"`
+}
+
+func ToLegoSeriesPostgres(s *models.LegoSeries) *LegoSeriesPostgres {
+	return &LegoSeriesPostgres{
+		Name: s.Name,
+	}
 }
 
 func (s *LegoSeriesPostgres) ToLegoSeries() *models.LegoSeries {
 	return &models.LegoSeries{
-		ID:   -1,
+		ID:   int(s.ID),
 		Name: s.Name,
 	}
 }
