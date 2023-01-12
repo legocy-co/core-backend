@@ -1,32 +1,41 @@
 package postgres
 
 import (
-	"database/sql"
 	"fmt"
-	"legocy-go/infrastructure/db"
+	config "legocy-go/config"
+	entities "legocy-go/infrastructure/db/postgres/entities"
+
+	"github.com/jinzhu/gorm"
 )
 
 type PostrgresConnection struct {
-	config *db.ConnectionConfig
+	config *config.DatabaseConfig
+	db     *gorm.DB
 }
 
-func (p *PostrgresConnection) getConnectionString() string {
+func (psql *PostrgresConnection) getConnectionString() string {
 	return fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		p.config.Hostname, p.config.Port, p.config.Username, p.config.Password, p.config.DBName)
+		psql.config.Hostname, psql.config.Port, psql.config.DbUser, psql.config.DbPassword, psql.config.DbName)
 }
 
-func (p *PostrgresConnection) Connect() (*sql.DB, error) {
+func (psql *PostrgresConnection) Init() {
 
-	db, err := sql.Open("postgres", p.getConnectionString())
+	conn, err := gorm.Open("postgres", psql.getConnectionString())
 	if err != nil {
-		panic(err)
+		return
 	}
 
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
+	psql.db = conn
+	psql.db.LogMode(true)
 
-	return db, err
+	psql.db.Debug().AutoMigrate(
+		entities.LegoSeriesPostgres{},
+		entities.LegoSetPostgres{},
+	)
+}
+
+func (psql *PostrgresConnection) GetDB() *gorm.DB {
+	defer psql.db.Close()
+	return psql.db
 }
