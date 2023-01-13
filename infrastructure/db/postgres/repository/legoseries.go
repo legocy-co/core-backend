@@ -11,18 +11,19 @@ type LegoSeriesPostgresRepository struct {
 	conn *p.PostrgresConnection
 }
 
-func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c *context.Context, s *models.LegoSeries) error {
+func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeries) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {
 		return p.ErrConnectionLost
 	}
 
-	db.Create(s)
+	entity := entities.FromLegoSeries(s)
+	db.Create(entity)
 	return nil
 }
 
-func (psql *LegoSeriesPostgresRepository) GetLegoSeries(c *context.Context) ([]*models.LegoSeries, error) {
+func (psql *LegoSeriesPostgresRepository) GetLegoSeries(c context.Context) ([]*models.LegoSeries, error) {
 	var series []*models.LegoSeries
 	db := psql.conn.GetDB()
 
@@ -40,7 +41,7 @@ func (psql *LegoSeriesPostgresRepository) GetLegoSeries(c *context.Context) ([]*
 	return series, nil
 }
 
-func (psql *LegoSeriesPostgresRepository) DeleteLegoSeries(c *context.Context, id int) error {
+func (psql *LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {

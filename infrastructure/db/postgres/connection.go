@@ -36,6 +36,5 @@ func (psql *PostrgresConnection) Init() {
 }
 
 func (psql *PostrgresConnection) GetDB() *gorm.DB {
-	defer psql.db.Close()
 	return psql.db
 }
