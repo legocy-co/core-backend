@@ -6,7 +6,7 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(c *context.Context) error
+	CreateUser(c *context.Context, u *models.User, password string) error
 	GetUser(c *context.Context) (*models.User, error)
 	DeleteUser(c *context.Context, id int) error
 }

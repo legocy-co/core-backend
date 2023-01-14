@@ -8,9 +8,19 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+var postgresConn *PostrgresConnection // private singleton instance
+
 type PostrgresConnection struct {
 	config *config.DatabaseConfig
 	db     *gorm.DB
+}
+
+func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (*PostrgresConnection, error) {
+	if postgresConn != nil {
+		return nil, ErrConnectionAlreadyExists
+	}
+	postgresConn = &PostrgresConnection{config, db}
+	return postgresConn, nil
 }
 
 func (psql *PostrgresConnection) getConnectionString() string {
