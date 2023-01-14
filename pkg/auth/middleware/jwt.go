@@ -10,15 +10,14 @@ import (
 var jwtKey = "supersecretinfo" // TODO: Move to config
 
 type JWTClaim struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	Email string `json:"email"`
 	jwt.StandardClaims
 }
 
-func GenerateJWT(username, email string) (tokenString string, err error) {
+func GenerateJWT(email string) (tokenString string, err error) {
 	expirationTime := time.Now().Add(1 * time.Hour)
 	claims := &JWTClaim{
-		Username: username,
+		Email: email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

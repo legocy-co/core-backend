@@ -21,7 +21,6 @@ func FromUser(u *models.User, password string) *UserPostgres {
 
 func (up *UserPostgres) ToUser() *models.User {
 	return &models.User{
-		ID:       int(up.ID),
 		Username: up.Username,
 		Email:    up.Email,
 	}

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	d "legocy-go/infrastructure/db"
 	p "legocy-go/infrastructure/db/postgres"
 	entities "legocy-go/infrastructure/db/postgres/entities"
 	models "legocy-go/pkg/lego/models"
@@ -15,7 +16,7 @@ func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s 
 	db := psql.conn.GetDB()
 
 	if db == nil {
-		return p.ErrConnectionLost
+		return d.ErrConnectionLost
 	}
 
 	entity := entities.FromLegoSeries(s)
@@ -28,7 +29,7 @@ func (psql *LegoSeriesPostgresRepository) GetLegoSeries(c context.Context) ([]*m
 	db := psql.conn.GetDB()
 
 	if db == nil {
-		return series, p.ErrConnectionLost
+		return series, d.ErrConnectionLost
 	}
 
 	var entitiesList []*entities.LegoSeriesPostgres
@@ -45,7 +46,7 @@ func (psql *LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id
 	db := psql.conn.GetDB()
 
 	if db == nil {
-		return p.ErrConnectionLost
+		return d.ErrConnectionLost
 	}
 
 	db.Delete(&entities.LegoSeriesPostgres{}, id)

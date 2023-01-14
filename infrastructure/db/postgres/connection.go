@@ -3,6 +3,7 @@ package postgres
 import (
 	"fmt"
 	config "legocy-go/config"
+	d "legocy-go/infrastructure/db"
 	entities "legocy-go/infrastructure/db/postgres/entities"
 
 	"github.com/jinzhu/gorm"
@@ -15,9 +16,10 @@ type PostrgresConnection struct {
 	db     *gorm.DB
 }
 
+// Call from outside
 func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (*PostrgresConnection, error) {
 	if postgresConn != nil {
-		return nil, ErrConnectionAlreadyExists
+		return nil, d.ErrConnectionAlreadyExists
 	}
 	postgresConn = &PostrgresConnection{config, db}
 	return postgresConn, nil

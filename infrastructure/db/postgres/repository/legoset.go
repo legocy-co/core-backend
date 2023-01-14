@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	d "legocy-go/infrastructure/db"
 	p "legocy-go/infrastructure/db/postgres"
 	entities "legocy-go/infrastructure/db/postgres/entities"
 	models "legocy-go/pkg/lego/models"
@@ -15,7 +16,7 @@ func (psql *LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *model
 	db := psql.conn.GetDB()
 
 	if db == nil {
-		return p.ErrConnectionLost
+		return d.ErrConnectionLost
 	}
 
 	entity := entities.FromLegoSet(s)
