@@ -1,12 +1,13 @@
 package v1
 
 import (
+	h "legocy-go/api/v1/handlers"
 	m "legocy-go/api/v1/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter(tokenHandler h.TokenHandler, legoSeriesHandler h.LegoSeriesHandler) *gin.Engine {
 	r := gin.Default()
 
 	r.Use(func(c *gin.Context) {
@@ -25,9 +26,17 @@ func InitRouter() *gin.Engine {
 		}
 	})
 
-	v1 := r.Group("/api/v1").Use(m.Auth())
+	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/", nil)
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/token", tokenHandler.GenerateToken)
+			auth.POST("/register", tokenHandler.UserRegister)
+		}
+		series := v1.Group("/series").Use(m.Auth())
+		{
+			series.GET("/", legoSeriesHandler.ListSeries)
+		}
 	}
 
 	return r

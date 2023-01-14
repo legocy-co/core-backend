@@ -11,6 +11,10 @@ type UserUseCase struct {
 	repo r.UserRepository
 }
 
+func NewUserUsecase(repo r.UserRepository) UserUseCase {
+	return UserUseCase{repo: repo}
+}
+
 func (s *UserUseCase) ValidateUser(c context.Context, req res.JWTRequest) error {
 	return s.repo.ValidateUser(c, req.Email, req.Password)
 }

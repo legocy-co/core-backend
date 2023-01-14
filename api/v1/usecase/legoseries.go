@@ -11,6 +11,10 @@ type LegoSeriesService struct {
 	repo r.LegoSeriesRepository
 }
 
+func NewLegoSeriesService(repo r.LegoSeriesRepository) LegoSeriesService {
+	return LegoSeriesService{repo: repo}
+}
+
 func (s *LegoSeriesService) ListSeries(ctx context.Context) ([]*models.LegoSeries, error) {
 	return s.repo.GetLegoSeriesList(ctx)
 }

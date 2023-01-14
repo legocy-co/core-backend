@@ -14,6 +14,10 @@ type UserPostgresRepository struct {
 	conn *p.PostrgresConnection
 }
 
+func NewUserPostgresRepository(conn *p.PostrgresConnection) UserPostgresRepository {
+	return UserPostgresRepository{conn: conn}
+}
+
 func (r *UserPostgresRepository) CreateUser(c context.Context, u *models.User, password string) error {
 	db := r.conn.GetDB()
 
@@ -31,7 +35,7 @@ func (r *UserPostgresRepository) CreateUser(c context.Context, u *models.User, p
 	return nil
 }
 
-func (r *UserPostgresRepository) ValidateUser(c context.Context, username, email, password string) error {
+func (r *UserPostgresRepository) ValidateUser(c context.Context, email, password string) error {
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -39,7 +43,7 @@ func (r *UserPostgresRepository) ValidateUser(c context.Context, username, email
 	}
 
 	var entity *entities.UserPostgres
-	db.Model(entities.UserPostgres{Username: username, Email: email}).First(entity)
+	db.Model(entities.UserPostgres{Email: email}).First(entity)
 
 	if entity == nil {
 		return err.ErrUserNotFound

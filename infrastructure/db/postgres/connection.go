@@ -42,6 +42,7 @@ func (psql *PostrgresConnection) Init() {
 	psql.db.LogMode(true)
 
 	psql.db.Debug().AutoMigrate(
+		entities.UserPostgres{},
 		entities.LegoSeriesPostgres{},
 		entities.LegoSetPostgres{},
 	)

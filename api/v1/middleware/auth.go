@@ -11,7 +11,7 @@ func Auth() gin.HandlerFunc {
 
 		tokenString := ctx.GetHeader("Authorization")
 		if tokenString == "" {
-			ctx.JSON(401, gin.H{"error": "bad request"})
+			ctx.JSON(401, gin.H{"error": "Token Header not found"})
 			ctx.Abort()
 			return
 		}

@@ -9,7 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GenerateToken(c *gin.Context, service s.UserUseCase) {
+type TokenHandler struct {
+	service s.UserUseCase
+}
+
+func NewTokenHandler(service s.UserUseCase) TokenHandler {
+	return TokenHandler{service: service}
+}
+
+func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	var jwtRequest res.JWTRequest
 	if err := c.ShouldBindJSON(&jwtRequest); err != nil {
@@ -18,7 +26,7 @@ func GenerateToken(c *gin.Context, service s.UserUseCase) {
 		return
 	}
 
-	errIsValidUser := service.ValidateUser(c.Request.Context(), jwtRequest)
+	errIsValidUser := th.service.ValidateUser(c.Request.Context(), jwtRequest)
 	if errIsValidUser != nil {
 		res.ErrorRespond(c.Writer, "Invalid credentials")
 		return
@@ -42,7 +50,7 @@ func GenerateToken(c *gin.Context, service s.UserUseCase) {
 
 }
 
-func UserRegister(c *gin.Context, service s.UserUseCase) {
+func (th *TokenHandler) UserRegister(c *gin.Context) {
 	var registerReq res.UserRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
@@ -52,7 +60,7 @@ func UserRegister(c *gin.Context, service s.UserUseCase) {
 	}
 
 	user := registerReq.ToUser()
-	if err := service.CreateUser(c, user, registerReq.Password); err != nil {
+	if err := th.service.CreateUser(c, user, registerReq.Password); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		c.Abort()
 		return
