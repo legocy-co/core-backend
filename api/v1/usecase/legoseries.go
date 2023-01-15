@@ -22,3 +22,11 @@ func (s *LegoSeriesService) ListSeries(ctx context.Context) ([]*models.LegoSerie
 func (s *LegoSeriesService) DetailSeries(ctx context.Context, id int) (*models.LegoSeries, error) {
 	return s.repo.GetLegoSeries(ctx, id)
 }
+
+func (s *LegoSeriesService) CreateLegoSeries(ctx context.Context, m *models.LegoSeries) error {
+	return s.repo.CreateLegoSeries(ctx, m)
+}
+
+func (s *LegoSeriesService) DeleteSeries(ctx context.Context, id int) error {
+	return s.repo.DeleteLegoSeries(ctx, id)
+}

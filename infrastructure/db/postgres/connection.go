@@ -6,7 +6,9 @@ import (
 	d "legocy-go/infrastructure/db"
 	entities "legocy-go/infrastructure/db/postgres/entities"
 
-	"github.com/jinzhu/gorm"
+	postgres "gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var postgresConn *PostrgresConnection // private singleton instance
@@ -32,14 +34,16 @@ func (psql *PostrgresConnection) getConnectionString() string {
 }
 
 func (psql *PostrgresConnection) Init() {
-
-	conn, err := gorm.Open("postgres", psql.getConnectionString())
+	dsn := psql.getConnectionString()
+	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
+		fmt.Println("Error connecting to database!", err)
 		return
 	}
 
 	psql.db = conn
-	psql.db.LogMode(true)
 
 	psql.db.Debug().AutoMigrate(
 		entities.UserPostgres{},

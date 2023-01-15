@@ -3,12 +3,16 @@ package v1
 import (
 	h "legocy-go/api/v1/handlers"
 	m "legocy-go/api/v1/middleware"
+	s "legocy-go/api/v1/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter(tokenHandler h.TokenHandler, legoSeriesHandler h.LegoSeriesHandler) *gin.Engine {
+func InitRouter(userService s.UserUseCase, seriesService s.LegoSeriesService) *gin.Engine {
 	r := gin.Default()
+
+	tokenHandler := h.NewTokenHandler(userService)
+	legoSeriesHandler := h.NewLegoSeriesHandler(seriesService)
 
 	r.Use(func(c *gin.Context) {
 		// add header Access-Control-Allow-Origin
@@ -36,6 +40,9 @@ func InitRouter(tokenHandler h.TokenHandler, legoSeriesHandler h.LegoSeriesHandl
 		series := v1.Group("/series").Use(m.Auth())
 		{
 			series.GET("/", legoSeriesHandler.ListSeries)
+			series.POST("/", legoSeriesHandler.SeriesCreate)
+			series.GET("/:seriesID", legoSeriesHandler.DetailSeries)
+			series.DELETE("/:seriesID", legoSeriesHandler.DeleteSeries)
 		}
 	}
 

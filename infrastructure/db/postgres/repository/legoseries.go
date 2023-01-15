@@ -24,8 +24,14 @@ func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s 
 	}
 
 	entity := entities.FromLegoSeries(s)
-	db.Create(entity)
-	return nil
+	result := db.Create(&entity)
+
+	if result.Error == nil {
+		db.Commit()
+		return nil
+	}
+
+	return result.Error
 }
 
 func (psql *LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error) {
@@ -37,7 +43,7 @@ func (psql *LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) (
 	}
 
 	var entitiesList []*entities.LegoSeriesPostgres
-	db.Find(entitiesList)
+	db.Find(&entitiesList)
 
 	for _, entity := range entitiesList {
 		series = append(series, entity.ToLegoSeries())

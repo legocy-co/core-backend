@@ -6,8 +6,8 @@ import (
 
 type UserPostgres struct {
 	Model
-	Username string `gorm:"not null"`
-	Email    string `gorm:"unique not null"`
+	Username string `gorm:"unique;not null"`
+	Email    string `gorm:"unique;not null"`
 	Password string
 }
 

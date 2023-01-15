@@ -2,9 +2,13 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"legocy-go/helpers"
 )
+
+var appConf *AppConfig // private singleton variable
+var DefaultJWTConfig *JWTConfig = &JWTConfig{SecretKey: "test12345", AccesTokenLifeTime: 3}
 
 type DatabaseConfig struct {
 	Hostname   string `yaml:"hostname" json:"hostname"`
@@ -15,7 +19,8 @@ type DatabaseConfig struct {
 }
 
 type JWTConfig struct {
-	SecretKey string `yaml:"secret_key" json:"secret_key"`
+	SecretKey          string `yaml:"secret_key" json:"secret_key"`
+	AccesTokenLifeTime int    `yaml:"acces_tokern_lifetime_hours" json:"acces_token_lifetime_hours"`
 }
 
 type AppConfig struct {
@@ -23,9 +28,26 @@ type AppConfig struct {
 	JwtConf JWTConfig      `yaml:"jwt" json:"jwt"`
 }
 
-var appConf *AppConfig // private singleton variable
 func GetAppConfig() *AppConfig {
 	return appConf
+}
+
+func GetDBConfig() *DatabaseConfig {
+	cfg := GetAppConfig()
+	if cfg == nil {
+		return nil
+	}
+
+	return &cfg.DbConf
+}
+
+func GetJWTConfig() *JWTConfig {
+	cfg := GetAppConfig()
+	if cfg == nil {
+		return DefaultJWTConfig
+	}
+
+	return &cfg.JwtConf
 }
 
 func SetAppConfig(cfg *AppConfig) error {
@@ -38,7 +60,7 @@ func SetAppConfig(cfg *AppConfig) error {
 }
 
 func SetupFromJSON(fp string) error {
-	var cfg *AppConfig
+	var cfg AppConfig
 
 	if fileExists := helpers.FileExists(fp); !fileExists {
 		return ErrConfigFileDoesNotExist
@@ -49,11 +71,13 @@ func SetupFromJSON(fp string) error {
 		return err
 	}
 
-	err = json.Unmarshal(raw, cfg)
+	fmt.Println(raw)
+
+	err = json.Unmarshal(raw, &cfg)
 	if err != nil {
 		return err
 	}
 
-	appConf = cfg
+	SetAppConfig(&cfg)
 	return nil
 }

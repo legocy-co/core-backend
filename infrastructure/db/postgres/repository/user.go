@@ -2,11 +2,12 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	h "legocy-go/helpers"
 	d "legocy-go/infrastructure/db"
 	p "legocy-go/infrastructure/db/postgres"
 	entities "legocy-go/infrastructure/db/postgres/entities"
-	err "legocy-go/pkg/auth/errors"
+	e "legocy-go/pkg/auth/errors"
 	models "legocy-go/pkg/auth/models"
 )
 
@@ -31,7 +32,12 @@ func (r *UserPostgresRepository) CreateUser(c context.Context, u *models.User, p
 
 	var entity entities.UserPostgres = *entities.FromUser(u, passwordHash)
 
-	db.Create(&entity)
+	result := db.Create(&entity)
+	if result.Error != nil {
+		return e.ErrUserAlreadyExists
+	}
+	db.Commit()
+
 	return nil
 }
 
@@ -39,19 +45,21 @@ func (r *UserPostgresRepository) ValidateUser(c context.Context, email, password
 
 	db := r.conn.GetDB()
 	if db == nil {
+		fmt.Println("Error Connecting to database!")
 		return d.ErrConnectionLost
 	}
 
 	var entity *entities.UserPostgres
-	db.Model(entities.UserPostgres{Email: email}).First(entity)
+	db.Model(entities.UserPostgres{}).First(&entity, entities.UserPostgres{Email: email})
 
 	if entity == nil {
-		return err.ErrUserNotFound
+		fmt.Printf("User with email = %v not found", email)
+		return e.ErrUserNotFound
 	}
 
 	passwordsMacthed := h.CheckPasswordHash(password, entity.Password)
 	if !passwordsMacthed {
-		return err.ErrWrongPassword
+		return e.ErrWrongPassword
 	}
 
 	return nil
@@ -75,7 +83,7 @@ func (r *UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, er
 	var errOutput error
 
 	if len(users) == 0 {
-		errOutput = err.ErrUserNotFound
+		errOutput = e.ErrUserNotFound
 	}
 
 	return users, errOutput
@@ -92,7 +100,7 @@ func (r *UserPostgresRepository) GetUser(c context.Context, id int) (*models.Use
 
 	db.First(entity, id)
 	if entity == nil {
-		return user, err.ErrUserNotFound
+		return user, e.ErrUserNotFound
 	}
 
 	user = entity.ToUser()
@@ -106,6 +114,7 @@ func (r *UserPostgresRepository) DeleteUser(c context.Context, id int) error {
 	}
 
 	db.Delete(&entities.UserPostgres{}, id)
+	db.Commit()
 	return nil
 
 }

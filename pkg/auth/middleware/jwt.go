@@ -2,12 +2,14 @@ package auth
 
 import (
 	"errors"
+	c "legocy-go/config"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = "supersecretinfo" // TODO: Move to config
+var JwtConf *c.JWTConfig = c.GetJWTConfig()
+var jwtKey string = JwtConf.SecretKey
 
 type JWTClaim struct {
 	Email string `json:"email"`
@@ -15,7 +17,7 @@ type JWTClaim struct {
 }
 
 func GenerateJWT(email string) (tokenString string, err error) {
-	expirationTime := time.Now().Add(1 * time.Hour)
+	expirationTime := time.Now().Add(time.Duration(JwtConf.AccesTokenLifeTime) * time.Hour)
 	claims := &JWTClaim{
 		Email: email,
 		StandardClaims: jwt.StandardClaims{
@@ -23,7 +25,7 @@ func GenerateJWT(email string) (tokenString string, err error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err = token.SignedString(jwtKey)
+	tokenString, err = token.SignedString([]byte(jwtKey))
 	return
 }
 

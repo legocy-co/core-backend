@@ -1,7 +1,7 @@
 package main
 
 import (
-	h "legocy-go/api/v1/handlers"
+	"fmt"
 	r "legocy-go/api/v1/router"
 	s "legocy-go/api/v1/usecase"
 	config "legocy-go/config"
@@ -9,14 +9,14 @@ import (
 	repo "legocy-go/infrastructure/db/postgres/repository"
 	"log"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 func main() {
 
 	// Config
 
-	err := config.SetupFromJSON("config/json/config.json")
+	err := config.SetupFromJSON("/Users/wjojf/Documents/dev/legocy-go-clean/config/json/config.json")
 	if err != nil {
 		log.Fatalln(err)
 		return
@@ -37,22 +37,18 @@ func main() {
 		return
 	}
 	conn.Init()
+	fmt.Println(conn)
 
 	// Repositories
 	userRepo := repo.NewUserPostgresRepository(conn)
 	seriesRepo := repo.NewLegoSeriesPostgresRepository(conn)
 
 	// Services
-
 	userService := s.NewUserUsecase(&userRepo)
 	seriesService := s.NewLegoSeriesService(&seriesRepo)
 
-	// Handlers
-	tokenHandler := h.NewTokenHandler(userService)
-	seriesHandler := h.NewLegoSeriesHandler(seriesService)
-
 	// Router
-	router := r.InitRouter(tokenHandler, seriesHandler)
+	router := r.InitRouter(userService, seriesService)
 	router.Run(":" + "8080")
 
 }

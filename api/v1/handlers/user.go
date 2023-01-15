@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	res "legocy-go/api/v1/resources"
 	s "legocy-go/api/v1/usecase"
 	jwt "legocy-go/pkg/auth/middleware"
@@ -34,6 +35,7 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	token, err := jwt.GenerateJWT(jwtRequest.Email)
 	if err != nil {
+		fmt.Println(err)
 		res.ErrorRespond(c.Writer, "Error generating token")
 		return
 	}
@@ -61,7 +63,7 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 
 	user := registerReq.ToUser()
 	if err := th.service.CreateUser(c, user, registerReq.Password); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()
 		return
 	}

@@ -1,3 +1,14 @@
 {
-    "postgres_db": "test_db"
+    "database": {
+        "hostname": "localhost",
+        "port": 5432,
+        "db_name": "legocy_go",
+        "db_user": "wjojf",
+        "db_password": "12345"
+    },
+
+    "jwt": {
+        "secret_key": "Srka/sjFriZpxBmPIyULv7pXJ3WWy8Dq8Hvajj/uaUo=",
+        "acces_token_lifetime_hours": 2
+    }
 }

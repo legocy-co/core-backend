@@ -1,6 +1,6 @@
 package lego
 
 type LegoSeries struct {
-	ID   int    `json:"int"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
