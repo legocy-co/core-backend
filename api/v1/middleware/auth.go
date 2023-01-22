@@ -26,3 +26,10 @@ func Auth() gin.HandlerFunc {
 		ctx.Next()
 	}
 }
+
+func AdminUserOnly() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		//TODO: validate Admin token
+		ctx.Next()
+	}
+}
