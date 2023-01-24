@@ -9,10 +9,10 @@ import (
 )
 
 type LegoSeriesPostgresRepository struct {
-	conn *p.PostrgresConnection
+	conn *p.PostgresConnection
 }
 
-func NewLegoSeriesPostgresRepository(conn *p.PostrgresConnection) LegoSeriesPostgresRepository {
+func NewLegoSeriesPostgresRepository(conn *p.PostgresConnection) LegoSeriesPostgresRepository {
 	return LegoSeriesPostgresRepository{conn: conn}
 }
 

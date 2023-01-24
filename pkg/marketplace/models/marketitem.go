@@ -6,6 +6,7 @@ import (
 )
 
 type MarketItem struct {
+	ID       int
 	LegoSet  lego.LegoSet
 	Seller   auth.User
 	Price    float32

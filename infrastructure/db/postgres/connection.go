@@ -11,29 +11,28 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var postgresConn *PostrgresConnection // private singleton instance
+var postgresConn *PostgresConnection // private singleton instance
 
-type PostrgresConnection struct {
+type PostgresConnection struct {
 	config *config.DatabaseConfig
 	db     *gorm.DB
 }
 
-// Call from outside
-func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (*PostrgresConnection, error) {
+func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (*PostgresConnection, error) {
 	if postgresConn != nil {
 		return nil, d.ErrConnectionAlreadyExists
 	}
-	postgresConn = &PostrgresConnection{config, db}
+	postgresConn = &PostgresConnection{config, db}
 	return postgresConn, nil
 }
 
-func (psql *PostrgresConnection) getConnectionString() string {
+func (psql *PostgresConnection) getConnectionString() string {
 	return fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		psql.config.Hostname, psql.config.Port, psql.config.DbUser, psql.config.DbPassword, psql.config.DbName)
 }
 
-func (psql *PostrgresConnection) Init() {
+func (psql *PostgresConnection) Init() {
 	dsn := psql.getConnectionString()
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
@@ -49,9 +48,12 @@ func (psql *PostrgresConnection) Init() {
 		entities.UserPostgres{},
 		entities.LegoSeriesPostgres{},
 		entities.LegoSetPostgres{},
+		entities.CurrencyPostgres{},
+		entities.LocationPostgres{},
+		entities.MarketItemPostgres{},
 	)
 }
 
-func (psql *PostrgresConnection) GetDB() *gorm.DB {
+func (psql *PostgresConnection) GetDB() *gorm.DB {
 	return psql.db
 }

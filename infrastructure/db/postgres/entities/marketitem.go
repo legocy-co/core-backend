@@ -1,16 +1,8 @@
 package postgres
 
-type LocationPostgres struct {
-	Model
-	Country string `gorm:"uniqueIndex:idx_country_city"`
-	City    string `gorm:"uniqueIndex:idx_country_city""`
-}
-
-type CurrencyPostgres struct {
-	Model
-	Name   string `gorm:"unique"`
-	Symbol string `gorm:"unique"`
-}
+import (
+	models "legocy-go/pkg/marketplace/models"
+)
 
 type MarketItemPostgres struct {
 	Model
@@ -23,4 +15,24 @@ type MarketItemPostgres struct {
 	Seller             UserPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	LocationPostgresID uint
 	Location           LocationPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+}
+
+func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
+	return &models.MarketItem{
+		LegoSet:  *mp.LegoSet.ToLegoSet(),
+		Seller:   *mp.Seller.ToUser(),
+		Price:    mp.Price,
+		Currency: *mp.Currency.ToCurrency(),
+		Location: *mp.Location.ToLocation(),
+	}
+}
+
+func FromMarketItem(mi *models.MarketItem) *MarketItemPostgres {
+	return &MarketItemPostgres{
+		Price:              mi.Price,
+		CurrencyPostgresID: uint(mi.Currency.ID),
+		LegoSetPostgresID:  uint(mi.LegoSet.ID),
+		UserPostgresID:     uint(mi.Seller.ID),
+		LocationPostgresID: uint(mi.Location.ID),
+	}
 }

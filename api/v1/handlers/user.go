@@ -29,11 +29,17 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	errIsValidUser := th.service.ValidateUser(c.Request.Context(), jwtRequest)
 	if errIsValidUser != nil {
-		res.ErrorRespond(c.Writer, "Invalid credentials")
+		res.ErrorRespond(c.Writer, errIsValidUser.Error())
 		return
 	}
 
-	token, err := jwt.GenerateJWT(jwtRequest.Email)
+	user, err := th.service.GetUserByEmail(c.Request.Context(), jwtRequest.Email)
+	if err != nil {
+		res.ErrorRespond(c.Writer, err.Error())
+		return
+	}
+
+	token, err := jwt.GenerateJWT(user.Email, user.Role)
 	if err != nil {
 		fmt.Println(err)
 		res.ErrorRespond(c.Writer, "Error generating token")

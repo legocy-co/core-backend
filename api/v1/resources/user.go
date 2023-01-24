@@ -19,6 +19,15 @@ func (ur *UserRegistrationRequest) ToUser() *models.User {
 	return &models.User{
 		Email:    ur.Email,
 		Username: ur.Username,
+		Role:     models.USER,
+	}
+}
+
+func (ur *UserRegistrationRequest) ToAdmin() *models.User {
+	return &models.User{
+		Email:    ur.Email,
+		Username: ur.Username,
+		Role:     models.ADMIN,
 	}
 }
 

@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// Basic fields for each entity
 type Model struct {
 	ID        uint       `gorm:"primary_key" json:"id,omitempty"`
 	CreatedAt time.Time  `gorm:"not null" json:"created_at" sql:"DEFAULT:CURRENT_TIMESTAMP"`

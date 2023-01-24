@@ -29,7 +29,20 @@ func Auth() gin.HandlerFunc {
 
 func AdminUserOnly() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		//TODO: validate Admin token
+		tokenString := ctx.GetHeader("Authorization")
+		if tokenString == "" {
+			ctx.JSON(401, gin.H{"error": "Token Header not found"})
+			ctx.Abort()
+			return
+		}
+
+		err := auth.ValidateAdminToken(tokenString)
+		if err != nil {
+			ctx.JSON(401, gin.H{"error": err.Error()})
+			ctx.Abort()
+			return
+		}
+
 		ctx.Next()
 	}
 }

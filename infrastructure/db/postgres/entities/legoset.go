@@ -25,9 +25,9 @@ func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {
 
 func FromLegoSet(s *models.LegoSet) *LegoSetPostgres {
 	return &LegoSetPostgres{
-		Number:                s.Number,
-		Name:                  s.Name,
-		NPieces:               s.NPieces,
-		LegoSeriesPostrgresID: uint(s.Series.ID),
+		Number:               s.Number,
+		Name:                 s.Name,
+		NPieces:              s.NPieces,
+		LegoSeriesPostgresID: uint(s.Series.ID),
 	}
 }

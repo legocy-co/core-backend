@@ -22,3 +22,7 @@ func (s *UserUseCase) ValidateUser(c context.Context, req res.JWTRequest) error 
 func (s *UserUseCase) CreateUser(c context.Context, u *models.User, password string) error {
 	return s.repo.CreateUser(c, u, password)
 }
+
+func (s *UserUseCase) GetUserByEmail(c context.Context, email string) (*models.User, error) {
+	return s.repo.GetUserByEmail(c, email)
+}

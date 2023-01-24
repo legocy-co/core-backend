@@ -9,7 +9,7 @@ import (
 )
 
 type LegoSetPostgresRepository struct {
-	conn *p.PostrgresConnection
+	conn *p.PostgresConnection
 }
 
 func (psql *LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSet) error {

@@ -12,10 +12,10 @@ import (
 )
 
 type UserPostgresRepository struct {
-	conn *p.PostrgresConnection
+	conn *p.PostgresConnection
 }
 
-func NewUserPostgresRepository(conn *p.PostrgresConnection) UserPostgresRepository {
+func NewUserPostgresRepository(conn *p.PostgresConnection) UserPostgresRepository {
 	return UserPostgresRepository{conn: conn}
 }
 
@@ -99,6 +99,24 @@ func (r *UserPostgresRepository) GetUser(c context.Context, id int) (*models.Use
 	}
 
 	db.First(entity, id)
+	if entity == nil {
+		return user, e.ErrUserNotFound
+	}
+
+	user = entity.ToUser()
+	return user, nil
+}
+
+func (r *UserPostgresRepository) GetUserByEmail(c context.Context, email string) (*models.User, error) {
+	var user *models.User
+	var entity *entities.UserPostgres
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return user, d.ErrConnectionLost
+	}
+
+	db.Where("email = ?", email).First(&entity)
 	if entity == nil {
 		return user, e.ErrUserNotFound
 	}

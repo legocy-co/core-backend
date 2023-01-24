@@ -32,6 +32,7 @@ func InitRouter(userService s.UserUseCase, seriesService s.LegoSeriesService) *g
 
 	v1 := r.Group("/api/v1")
 	{
+
 		auth := v1.Group("/auth")
 		{
 			auth.POST("/token", tokenHandler.GenerateToken)
