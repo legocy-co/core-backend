@@ -6,11 +6,11 @@ import (
 
 type LegoSetPostgres struct {
 	Model
-	Number                int    `gorm:"unique"`
-	Name                  string `gorm:"unique"`
-	NPieces               int
-	LegoSeriesPostrgresID uint
-	LegoSeries            LegoSeriesPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Number               int    `gorm:"unique"`
+	Name                 string `gorm:"unique"`
+	NPieces              int
+	LegoSeriesPostgresID uint
+	LegoSeries           LegoSeriesPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {
