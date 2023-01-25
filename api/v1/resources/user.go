@@ -6,6 +6,7 @@ import (
 
 type UserRegistrationResponse struct {
 	Email    string `json:"email"`
+	Role     int    `json:"role"`
 	Username string `json:"username"`
 }
 
@@ -34,6 +35,7 @@ func (ur *UserRegistrationRequest) ToAdmin() *models.User {
 func GetUserResponse(u *models.User) *UserRegistrationResponse {
 	return &UserRegistrationResponse{
 		Email:    u.Email,
+		Role:     u.Role,
 		Username: u.Username,
 	}
 }

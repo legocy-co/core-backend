@@ -84,3 +84,31 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 	res.Respond(c.Writer, response)
 
 }
+
+// Admin handlers
+
+func (th *TokenHandler) AdminRegister(c *gin.Context) {
+	var registerReq res.UserRegistrationRequest
+
+	if err := c.ShouldBindJSON(&registerReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.Abort()
+		return
+	}
+
+	user := registerReq.ToAdmin()
+	if err := th.service.CreateUser(c, user, registerReq.Password); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.Abort()
+		return
+	}
+
+	response := res.DataMetaResponse{
+		Data: res.GetUserResponse(user),
+		Meta: map[string]interface{}{
+			"status": 200,
+			"msg":    res.MSG_SUCCESS,
+		},
+	}
+	res.Respond(c.Writer, response)
+}

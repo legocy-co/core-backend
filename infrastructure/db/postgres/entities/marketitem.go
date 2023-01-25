@@ -8,13 +8,13 @@ type MarketItemPostgres struct {
 	Model
 	Price              float32
 	CurrencyPostgresID uint
-	Currency           CurrencyPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Currency           CurrencyPostgres `gorm:"ForeignKey:CurrencyPostgresID"`
 	LegoSetPostgresID  uint
-	LegoSet            LegoSetPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	LegoSet            LegoSetPostgres `gorm:"ForeignKey:LegoSetPostgresID"`
 	UserPostgresID     uint
-	Seller             UserPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Seller             UserPostgres `gorm:"ForeignKey:UserPostgresID"`
 	LocationPostgresID uint
-	Location           LocationPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID"`
 }
 
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {

@@ -12,7 +12,6 @@ import (
 )
 
 var postgresConn *PostgresConnection // private singleton instance
-
 type PostgresConnection struct {
 	config *config.DatabaseConfig
 	db     *gorm.DB
@@ -35,7 +34,7 @@ func (psql *PostgresConnection) getConnectionString() string {
 func (psql *PostgresConnection) Init() {
 	dsn := psql.getConnectionString()
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		fmt.Println("Error connecting to database!", err)

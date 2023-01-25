@@ -32,18 +32,28 @@ func InitRouter(userService s.UserUseCase, seriesService s.LegoSeriesService) *g
 
 	v1 := r.Group("/api/v1")
 	{
-
+		//Auth section
 		auth := v1.Group("/auth")
 		{
 			auth.POST("/token", tokenHandler.GenerateToken)
 			auth.POST("/register", tokenHandler.UserRegister)
 		}
+
+		authPrivate := v1.Group("/admin/auth").Use(m.AdminUserOnly())
+		{
+			authPrivate.POST("/", tokenHandler.AdminRegister)
+		}
+
+		//LegoSeres Section
 		series := v1.Group("/series").Use(m.Auth())
 		{
 			series.GET("/", legoSeriesHandler.ListSeries)
-			series.POST("/", legoSeriesHandler.SeriesCreate)
 			series.GET("/:seriesID", legoSeriesHandler.DetailSeries)
-			series.DELETE("/:seriesID", legoSeriesHandler.DeleteSeries)
+		}
+		seriesPrivate := v1.Group("/admin/series").Use(m.AdminUserOnly())
+		{
+			seriesPrivate.POST("/", legoSeriesHandler.SeriesCreate)
+			seriesPrivate.DELETE("/:seriesID", legoSeriesHandler.DeleteSeries)
 		}
 	}
 

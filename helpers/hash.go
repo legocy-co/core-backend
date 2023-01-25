@@ -2,7 +2,6 @@ package helpers
 
 import (
 	"errors"
-
 	"golang.org/x/crypto/bcrypt"
 )
 

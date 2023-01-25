@@ -10,7 +10,7 @@ type LegoSetPostgres struct {
 	Name                 string `gorm:"unique"`
 	NPieces              int
 	LegoSeriesPostgresID uint
-	LegoSeries           LegoSeriesPostgres `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	LegoSeries           LegoSeriesPostgres `gorm:"ForeignKey:LegoSeriesPostgresID"`
 }
 
 func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {

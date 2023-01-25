@@ -6,6 +6,7 @@ import (
 	p "legocy-go/infrastructure/db/postgres"
 	entities "legocy-go/infrastructure/db/postgres/entities"
 	models "legocy-go/pkg/lego/models"
+	"log"
 )
 
 type LegoSeriesPostgresRepository struct {
@@ -25,12 +26,7 @@ func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s 
 
 	entity := entities.FromLegoSeries(s)
 	result := db.Create(&entity)
-
-	if result.Error == nil {
-		db.Commit()
-		return nil
-	}
-
+	db.Commit()
 	return result.Error
 }
 
@@ -48,7 +44,7 @@ func (psql *LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) (
 	for _, entity := range entitiesList {
 		series = append(series, entity.ToLegoSeries())
 	}
-
+	log.Print(series)
 	return series, nil
 }
 

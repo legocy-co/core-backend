@@ -64,19 +64,23 @@ func ValidateToken(signedToken string) (err error) {
 	return
 }
 
-func ValidateAdminToken(signedToken string) error {
-	if err := ValidateToken(signedToken); err != nil {
-		return err
-	}
+func ValidateAdminToken(signedToken string) (err error) {
 
 	claims, ok := ParseTokenClaims(signedToken)
 	if !ok {
-		return errors.New("couldn't parse claims")
+		err = errors.New("couldn't parse claims")
+		return
+	}
+
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		err = errors.New("token expired")
+		return
 	}
 
 	if claims.Role != auth.ADMIN {
-		return errors.New("user is not admin")
+		err = errors.New("user is not admin")
+		return
 	}
 
-	return nil
+	return
 }
