@@ -12,19 +12,23 @@ type LegoSetPostgresRepository struct {
 	conn *p.PostgresConnection
 }
 
-func (psql *LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSet) error {
+func NewLegoSetPostgresRepository(conn *p.PostgresConnection) LegoSetPostgresRepository {
+	return LegoSetPostgresRepository{conn: conn}
+}
+
+func (psql *LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetBasic) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {
 		return d.ErrConnectionLost
 	}
 
-	entity := entities.FromLegoSet(s)
+	entity := entities.FromLegoSetBasic(s)
 	db.Create(entity)
 	return nil
 }
 
-func (psql *LegoSetPostgresRepository) GetLegoSets(c *context.Context) ([]*models.LegoSet, error) {
+func (psql *LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, error) {
 	var legoSets []*models.LegoSet
 	db := psql.conn.GetDB()
 
@@ -58,7 +62,7 @@ func (psql *LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int)
 	return legoSet, nil
 }
 
-func (psql *LegoSetPostgresRepository) DeleteLegoSet(c *context.Context, id int) error {
+func (psql *LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {

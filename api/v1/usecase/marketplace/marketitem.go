@@ -1,4 +1,4 @@
-package v1
+package marketplace
 
 import (
 	models "legocy-go/pkg/marketplace/models"

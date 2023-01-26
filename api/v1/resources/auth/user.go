@@ -1,4 +1,4 @@
-package v1
+package auth
 
 import (
 	models "legocy-go/pkg/auth/models"

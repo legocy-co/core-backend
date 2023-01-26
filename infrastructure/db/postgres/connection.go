@@ -11,18 +11,18 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var postgresConn *PostgresConnection // private singleton instance
-type PostgresConnection struct {
-	config *config.DatabaseConfig
-	db     *gorm.DB
-}
-
 func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (*PostgresConnection, error) {
 	if postgresConn != nil {
 		return nil, d.ErrConnectionAlreadyExists
 	}
 	postgresConn = &PostgresConnection{config, db}
 	return postgresConn, nil
+}
+
+var postgresConn *PostgresConnection // private singleton instance
+type PostgresConnection struct {
+	config *config.DatabaseConfig
+	db     *gorm.DB
 }
 
 func (psql *PostgresConnection) getConnectionString() string {
@@ -43,7 +43,7 @@ func (psql *PostgresConnection) Init() {
 
 	psql.db = conn
 
-	psql.db.Debug().AutoMigrate(
+	err = psql.db.Debug().AutoMigrate(
 		entities.UserPostgres{},
 		entities.LegoSeriesPostgres{},
 		entities.LegoSetPostgres{},
@@ -51,6 +51,10 @@ func (psql *PostgresConnection) Init() {
 		entities.LocationPostgres{},
 		entities.MarketItemPostgres{},
 	)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (psql *PostgresConnection) GetDB() *gorm.DB {

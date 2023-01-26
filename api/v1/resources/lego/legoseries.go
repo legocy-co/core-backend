@@ -1,4 +1,4 @@
-package v1
+package lego
 
 import (
 	models "legocy-go/pkg/lego/models"

@@ -31,3 +31,12 @@ func FromLegoSet(s *models.LegoSet) *LegoSetPostgres {
 		LegoSeriesPostgresID: uint(s.Series.ID),
 	}
 }
+
+func FromLegoSetBasic(s *models.LegoSetBasic) *LegoSetPostgres {
+	return &LegoSetPostgres{
+		Number:               s.Number,
+		Name:                 s.Name,
+		NPieces:              s.NPieces,
+		LegoSeriesPostgresID: uint(s.SeriesID),
+	}
+}

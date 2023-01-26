@@ -1,8 +1,8 @@
-package v1
+package auth
 
 import (
 	"context"
-	res "legocy-go/api/v1/resources"
+	res "legocy-go/api/v1/resources/auth"
 	models "legocy-go/pkg/auth/models"
 	r "legocy-go/pkg/auth/repository"
 )

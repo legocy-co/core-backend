@@ -1,8 +1,9 @@
-package v1
+package lego
 
 import (
 	res "legocy-go/api/v1/resources"
-	s "legocy-go/api/v1/usecase"
+	"legocy-go/api/v1/resources/lego"
+	s "legocy-go/api/v1/usecase/lego"
 	"net/http"
 	"strconv"
 
@@ -20,16 +21,19 @@ func NewLegoSeriesHandler(service s.LegoSeriesService) LegoSeriesHandler {
 func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 	seriesList, err := lsh.service.ListSeries(c.Request.Context())
 	if err != nil {
-		res.ErrorRespond(c.Writer, "Error extracting LEGO Series List")
+		res.ErrorRespond(c.Writer, err.Error())
 		return
 	}
 
+	var seriesResponses []lego.LegoSeriesResponse
+
+	for _, series := range seriesList {
+		seriesResponses = append(seriesResponses, lego.GetLegoSeriesResponse(series))
+	}
+
 	seriesResponse := res.DataMetaResponse{
-		Data: seriesList,
-		Meta: map[string]interface{}{
-			"status": 200,
-			"msg":    "OK",
-		},
+		Data: seriesResponses,
+		Meta: res.SuccessMetaResponse,
 	}
 
 	res.Respond(c.Writer, seriesResponse)
@@ -48,18 +52,15 @@ func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 		return
 	}
 
-	seriesResponse := res.GetLegoSeriesResponse(seriesObj)
+	seriesResponse := lego.GetLegoSeriesResponse(seriesObj)
 	res.Respond(c.Writer, res.DataMetaResponse{
 		Data: seriesResponse,
-		Meta: map[string]interface{}{
-			"status": 200,
-			"msg":    res.MSG_SUCCESS,
-		},
+		Meta: res.SuccessMetaResponse,
 	})
 }
 
 func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
-	var seriesRequest res.LegoSeriesRequest
+	var seriesRequest lego.LegoSeriesRequest
 
 	if err := c.ShouldBindJSON(&seriesRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -76,11 +77,8 @@ func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 	}
 
 	res.Respond(c.Writer, res.DataMetaResponse{
-		Data: res.GetLegoSeriesResponse(seriesObj),
-		Meta: map[string]interface{}{
-			"status": 200,
-			"msg":    res.MSG_SUCCESS,
-		},
+		Data: lego.GetLegoSeriesResponse(seriesObj),
+		Meta: res.SuccessMetaResponse,
 	})
 }
 
@@ -101,9 +99,6 @@ func (lsh *LegoSeriesHandler) DeleteSeries(c *gin.Context) {
 
 	res.Respond(c.Writer, res.DataMetaResponse{
 		Data: seriesID,
-		Meta: map[string]interface{}{
-			"status": 200,
-			"msg":    res.MSG_SUCCESS,
-		},
+		Meta: res.SuccessMetaResponse,
 	})
 }

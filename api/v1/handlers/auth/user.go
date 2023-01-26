@@ -1,9 +1,10 @@
-package v1
+package auth
 
 import (
 	"fmt"
 	res "legocy-go/api/v1/resources"
-	s "legocy-go/api/v1/usecase"
+	"legocy-go/api/v1/resources/auth"
+	ser "legocy-go/api/v1/usecase/auth"
 	jwt "legocy-go/pkg/auth/middleware"
 	"net/http"
 
@@ -11,16 +12,16 @@ import (
 )
 
 type TokenHandler struct {
-	service s.UserUseCase
+	service ser.UserUseCase
 }
 
-func NewTokenHandler(service s.UserUseCase) TokenHandler {
+func NewTokenHandler(service ser.UserUseCase) TokenHandler {
 	return TokenHandler{service: service}
 }
 
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
-	var jwtRequest res.JWTRequest
+	var jwtRequest auth.JWTRequest
 	if err := c.ShouldBindJSON(&jwtRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()
@@ -47,19 +48,16 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 	}
 
 	res.Respond(c.Writer, res.DataMetaResponse{
-		Data: res.JWTResponse{
+		Data: auth.JWTResponse{
 			AccessToken: token,
 		},
-		Meta: map[string]interface{}{
-			"msg":    res.MSG_SUCCESS,
-			"status": 200,
-		},
+		Meta: res.SuccessMetaResponse,
 	})
 
 }
 
 func (th *TokenHandler) UserRegister(c *gin.Context) {
-	var registerReq res.UserRegistrationRequest
+	var registerReq auth.UserRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -75,11 +73,8 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 	}
 
 	response := res.DataMetaResponse{
-		Data: res.GetUserResponse(user),
-		Meta: map[string]interface{}{
-			"status": 200,
-			"msg":    res.MSG_SUCCESS,
-		},
+		Data: auth.GetUserResponse(user),
+		Meta: res.SuccessMetaResponse,
 	}
 	res.Respond(c.Writer, response)
 
@@ -88,7 +83,7 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 // Admin handlers
 
 func (th *TokenHandler) AdminRegister(c *gin.Context) {
-	var registerReq res.UserRegistrationRequest
+	var registerReq auth.UserRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -104,11 +99,8 @@ func (th *TokenHandler) AdminRegister(c *gin.Context) {
 	}
 
 	response := res.DataMetaResponse{
-		Data: res.GetUserResponse(user),
-		Meta: map[string]interface{}{
-			"status": 200,
-			"msg":    res.MSG_SUCCESS,
-		},
+		Data: auth.GetUserResponse(user),
+		Meta: res.SuccessMetaResponse,
 	}
 	res.Respond(c.Writer, response)
 }

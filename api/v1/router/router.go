@@ -1,18 +1,27 @@
 package v1
 
 import (
-	h "legocy-go/api/v1/handlers"
-	m "legocy-go/api/v1/middleware"
-	s "legocy-go/api/v1/usecase"
+	s "legocy-go/api/v1/usecase/auth"
+	"legocy-go/api/v1/usecase/lego"
 
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter(userService s.UserUseCase, seriesService s.LegoSeriesService) *gin.Engine {
-	r := gin.Default()
+type V1router struct {
+	router *gin.Engine
+}
 
-	tokenHandler := h.NewTokenHandler(userService)
-	legoSeriesHandler := h.NewLegoSeriesHandler(seriesService)
+func (r V1router) Run(port string) error {
+	return r.router.Run(":" + port)
+}
+
+func InitRouter(
+	userService s.UserUseCase,
+	legoSeriesService lego.LegoSeriesService,
+	legoSetService lego.LegoSetUseCase) V1router {
+
+	r := gin.Default()
+	router := V1router{router: r}
 
 	r.Use(func(c *gin.Context) {
 		// add header Access-Control-Allow-Origin
@@ -31,31 +40,13 @@ func InitRouter(userService s.UserUseCase, seriesService s.LegoSeriesService) *g
 	})
 
 	v1 := r.Group("/api/v1")
-	{
-		//Auth section
-		auth := v1.Group("/auth")
-		{
-			auth.POST("/token", tokenHandler.GenerateToken)
-			auth.POST("/register", tokenHandler.UserRegister)
-		}
 
-		authPrivate := v1.Group("/admin/auth").Use(m.AdminUserOnly())
-		{
-			authPrivate.POST("/", tokenHandler.AdminRegister)
-		}
+	//legoseries.go
+	router.addLegoSeries(v1, legoSeriesService)
+	//auth.go
+	router.addAuth(v1, userService)
 
-		//LegoSeres Section
-		series := v1.Group("/series").Use(m.Auth())
-		{
-			series.GET("/", legoSeriesHandler.ListSeries)
-			series.GET("/:seriesID", legoSeriesHandler.DetailSeries)
-		}
-		seriesPrivate := v1.Group("/admin/series").Use(m.AdminUserOnly())
-		{
-			seriesPrivate.POST("/", legoSeriesHandler.SeriesCreate)
-			seriesPrivate.DELETE("/:seriesID", legoSeriesHandler.DeleteSeries)
-		}
-	}
+	router.addLegoSets(v1, legoSetService)
 
-	return r
+	return router
 }
