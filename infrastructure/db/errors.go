@@ -6,3 +6,5 @@ import (
 
 var ErrConnectionLost = errors.New("connection lost")
 var ErrConnectionAlreadyExists = errors.New("connection already established")
+
+var ErrItemNotFound = errors.New("item not found")
