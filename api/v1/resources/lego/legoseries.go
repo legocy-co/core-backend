@@ -8,9 +8,8 @@ type LegoSeriesRequest struct {
 	Name string `json:"name"`
 }
 
-func (sr *LegoSeriesRequest) ToLegoSeries() *models.LegoSeries {
-	return &models.LegoSeries{
-		ID:   -1,
+func (sr *LegoSeriesRequest) ToLegoSeriesBasic() *models.LegoSeriesBasic {
+	return &models.LegoSeriesBasic{
 		Name: sr.Name,
 	}
 }

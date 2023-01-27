@@ -3,8 +3,9 @@ package app
 import (
 	"gorm.io/gorm"
 	r "legocy-go/api/v1/router"
-	s "legocy-go/api/v1/usecase/auth"
+	"legocy-go/api/v1/usecase/auth"
 	"legocy-go/api/v1/usecase/lego"
+	"legocy-go/api/v1/usecase/marketplace"
 	"legocy-go/config"
 	p "legocy-go/infrastructure/db/postgres"
 	repo "legocy-go/infrastructure/db/postgres/repository"
@@ -49,17 +50,20 @@ func (a *App) setup() r.V1router {
 	userRepo := repo.NewUserPostgresRepository(conn)
 	seriesRepo := repo.NewLegoSeriesPostgresRepository(conn)
 	setsRepo := repo.NewLegoSetPostgresRepository(conn)
+	locationRepo := repo.NewLocationPostgresRepository(conn)
 
 	// Services
-	userService := s.NewUserUsecase(&userRepo)
+	userService := auth.NewUserUsecase(&userRepo)
 	seriesService := lego.NewLegoSeriesService(&seriesRepo)
 	setsService := lego.NewLegoSetUseCase(&setsRepo)
+	locationService := marketplace.NewLocationUseCase(&locationRepo)
 
 	// Router
 	v1router := r.InitRouter(
 		userService,
 		seriesService,
-		setsService)
+		setsService,
+		locationService)
 
 	return v1router
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/api/v1/usecase/auth"
 	"legocy-go/api/v1/usecase/lego"
+	"legocy-go/api/v1/usecase/marketplace"
 )
 
 type V1router struct {
@@ -17,7 +18,8 @@ func (r V1router) Run(port string) error {
 func InitRouter(
 	userService auth.UserUseCase,
 	legoSeriesService lego.LegoSeriesService,
-	legoSetService lego.LegoSetUseCase) V1router {
+	legoSetService lego.LegoSetUseCase,
+	locationService marketplace.LocationUseCase) V1router {
 
 	r := gin.Default()
 	router := V1router{router: r}
@@ -48,6 +50,9 @@ func InitRouter(
 
 	//legoset.go
 	router.addLegoSets(v1, legoSetService)
+
+	//location.go
+	router.addLocations(v1, locationService)
 
 	return router
 }

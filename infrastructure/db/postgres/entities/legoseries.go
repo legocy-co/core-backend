@@ -9,6 +9,12 @@ type LegoSeriesPostgres struct {
 	Name string `gorm:"unique"`
 }
 
+func FromLegoSeriesBasic(s *models.LegoSeriesBasic) *LegoSeriesPostgres {
+	return &LegoSeriesPostgres{
+		Name: s.Name,
+	}
+}
+
 func FromLegoSeries(s *models.LegoSeries) *LegoSeriesPostgres {
 	return &LegoSeriesPostgres{
 		Name: s.Name,

@@ -12,6 +12,10 @@ type LocationPostgresRepository struct {
 	conn *postgres.PostgresConnection
 }
 
+func NewLocationPostgresRepository(conn *postgres.PostgresConnection) LocationPostgresRepository {
+	return LocationPostgresRepository{conn: conn}
+}
+
 func (lpr *LocationPostgresRepository) GetLocations(c context.Context) ([]*models.Location, error) {
 	var locations []*models.Location
 	var locationsDB []*entities.LocationPostgres
@@ -59,13 +63,13 @@ func (lpr *LocationPostgresRepository) GetCountryLocations(c context.Context, co
 	return locations, err
 }
 
-func (lpr *LocationPostgresRepository) CreateLocation(c context.Context, location *models.Location) error {
+func (lpr *LocationPostgresRepository) CreateLocation(c context.Context, location *models.LocationBasic) error {
 	db := lpr.conn.GetDB()
 	if db == nil {
 		return database.ErrConnectionLost
 	}
 
-	var entity *entities.LocationPostgres = entities.FromLocation(location)
+	var entity *entities.LocationPostgres = entities.FromLocationBasic(location)
 	if entity == nil {
 		return database.ErrItemNotFound
 	}

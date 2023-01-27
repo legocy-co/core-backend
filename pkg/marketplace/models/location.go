@@ -5,3 +5,8 @@ type Location struct {
 	Country string
 	City    string
 }
+
+type LocationBasic struct {
+	Country string
+	City    string
+}

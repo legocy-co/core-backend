@@ -23,7 +23,7 @@ func (s *LegoSeriesService) DetailSeries(ctx context.Context, id int) (*models.L
 	return s.repo.GetLegoSeries(ctx, id)
 }
 
-func (s *LegoSeriesService) CreateLegoSeries(ctx context.Context, m *models.LegoSeries) error {
+func (s *LegoSeriesService) CreateLegoSeries(ctx context.Context, m *models.LegoSeriesBasic) error {
 	return s.repo.CreateLegoSeries(ctx, m)
 }
 
