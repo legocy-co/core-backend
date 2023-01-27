@@ -1,10 +1,9 @@
 package v1
 
 import (
-	s "legocy-go/api/v1/usecase/auth"
-	"legocy-go/api/v1/usecase/lego"
-
 	"github.com/gin-gonic/gin"
+	"legocy-go/api/v1/usecase/auth"
+	"legocy-go/api/v1/usecase/lego"
 )
 
 type V1router struct {
@@ -16,7 +15,7 @@ func (r V1router) Run(port string) error {
 }
 
 func InitRouter(
-	userService s.UserUseCase,
+	userService auth.UserUseCase,
 	legoSeriesService lego.LegoSeriesService,
 	legoSetService lego.LegoSetUseCase) V1router {
 
@@ -43,9 +42,11 @@ func InitRouter(
 
 	//legoseries.go
 	router.addLegoSeries(v1, legoSeriesService)
+
 	//auth.go
 	router.addAuth(v1, userService)
 
+	//legoset.go
 	router.addLegoSets(v1, legoSetService)
 
 	return router

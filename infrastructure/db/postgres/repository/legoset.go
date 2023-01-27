@@ -37,7 +37,7 @@ func (psql *LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models
 	}
 
 	var entitiesList []*entities.LegoSetPostgres
-	db.Find(&entitiesList)
+	db.Preload("LegoSeries").Find(&entitiesList)
 
 	for _, entity := range entitiesList {
 		legoSets = append(legoSets, entity.ToLegoSet())
@@ -56,7 +56,7 @@ func (psql *LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int)
 	}
 
 	var entity *entities.LegoSetPostgres
-	db.First(&entity, id)
+	db.Preload("LegoSeries").First(&entity, id)
 
 	legoSet = entity.ToLegoSet()
 	return legoSet, nil

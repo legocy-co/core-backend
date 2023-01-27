@@ -21,3 +21,11 @@ func (u *LegoSetUseCase) ListLegoSets(c context.Context) ([]*models.LegoSet, err
 func (u *LegoSetUseCase) LegoSetDetail(c context.Context, id int) (*models.LegoSet, error) {
 	return u.repo.GetLegoSetByID(c, id)
 }
+
+func (u *LegoSetUseCase) LegoSetCreate(c context.Context, legoSet *models.LegoSetBasic) error {
+	return u.repo.CreateLegoSet(c, legoSet)
+}
+
+func (u *LegoSetUseCase) LegoSetDelete(c context.Context, id int) error {
+	return u.repo.DeleteLegoSet(c, id)
+}
