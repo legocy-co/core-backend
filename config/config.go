@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"legocy-go/helpers"
+	"legocy-go/pkg/helpers"
 )
 
 var appConf *AppConfig // private singleton variable

@@ -3,12 +3,12 @@ package postgres
 import (
 	"context"
 	"fmt"
-	h "legocy-go/helpers"
 	d "legocy-go/infrastructure/db"
 	p "legocy-go/infrastructure/db/postgres"
 	entities "legocy-go/infrastructure/db/postgres/entities"
 	e "legocy-go/pkg/auth/errors"
 	models "legocy-go/pkg/auth/models"
+	h "legocy-go/pkg/helpers"
 )
 
 type UserPostgresRepository struct {
