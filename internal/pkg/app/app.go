@@ -2,13 +2,13 @@ package app
 
 import (
 	"gorm.io/gorm"
-	r "legocy-go/api/v1/router"
-	"legocy-go/api/v1/usecase/auth"
-	"legocy-go/api/v1/usecase/lego"
-	"legocy-go/api/v1/usecase/marketplace"
-	"legocy-go/config"
-	p "legocy-go/infrastructure/db/postgres"
-	repo "legocy-go/infrastructure/db/postgres/repository"
+	r "legocy-go/internal/api/v1/router"
+	"legocy-go/internal/api/v1/usecase/auth"
+	lego2 "legocy-go/internal/api/v1/usecase/lego"
+	"legocy-go/internal/api/v1/usecase/marketplace"
+	"legocy-go/internal/config"
+	p "legocy-go/internal/db/postgres"
+	"legocy-go/internal/db/postgres/repository"
 )
 
 type Application interface {
@@ -47,15 +47,15 @@ func (a *App) setup() r.V1router {
 	conn.Init()
 
 	// Repositories
-	userRepo := repo.NewUserPostgresRepository(conn)
-	seriesRepo := repo.NewLegoSeriesPostgresRepository(conn)
-	setsRepo := repo.NewLegoSetPostgresRepository(conn)
-	locationRepo := repo.NewLocationPostgresRepository(conn)
+	userRepo := postgres.NewUserPostgresRepository(conn)
+	seriesRepo := postgres.NewLegoSeriesPostgresRepository(conn)
+	setsRepo := postgres.NewLegoSetPostgresRepository(conn)
+	locationRepo := postgres.NewLocationPostgresRepository(conn)
 
 	// Services
 	userService := auth.NewUserUsecase(&userRepo)
-	seriesService := lego.NewLegoSeriesService(&seriesRepo)
-	setsService := lego.NewLegoSetUseCase(&setsRepo)
+	seriesService := lego2.NewLegoSeriesService(&seriesRepo)
+	setsService := lego2.NewLegoSetUseCase(&setsRepo)
 	locationService := marketplace.NewLocationUseCase(&locationRepo)
 
 	// Router

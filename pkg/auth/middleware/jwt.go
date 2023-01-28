@@ -2,7 +2,7 @@ package auth
 
 import (
 	"errors"
-	c "legocy-go/config"
+	c "legocy-go/internal/config"
 	auth "legocy-go/pkg/auth/models"
 	"time"
 
