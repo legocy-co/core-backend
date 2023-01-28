@@ -17,17 +17,18 @@ type Application interface {
 }
 
 func New(configFilepath string) Application {
-	return &App{configFilepath: configFilepath}
+	return &App{cfg: configFilepath}
 }
 
 type App struct {
-	configFilepath string
+	cfg     string
+	isSetUp bool
 }
 
 func (a *App) setup() r.V1router {
 	// Config
 
-	err := config.SetupFromJSON(a.configFilepath)
+	err := config.SetupFromJSON(a.cfg)
 	if err != nil {
 		panic(err)
 	}

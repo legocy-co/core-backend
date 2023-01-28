@@ -1,12 +1,11 @@
 package postgres
 
 import (
-	"legocy-go/internal/db/postgres"
 	models "legocy-go/pkg/auth/models"
 )
 
 type UserPostgres struct {
-	postgres.Model
+	Model
 	Username string `gorm:"unique;not null"`
 	Email    string `gorm:"unique;not null"`
 	Role     int
