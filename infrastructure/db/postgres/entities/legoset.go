@@ -1,11 +1,12 @@
 package postgres
 
 import (
+	"legocy-go/infrastructure/db/postgres"
 	models "legocy-go/pkg/lego/models"
 )
 
 type LegoSetPostgres struct {
-	Model
+	postgres.Model
 	Number               int    `gorm:"unique"`
 	Name                 string `gorm:"unique"`
 	NPieces              int

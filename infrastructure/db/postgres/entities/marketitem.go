@@ -1,11 +1,12 @@
 package postgres
 
 import (
+	"legocy-go/infrastructure/db/postgres"
 	models "legocy-go/pkg/marketplace/models"
 )
 
 type MarketItemPostgres struct {
-	Model
+	postgres.Model
 	Price              float32
 	CurrencyPostgresID uint
 	Currency           CurrencyPostgres `gorm:"ForeignKey:CurrencyPostgresID"`

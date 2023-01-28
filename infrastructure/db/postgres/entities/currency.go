@@ -1,11 +1,12 @@
 package postgres
 
 import (
+	"legocy-go/infrastructure/db/postgres"
 	models "legocy-go/pkg/marketplace/models"
 )
 
 type CurrencyPostgres struct {
-	Model
+	postgres.Model
 	Name   string `gorm:"unique"`
 	Symbol string `gorm:"unique"`
 }

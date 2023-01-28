@@ -1,9 +1,12 @@
 package postgres
 
-import models "legocy-go/pkg/marketplace/models"
+import (
+	"legocy-go/infrastructure/db/postgres"
+	models "legocy-go/pkg/marketplace/models"
+)
 
 type LocationPostgres struct {
-	Model
+	postgres.Model
 	Country string `gorm:"uniqueIndex:idx_country_city"`
 	City    string `gorm:"uniqueIndex:idx_country_city""`
 }
