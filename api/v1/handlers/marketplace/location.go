@@ -19,7 +19,7 @@ func NewLocationHandler(service s.LocationUseCase) LocationHandler {
 func (h *LocationHandler) ListLocations(c *gin.Context) {
 	locationsList, err := h.service.ListLocations(c)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, "Invalid request body")
+		c.JSON(http.StatusBadRequest, err.Error())
 		c.Abort()
 		return
 	}
@@ -34,5 +34,25 @@ func (h *LocationHandler) ListLocations(c *gin.Context) {
 		Meta: r.SuccessMetaResponse,
 	}
 
+	r.Respond(c.Writer, response)
+}
+
+func (h *LocationHandler) CreateLocation(c *gin.Context) {
+	var locationRequest res.LocationRequest
+	if err := c.ShouldBindJSON(&locationRequest); err != nil {
+		c.JSON(http.StatusBadRequest, "Invalid request body")
+		c.Abort()
+		return
+	}
+
+	locationBasic := locationRequest.ToLocationBasic()
+	err := h.service.CreateLocation(c, locationBasic)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		c.Abort()
+		return
+	}
+
+	response := r.DataMetaResponse{Data: true, Meta: r.SuccessMetaResponse}
 	r.Respond(c.Writer, response)
 }

@@ -26,7 +26,6 @@ func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s 
 
 	entity := entities.FromLegoSeriesBasic(s)
 	result := db.Create(&entity)
-	db.Commit()
 	return result.Error
 }
 

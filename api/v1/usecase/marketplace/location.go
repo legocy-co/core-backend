@@ -21,3 +21,7 @@ func (l *LocationUseCase) ListLocations(c context.Context) ([]*models.Location, 
 func (l *LocationUseCase) CountryLocations(c context.Context, country string) ([]*models.Location, error) {
 	return l.repo.GetCountryLocations(c, country)
 }
+
+func (l *LocationUseCase) CreateLocation(c context.Context, loc *models.LocationBasic) error {
+	return l.repo.CreateLocation(c, loc)
+}

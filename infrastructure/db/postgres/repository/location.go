@@ -74,9 +74,6 @@ func (lpr *LocationPostgresRepository) CreateLocation(c context.Context, locatio
 		return database.ErrItemNotFound
 	}
 
-	db.Create(&entity)
-	db.Commit()
-
-	return nil
-
+	result := db.Create(&entity)
+	return result.Error
 }

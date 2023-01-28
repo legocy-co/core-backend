@@ -58,8 +58,6 @@ func (cpr *CurrencyPostgresRepository) CreateCurrency(c context.Context, currenc
 	}
 
 	var entity *entities.CurrencyPostgres = entities.FromCurrency(currency)
-	db.Create(&entity)
-	db.Commit()
-
-	return nil
+	result := db.Create(&entity)
+	return result.Error
 }

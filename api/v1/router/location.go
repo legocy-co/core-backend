@@ -14,4 +14,8 @@ func (r V1router) addLocations(rg *gin.RouterGroup, ser s.LocationUseCase) {
 	{
 		locations.GET("/", handler.ListLocations)
 	}
+	locationsAdmin := rg.Group("/admin/locations").Use(m.AdminUserOnly())
+	{
+		locationsAdmin.POST("/", handler.CreateLocation)
+	}
 }

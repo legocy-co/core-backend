@@ -33,12 +33,7 @@ func (r *UserPostgresRepository) CreateUser(c context.Context, u *models.User, p
 	var entity entities.UserPostgres = *entities.FromUser(u, passwordHash)
 
 	result := db.Create(&entity)
-	if result.Error != nil {
-		return e.ErrUserAlreadyExists
-	}
-	db.Commit()
-
-	return nil
+	return result.Error
 }
 
 func (r *UserPostgresRepository) ValidateUser(c context.Context, email, password string) error {
