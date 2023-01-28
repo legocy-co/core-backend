@@ -1,4 +1,4 @@
-# legocy-go-clean
+# LEGOcy
 
 Clean Architecture version of LEGOcy API using Go
 
