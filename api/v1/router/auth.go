@@ -2,9 +2,9 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/api/v1/handlers/auth"
-	m "legocy-go/internal/api/v1/middleware"
-	s "legocy-go/internal/api/v1/usecase/auth"
+	"legocy-go/api/v1/handlers/auth"
+	m "legocy-go/api/v1/middleware"
+	s "legocy-go/api/v1/usecase/auth"
 )
 
 func (r V1router) addAuth(rg *gin.RouterGroup, service s.UserUseCase) {

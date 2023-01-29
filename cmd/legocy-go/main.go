@@ -1,6 +1,8 @@
 package main
 
-import "legocy-go/internal/pkg/app"
+import (
+	"legocy-go/internal/app"
+)
 
 const configFilepath = "/Users/wjojf/GolandProjects/legocy-go-clean/internal/config/json/config.json"
 

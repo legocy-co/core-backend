@@ -68,6 +68,6 @@ func (psql *LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id
 		return d.ErrConnectionLost
 	}
 
-	db.Delete(&entities.LegoSeriesPostgres{}, id)
-	return nil
+	result := db.Delete(&entities.LegoSeriesPostgres{}, id)
+	return result.Error
 }

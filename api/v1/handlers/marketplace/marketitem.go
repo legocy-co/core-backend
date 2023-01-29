@@ -1,7 +1,7 @@
 package marketplace
 
 import (
-	s "legocy-go/internal/api/v1/usecase/marketplace"
+	s "legocy-go/api/v1/usecase/marketplace"
 )
 
 type MarketItemHandler struct {

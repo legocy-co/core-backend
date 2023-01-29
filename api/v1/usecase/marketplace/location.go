@@ -25,3 +25,7 @@ func (l *LocationUseCase) CountryLocations(c context.Context, country string) ([
 func (l *LocationUseCase) CreateLocation(c context.Context, loc *models.LocationBasic) error {
 	return l.repo.CreateLocation(c, loc)
 }
+
+func (l *LocationUseCase) DeleteLocation(c context.Context, id int) error {
+	return l.repo.DeleteLocation(c, id)
+}

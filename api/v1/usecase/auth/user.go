@@ -2,7 +2,7 @@ package auth
 
 import (
 	"context"
-	res "legocy-go/internal/api/v1/resources/auth"
+	res "legocy-go/api/v1/resources/auth"
 	models "legocy-go/pkg/auth/models"
 	r "legocy-go/pkg/auth/repository"
 )

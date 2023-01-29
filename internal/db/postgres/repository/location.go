@@ -77,3 +77,13 @@ func (lpr *LocationPostgresRepository) CreateLocation(c context.Context, locatio
 	result := db.Create(&entity)
 	return result.Error
 }
+
+func (lpr *LocationPostgresRepository) DeleteLocation(c context.Context, id int) error {
+	db := lpr.conn.GetDB()
+	if db == nil {
+		return database.ErrConnectionLost
+	}
+
+	result := db.Delete(entities.LocationPostgres{}, id)
+	return result.Error
+}

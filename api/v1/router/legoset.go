@@ -2,9 +2,9 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	h "legocy-go/internal/api/v1/handlers/lego"
-	m "legocy-go/internal/api/v1/middleware"
-	s "legocy-go/internal/api/v1/usecase/lego"
+	h "legocy-go/api/v1/handlers/lego"
+	m "legocy-go/api/v1/middleware"
+	s "legocy-go/api/v1/usecase/lego"
 )
 
 func (r V1router) addLegoSets(rg *gin.RouterGroup, service s.LegoSetUseCase) {

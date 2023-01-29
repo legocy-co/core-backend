@@ -1,9 +1,9 @@
 package lego
 
 import (
-	"legocy-go/internal/api/v1/resources"
-	"legocy-go/internal/api/v1/resources/lego"
-	s "legocy-go/internal/api/v1/usecase/lego"
+	r "legocy-go/api/v1/resources"
+	"legocy-go/api/v1/resources/lego"
+	s "legocy-go/api/v1/usecase/lego"
 	"net/http"
 	"strconv"
 
@@ -21,7 +21,7 @@ func NewLegoSeriesHandler(service s.LegoSeriesService) LegoSeriesHandler {
 func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 	seriesList, err := lsh.service.ListSeries(c.Request.Context())
 	if err != nil {
-		v1.ErrorRespond(c.Writer, err.Error())
+		r.ErrorRespond(c.Writer, err.Error())
 		return
 	}
 
@@ -31,31 +31,31 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 		seriesResponses = append(seriesResponses, lego.GetLegoSeriesResponse(series))
 	}
 
-	seriesResponse := v1.DataMetaResponse{
+	seriesResponse := r.DataMetaResponse{
 		Data: seriesResponses,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	}
 
-	v1.Respond(c.Writer, seriesResponse)
+	r.Respond(c.Writer, seriesResponse)
 }
 
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {
-		v1.ErrorRespond(c.Writer, "Error extracting ID from url path")
+		r.ErrorRespond(c.Writer, "Error extracting ID from url path")
 		return
 	}
 
 	seriesObj, err := lsh.service.DetailSeries(c.Request.Context(), seriesID)
 	if err != nil || seriesObj.ID == 0 {
-		v1.ErrorRespond(c.Writer, "Error extracting LegoSeries object with given ID")
+		r.ErrorRespond(c.Writer, "Error extracting LegoSeries object with given ID")
 		return
 	}
 
 	seriesResponse := lego.GetLegoSeriesResponse(seriesObj)
-	v1.Respond(c.Writer, v1.DataMetaResponse{
+	r.Respond(c.Writer, r.DataMetaResponse{
 		Data: seriesResponse,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	})
 }
 
@@ -76,9 +76,9 @@ func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 		return
 	}
 
-	v1.Respond(c.Writer, v1.DataMetaResponse{
+	r.Respond(c.Writer, r.DataMetaResponse{
 		Data: true,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	})
 }
 
@@ -97,8 +97,8 @@ func (lsh *LegoSeriesHandler) DeleteSeries(c *gin.Context) {
 		return
 	}
 
-	v1.Respond(c.Writer, v1.DataMetaResponse{
+	r.Respond(c.Writer, r.DataMetaResponse{
 		Data: seriesID,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	})
 }

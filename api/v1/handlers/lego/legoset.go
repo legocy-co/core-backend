@@ -2,9 +2,9 @@ package lego
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/api/v1/resources"
-	res "legocy-go/internal/api/v1/resources/lego"
-	s "legocy-go/internal/api/v1/usecase/lego"
+	r "legocy-go/api/v1/resources"
+	res "legocy-go/api/v1/resources/lego"
+	s "legocy-go/api/v1/usecase/lego"
 	"net/http"
 	"strconv"
 )
@@ -20,7 +20,7 @@ func NewLegoSetHandler(service s.LegoSetUseCase) LegoSetHandler {
 func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
 	setsList, err := lsh.service.ListLegoSets(c)
 	if err != nil {
-		v1.ErrorRespond(c.Writer, err.Error())
+		r.ErrorRespond(c.Writer, err.Error())
 		return
 	}
 
@@ -30,16 +30,16 @@ func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
 	}
 
 	if len(setsResponse) == 0 {
-		v1.ErrorRespond(c.Writer, "No data found")
+		r.ErrorRespond(c.Writer, "No data found")
 		return
 	}
 
-	response := v1.DataMetaResponse{
+	response := r.DataMetaResponse{
 		Data: setsResponse,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	}
 
-	v1.Respond(c.Writer, response)
+	r.Respond(c.Writer, response)
 }
 
 func (lsh *LegoSetHandler) SetDetail(c *gin.Context) {
@@ -59,12 +59,12 @@ func (lsh *LegoSetHandler) SetDetail(c *gin.Context) {
 
 	legoSetResponse := res.GetLegoSetResponse(legoSet)
 
-	response := v1.DataMetaResponse{
+	response := r.DataMetaResponse{
 		Data: legoSetResponse,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	}
 
-	v1.Respond(c.Writer, response)
+	r.Respond(c.Writer, response)
 }
 
 func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
@@ -83,12 +83,12 @@ func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
 		return
 	}
 
-	response := v1.DataMetaResponse{
+	response := r.DataMetaResponse{
 		Data: true,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	}
 
-	v1.Respond(c.Writer, response)
+	r.Respond(c.Writer, response)
 }
 
 func (lsh *LegoSetHandler) SetDelete(c *gin.Context) {
@@ -106,10 +106,10 @@ func (lsh *LegoSetHandler) SetDelete(c *gin.Context) {
 		return
 	}
 
-	response := v1.DataMetaResponse{
+	response := r.DataMetaResponse{
 		Data: true,
-		Meta: v1.SuccessMetaResponse,
+		Meta: r.SuccessMetaResponse,
 	}
 
-	v1.Respond(c.Writer, response)
+	r.Respond(c.Writer, response)
 }
