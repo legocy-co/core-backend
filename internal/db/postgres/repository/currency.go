@@ -3,13 +3,16 @@ package postgres
 import (
 	"golang.org/x/net/context"
 	d "legocy-go/internal/db"
-	"legocy-go/internal/db/postgres"
 	entities "legocy-go/internal/db/postgres/entities"
 	models "legocy-go/pkg/marketplace/models"
 )
 
 type CurrencyPostgresRepository struct {
-	conn *postgres.PostgresConnection
+	conn d.DataBaseConnection
+}
+
+func NewCurrencyPostgresRepository(conn d.DataBaseConnection) *CurrencyPostgresRepository {
+	return &CurrencyPostgresRepository{conn: conn}
 }
 
 func (cpr *CurrencyPostgresRepository) GetCurrencies(c context.Context) ([]*models.Currency, error) {

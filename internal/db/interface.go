@@ -1,6 +1,6 @@
 package db
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 type DataBaseConnection interface {
 	Init()

@@ -3,16 +3,15 @@ package postgres
 import (
 	"golang.org/x/net/context"
 	database "legocy-go/internal/db"
-	"legocy-go/internal/db/postgres"
 	entities "legocy-go/internal/db/postgres/entities"
 	models "legocy-go/pkg/marketplace/models"
 )
 
 type LocationPostgresRepository struct {
-	conn *postgres.PostgresConnection
+	conn database.DataBaseConnection
 }
 
-func NewLocationPostgresRepository(conn *postgres.PostgresConnection) LocationPostgresRepository {
+func NewLocationPostgresRepository(conn database.DataBaseConnection) LocationPostgresRepository {
 	return LocationPostgresRepository{conn: conn}
 }
 

@@ -3,17 +3,16 @@ package postgres
 import (
 	"context"
 	d "legocy-go/internal/db"
-	p "legocy-go/internal/db/postgres"
 	entities "legocy-go/internal/db/postgres/entities"
 	models "legocy-go/pkg/lego/models"
 	"log"
 )
 
 type LegoSeriesPostgresRepository struct {
-	conn *p.PostgresConnection
+	conn d.DataBaseConnection
 }
 
-func NewLegoSeriesPostgresRepository(conn *p.PostgresConnection) LegoSeriesPostgresRepository {
+func NewLegoSeriesPostgresRepository(conn d.DataBaseConnection) LegoSeriesPostgresRepository {
 	return LegoSeriesPostgresRepository{conn: conn}
 }
 

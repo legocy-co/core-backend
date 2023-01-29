@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	d "legocy-go/internal/db"
-	p "legocy-go/internal/db/postgres"
 	entities "legocy-go/internal/db/postgres/entities"
 	e "legocy-go/pkg/auth/errors"
 	models "legocy-go/pkg/auth/models"
@@ -12,10 +11,10 @@ import (
 )
 
 type UserPostgresRepository struct {
-	conn *p.PostgresConnection
+	conn d.DataBaseConnection
 }
 
-func NewUserPostgresRepository(conn *p.PostgresConnection) UserPostgresRepository {
+func NewUserPostgresRepository(conn d.DataBaseConnection) UserPostgresRepository {
 	return UserPostgresRepository{conn: conn}
 }
 

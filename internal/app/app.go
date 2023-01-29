@@ -7,8 +7,11 @@ import (
 	lego2 "legocy-go/api/v1/usecase/lego"
 	"legocy-go/api/v1/usecase/marketplace"
 	"legocy-go/internal/config"
+	d "legocy-go/internal/db"
 	p "legocy-go/internal/db/postgres"
 	repo "legocy-go/internal/db/postgres/repository"
+	"legocy-go/internal/storage"
+	"legocy-go/internal/storage/provider"
 )
 
 type Application interface {
@@ -16,19 +19,14 @@ type Application interface {
 	Run(port string)
 }
 
-func New(configFilepath string) Application {
-	return &App{cfg: configFilepath}
-}
-
 type App struct {
-	cfg     string
-	isSetUp bool
+	database     d.DataBaseConnection
+	imageStorage storage.ImageStorage
 }
 
-func (a *App) setup() router.V1router {
-	// Config
-
-	err := config.SetupFromJSON(a.cfg)
+func New(configFilepath string) Application {
+	// Load config
+	err := config.SetupFromJSON(configFilepath)
 	if err != nil {
 		panic(err)
 	}
@@ -38,20 +36,40 @@ func (a *App) setup() router.V1router {
 		panic("empty config")
 	}
 
-	// Database
-	dbCfg := cfg.DbConf
+	//Database
+
+	dbCfg := config.GetDBConfig()
 	var db *gorm.DB
-	conn, err := p.CreateConnection(&dbCfg, db)
+	conn, err := p.CreateConnection(dbCfg, db)
 	if err != nil {
 		panic(err)
 	}
 	conn.Init()
 
+	// Item Storage
+	minioCfg := config.GetMinioConfig()
+	imgStorage, err := provider.NewMinioProvider(
+		minioCfg.Url,
+		minioCfg.User, minioCfg.Password,
+		minioCfg.Ssl)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return &App{
+		database:     conn,
+		imageStorage: imgStorage,
+	}
+}
+
+func (a *App) setup() router.V1router {
+
 	// Repositories
-	userRepo := repo.NewUserPostgresRepository(conn)
-	seriesRepo := repo.NewLegoSeriesPostgresRepository(conn)
-	setsRepo := repo.NewLegoSetPostgresRepository(conn)
-	locationRepo := repo.NewLocationPostgresRepository(conn)
+	userRepo := repo.NewUserPostgresRepository(a.database)
+	seriesRepo := repo.NewLegoSeriesPostgresRepository(a.database)
+	setsRepo := repo.NewLegoSetPostgresRepository(a.database)
+	locationRepo := repo.NewLocationPostgresRepository(a.database)
 
 	// Services
 	userService := auth.NewUserUsecase(&userRepo)

@@ -8,7 +8,25 @@ import (
 )
 
 var appConf *AppConfig // private singleton variable
-var DefaultJWTConfig *JWTConfig = &JWTConfig{SecretKey: "test12345", AccesTokenLifeTime: 3}
+
+type AppConfig struct {
+	DbConf    DatabaseConfig `yaml:"database" json:"database"`
+	JwtConf   JWTConfig      `yaml:"jwt" json:"jwt"`
+	MinioCong MinioConfig    `yaml:"minio" json:"minio"`
+}
+
+func GetAppConfig() *AppConfig {
+	return appConf
+}
+
+func SetAppConfig(cfg *AppConfig) error {
+	if appConf != nil {
+		return ErrConfigAlreadyExists
+	}
+
+	appConf = cfg
+	return nil
+}
 
 type DatabaseConfig struct {
 	Hostname   string `yaml:"hostname" json:"hostname"`
@@ -23,13 +41,12 @@ type JWTConfig struct {
 	AccesTokenLifeTime int    `yaml:"acces_tokern_lifetime_hours" json:"acces_token_lifetime_hours"`
 }
 
-type AppConfig struct {
-	DbConf  DatabaseConfig `yaml:"database" json:"database"`
-	JwtConf JWTConfig      `yaml:"jwt" json:"jwt"`
-}
-
-func GetAppConfig() *AppConfig {
-	return appConf
+type MinioConfig struct {
+	Url      string `json:"url"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Token    string `json:"token"`
+	Ssl      bool   `json:"ssl"`
 }
 
 func GetDBConfig() *DatabaseConfig {
@@ -50,13 +67,13 @@ func GetJWTConfig() *JWTConfig {
 	return &cfg.JwtConf
 }
 
-func SetAppConfig(cfg *AppConfig) error {
-	if appConf != nil {
-		return ErrConfigAlreadyExists
+func GetMinioConfig() *MinioConfig {
+	cfg := GetAppConfig()
+	if cfg == nil {
+		return DefaultMinioConfig
 	}
 
-	appConf = cfg
-	return nil
+	return &cfg.MinioCong
 }
 
 func SetupFromJSON(fp string) error {

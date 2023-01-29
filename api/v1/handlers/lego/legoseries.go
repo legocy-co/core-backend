@@ -42,13 +42,15 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {
-		r.ErrorRespond(c.Writer, "Error extracting ID from url path")
+		c.JSON(http.StatusBadRequest, err.Error())
+		c.Abort()
 		return
 	}
 
 	seriesObj, err := lsh.service.DetailSeries(c.Request.Context(), seriesID)
 	if err != nil || seriesObj.ID == 0 {
-		r.ErrorRespond(c.Writer, "Error extracting LegoSeries object with given ID")
+		c.JSON(http.StatusBadRequest, "Error extracting LegoSeries object with given ID")
+		c.Abort()
 		return
 	}
 

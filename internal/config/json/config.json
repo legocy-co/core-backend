@@ -10,5 +10,13 @@
     "jwt": {
         "secret_key": "Srka/sjFriZpxBmPIyULv7pXJ3WWy8Dq8Hvajj/uaUo=",
         "acces_token_lifetime_hours": 2
+    },
+
+    "minio": {
+        "url":"http://localhost:9000",
+        "user": "legocy",
+        "password": "legocy123",
+        "token": "",
+        "ssl": false
     }
 }
