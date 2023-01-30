@@ -13,14 +13,16 @@ var JwtConf *c.JWTConfig = c.GetJWTConfig()
 var jwtKey string = JwtConf.SecretKey
 
 type JWTClaim struct {
+	ID    int    `json:"id"`
 	Email string `json:"email"`
 	Role  int    `json:"role"`
 	jwt.StandardClaims
 }
 
-func GenerateJWT(email string, role int) (tokenString string, err error) {
+func GenerateJWT(email string, id, role int) (tokenString string, err error) {
 	expirationTime := time.Now().Add(time.Duration(JwtConf.AccesTokenLifeTime) * time.Hour)
 	claims := &JWTClaim{
+		ID:    id,
 		Email: email,
 		Role:  role,
 		StandardClaims: jwt.StandardClaims{

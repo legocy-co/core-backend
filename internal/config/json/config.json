@@ -13,7 +13,7 @@
     },
 
     "minio": {
-        "url":"http://localhost:9000",
+        "url":"minio",
         "user": "legocy",
         "password": "legocy123",
         "token": "",

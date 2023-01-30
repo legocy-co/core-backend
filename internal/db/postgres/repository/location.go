@@ -15,7 +15,7 @@ func NewLocationPostgresRepository(conn database.DataBaseConnection) LocationPos
 	return LocationPostgresRepository{conn: conn}
 }
 
-func (lpr *LocationPostgresRepository) GetLocations(c context.Context) ([]*models.Location, error) {
+func (lpr LocationPostgresRepository) GetLocations(c context.Context) ([]*models.Location, error) {
 	var locations []*models.Location
 	var locationsDB []*entities.LocationPostgres
 
@@ -38,7 +38,7 @@ func (lpr *LocationPostgresRepository) GetLocations(c context.Context) ([]*model
 	return locations, err
 }
 
-func (lpr *LocationPostgresRepository) GetCountryLocations(c context.Context, country string) ([]*models.Location, error) {
+func (lpr LocationPostgresRepository) GetCountryLocations(c context.Context, country string) ([]*models.Location, error) {
 	var locations []*models.Location
 	var locationsDB []*entities.LocationPostgres
 
@@ -62,7 +62,7 @@ func (lpr *LocationPostgresRepository) GetCountryLocations(c context.Context, co
 	return locations, err
 }
 
-func (lpr *LocationPostgresRepository) CreateLocation(c context.Context, location *models.LocationBasic) error {
+func (lpr LocationPostgresRepository) CreateLocation(c context.Context, location *models.LocationBasic) error {
 	db := lpr.conn.GetDB()
 	if db == nil {
 		return database.ErrConnectionLost
@@ -77,7 +77,7 @@ func (lpr *LocationPostgresRepository) CreateLocation(c context.Context, locatio
 	return result.Error
 }
 
-func (lpr *LocationPostgresRepository) DeleteLocation(c context.Context, id int) error {
+func (lpr LocationPostgresRepository) DeleteLocation(c context.Context, id int) error {
 	db := lpr.conn.GetDB()
 	if db == nil {
 		return database.ErrConnectionLost

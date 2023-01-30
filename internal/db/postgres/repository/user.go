@@ -18,7 +18,7 @@ func NewUserPostgresRepository(conn d.DataBaseConnection) UserPostgresRepository
 	return UserPostgresRepository{conn: conn}
 }
 
-func (r *UserPostgresRepository) CreateUser(c context.Context, u *models.User, password string) error {
+func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, password string) error {
 	db := r.conn.GetDB()
 
 	if db == nil {
@@ -35,7 +35,7 @@ func (r *UserPostgresRepository) CreateUser(c context.Context, u *models.User, p
 	return result.Error
 }
 
-func (r *UserPostgresRepository) ValidateUser(c context.Context, email, password string) error {
+func (r UserPostgresRepository) ValidateUser(c context.Context, email, password string) error {
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -59,7 +59,7 @@ func (r *UserPostgresRepository) ValidateUser(c context.Context, email, password
 	return nil
 }
 
-func (r *UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, error) {
+func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, error) {
 	var usersDb []*entities.UserPostgres
 	var users []*models.User
 
@@ -83,7 +83,7 @@ func (r *UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, er
 	return users, errOutput
 }
 
-func (r *UserPostgresRepository) GetUser(c context.Context, id int) (*models.User, error) {
+func (r UserPostgresRepository) GetUser(c context.Context, id int) (*models.User, error) {
 	var user *models.User
 	var entity *entities.UserPostgres
 
@@ -101,7 +101,7 @@ func (r *UserPostgresRepository) GetUser(c context.Context, id int) (*models.Use
 	return user, nil
 }
 
-func (r *UserPostgresRepository) GetUserByEmail(c context.Context, email string) (*models.User, error) {
+func (r UserPostgresRepository) GetUserByEmail(c context.Context, email string) (*models.User, error) {
 	var user *models.User
 	var entity *entities.UserPostgres
 
@@ -119,7 +119,7 @@ func (r *UserPostgresRepository) GetUserByEmail(c context.Context, email string)
 	return user, nil
 }
 
-func (r *UserPostgresRepository) DeleteUser(c context.Context, id int) error {
+func (r UserPostgresRepository) DeleteUser(c context.Context, id int) error {
 	db := r.conn.GetDB()
 	if db == nil {
 		return d.ErrConnectionLost

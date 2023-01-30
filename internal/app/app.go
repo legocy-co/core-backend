@@ -1,96 +1,46 @@
 package app
 
 import (
-	"gorm.io/gorm"
-	router "legocy-go/api/v1/router"
-	"legocy-go/api/v1/usecase/auth"
-	lego2 "legocy-go/api/v1/usecase/lego"
-	"legocy-go/api/v1/usecase/marketplace"
+	"fmt"
 	"legocy-go/internal/config"
 	d "legocy-go/internal/db"
-	p "legocy-go/internal/db/postgres"
-	repo "legocy-go/internal/db/postgres/repository"
 	"legocy-go/internal/storage"
-	"legocy-go/internal/storage/provider"
+	"log"
 )
-
-type Application interface {
-	setup() router.V1router
-	Run(port string)
-}
 
 type App struct {
 	database     d.DataBaseConnection
 	imageStorage storage.ImageStorage
 }
 
-func New(configFilepath string) Application {
+func New(configFilepath string) *App {
+
+	app := App{}
+
 	// Load config
 	err := config.SetupFromJSON(configFilepath)
 	if err != nil {
-		panic(err)
+		log.Fatalln(fmt.Sprintf("[Config] %v", err.Error()))
 	}
 
 	cfg := config.GetAppConfig()
 	if cfg == nil {
-		panic("empty config")
+		log.Fatalln("Error getting app config")
 	}
 
 	//Database
-
 	dbCfg := config.GetDBConfig()
-	var db *gorm.DB
-	conn, err := p.CreateConnection(dbCfg, db)
-	if err != nil {
-		panic(err)
+	if cfg == nil {
+		log.Fatalln("empty db config")
 	}
-	conn.Init()
+	app.setDatabase(dbCfg)
 
 	// Item Storage
 	minioCfg := config.GetMinioConfig()
-	imgStorage, err := provider.NewMinioProvider(
-		minioCfg.Url,
-		minioCfg.User, minioCfg.Password,
-		minioCfg.Ssl)
-
-	if err != nil {
-		panic(err)
+	if minioCfg == nil {
+		log.Fatalln("empty minio config")
 	}
+	app.setStorage(*minioCfg)
 
-	return &App{
-		database:     conn,
-		imageStorage: imgStorage,
-	}
-}
-
-func (a *App) setup() router.V1router {
-
-	// Repositories
-	userRepo := repo.NewUserPostgresRepository(a.database)
-	seriesRepo := repo.NewLegoSeriesPostgresRepository(a.database)
-	setsRepo := repo.NewLegoSetPostgresRepository(a.database)
-	locationRepo := repo.NewLocationPostgresRepository(a.database)
-
-	// Services
-	userService := auth.NewUserUsecase(&userRepo)
-	seriesService := lego2.NewLegoSeriesService(&seriesRepo)
-	setsService := lego2.NewLegoSetUseCase(&setsRepo)
-	locationService := marketplace.NewLocationUseCase(&locationRepo)
-
-	// Router
-	v1router := router.InitRouter(
-		userService,
-		seriesService,
-		setsService,
-		locationService)
-
-	return v1router
-}
-
-func (a *App) Run(port string) {
-	router := a.setup()
-	err := router.Run(port)
-	if err != nil {
-		panic(err)
-	}
+	return &app
 }

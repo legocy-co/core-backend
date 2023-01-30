@@ -16,7 +16,7 @@ func NewLegoSeriesPostgresRepository(conn d.DataBaseConnection) LegoSeriesPostgr
 	return LegoSeriesPostgresRepository{conn: conn}
 }
 
-func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeriesBasic) error {
+func (psql LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeriesBasic) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {
@@ -28,7 +28,7 @@ func (psql *LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s 
 	return result.Error
 }
 
-func (psql *LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error) {
+func (psql LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error) {
 	var series []*models.LegoSeries
 	db := psql.conn.GetDB()
 
@@ -46,7 +46,7 @@ func (psql *LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) (
 	return series, nil
 }
 
-func (psql *LegoSeriesPostgresRepository) GetLegoSeries(c context.Context, id int) (*models.LegoSeries, error) {
+func (psql LegoSeriesPostgresRepository) GetLegoSeries(c context.Context, id int) (*models.LegoSeries, error) {
 	var entity *entities.LegoSeriesPostgres
 	var series *models.LegoSeries
 
@@ -60,7 +60,7 @@ func (psql *LegoSeriesPostgresRepository) GetLegoSeries(c context.Context, id in
 	return series, nil
 }
 
-func (psql *LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) error {
+func (psql LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {

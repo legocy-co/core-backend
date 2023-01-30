@@ -23,6 +23,12 @@ type minioAuthData struct {
 
 func (m *MinioProvider) Connect() error {
 	var err error
+
+	// if already connected - return
+	if m.client != nil {
+		return nil
+	}
+
 	m.client, err = minio.New(m.url, &minio.Options{
 		Creds:  credentials.NewStaticV4(m.user, m.password, ""),
 		Secure: m.ssl,

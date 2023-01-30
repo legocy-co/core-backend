@@ -5,17 +5,18 @@ import (
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
 	models "legocy-go/pkg/auth/models"
+	"legocy-go/pkg/auth/repository"
 )
 
 type UserImagePostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
-func NewUserImagePostgresRepository(conn d.DataBaseConnection) *UserPostgresRepository {
-	return &UserPostgresRepository{conn: conn}
+func NewUserImagePostgresRepository(conn d.DataBaseConnection) repository.UserImageRepository {
+	return UserImagePostgresRepository{conn: conn}
 }
 
-func (r *UserImagePostgresRepository) AddUserImage(c context.Context, image *models.UserImage) error {
+func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *models.UserImage) error {
 	db := r.conn.GetDB()
 	if db == nil {
 		return d.ErrConnectionLost
@@ -26,7 +27,7 @@ func (r *UserImagePostgresRepository) AddUserImage(c context.Context, image *mod
 	return result.Error
 }
 
-func (r *UserImagePostgresRepository) GetUserImages(c context.Context, userID int) ([]*models.UserImage, error) {
+func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int) ([]*models.UserImage, error) {
 	var userImages []*models.UserImage
 
 	db := r.conn.GetDB()

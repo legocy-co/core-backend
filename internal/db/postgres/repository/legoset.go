@@ -15,7 +15,7 @@ func NewLegoSetPostgresRepository(conn d.DataBaseConnection) LegoSetPostgresRepo
 	return LegoSetPostgresRepository{conn: conn}
 }
 
-func (psql *LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetBasic) error {
+func (psql LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetBasic) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {
@@ -27,7 +27,7 @@ func (psql *LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *model
 	return nil
 }
 
-func (psql *LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, error) {
+func (psql LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, error) {
 	var legoSets []*models.LegoSet
 	db := psql.conn.GetDB()
 
@@ -46,7 +46,7 @@ func (psql *LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models
 
 }
 
-func (psql *LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*models.LegoSet, error) {
+func (psql LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*models.LegoSet, error) {
 	var legoSet *models.LegoSet
 	db := psql.conn.GetDB()
 
@@ -61,7 +61,7 @@ func (psql *LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int)
 	return legoSet, nil
 }
 
-func (psql *LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) error {
+func (psql LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {

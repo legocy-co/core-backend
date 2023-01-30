@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	r "legocy-go/api/v1/resources"
 	"legocy-go/api/v1/resources/auth"
 	ser "legocy-go/api/v1/usecase/auth"
@@ -28,22 +27,24 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 		return
 	}
 
-	errIsValidUser := th.service.ValidateUser(c.Request.Context(), jwtRequest)
-	if errIsValidUser != nil {
-		r.ErrorRespond(c.Writer, errIsValidUser.Error())
+	err := th.service.ValidateUser(c.Request.Context(), jwtRequest)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		c.Abort()
 		return
 	}
 
 	user, err := th.service.GetUserByEmail(c.Request.Context(), jwtRequest.Email)
 	if err != nil {
-		r.ErrorRespond(c.Writer, err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		c.Abort()
 		return
 	}
 
-	token, err := jwt.GenerateJWT(user.Email, user.Role)
+	token, err := jwt.GenerateJWT(user.Email, user.ID, user.Role)
 	if err != nil {
-		fmt.Println(err)
-		r.ErrorRespond(c.Writer, "Error generating token")
+		c.JSON(http.StatusBadRequest, err.Error())
+		c.Abort()
 		return
 	}
 

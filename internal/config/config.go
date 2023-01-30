@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"legocy-go/pkg/helpers"
 )
@@ -87,8 +86,6 @@ func SetupFromJSON(fp string) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(raw)
 
 	err = json.Unmarshal(raw, &cfg)
 	if err != nil {

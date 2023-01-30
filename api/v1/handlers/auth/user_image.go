@@ -2,10 +2,11 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	r "legocy-go/api/v1/resources"
 	ser "legocy-go/api/v1/usecase/auth"
 	"legocy-go/internal/storage"
-	"legocy-go/internal/storage/models"
+	s "legocy-go/internal/storage/models"
+	models "legocy-go/pkg/auth/models"
 	"net/http"
 	"strconv"
 )
@@ -15,8 +16,18 @@ type UserImageHandler struct {
 	storage storage.ImageStorage
 }
 
+func NewUserImageHandler(service ser.UserImageUseCase, storage storage.ImageStorage) UserImageHandler {
+	return UserImageHandler{service: service, storage: storage}
+}
+
 func (h *UserImageHandler) UploadUserImage(c *gin.Context) {
-	//TODO: add permission(user itself or admin) & store imgUrl in database
+
+	err := h.storage.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		c.Abort()
+		return
+	}
 
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
@@ -33,7 +44,7 @@ func (h *UserImageHandler) UploadUserImage(c *gin.Context) {
 	src, err := file.Open()
 	defer src.Close()
 
-	img := models.ImageUnit{
+	img := s.ImageUnit{
 		UserID:      userID,
 		Payload:     src,
 		PayloadName: file.Filename,
@@ -46,5 +57,18 @@ func (h *UserImageHandler) UploadUserImage(c *gin.Context) {
 		c.Abort()
 	}
 
-	logrus.Info(imgUrl)
+	userImg := &models.UserImage{
+		UserID:      userID,
+		FilepathURL: imgUrl,
+	}
+
+	err = h.service.StoreUserImage(c.Request.Context(), userImg)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		c.Abort()
+		return
+	}
+
+	response := r.DataMetaResponse{Data: userImg, Meta: r.SuccessMetaResponse}
+	r.Respond(c.Writer, response)
 }

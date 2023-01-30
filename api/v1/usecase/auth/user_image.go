@@ -2,12 +2,16 @@ package auth
 
 import (
 	"context"
-	repo "legocy-go/internal/db/postgres/repository"
 	models "legocy-go/pkg/auth/models"
+	repo "legocy-go/pkg/auth/repository"
 )
 
 type UserImageUseCase struct {
-	repo repo.UserImagePostgresRepository
+	repo repo.UserImageRepository
+}
+
+func NewUserImageUseCase(repo repo.UserImageRepository) UserImageUseCase {
+	return UserImageUseCase{repo: repo}
 }
 
 func (s *UserImageUseCase) StoreUserImage(c context.Context, image *models.UserImage) error {

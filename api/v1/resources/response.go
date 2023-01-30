@@ -15,7 +15,6 @@ func Respond(w http.ResponseWriter, data DataMetaResponse) {
 	json.NewEncoder(w).Encode(data)
 }
 
-// Static Error Response
 func ErrorRespond(w http.ResponseWriter, msg string) {
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(

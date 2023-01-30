@@ -2,9 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/api/v1/usecase/auth"
-	"legocy-go/api/v1/usecase/lego"
-	"legocy-go/api/v1/usecase/marketplace"
+	"legocy-go/internal/app"
 )
 
 type V1router struct {
@@ -15,11 +13,7 @@ func (r V1router) Run(port string) error {
 	return r.router.Run(":" + port)
 }
 
-func InitRouter(
-	userService auth.UserUseCase,
-	legoSeriesService lego.LegoSeriesService,
-	legoSetService lego.LegoSetUseCase,
-	locationService marketplace.LocationUseCase) V1router {
+func InitRouter(app *app.App) V1router {
 
 	r := gin.Default()
 	router := V1router{router: r}
@@ -42,17 +36,20 @@ func InitRouter(
 
 	v1 := r.Group("/api/v1")
 
-	//legoseries.go
-	router.addLegoSeries(v1, legoSeriesService)
-
 	//auth.go
-	router.addAuth(v1, userService)
+	router.addAuth(v1, app.GetUserService())
+
+	//user_images.go
+	router.addUserImages(v1, app.GetUserImagesService(), app.GetStorage())
+
+	//legoseries.go
+	router.addLegoSeries(v1, app.GetLegoSeriesService())
 
 	//legoset.go
-	router.addLegoSets(v1, legoSetService)
+	router.addLegoSets(v1, app.GetLegoSetService())
 
 	//location.go
-	router.addLocations(v1, locationService)
+	router.addLocations(v1, app.GetLocationService())
 
 	return router
 }

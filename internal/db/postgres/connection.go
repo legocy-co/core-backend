@@ -5,6 +5,7 @@ import (
 	"legocy-go/internal/config"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
+	"log"
 
 	postgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -56,7 +57,7 @@ func (psql PostgresConnection) Init() {
 	)
 
 	if err != nil {
-		panic(err)
+		log.Fatalln(fmt.Sprintf("[Postgres] %v", err.Error()))
 	}
 }
 
