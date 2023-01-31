@@ -18,7 +18,7 @@ func (cp *CurrencyPostgres) ToCurrency() *models.Currency {
 	}
 }
 
-func FromCurrency(curr *models.Currency) *CurrencyPostgres {
+func FromCurrencyBasic(curr *models.CurrencyBasic) *CurrencyPostgres {
 	return &CurrencyPostgres{
 		Name:   curr.Name,
 		Symbol: curr.Symbol,

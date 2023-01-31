@@ -8,7 +8,8 @@ import (
 const configFilepath = "/Users/wjojf/GolandProjects/legocy-go-clean/internal/config/json/config.json"
 
 func main() {
-	app := app.New(configFilepath)
-	router := r.InitRouter(app)
-	router.Run("8080")
+	_app := app.New(configFilepath)
+
+	v1 := r.InitRouter(_app)
+	v1.Run("8080")
 }

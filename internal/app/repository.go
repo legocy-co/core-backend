@@ -8,25 +8,25 @@ import (
 )
 
 func (a *App) GetUserRepo() auth.UserRepository {
-	return postgres.NewUserPostgresRepository(a.database)
+	return postgres.NewUserPostgresRepository(a.GetDatabase())
 }
 
 func (a *App) GetUserImagesRepo() auth.UserImageRepository {
-	return postgres.NewUserImagePostgresRepository(a.database)
+	return postgres.NewUserImagePostgresRepository(a.GetDatabase())
 }
 
 func (a *App) GetLegoSeriesRepo() lego.LegoSeriesRepository {
-	return postgres.NewLegoSeriesPostgresRepository(a.database)
+	return postgres.NewLegoSeriesPostgresRepository(a.GetDatabase())
 }
 
 func (a *App) GetLegoSetRepo() lego.LegoSetRepository {
-	return postgres.NewLegoSetPostgresRepository(a.database)
+	return postgres.NewLegoSetPostgresRepository(a.GetDatabase())
 }
 
 func (a *App) GetLocationRepo() marketplace.LocationRepository {
-	return postgres.NewLocationPostgresRepository(a.database)
+	return postgres.NewLocationPostgresRepository(a.GetDatabase())
 }
 
 func (a *App) GetCurrencyRepo() marketplace.CurrencyRepository {
-	return postgres.NewCurrencyPostgresRepository(a.database)
+	return postgres.NewCurrencyPostgresRepository(a.GetDatabase())
 }

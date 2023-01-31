@@ -53,14 +53,14 @@ func (cpr *CurrencyPostgresRepository) GetCurrency(c context.Context, symbol str
 	return currency, nil
 }
 
-func (cpr *CurrencyPostgresRepository) CreateCurrency(c context.Context, currency *models.Currency) error {
+func (cpr *CurrencyPostgresRepository) CreateCurrency(c context.Context, currency *models.CurrencyBasic) error {
 	db := cpr.conn.GetDB()
 
 	if db == nil {
 		return d.ErrConnectionLost
 	}
 
-	var entity *entities.CurrencyPostgres = entities.FromCurrency(currency)
+	var entity *entities.CurrencyPostgres = entities.FromCurrencyBasic(currency)
 	result := db.Create(&entity)
 	return result.Error
 }

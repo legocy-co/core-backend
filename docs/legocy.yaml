@@ -1,0 +1,18 @@
+swagger: "2.0"
+info:
+  title: LEGOcy API
+  description: default
+  version: 1.0.0
+host: www.legocy.com/api
+schemes:
+  - http
+  - http
+paths:
+  /v1/sets:
+    get:
+      parameters: []
+      responses:
+        default:
+          description: "Data/Meta List of LegoSets objects"
+
+  
