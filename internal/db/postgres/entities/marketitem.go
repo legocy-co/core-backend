@@ -19,6 +19,7 @@ type MarketItemPostgres struct {
 
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 	return &models.MarketItem{
+		ID:       int(mp.ID),
 		LegoSet:  *mp.LegoSet.ToLegoSet(),
 		Seller:   *mp.Seller.ToUser(),
 		Price:    mp.Price,
@@ -27,12 +28,12 @@ func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 	}
 }
 
-func FromMarketItem(mi *models.MarketItem) *MarketItemPostgres {
+func FromMarketItemBasic(mi *models.MarketItemBasic) *MarketItemPostgres {
 	return &MarketItemPostgres{
 		Price:              mi.Price,
-		CurrencyPostgresID: uint(mi.Currency.ID),
-		LegoSetPostgresID:  uint(mi.LegoSet.ID),
-		UserPostgresID:     uint(mi.Seller.ID),
-		LocationPostgresID: uint(mi.Location.ID),
+		CurrencyPostgresID: uint(mi.CurrencyID),
+		LegoSetPostgresID:  uint(mi.LegoSetID),
+		UserPostgresID:     uint(mi.SellerID),
+		LocationPostgresID: uint(mi.LocationID),
 	}
 }

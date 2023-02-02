@@ -29,3 +29,7 @@ func (a *App) GetLocationService() marketplace.LocationUseCase {
 func (a *App) GetCurrencyService() marketplace.CurrencyUseCase {
 	return marketplace.NewCurrencyUseCase(a.GetCurrencyRepo())
 }
+
+func (a *App) GetMarketItemService() marketplace.MarketItemService {
+	return marketplace.NewMarketItemSerivce(a.GetMarketItemRepo())
+}

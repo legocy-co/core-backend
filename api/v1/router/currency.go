@@ -13,6 +13,12 @@ func (r V1router) addCurrencies(rg *gin.RouterGroup, service s.CurrencyUseCase) 
 	currencies := rg.Group("/currencies").Use(m.Auth())
 	{
 		currencies.GET("/", handler.ListCurrencies)
+		currencies.GET("/:currencySymbol", handler.CurrencyDetail)
+	}
+
+	currenciesAdmin := rg.Group("/currencies/admin").Use(m.AdminUserOnly())
+	{
+		currenciesAdmin.POST("/", handler.CreateCurrency)
 	}
 
 }

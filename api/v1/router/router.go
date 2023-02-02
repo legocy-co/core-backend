@@ -54,5 +54,8 @@ func InitRouter(app *app.App) V1router {
 	//currency.go
 	router.addCurrencies(v1, app.GetCurrencyService())
 
+	//marketitem.go
+	router.addMarketItems(v1, app.GetMarketItemService(), app.GetMarketItemRepo())
+
 	return router
 }

@@ -30,3 +30,7 @@ func (a *App) GetLocationRepo() marketplace.LocationRepository {
 func (a *App) GetCurrencyRepo() marketplace.CurrencyRepository {
 	return postgres.NewCurrencyPostgresRepository(a.GetDatabase())
 }
+
+func (a *App) GetMarketItemRepo() marketplace.MarketItemRepository {
+	return postgres.NewMarketItemPostgresRepository(a.GetDatabase())
+}

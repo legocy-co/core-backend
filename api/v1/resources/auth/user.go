@@ -39,3 +39,19 @@ func GetUserResponse(u *models.User) *UserRegistrationResponse {
 		Username: u.Username,
 	}
 }
+
+type UserDetailResponse struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Role     int    `json:"role"`
+}
+
+func GetUserDetailResponse(u *models.User) UserDetailResponse {
+	return UserDetailResponse{
+		ID:       u.ID,
+		Username: u.Username,
+		Email:    u.Email,
+		Role:     u.Role,
+	}
+}

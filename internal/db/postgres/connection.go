@@ -17,7 +17,7 @@ func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (d.DataBaseCon
 		return nil, d.ErrConnectionAlreadyExists
 	}
 	postgresConn = &PostgresConnection{config, db}
-	return *postgresConn, nil
+	return postgresConn, nil
 }
 
 var postgresConn *PostgresConnection // private singleton instance
@@ -26,20 +26,20 @@ type PostgresConnection struct {
 	db     *gorm.DB
 }
 
-func (psql PostgresConnection) getConnectionString() string {
+func (psql *PostgresConnection) getConnectionString() string {
 	return fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		psql.config.Hostname, psql.config.Port, psql.config.DbUser, psql.config.DbPassword, psql.config.DbName)
 }
 
-func (psql PostgresConnection) Init() {
+func (psql *PostgresConnection) Init() {
 	dsn := psql.getConnectionString()
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
-		fmt.Println("Error connecting to database!", err)
-		return
+		fmt.Printf("Error connecting to database! %v", err.Error())
+		panic(err)
 	}
 
 	psql.db = conn
@@ -61,6 +61,6 @@ func (psql PostgresConnection) Init() {
 	}
 }
 
-func (psql PostgresConnection) GetDB() *gorm.DB {
+func (psql *PostgresConnection) GetDB() *gorm.DB {
 	return psql.db
 }

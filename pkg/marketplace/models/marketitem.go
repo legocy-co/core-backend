@@ -13,3 +13,11 @@ type MarketItem struct {
 	Currency Currency
 	Location Location
 }
+
+type MarketItemBasic struct {
+	LegoSetID  int
+	SellerID   int
+	Price      float32
+	CurrencyID int
+	LocationID int
+}
