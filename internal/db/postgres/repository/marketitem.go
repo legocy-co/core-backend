@@ -15,7 +15,9 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 	return MarketItemPostgresRepository{conn: conn}
 }
 
-func (r MarketItemPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItem, error) {
+func (r MarketItemPostgresRepository) GetMarketItems(
+	c context.Context) ([]*models.MarketItem, error) {
+
 	var marketItems []*models.MarketItem
 
 	db := r.conn.GetDB()
@@ -40,7 +42,8 @@ func (r MarketItemPostgresRepository) GetMarketItems(c context.Context) ([]*mode
 	return marketItems, nil
 }
 
-func (r MarketItemPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItem, error) {
+func (r MarketItemPostgresRepository) GetMarketItemByID(
+	c context.Context, id int) (*models.MarketItem, error) {
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -57,6 +60,23 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(c context.Context, id in
 	return entity.ToMarketItem(), nil
 }
 
+func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
+	c context.Context, sellerID int) (int64, error) {
+
+	var count *int64
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return *count, d.ErrConnectionLost
+	}
+
+	res := db.Where(
+		entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
+		Count(count)
+
+	return *count, res.Error
+}
+
 func (r MarketItemPostgresRepository) GetMarketItemsBySeller(
 	c context.Context, sellerID int) ([]*models.MarketItem, error) {
 
@@ -66,11 +86,11 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySeller(
 	}
 
 	var itemsDB []*entities.MarketItemPostgres
-	err := db.Model(&entities.MarketItemPostgres{}).
+	err := db.Where(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Find(&itemsDB, entities.MarketItemPostgres{UserPostgresID: uint(sellerID)})
+		Find(&itemsDB)
 
 	if err.Error != nil {
 		return nil, err.Error
@@ -84,8 +104,8 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySeller(
 	return marketItems, nil
 }
 
-func (r MarketItemPostgresRepository) CreateMarketItem(c context.Context,
-	item *models.MarketItemBasic) error {
+func (r MarketItemPostgresRepository) CreateMarketItem(
+	c context.Context, item *models.MarketItemBasic) error {
 
 	db := r.conn.GetDB()
 	if db == nil {

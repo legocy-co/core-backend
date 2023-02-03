@@ -92,7 +92,7 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
-	tokenString := v1.GetAuthToken(c)
+	tokenString := v1.GetAuthTokenHeader(c)
 	userPayload, ok := auth.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
@@ -114,7 +114,7 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	}
 
 	response := r.DataMetaResponse{
-		Data: true,
+		Data: itemRequest,
 		Meta: r.SuccessMetaResponse,
 	}
 	r.Respond(c.Writer, response)
