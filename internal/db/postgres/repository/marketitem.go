@@ -4,6 +4,7 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
+	"legocy-go/pkg/helpers"
 	models "legocy-go/pkg/marketplace/models"
 )
 
@@ -18,18 +19,31 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 func (r MarketItemPostgresRepository) GetMarketItems(
 	c context.Context) ([]*models.MarketItem, error) {
 
+	var limit int = -1
+	var page int = -1
+	var offset int = -1
+
+	if p := c.Value("page"); p != nil {
+		if l := c.Value("limit"); l != nil {
+			page = c.Value("page").(int)
+			limit = c.Value("limit").(int)
+			offset = helpers.GetOffsetByPageLimit(page, limit)
+		}
+	}
+
 	var marketItems []*models.MarketItem
+	var itemsDB []*entities.MarketItemPostgres
 
 	db := r.conn.GetDB()
 	if db == nil {
 		return marketItems, d.ErrConnectionLost
 	}
 
-	var itemsDB []*entities.MarketItemPostgres
 	res := db.Model(&entities.MarketItemPostgres{}).
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
+		Limit(limit).Offset(offset).
 		Find(&itemsDB)
 	if res.Error != nil {
 		return marketItems, res.Error
