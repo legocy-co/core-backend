@@ -15,13 +15,16 @@ func (r V1router) addMarketItems(
 
 	items := rg.Group("/market-items").Use(m.Auth())
 	{
-		items.GET("/",
-			m.AddDefaultPagination(), handler.ListMarketItems)
-		items.POST("/",
-			m.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()),
-			handler.CreateMarketItem)
-		items.DELETE("/:itemId",
-			m.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()),
-			handler.DeleteMarketItem)
+		items.GET("/", handler.ListMarketItems)
+
+		items.Use(
+			m.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
+		{
+			items.POST("/", handler.CreateMarketItem)
+		}
+		items.Use(m.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
+		{
+			items.DELETE("/:itemId", handler.DeleteMarketItem)
+		}
 	}
 }

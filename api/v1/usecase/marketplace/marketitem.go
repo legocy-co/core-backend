@@ -25,11 +25,6 @@ func (ms *MarketItemService) ListMarketItems(
 	return ms.repo.GetMarketItems(c)
 }
 
-func (ms *MarketItemService) SellerMarketItems(
-	c context.Context, id int) ([]*models.MarketItem, error) {
-	return ms.repo.GetMarketItemsBySeller(c, id)
-}
-
 func (ms *MarketItemService) MarketItemDetail(c context.Context, id int) (*models.MarketItem, error) {
 	return ms.repo.GetMarketItemByID(c, id)
 }

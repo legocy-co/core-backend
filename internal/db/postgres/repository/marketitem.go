@@ -4,9 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
-	"legocy-go/internal/utils"
+	"legocy-go/pkg/filter"
 	models "legocy-go/pkg/marketplace/models"
-	"log"
 )
 
 type MarketItemPostgresRepository struct {
@@ -20,18 +19,9 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 func (r MarketItemPostgresRepository) GetMarketItems(
 	c context.Context) ([]*models.MarketItem, error) {
 
-	var limit int = -1
-	var page int = -1
-	pagination := c.Value("pagination").(utils.Pagination)
-	utils.LoadPaginationConfig(pagination, &page, &limit)
-
-	var offset int = -1
-	if page > 0 && limit > 0 {
-		offset = (page - 1) * limit
-	}
-
 	var marketItems []*models.MarketItem
 	var itemsDB []*entities.MarketItemPostgres
+	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -39,10 +29,10 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 	}
 
 	res := db.Model(&entities.MarketItemPostgres{}).
+		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Limit(limit).Offset(offset).
 		Find(&itemsDB)
 	if res.Error != nil {
 		return marketItems, res.Error
@@ -88,49 +78,6 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 		Count(count)
 
 	return *count, res.Error
-}
-
-func (r MarketItemPostgresRepository) GetMarketItemsBySeller(
-	c context.Context, sellerID int) ([]*models.MarketItem, error) {
-
-	var marketItems []*models.MarketItem
-	var itemsDB []*entities.MarketItemPostgres
-
-	var limit int = -1
-	var page int = -1
-	pagination := c.Value("pagination").(utils.Pagination)
-	utils.LoadPaginationConfig(pagination, &page, &limit)
-
-	log.Println(limit, page)
-
-	var offset int = -1
-	if page > 0 && limit > 0 {
-		offset = (page - 1) * limit
-	}
-
-	log.Println(page, limit, offset)
-
-	db := r.conn.GetDB()
-	if db == nil {
-		return nil, d.ErrConnectionLost
-	}
-
-	err := db.Where(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
-		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Preload("Currency").Preload("Location").
-		Limit(limit).Offset(offset).
-		Find(&itemsDB)
-
-	if err.Error != nil {
-		return nil, err.Error
-	}
-
-	for _, entity := range itemsDB {
-		marketItems = append(marketItems, entity.ToMarketItem())
-	}
-
-	return marketItems, nil
 }
 
 func (r MarketItemPostgresRepository) CreateMarketItem(
