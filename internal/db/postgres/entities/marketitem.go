@@ -7,13 +7,13 @@ import (
 type MarketItemPostgres struct {
 	Model
 	Price              float32
-	CurrencyPostgresID uint
+	CurrencyPostgresID uint             `filter:"param:currencyId;searchable,filterable"`
 	Currency           CurrencyPostgres `gorm:"ForeignKey:CurrencyPostgresID"`
-	LegoSetPostgresID  uint
-	LegoSet            LegoSetPostgres `gorm:"ForeignKey:LegoSetPostgresID"`
-	UserPostgresID     uint
-	Seller             UserPostgres `gorm:"ForeignKey:UserPostgresID"`
-	LocationPostgresID uint
+	LegoSetPostgresID  uint             `filter:"param:setId;searchable,filterable"`
+	LegoSet            LegoSetPostgres  `gorm:"ForeignKey:LegoSetPostgresID"`
+	UserPostgresID     uint             `filter:"param:sellerId;searchable,filterable"`
+	Seller             UserPostgres     `gorm:"ForeignKey:UserPostgresID"`
+	LocationPostgresID uint             `filter:"param:locationId;searchable,filterable"`
 	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID"`
 }
 

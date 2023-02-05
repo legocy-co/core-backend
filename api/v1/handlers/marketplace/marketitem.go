@@ -1,13 +1,12 @@
 package marketplace
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	v1 "legocy-go/api/v1/middleware"
 	r "legocy-go/api/v1/resources"
 	res "legocy-go/api/v1/resources/marketplace"
+	"legocy-go/api/v1/resources/pagination"
 	s "legocy-go/api/v1/usecase/marketplace"
-	"legocy-go/internal/utils"
 	auth "legocy-go/pkg/auth/middleware"
 	"legocy-go/pkg/marketplace/errors"
 	models "legocy-go/pkg/marketplace/models"
@@ -26,43 +25,20 @@ func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
 }
 
 func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
+
+	ctx := pagination.GetPaginationContext(c)
+
 	var marketItems []*models.MarketItem
-	var err error
-
-	var pagination = utils.Pagination{
-		Page:  c.Param("page"),
-		Limit: c.Param("limit"),
-	}
-
-	b := context.Background()
-	ctx := context.WithValue(b, "pagination", pagination)
-
-	sellerId := c.Query("sellerId")
-	if sellerId == "" {
-		// Load all
-		marketItems, err = h.service.ListMarketItems(ctx)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-	} else {
-		// Load seller MarketItems
-		sellerId, err := strconv.Atoi(sellerId)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		marketItems, err = h.service.SellerMarketItems(ctx, sellerId)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+	marketItems, err := h.service.ListMarketItems(ctx)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": err.Error()})
 	}
 
 	if len(marketItems) == 0 {
 		c.AbortWithStatusJSON(
-			http.StatusInternalServerError,
-			gin.H{"error": errors.ErrMarketItemsNotFound})
+			http.StatusNotFound,
+			gin.H{"error": errors.ErrMarketItemsNotFound.Error()})
 		return
 	}
 
@@ -73,7 +49,7 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	response := r.DataMetaResponse{
 		Data: marketItemResponse,
-		Meta: r.GetPaginatedMetaResponse(c.Request.URL.Path, r.MsgSuccess, pagination),
+		Meta: r.SuccessMetaResponse,
 	}
 	r.Respond(c.Writer, response)
 }

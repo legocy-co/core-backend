@@ -1,10 +1,22 @@
-package v1
+package pagination
 
 import (
+	"context"
 	"fmt"
-	"legocy-go/internal/utils"
+	"github.com/gin-gonic/gin"
+	"legocy-go/pkg/filter"
+	"log"
 	"strconv"
 )
+
+func GetPaginationContext(c *gin.Context) context.Context {
+	params, err := filter.GetQueryParams(c)
+	if err != nil {
+		log.Println(err.Error())
+		return c
+	}
+	return context.WithValue(context.Background(), "pagination", params)
+}
 
 type paginationUrls struct {
 	Prev string `json:"previous""`
@@ -20,7 +32,7 @@ type PaginatedMetaResponse struct {
 }
 
 func GetPaginatedMetaResponse(
-	url string, message string, pagination utils.Pagination) PaginatedMetaResponse {
+	url string, message string, pagination Pagination) PaginatedMetaResponse {
 
 	page, err := strconv.Atoi(pagination.Page)
 	if err != nil {
