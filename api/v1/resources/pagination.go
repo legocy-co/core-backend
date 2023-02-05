@@ -1,9 +1,8 @@
 package v1
 
 import (
-	"github.com/gin-gonic/gin"
-	"legocy-go/pkg/helpers"
-	u "net/url"
+	"fmt"
+	"legocy-go/internal/utils"
 	"strconv"
 )
 
@@ -14,51 +13,55 @@ type paginationUrls struct {
 }
 
 type PaginatedMetaResponse struct {
-	Status   string
+	Message  string         `json:"message"`
 	Page     int            `json:"page"`
 	PageSize int            `json:"page_size"`
 	Links    paginationUrls `json:"links"`
 }
 
-func getPrevPageUrl(url *u.URL, page int) string {
+func GetPaginatedMetaResponse(
+	url string, message string, pagination utils.Pagination) PaginatedMetaResponse {
 
-	var urlCopy *u.URL
-	err := helpers.DeepCopy(url, urlCopy)
+	page, err := strconv.Atoi(pagination.Page)
 	if err != nil {
-		return ""
+		page = 0
+	}
+	limit, err := strconv.Atoi(pagination.Limit)
+	if err != nil {
+		limit = 0
 	}
 
+	return PaginatedMetaResponse{
+		Message:  message,
+		Page:     page,
+		PageSize: limit,
+		Links:    generateMetaUrls(url, page),
+	}
+
+}
+
+func getPrevPageUrl(url string, page int) string {
 	prevPage := page - 1
-	switch prevPage {
-	case 0:
-		return ""
-	default:
-		urlCopy.Query().Set("page", strconv.Itoa(prevPage))
-		return urlCopy.Path
-	}
-}
+	var pageSymbol string
 
-func getNextPageUrl(url *u.URL, page int) string {
-	var urlCopy *u.URL
-	err := helpers.DeepCopy(url, urlCopy)
-	if err != nil {
-		return ""
+	if prevPage <= 0 {
+		pageSymbol = ""
+	} else {
+		pageSymbol = strconv.Itoa(prevPage)
 	}
 
-	nextPage := page + 1
-	urlCopy.Query().Set("page", strconv.Itoa(nextPage))
-	return urlCopy.Path
+	return url + fmt.Sprintf("?page=%v", pageSymbol)
+
 }
 
-func generatePrevNextUrls(url *u.URL, page int) paginationUrls {
+func getNextPageUrl(url string, page int) string {
+	return url + fmt.Sprintf("?page=%v", strconv.Itoa(page+1))
+}
+
+func generateMetaUrls(url string, page int) paginationUrls {
 	return paginationUrls{
 		Prev: getPrevPageUrl(url, page),
-		Curr: url.Path,
+		Curr: url,
 		Next: getNextPageUrl(url, page),
 	}
-}
-
-func GetPaginatedMetaResponse(ctx *gin.Context, message string) *PaginatedMetaResponse {
-	// TODO:
-	return nil
 }

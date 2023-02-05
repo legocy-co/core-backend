@@ -4,8 +4,9 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
-	"legocy-go/pkg/helpers"
+	"legocy-go/internal/utils"
 	models "legocy-go/pkg/marketplace/models"
+	"log"
 )
 
 type MarketItemPostgresRepository struct {
@@ -21,14 +22,12 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 
 	var limit int = -1
 	var page int = -1
-	var offset int = -1
+	pagination := c.Value("pagination").(utils.Pagination)
+	utils.LoadPaginationConfig(pagination, &page, &limit)
 
-	if p := c.Value("page"); p != nil {
-		if l := c.Value("limit"); l != nil {
-			page = c.Value("page").(int)
-			limit = c.Value("limit").(int)
-			offset = helpers.GetOffsetByPageLimit(page, limit)
-		}
+	var offset int = -1
+	if page > 0 && limit > 0 {
+		offset = (page - 1) * limit
 	}
 
 	var marketItems []*models.MarketItem
@@ -94,23 +93,39 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 func (r MarketItemPostgresRepository) GetMarketItemsBySeller(
 	c context.Context, sellerID int) ([]*models.MarketItem, error) {
 
+	var marketItems []*models.MarketItem
+	var itemsDB []*entities.MarketItemPostgres
+
+	var limit int = -1
+	var page int = -1
+	pagination := c.Value("pagination").(utils.Pagination)
+	utils.LoadPaginationConfig(pagination, &page, &limit)
+
+	log.Println(limit, page)
+
+	var offset int = -1
+	if page > 0 && limit > 0 {
+		offset = (page - 1) * limit
+	}
+
+	log.Println(page, limit, offset)
+
 	db := r.conn.GetDB()
 	if db == nil {
 		return nil, d.ErrConnectionLost
 	}
 
-	var itemsDB []*entities.MarketItemPostgres
 	err := db.Where(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
+		Limit(limit).Offset(offset).
 		Find(&itemsDB)
 
 	if err.Error != nil {
 		return nil, err.Error
 	}
 
-	var marketItems []*models.MarketItem
 	for _, entity := range itemsDB {
 		marketItems = append(marketItems, entity.ToMarketItem())
 	}

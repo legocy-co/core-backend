@@ -35,7 +35,7 @@ func (psql *PostgresConnection) getConnectionString() string {
 func (psql *PostgresConnection) Init() {
 	dsn := psql.getConnectionString()
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		fmt.Printf("Error connecting to database! %v", err.Error())
