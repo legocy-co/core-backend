@@ -64,14 +64,12 @@ func generateMetaUrls(url string, page int) paginationUrls {
 
 func getPrevPageUrl(url string, page int) string {
 	prevPage := page - 1
-	var pageSymbol string
 
 	if prevPage <= 0 {
-		pageSymbol = ""
-	} else {
-		pageSymbol = strconv.Itoa(prevPage)
+		return url
 	}
 
+	pageSymbol := strconv.Itoa(prevPage)
 	return url + fmt.Sprintf("?page=%v", pageSymbol)
 
 }
