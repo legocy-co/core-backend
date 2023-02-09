@@ -13,6 +13,10 @@ type App struct {
 	imageStorage storage.ImageStorage
 }
 
+func (a *App) isReady() bool {
+	return a.imageStorage.IsReady() && a.database.IsReady()
+}
+
 func New(configFilepath string) *App {
 
 	app := App{}
@@ -41,6 +45,10 @@ func New(configFilepath string) *App {
 		log.Fatalln("empty minio config")
 	}
 	app.setStorage(*minioCfg)
+
+	if !app.isReady() {
+		panic("Some dependencies failed to inject")
+	}
 
 	return &app
 }

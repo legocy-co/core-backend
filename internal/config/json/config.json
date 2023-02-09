@@ -3,8 +3,8 @@
         "hostname": "localhost",
         "port": 5432,
         "db_name": "legocy_go",
-        "db_user": "wjojf",
-        "db_password": "12345"
+        "db_user": "postgres",
+        "db_password": "postgres"
     },
 
     "jwt": {
@@ -13,10 +13,11 @@
     },
 
     "minio": {
-        "url":"minio",
-        "user": "legocy",
-        "password": "legocy123",
-        "token": "",
+        "url":"localhost:9000",
+        "user": "admin",
+        "password": "password12345",
+        "token": "dtrozSkKxVAFeuQ8",
+        "secret_token": "XB2ziVLFTHzLjrLlOrrkCEn98CRSGB72" ,
         "ssl": false
     }
 }

@@ -41,11 +41,12 @@ type JWTConfig struct {
 }
 
 type MinioConfig struct {
-	Url      string `json:"url"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Token    string `json:"token"`
-	Ssl      bool   `json:"ssl"`
+	Url         string `json:"url"`
+	User        string `json:"user"`
+	Password    string `json:"password"`
+	Token       string `json:"access_token"`
+	SecretToken string `json:"secret_token"`
+	Ssl         bool   `json:"ssl"`
 }
 
 func GetDBConfig() *DatabaseConfig {

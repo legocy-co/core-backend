@@ -26,6 +26,10 @@ type PostgresConnection struct {
 	db     *gorm.DB
 }
 
+func (p *PostgresConnection) IsReady() bool {
+	return p.db != nil
+}
+
 func (psql *PostgresConnection) getConnectionString() string {
 	return fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",

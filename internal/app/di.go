@@ -33,7 +33,7 @@ func (a *App) GetStorage() storage.ImageStorage {
 func (a *App) setStorage(minioCfg config.MinioConfig) {
 	imgStorage, err := provider.NewMinioProvider(
 		minioCfg.Url,
-		minioCfg.User, minioCfg.Password,
+		minioCfg.User, minioCfg.Password, minioCfg.Token,
 		minioCfg.Ssl)
 	if err != nil {
 		log.Fatalln(fmt.Sprintf("[Minio] %v", err.Error()))

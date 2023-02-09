@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"github.com/minio/minio-go/v7"
 	"legocy-go/internal/storage/models"
 	"log"
@@ -12,14 +13,16 @@ func (m *MinioProvider) UploadFile(ctx context.Context, object models.ImageUnit)
 	// Получаем "уникальное" имя объекта для загружаемого фото
 	imageName := object.GenerateObjectName()
 
-	_, err := m.client.PutObject(
+	uploadInfo, err := m.client.PutObject(
 		ctx,
-		UserObjectsBucketName, // Константа с именем бакета
+		UserObjectsBucketName,
 		imageName,
 		object.Payload,
 		object.PayloadSize,
-		minio.PutObjectOptions{ContentType: "image/png"},
+		minio.PutObjectOptions{},
 	)
+
+	log.Println(fmt.Sprintf("Sending Image to Minio: %v", uploadInfo))
 
 	return imageName, err
 }

@@ -53,8 +53,9 @@ func (h *UserImageHandler) UploadUserImage(c *gin.Context) {
 
 	imgUrl, err := h.storage.UploadFile(c.Request.Context(), img)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		c.Abort()
+		return
 	}
 
 	userImg := &models.UserImage{
@@ -64,7 +65,7 @@ func (h *UserImageHandler) UploadUserImage(c *gin.Context) {
 
 	err = h.service.StoreUserImage(c.Request.Context(), userImg)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		c.Abort()
 		return
 	}
