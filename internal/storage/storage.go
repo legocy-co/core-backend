@@ -8,6 +8,6 @@ import (
 type ImageStorage interface {
 	Connect() error // Инициализатор подключения
 	IsReady() bool
-	UploadFile(context.Context, models.ImageUnit) (string, error)   // Загрузка файлов
-	DownloadFile(context.Context, string) (models.ImageUnit, error) // Скачивание файлов
+	UploadFile(context.Context, models.ImageUnit, string) (string, error) // Загрузка файлов
+	DownloadFile(context.Context, string) (models.ImageUnit, error)       // Скачивание файлов
 }

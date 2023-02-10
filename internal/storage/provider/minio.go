@@ -18,11 +18,12 @@ func (m *MinioProvider) IsReady() bool {
 }
 
 type minioAuthData struct {
-	url      string
-	user     string
-	password string
-	token    string
-	ssl      bool
+	url         string
+	user        string
+	password    string
+	token       string
+	secretToken string
+	ssl         bool
 }
 
 func (m *MinioProvider) Connect() error {
@@ -34,7 +35,7 @@ func (m *MinioProvider) Connect() error {
 	}
 
 	m.client, err = minio.New(m.url, &minio.Options{
-		Creds:  credentials.NewStaticV4(m.user, m.password, m.token),
+		Creds:  credentials.NewStaticV4(m.token, m.secretToken, ""),
 		Secure: m.ssl,
 	})
 	if err != nil {
@@ -44,15 +45,16 @@ func (m *MinioProvider) Connect() error {
 	return err
 }
 
-func NewMinioProvider(minioURL string, minioUser, minioPassword, token string, ssl bool) (storage.ImageStorage, error) {
+func NewMinioProvider(minioURL string, minioUser, minioPassword, token, secretToken string, ssl bool) (storage.ImageStorage, error) {
 	//Client will be initialized by Connect() method
 	return &MinioProvider{
 		minioAuthData: minioAuthData{
-			password: minioPassword,
-			url:      minioURL,
-			user:     minioUser,
-			ssl:      ssl,
-			token:    token,
+			password:    minioPassword,
+			url:         minioURL,
+			user:        minioUser,
+			ssl:         ssl,
+			token:       token,
+			secretToken: secretToken,
 		},
 		client: nil,
 	}, nil

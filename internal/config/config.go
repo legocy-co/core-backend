@@ -44,7 +44,7 @@ type MinioConfig struct {
 	Url         string `json:"url"`
 	User        string `json:"user"`
 	Password    string `json:"password"`
-	Token       string `json:"access_token"`
+	Token       string `json:"token"`
 	SecretToken string `json:"secret_token"`
 	Ssl         bool   `json:"ssl"`
 }

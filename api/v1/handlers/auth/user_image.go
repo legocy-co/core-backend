@@ -6,6 +6,7 @@ import (
 	ser "legocy-go/api/v1/usecase/auth"
 	"legocy-go/internal/storage"
 	s "legocy-go/internal/storage/models"
+	"legocy-go/internal/storage/provider"
 	models "legocy-go/pkg/auth/models"
 	"net/http"
 	"strconv"
@@ -45,13 +46,13 @@ func (h *UserImageHandler) UploadUserImage(c *gin.Context) {
 	defer src.Close()
 
 	img := s.ImageUnit{
-		UserID:      userID,
+		ID:          userID,
 		Payload:     src,
 		PayloadName: file.Filename,
 		PayloadSize: file.Size,
 	}
 
-	imgUrl, err := h.storage.UploadFile(c.Request.Context(), img)
+	imgUrl, err := h.storage.UploadFile(c.Request.Context(), img, provider.UserObjectsBucketName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		c.Abort()

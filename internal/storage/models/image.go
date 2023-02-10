@@ -8,20 +8,21 @@ import (
 )
 
 type ImageUnit struct {
-	UserID      int
+	ID          int
 	Payload     io.Reader
 	PayloadName string
 	PayloadSize int64
 }
 
-func (i *ImageUnit) GenerateObjectName() string {
+func (i *ImageUnit) GenerateObjectName(bucketName string) string {
 	t := time.Now()
 	formatted := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
 		t.Year(), t.Month(), t.Day(),
 		t.Hour(), t.Minute(), t.Second())
 	return fmt.Sprintf(
-		"%s/%s.%s",
-		strconv.Itoa(i.UserID),
+		"%s/%s/%s.%s",
+		bucketName,
+		strconv.Itoa(i.ID),
 		formatted,
 		"png")
 }

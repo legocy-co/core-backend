@@ -1,5 +1,11 @@
 package provider
 
 const (
-	UserObjectsBucketName = "legocy"
+	UserObjectsBucketName      = "users"
+	MarketItemImagesBucketName = "marketItems"
 )
+
+func isValidBucketName(bucketName string) bool {
+	return bucketName == UserObjectsBucketName ||
+		bucketName == MarketItemImagesBucketName
+}
