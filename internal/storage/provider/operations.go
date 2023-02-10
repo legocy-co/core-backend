@@ -20,8 +20,7 @@ func (m *MinioProvider) UploadFile(ctx context.Context, object models.ImageUnit,
 		return "", err
 	}
 
-	// Получаем "уникальное" имя объекта для загружаемого фото
-	imageName := object.GenerateObjectName(bucketName)
+	imageName := object.GenerateObjectName()
 	log.Println(imageName)
 
 	uploadInfo, err := m.client.PutObject(
@@ -34,11 +33,9 @@ func (m *MinioProvider) UploadFile(ctx context.Context, object models.ImageUnit,
 	)
 
 	log.Println(fmt.Sprintf("Sending Image to Minio: %v", uploadInfo))
-	log.Println(err)
-	return imageName, err
+	return object.GetObjectURL(m.url, bucketName, imageName), err
 }
 
-// DownloadFile - Возвращает файл из minio
 func (m *MinioProvider) DownloadFile(ctx context.Context, image string) (models.ImageUnit, error) {
 	reader, err := m.client.GetObject(
 		ctx,

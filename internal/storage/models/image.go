@@ -14,15 +14,23 @@ type ImageUnit struct {
 	PayloadSize int64
 }
 
-func (i *ImageUnit) GenerateObjectName(bucketName string) string {
+func (i *ImageUnit) GenerateObjectName() string {
 	t := time.Now()
 	formatted := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
 		t.Year(), t.Month(), t.Day(),
 		t.Hour(), t.Minute(), t.Second())
 	return fmt.Sprintf(
-		"%s/%s/%s.%s",
-		bucketName,
+		"%s/%s.%s",
 		strconv.Itoa(i.ID),
 		formatted,
 		"png")
+}
+
+func (i *ImageUnit) GetObjectURL(baseUrl, bucketName, filepath string) string {
+	return fmt.Sprintf(
+		"%s/%s/%s",
+		baseUrl,
+		bucketName,
+		filepath,
+	)
 }
