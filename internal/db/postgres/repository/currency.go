@@ -16,16 +16,16 @@ func NewCurrencyPostgresRepository(conn d.DataBaseConnection) *CurrencyPostgresR
 }
 
 func (cpr *CurrencyPostgresRepository) GetCurrencies(c context.Context) ([]*models.Currency, error) {
-	var currencies []*models.Currency
 	var currenciesDB []*entities.CurrencyPostgres
 	db := cpr.conn.GetDB()
 
 	if db == nil {
-		return currencies, d.ErrConnectionLost
+		return nil, d.ErrConnectionLost
 	}
 
 	db.Find(&currenciesDB)
 
+	currencies := make([]*models.Currency, 0, len(currenciesDB))
 	for _, entity := range currenciesDB {
 		currencies = append(currencies, entity.ToCurrency())
 	}

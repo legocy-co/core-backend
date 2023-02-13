@@ -16,16 +16,16 @@ func NewLocationPostgresRepository(conn database.DataBaseConnection) LocationPos
 }
 
 func (lpr LocationPostgresRepository) GetLocations(c context.Context) ([]*models.Location, error) {
-	var locations []*models.Location
 	var locationsDB []*entities.LocationPostgres
 
 	db := lpr.conn.GetDB()
 	if db == nil {
-		return locations, database.ErrConnectionLost
+		return nil, database.ErrConnectionLost
 	}
 
 	db.Find(&locationsDB)
 
+	locations := make([]*models.Location, 0, len(locationsDB))
 	for _, entity := range locationsDB {
 		locations = append(locations, entity.ToLocation())
 	}
@@ -39,17 +39,17 @@ func (lpr LocationPostgresRepository) GetLocations(c context.Context) ([]*models
 }
 
 func (lpr LocationPostgresRepository) GetCountryLocations(c context.Context, country string) ([]*models.Location, error) {
-	var locations []*models.Location
 	var locationsDB []*entities.LocationPostgres
 
 	db := lpr.conn.GetDB()
 	if db == nil {
-		return locations, database.ErrConnectionLost
+		return nil, database.ErrConnectionLost
 	}
 
 	db.Model(entities.LocationPostgres{}).Find(&locationsDB,
 		entities.LocationPostgres{Country: country})
 
+	locations := make([]*models.Location, 0, len(locationsDB))
 	for _, entity := range locationsDB {
 		locations = append(locations, entity.ToLocation())
 	}

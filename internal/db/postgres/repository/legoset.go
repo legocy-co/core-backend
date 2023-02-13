@@ -28,16 +28,16 @@ func (psql LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models
 }
 
 func (psql LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, error) {
-	var legoSets []*models.LegoSet
 	db := psql.conn.GetDB()
 
 	if db == nil {
-		return legoSets, d.ErrConnectionLost
+		return nil, d.ErrConnectionLost
 	}
 
 	var entitiesList []*entities.LegoSetPostgres
 	db.Preload("LegoSeries").Find(&entitiesList)
 
+	legoSets := make([]*models.LegoSet, 0, len(entitiesList))
 	for _, entity := range entitiesList {
 		legoSets = append(legoSets, entity.ToLegoSet())
 	}

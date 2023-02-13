@@ -61,15 +61,15 @@ func (r UserPostgresRepository) ValidateUser(c context.Context, email, password 
 
 func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, error) {
 	var usersDb []*entities.UserPostgres
-	var users []*models.User
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return users, d.ErrConnectionLost
+		return nil, d.ErrConnectionLost
 	}
 
 	db.Find(usersDb)
 
+	users := make([]*models.User, 0, len(usersDb))
 	for _, userDb := range usersDb {
 		users = append(users, userDb.ToUser())
 	}

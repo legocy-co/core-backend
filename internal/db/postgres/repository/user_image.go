@@ -28,11 +28,10 @@ func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *mode
 }
 
 func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int) ([]*models.UserImage, error) {
-	var userImages []*models.UserImage
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return userImages, d.ErrConnectionLost
+		return nil, d.ErrConnectionLost
 	}
 
 	var userImagesDB []*entities.UserPostgresImage
@@ -40,9 +39,10 @@ func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int
 		&userImagesDB, entities.UserPostgresImage{UserID: uint(userID)})
 
 	if len(userImagesDB) == 0 {
-		return userImages, d.ErrItemNotFound
+		return nil, d.ErrItemNotFound
 	}
 
+	userImages := make([]*models.UserImage, 0, len(userImagesDB))
 	for _, entity := range userImagesDB {
 		userImages = append(userImages, entity.ToUserImage())
 	}

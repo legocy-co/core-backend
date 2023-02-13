@@ -19,13 +19,12 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 func (r MarketItemPostgresRepository) GetMarketItems(
 	c context.Context) ([]*models.MarketItem, error) {
 
-	var marketItems []*models.MarketItem
 	var itemsDB []*entities.MarketItemPostgres
 	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return marketItems, d.ErrConnectionLost
+		return nil, d.ErrConnectionLost
 	}
 
 	res := db.Model(&entities.MarketItemPostgres{}).
@@ -35,9 +34,10 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		Preload("Currency").Preload("Location").
 		Find(&itemsDB)
 	if res.Error != nil {
-		return marketItems, res.Error
+		return nil, res.Error
 	}
 
+	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
 	for _, entity := range itemsDB {
 		marketItems = append(marketItems, entity.ToMarketItem())
 	}
