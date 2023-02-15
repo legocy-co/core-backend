@@ -42,7 +42,7 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 		return
 	}
 
-	var marketItemResponse []res.MarketItemResponse
+	marketItemResponse := make([]res.MarketItemResponse, 0, len(marketItems))
 	for _, m := range marketItems {
 		marketItemResponse = append(marketItemResponse, res.GetMarketItemResponse(m))
 	}

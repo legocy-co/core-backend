@@ -24,7 +24,7 @@ func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
 		return
 	}
 
-	var setsResponse []res.LegoSetResponse
+	setsResponse := make([]res.LegoSetResponse, 0, len(setsList))
 	for _, legoSet := range setsList {
 		setsResponse = append(setsResponse, res.GetLegoSetResponse(legoSet))
 	}

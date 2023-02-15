@@ -25,8 +25,7 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 		return
 	}
 
-	var seriesResponses []lego.LegoSeriesResponse
-
+	seriesResponses := make([]lego.LegoSeriesResponse, 0, len(seriesList))
 	for _, series := range seriesList {
 		seriesResponses = append(seriesResponses, lego.GetLegoSeriesResponse(series))
 	}
