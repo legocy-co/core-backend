@@ -1,9 +1,9 @@
 package app
 
 import (
-	auth "legocy-go/api/v1/usecase/auth"
-	"legocy-go/api/v1/usecase/lego"
-	"legocy-go/api/v1/usecase/marketplace"
+	auth "legocy-go/delievery/http/usecase/auth"
+	"legocy-go/delievery/http/usecase/lego"
+	"legocy-go/delievery/http/usecase/marketplace"
 )
 
 func (a *App) GetUserService() auth.UserUseCase {

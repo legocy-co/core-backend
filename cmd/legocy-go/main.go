@@ -1,7 +1,7 @@
 package main
 
 import (
-	r "legocy-go/api/v1/router"
+	r "legocy-go/delievery/http/router"
 	"legocy-go/internal/app"
 )
 
