@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 	"legocy-go/internal/config"
 	"legocy-go/internal/db"
-	p "legocy-go/internal/db/postgres"
+	postgres "legocy-go/internal/db/postgres"
 	"legocy-go/internal/storage"
 	"legocy-go/internal/storage/provider"
 	"log"
@@ -17,7 +17,7 @@ func (a *App) GetDatabase() db.DataBaseConnection {
 
 func (a *App) setDatabase(dbCfg *config.DatabaseConfig) {
 	var dbConn *gorm.DB
-	conn, err := p.CreateConnection(dbCfg, dbConn)
+	conn, err := postgres.CreateConnection(dbCfg, dbConn)
 	if err != nil {
 		log.Fatalln(fmt.Sprintf("[Database] %v", err.Error()))
 		return

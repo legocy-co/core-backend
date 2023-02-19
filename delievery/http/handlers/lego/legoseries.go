@@ -21,7 +21,7 @@ func NewLegoSeriesHandler(service s.LegoSeriesService) LegoSeriesHandler {
 func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 	seriesList, err := lsh.service.ListSeries(c.Request.Context())
 	if err != nil {
-		r.ErrorRespond(c.Writer, err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -41,14 +41,13 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	seriesObj, err := lsh.service.DetailSeries(c.Request.Context(), seriesID)
 	if err != nil || seriesObj.ID == 0 {
-		c.JSON(http.StatusBadRequest, "Error extracting LegoSeries object with given ID")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error extracting LegoSeries object with given ID"})
 		c.Abort()
 		return
 	}

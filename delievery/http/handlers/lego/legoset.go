@@ -101,7 +101,7 @@ func (lsh *LegoSetHandler) SetDelete(c *gin.Context) {
 
 	err = lsh.service.LegoSetDelete(c, setID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()
 		return
 	}
