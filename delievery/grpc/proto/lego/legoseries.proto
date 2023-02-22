@@ -1,0 +1,38 @@
+syntax="proto3";
+
+package legoseries_service;
+
+service LegoSeriesService {
+    rpc GetLegoSeriesList(NoParam) returns (LegoSeriesMultipleResponse);
+    rpc GetLegoSeriesByID(LegoSeriesIDRequest) returns (LegoSeriesSingleResponse);
+    rpc GetLegoSeriesByName(LegoSeriesNameRequest) returns (LegoSeriesSingleResponse);
+    rpc CreateLegoSeries(LegoSeriesNameRequest) returns (LegoSeriesSingleResponse);
+    rpc DeleteLegoSeriesByName(LegoSeriesNameRequest) returns (LegoSeriesDeleteResponse);
+}
+
+//Request
+message NoParam{};
+
+message LegoSeriesIDRequest {
+    int32 id = 1;
+}
+
+message LegoSeriesNameRequest{
+    string name = 1;
+}
+
+
+// Response
+message LegoSeriesSingleResponse {
+    int32 id = 1;
+    string name = 2;
+}
+
+message LegoSeriesMultipleResponse {
+    repeated LegoSeriesSingleResponse series = 1;
+}
+
+message LegoSeriesDeleteResponse {
+    bool deleted = 1;
+}
+
