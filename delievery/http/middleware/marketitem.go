@@ -22,6 +22,10 @@ func ItemOwnerOrAdmin(
 			return
 		}
 
+		if tokenPayload.Role == models.ADMIN {
+			ctx.Next()
+		}
+
 		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
 			ctx.AbortWithStatusJSON(
@@ -29,16 +33,14 @@ func ItemOwnerOrAdmin(
 			return
 		}
 
-		marketItem, err := repo.GetMarketItemByID(ctx, itemID)
+		sellerID, err := repo.GetMarketItemSellerID(ctx, itemID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		if tokenPayload.ID != marketItem.Seller.ID &&
-			tokenPayload.Role != models.ADMIN {
-
+		if tokenPayload.ID != sellerID {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": "User does not have permission"})
 			return

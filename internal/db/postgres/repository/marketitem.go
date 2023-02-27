@@ -63,21 +63,37 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	return entity.ToMarketItem(), nil
 }
 
-func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
-	c context.Context, sellerID int) (int64, error) {
+func (r MarketItemPostgresRepository) GetMarketItemSellerID(
+	c context.Context, id int) (int, error) {
 
-	var count *int64
+	var count int
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return *count, d.ErrConnectionLost
+		return count, d.ErrConnectionLost
+	}
+
+	err := db.Model(entities.MarketItemPostgres{}).Where(
+		"id=?", id).Select("user_postgres_id").First(&count).Error
+
+	return count, err
+}
+
+func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
+	c context.Context, sellerID int) (int64, error) {
+
+	var count int64
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return count, d.ErrConnectionLost
 	}
 
 	res := db.Where(
 		entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
-		Count(count)
+		Count(&count)
 
-	return *count, res.Error
+	return count, res.Error
 }
 
 func (r MarketItemPostgresRepository) CreateMarketItem(
