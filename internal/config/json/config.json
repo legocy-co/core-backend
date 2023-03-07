@@ -1,7 +1,7 @@
 {
     "database": {
         "hostname": "localhost",
-        "port": 5432,
+        "port": 5433,
         "db_name": "legocy_go",
         "db_user": "postgres",
         "db_password": "postgres"
