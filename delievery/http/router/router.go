@@ -2,8 +2,8 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"legocy-go/internal/app"
 )
 
@@ -15,21 +15,25 @@ func (r V1router) Run(port string) error {
 	return r.router.Run(":" + port)
 }
 
-// @title LEGOcy API
-// @version 1.0
-// @description Testing Swagger APIs.
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-// @securityDefinitions.apiKey JWT
-// @in header
-// @name token
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:8081
-// @BasePath /api/v1
-// @schemes http
+// @title           LEGOcy API
+// @version         1.0
+// @description     LEGOcy is a marketplace for LEGO lovers.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func InitRouter(app *app.App) V1router {
 
 	r := gin.Default()
@@ -51,7 +55,7 @@ func InitRouter(app *app.App) V1router {
 		}
 	})
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.Group("/api/v1")
 

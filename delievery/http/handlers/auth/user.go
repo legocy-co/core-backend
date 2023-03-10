@@ -18,6 +18,17 @@ func NewTokenHandler(service ser.UserUseCase) TokenHandler {
 	return TokenHandler{service: service}
 }
 
+// Generate Token
+// @Summary      JWT Token Generation
+// @Description  generate Token by
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  model.Account
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /token [post]
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	var jwtRequest auth.JWTRequest
