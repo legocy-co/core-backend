@@ -93,13 +93,16 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 // AdminRegister
 //
 //	@Summary	Create Admin User
-//	@Tags		authentication
+//	@Tags		authentication_admin
 //	@ID			create-admin
 //	@Produce	json
 //	@Param		data	body		auth.UserRegistrationRequest	true	"reg request"
 //	@Success	200		{object}	auth.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/admin/auth [post]
+//
+// @Security ApiKeyAuth
+// @param Authorization header string true "Authorization"
 func (th *TokenHandler) AdminRegister(c *gin.Context) {
 
 	var registerReq auth.UserRegistrationRequest

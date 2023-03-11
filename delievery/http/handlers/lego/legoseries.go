@@ -26,8 +26,9 @@ func NewLegoSeriesHandler(service s.LegoSeriesService) LegoSeriesHandler {
 //	@Produce	json
 //	@Success	200	{object}	[]lego.LegoSeriesResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Security	ApiKeyAuth
 //	@Router		/series/ [get]
+//
+// @Security JWT
 func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 	seriesList, err := lsh.service.ListSeries(c.Request.Context())
 	if err != nil {
@@ -52,8 +53,9 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	lego.LegoSeriesResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Security	ApiKeyAuth
 //	@Router		/series/{seriesID} [post]
+//
+// @Security JWT
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {
@@ -84,8 +86,9 @@ func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	[]lego.LegoSeriesResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Security	ApiKeyAuth
 //	@Router		/series/ [post]
+//
+// @Security JWT
 func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 	var seriesRequest lego.LegoSeriesRequest
 
