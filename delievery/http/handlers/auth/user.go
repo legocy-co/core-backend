@@ -1,13 +1,12 @@
 package auth
 
 import (
-	r "legocy-go/delievery/http/resources"
+	"github.com/gin-gonic/gin"
 	"legocy-go/delievery/http/resources/auth"
 	ser "legocy-go/delievery/http/usecase/auth"
+	_ "legocy-go/docs"
 	jwt "legocy-go/pkg/auth/middleware"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 type TokenHandler struct {
@@ -18,17 +17,15 @@ func NewTokenHandler(service ser.UserUseCase) TokenHandler {
 	return TokenHandler{service: service}
 }
 
-// Generate Token
-// @Summary      JWT Token Generation
-// @Description  generate Token by
-// @Tags         accounts
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /token [post]
+// GenerateToken
+//
+//	@Summary	generate jwt token
+//	@ID			create-jwt
+//	@Produce	json
+//	@Param		data	body		auth.JWTRequest	 true "jwt request"
+//	@Success	200		{object}	auth.JWTResponse
+//	@Failure	400		{object}	map[string]interface{}
+//	@Router		/auth/token [post]
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	var jwtRequest auth.JWTRequest
@@ -40,35 +37,39 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	err := th.service.ValidateUser(c.Request.Context(), jwtRequest)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	user, err := th.service.GetUserByEmail(c.Request.Context(), jwtRequest.Email)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	token, err := jwt.GenerateJWT(user.Email, user.ID, user.Role)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	r.Respond(c.Writer, r.DataMetaResponse{
-		Data: auth.JWTResponse{
-			AccessToken: token,
-		},
-		Meta: r.SuccessMetaResponse,
+	c.JSON(http.StatusOK, auth.JWTResponse{
+		AccessToken: token,
 	})
 
 }
 
+// UserRegister
+//
+//	@Summary	register new user
+//	@ID			user-register
+//	@Produce	json
+//	@Param		data	body		auth.UserRegistrationRequest true "user data"
+//	@Success	200		{object}	auth.UserRegistrationResponse
+//	@Failure	400		{object}	map[string]interface{}
+//	@Router		/auth/register [post]
 func (th *TokenHandler) UserRegister(c *gin.Context) {
+
 	var registerReq auth.UserRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
@@ -84,17 +85,20 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 		return
 	}
 
-	response := r.DataMetaResponse{
-		Data: auth.GetUserResponse(user),
-		Meta: r.SuccessMetaResponse,
-	}
-	r.Respond(c.Writer, response)
-
+	c.JSON(http.StatusOK, auth.GetUserResponse(user))
 }
 
-// Admin handlers
-
+// AdminRegister
+//
+//	@Summary	Create Admin User
+//	@ID			create-admin
+//	@Produce	json
+//	@Param		data	body		auth.UserRegistrationRequest true "reg request"
+//	@Success	200		{object}	auth.UserRegistrationResponse
+//	@Failure	400		{object}	map[string]interface{}
+//	@Router		/admin/auth [post]
 func (th *TokenHandler) AdminRegister(c *gin.Context) {
+
 	var registerReq auth.UserRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
@@ -110,9 +114,5 @@ func (th *TokenHandler) AdminRegister(c *gin.Context) {
 		return
 	}
 
-	response := r.DataMetaResponse{
-		Data: auth.GetUserResponse(user),
-		Meta: r.SuccessMetaResponse,
-	}
-	r.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, auth.GetUserResponse(user))
 }
