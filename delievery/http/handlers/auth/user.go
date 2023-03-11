@@ -20,9 +20,10 @@ func NewTokenHandler(service ser.UserUseCase) TokenHandler {
 // GenerateToken
 //
 //	@Summary	generate jwt token
+//	@Tags		authentication
 //	@ID			create-jwt
 //	@Produce	json
-//	@Param		data	body		auth.JWTRequest	 true "jwt request"
+//	@Param		data	body		auth.JWTRequest	true	"jwt request"
 //	@Success	200		{object}	auth.JWTResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/auth/token [post]
@@ -62,9 +63,10 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 // UserRegister
 //
 //	@Summary	register new user
+//	@Tags		authentication
 //	@ID			user-register
 //	@Produce	json
-//	@Param		data	body		auth.UserRegistrationRequest true "user data"
+//	@Param		data	body		auth.UserRegistrationRequest	true	"user data"
 //	@Success	200		{object}	auth.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/auth/register [post]
@@ -91,9 +93,10 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 // AdminRegister
 //
 //	@Summary	Create Admin User
+//	@Tags		authentication
 //	@ID			create-admin
 //	@Produce	json
-//	@Param		data	body		auth.UserRegistrationRequest true "reg request"
+//	@Param		data	body		auth.UserRegistrationRequest	true	"reg request"
 //	@Success	200		{object}	auth.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/admin/auth [post]

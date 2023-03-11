@@ -18,6 +18,16 @@ func NewLegoSeriesHandler(service s.LegoSeriesService) LegoSeriesHandler {
 	return LegoSeriesHandler{service: service}
 }
 
+// ListSeries
+//
+//	@Summary	List of LEGO Series objects
+//	@Tags		lego_series
+//	@ID			list_lego_series
+//	@Produce	json
+//	@Success	200	{object}	[]lego.LegoSeriesResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Security	ApiKeyAuth
+//	@Router		/series/ [get]
 func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 	seriesList, err := lsh.service.ListSeries(c.Request.Context())
 	if err != nil {
@@ -30,14 +40,20 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 		seriesResponses = append(seriesResponses, lego.GetLegoSeriesResponse(series))
 	}
 
-	seriesResponse := r.DataMetaResponse{
-		Data: seriesResponses,
-		Meta: r.SuccessMetaResponse,
-	}
-
-	r.Respond(c.Writer, seriesResponse)
+	c.JSON(http.StatusOK, seriesResponses)
 }
 
+// DetailSeries
+//
+//	@Summary	LEGO Series by id
+//	@Tags		lego_series
+//	@ID			detail_lego_series
+//	@Param		seriesID	path	int	true	"series ID"
+//	@Produce	json
+//	@Success	200	{object}	lego.LegoSeriesResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Security	ApiKeyAuth
+//	@Router		/series/{seriesID} [post]
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {
@@ -59,6 +75,17 @@ func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	})
 }
 
+// SeriesCreate
+//
+//	@Summary	Create LEGO Series object
+//	@Tags		lego_series
+//	@ID			create_series
+//	@Param		data	body	lego.LegoSeriesRequest	true	"create data"
+//	@Produce	json
+//	@Success	200	{object}	[]lego.LegoSeriesResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Security	ApiKeyAuth
+//	@Router		/series/ [post]
 func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 	var seriesRequest lego.LegoSeriesRequest
 
