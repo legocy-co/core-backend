@@ -53,7 +53,7 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	lego.LegoSeriesResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/series/{seriesID} [post]
+//	@Router		/series/{seriesID} [get]
 //
 // @Security JWT
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
@@ -71,22 +71,19 @@ func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	}
 
 	seriesResponse := lego.GetLegoSeriesResponse(seriesObj)
-	r.Respond(c.Writer, r.DataMetaResponse{
-		Data: seriesResponse,
-		Meta: r.SuccessMetaResponse,
-	})
+	c.JSON(http.StatusOK, seriesResponse)
 }
 
 // SeriesCreate
 //
 //	@Summary	Create LEGO Series object
-//	@Tags		lego_series
+//	@Tags		lego_series_admin
 //	@ID			create_series
 //	@Param		data	body	lego.LegoSeriesRequest	true	"create data"
 //	@Produce	json
-//	@Success	200	{object}	[]lego.LegoSeriesResponse
+//	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/series/ [post]
+//	@Router		/admin/series/ [post]
 //
 // @Security JWT
 func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
