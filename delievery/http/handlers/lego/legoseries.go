@@ -28,7 +28,7 @@ func NewLegoSeriesHandler(service s.LegoSeriesService) LegoSeriesHandler {
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/series/ [get]
 //
-// @Security JWT
+//	@Security	JWT
 func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 	seriesList, err := lsh.service.ListSeries(c.Request.Context())
 	if err != nil {
@@ -55,7 +55,7 @@ func (lsh *LegoSeriesHandler) ListSeries(c *gin.Context) {
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/series/{seriesID} [get]
 //
-// @Security JWT
+//	@Security	JWT
 func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {
@@ -85,7 +85,7 @@ func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/admin/series/ [post]
 //
-// @Security JWT
+//	@Security	JWT
 func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 	var seriesRequest lego.LegoSeriesRequest
 
@@ -109,6 +109,18 @@ func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 	})
 }
 
+// DeleteSeries
+//
+//	@Summary	Delete LegoSeries object
+//	@Tags		lego_series_admin
+//	@ID			delete_series
+//	@Param		seriesID	path	int	true	"series ID"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/admin/series/{seriesID} [delete]
+//
+//	@Security	JWT
 func (lsh *LegoSeriesHandler) DeleteSeries(c *gin.Context) {
 	seriesID, err := strconv.Atoi(c.Param("seriesID"))
 	if err != nil {

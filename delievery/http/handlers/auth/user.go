@@ -101,8 +101,8 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/admin/auth [post]
 //
-// @Security ApiKeyAuth
-// @param Authorization header string true "Authorization"
+//	@Security	ApiKeyAuth
+//	@param		Authorization	header	string	true	"Authorization"
 func (th *TokenHandler) AdminRegister(c *gin.Context) {
 
 	var registerReq auth.UserRegistrationRequest

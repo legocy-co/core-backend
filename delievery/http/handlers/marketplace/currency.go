@@ -3,7 +3,7 @@ package marketplace
 import (
 	"github.com/gin-gonic/gin"
 	r "legocy-go/delievery/http/resources"
-	res "legocy-go/delievery/http/resources/marketplace"
+	"legocy-go/delievery/http/resources/marketplace"
 	s "legocy-go/delievery/http/usecase/marketplace"
 	"net/http"
 )
@@ -16,6 +16,17 @@ func NewCurrencyHandler(service s.CurrencyUseCase) CurrencyHandler {
 	return CurrencyHandler{service: service}
 }
 
+// ListCurrencies
+//
+//	@Summary	Get all currencies
+//	@Tags		currencies
+//	@ID			list_currencies
+//	@Produce	json
+//	@Success	200	{object}	[]marketplace.CurrencyResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/currencies/ [get]
+//
+//	@Security	JWT
 func (h CurrencyHandler) ListCurrencies(c *gin.Context) {
 	currenciesList, err := h.service.CurrenciesList(c)
 	if err != nil {
@@ -24,19 +35,26 @@ func (h CurrencyHandler) ListCurrencies(c *gin.Context) {
 		return
 	}
 
-	var currenciesResponse []res.CurrencyResponse
+	var currenciesResponse []marketplace.CurrencyResponse
 	for _, currency := range currenciesList {
-		currenciesResponse = append(currenciesResponse, res.GetCurrencyResponse(currency))
+		currenciesResponse = append(currenciesResponse, marketplace.GetCurrencyResponse(currency))
 	}
 
-	response := r.DataMetaResponse{
-		Data: currenciesResponse,
-		Meta: r.SuccessMetaResponse,
-	}
-
-	r.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, currenciesResponse)
 }
 
+// CurrencyDetail
+//
+//		@Summary	Get currency by symbol
+//		@Tags		currencies
+//		@ID			currency_detail
+//	 	@Param 		currencySymbol 	path string true "currency symbol"
+//		@Produce	json
+//		@Success	200	{object}	marketplace.CurrencyResponse
+//		@Failure	400	{object}	map[string]interface{}
+//		@Router		/currencies/{currencySymbol} [get]
+//
+//		@Security	JWT
 func (h CurrencyHandler) CurrencyDetail(c *gin.Context) {
 	currencySymbol := c.Param("currencySymbol")
 	if currencySymbol == "" {
@@ -50,17 +68,24 @@ func (h CurrencyHandler) CurrencyDetail(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	currResponse := res.GetCurrencyResponse(curr)
-	response := r.DataMetaResponse{
-		Data: currResponse,
-		Meta: r.SuccessMetaResponse,
-	}
-
-	r.Respond(c.Writer, response)
+	currResponse := marketplace.GetCurrencyResponse(curr)
+	c.JSON(http.StatusOK, currResponse)
 }
 
+// CreateCurrency
+//
+//	@Summary	Get currency by symbol
+//	@Tags		currencies_admin
+//	@ID			currency_create
+//	@Param 		data	body 	marketplace.CurrencyRequest true "currency symbol"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/admin/currencies/ [post]
+//
+//	@Security	JWT
 func (h CurrencyHandler) CreateCurrency(c *gin.Context) {
-	var currencyReq *res.CurrencyRequest
+	var currencyReq *marketplace.CurrencyRequest
 	if err := c.ShouldBindJSON(&currencyReq); err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusBadRequest, gin.H{"error": err.Error()})
