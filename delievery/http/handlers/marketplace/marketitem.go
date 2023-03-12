@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	v1 "legocy-go/delievery/http/middleware"
 	r "legocy-go/delievery/http/resources"
-	res "legocy-go/delievery/http/resources/marketplace"
+	"legocy-go/delievery/http/resources/marketplace"
 	"legocy-go/delievery/http/resources/pagination"
 	s "legocy-go/delievery/http/usecase/marketplace"
 	auth "legocy-go/pkg/auth/middleware"
@@ -24,6 +24,17 @@ func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
 	}
 }
 
+// ListMarketItems
+//
+//	@Summary	Get Market Items
+//	@Tags		market_items
+//	@ID			list_market_items
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/ [get]
+//
+//	@Security	JWT
 func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
@@ -42,9 +53,9 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 		return
 	}
 
-	marketItemResponse := make([]res.MarketItemResponse, 0, len(marketItems))
+	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
 	for _, m := range marketItems {
-		marketItemResponse = append(marketItemResponse, res.GetMarketItemResponse(m))
+		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
 	response := r.DataMetaResponse{
@@ -55,6 +66,18 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 	r.Respond(c.Writer, response)
 }
 
+// MarketItemDetail
+//
+//		@Summary	Get Market Item
+//		@Tags		market_items
+//		@ID			detail_market_item
+//	 	@Param 		itemID 	path  int true "item ID"
+//		@Produce	json
+//		@Success	200	{object}	marketplace.MarketItemResponse
+//		@Failure	400	{object}	map[string]interface{}
+//		@Router		/market-items/{itemID} [get]
+//
+//		@Security	JWT
 func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemID"))
 	if err != nil {
@@ -69,15 +92,22 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 		return
 	}
 
-	marketItemResponse := res.GetMarketItemResponse(marketItem)
-	response := r.DataMetaResponse{
-		Data: marketItemResponse,
-		Meta: r.SuccessMetaResponse,
-	}
-
-	r.Respond(c.Writer, response)
+	marketItemResponse := marketplace.GetMarketItemResponse(marketItem)
+	c.JSON(http.StatusOK, marketItemResponse)
 }
 
+// CreateMarketItem
+//
+//		@Summary	Create Market Item
+//		@Tags		market_items
+//		@ID			create_market_item
+//	 	@Param 		data 	body marketplace.MarketItemRequest true "data"
+//		@Produce	json
+//		@Success	200	{object}	map[string]interface{}
+//		@Failure	400	{object}	map[string]interface{}
+//		@Router		/market-items/ [post]
+//
+//		@Security	JWT
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := v1.GetAuthTokenHeader(c)
@@ -88,7 +118,7 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		return
 	}
 
-	var itemRequest *res.MarketItemRequest
+	var itemRequest *marketplace.MarketItemRequest
 	if err := c.ShouldBindJSON(&itemRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -108,6 +138,18 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	r.Respond(c.Writer, response)
 }
 
+// DeleteMarketItem
+//
+//		@Summary	Delete Market Item
+//		@Tags		market_items
+//		@ID			delete_market_item
+//	 	@Param 		itemId 	path	int true "item ID"
+//		@Produce	json
+//		@Success	200	{object}	map[string]bool
+//		@Failure	400	{object}	map[string]interface{}
+//		@Router		/market-items/{itemId} [delete]
+//
+//		@Security	JWT
 func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemId"))
 	if err != nil {
@@ -122,10 +164,5 @@ func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 			"Error deleting MarketItem object")
 	}
 
-	response := r.DataMetaResponse{
-		Data: true,
-		Meta: r.SuccessMetaResponse,
-	}
-
-	r.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, map[string]bool{"status": true})
 }
