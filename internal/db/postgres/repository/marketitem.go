@@ -89,9 +89,8 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 		return count, d.ErrConnectionLost
 	}
 
-	res := db.Where(
-		entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
-		Count(&count)
+	res := db.Model(
+		entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).Count(&count)
 
 	return count, res.Error
 }

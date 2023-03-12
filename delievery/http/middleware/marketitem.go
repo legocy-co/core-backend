@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	auth "legocy-go/pkg/auth/middleware"
 	models "legocy-go/pkg/auth/models"
 	r "legocy-go/pkg/marketplace/repository"
@@ -69,6 +70,7 @@ func HasFreeMarketItemsSlot(
 			return
 		}
 
+		logrus.Info("Getting seller market item amount")
 		userItemsCount, err := repo.GetSellerMarketItemsAmount(ctx, tokenPayload.ID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
@@ -83,7 +85,7 @@ func HasFreeMarketItemsSlot(
 					"error": "User has exceeded limit of publishing items"})
 			return
 		}
-
+		logrus.Info("User has free slots to create market item")
 		ctx.Next()
 	}
 }
