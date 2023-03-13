@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	r "legocy-go/delievery/http/resources"
 	"legocy-go/delievery/http/resources/lego"
+	"legocy-go/delievery/http/resources/pagination"
 	s "legocy-go/delievery/http/usecase/lego"
 	"net/http"
 	"strconv"
@@ -29,7 +30,10 @@ func NewLegoSetHandler(service s.LegoSetUseCase) LegoSetHandler {
 //
 //	@Security	JWT
 func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
-	setsList, err := lsh.service.ListLegoSets(c)
+
+	ctx := pagination.GetPaginationContext(c)
+
+	setsList, err := lsh.service.ListLegoSets(ctx)
 	if err != nil {
 		r.ErrorRespond(c.Writer, err.Error())
 		return

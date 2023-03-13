@@ -73,7 +73,7 @@ func (r LegoSeriesPostgresRepository) GetLegoSeriesByName(
 	}
 
 	var entity *entities.LegoSeriesPostgres
-	err := db.Model(entities.LegoSeriesPostgres{Name: name}).Find(&entity).Error
+	err := db.Where(entities.LegoSeriesPostgres{Name: name}).First(&entity).Error
 	if err != nil {
 		return nil, err
 	}
