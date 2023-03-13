@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"legocy-go/internal/config"
 	d "legocy-go/internal/db"
+	"legocy-go/internal/fixtures"
 	"legocy-go/internal/storage"
 	"log"
 )
@@ -49,6 +50,15 @@ func New(configFilepath string) *App {
 	if !app.isReady() {
 		panic("Some dependencies failed to inject")
 	}
+
+	// Fixtures
+	go func(load bool) {
+		if !load {
+			return
+		}
+		fixtures.LoadLegoSeries(app.GetLegoSeriesRepo())
+		fixtures.LoadLegoSets(app.GetLegoSetRepo(), app.GetLegoSeriesRepo())
+	}(false)
 
 	return &app
 }

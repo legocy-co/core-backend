@@ -2,7 +2,7 @@ import json
 import pandas as pd
 
 
-SETS_FILEPATH = '.../static/json/lego_sets.json'
+SETS_FILEPATH = '.../static/json/lego_sets_raw.json'
 THEMES_FILEPATH = '.../static/json/lego_themes.json'
 
 

@@ -16,8 +16,8 @@ func NewLegoSeriesPostgresRepository(conn d.DataBaseConnection) LegoSeriesPostgr
 	return LegoSeriesPostgresRepository{conn: conn}
 }
 
-func (psql LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeriesBasic) error {
-	db := psql.conn.GetDB()
+func (r LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeriesBasic) error {
+	db := r.conn.GetDB()
 
 	if db == nil {
 		return d.ErrConnectionLost
@@ -28,9 +28,9 @@ func (psql LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *
 	return result.Error
 }
 
-func (psql LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error) {
+func (r LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error) {
 
-	db := psql.conn.GetDB()
+	db := r.conn.GetDB()
 
 	if db == nil {
 		return nil, d.ErrConnectionLost
@@ -47,11 +47,13 @@ func (psql LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([
 	return series, nil
 }
 
-func (psql LegoSeriesPostgresRepository) GetLegoSeries(c context.Context, id int) (*models.LegoSeries, error) {
+func (r LegoSeriesPostgresRepository) GetLegoSeries(
+	c context.Context, id int) (*models.LegoSeries, error) {
+
 	var entity *entities.LegoSeriesPostgres
 	var series *models.LegoSeries
 
-	db := psql.conn.GetDB()
+	db := r.conn.GetDB()
 	if db == nil {
 		return series, d.ErrConnectionLost
 	}
@@ -61,8 +63,26 @@ func (psql LegoSeriesPostgresRepository) GetLegoSeries(c context.Context, id int
 	return series, nil
 }
 
-func (psql LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) error {
-	db := psql.conn.GetDB()
+func (r LegoSeriesPostgresRepository) GetLegoSeriesByName(
+	c context.Context, name string) (*models.LegoSeries, error) {
+
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var entity *entities.LegoSeriesPostgres
+	err := db.Model(entities.LegoSeriesPostgres{Name: name}).Find(&entity).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return entity.ToLegoSeries(), nil
+}
+
+func (r LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) error {
+	db := r.conn.GetDB()
 
 	if db == nil {
 		return d.ErrConnectionLost
