@@ -40,17 +40,6 @@ func New(configFilepath string) *App {
 	}
 	app.setDatabase(dbCfg)
 
-	// Item Storage
-	minioCfg := config.GetMinioConfig()
-	if minioCfg == nil {
-		log.Fatalln("empty minio config")
-	}
-	app.setStorage(*minioCfg)
-
-	if !app.isReady() {
-		panic("Some dependencies failed to inject")
-	}
-
 	// Fixtures
 	go func(load bool) {
 		if !load {
@@ -58,7 +47,19 @@ func New(configFilepath string) *App {
 		}
 		fixtures.LoadLegoSeries(app.GetLegoSeriesRepo())
 		fixtures.LoadLegoSets(app.GetLegoSetRepo(), app.GetLegoSeriesRepo())
-	}(false)
+	}(dbCfg.LoadFixtures)
+
+	// Item Storage
+	minioCfg := config.GetMinioConfig()
+	if minioCfg == nil {
+		log.Fatalln("empty minio config")
+	}
+	app.setStorage(*minioCfg)
+
+	// Check all deps
+	if !app.isReady() {
+		panic("Some dependencies failed to inject")
+	}
 
 	return &app
 }

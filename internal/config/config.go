@@ -28,11 +28,12 @@ func SetAppConfig(cfg *AppConfig) error {
 }
 
 type DatabaseConfig struct {
-	Hostname   string `yaml:"hostname" json:"hostname"`
-	Port       int    `yaml:"port" json:"port"`
-	DbName     string `yaml:"db_name" json:"db_name"`
-	DbUser     string `yaml:"db_user" json:"db_user"`
-	DbPassword string `yaml:"db_password" json:"db_password"`
+	Hostname     string `yaml:"hostname" json:"hostname"`
+	Port         int    `yaml:"port" json:"port"`
+	DbName       string `yaml:"db_name" json:"db_name"`
+	DbUser       string `yaml:"db_user" json:"db_user"`
+	DbPassword   string `yaml:"db_password" json:"db_password"`
+	LoadFixtures bool   `yaml:"load_fixtures" json:"load_fixtures"`
 }
 
 type JWTConfig struct {
