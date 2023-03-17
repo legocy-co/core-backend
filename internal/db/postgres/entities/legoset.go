@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	models "legocy-go/pkg/lego/models"
+	models "legocy-go/internal/domain/lego/models"
 )
 
 type LegoSetPostgres struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
+	models "legocy-go/internal/domain/lego/models"
 	"legocy-go/pkg/filter"
-	models "legocy-go/pkg/lego/models"
 )
 
 type LegoSetPostgresRepository struct {

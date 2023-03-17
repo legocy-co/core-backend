@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	models "legocy-go/pkg/lego/models"
-	"legocy-go/pkg/lego/repository"
+	models "legocy-go/internal/domain/lego/models"
+	"legocy-go/internal/domain/lego/repository"
 	"os"
 )
 

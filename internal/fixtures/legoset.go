@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	models "legocy-go/pkg/lego/models"
-	"legocy-go/pkg/lego/repository"
+	models "legocy-go/internal/domain/lego/models"
+	repository2 "legocy-go/internal/domain/lego/repository"
 	"os"
 	"strconv"
 )
@@ -25,7 +25,7 @@ type legoSet struct {
 }
 
 func (l legoSet) toLegoSetBasic(
-	r repository.LegoSeriesRepository) *models.LegoSetBasic {
+	r repository2.LegoSeriesRepository) *models.LegoSetBasic {
 
 	series, err := r.GetLegoSeriesByName(context.Background(), l.Series)
 	if err != nil {
@@ -46,8 +46,8 @@ func (l legoSet) toLegoSetBasic(
 }
 
 func LoadLegoSets(
-	setsRepo repository.LegoSetRepository,
-	seriesRepo repository.LegoSeriesRepository) {
+	setsRepo repository2.LegoSetRepository,
+	seriesRepo repository2.LegoSeriesRepository) {
 
 	cwd, _ := os.Getwd()
 	jsonFile, err := os.Open(cwd + legoSetsJSONFilepath)

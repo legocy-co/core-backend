@@ -5,8 +5,8 @@ import (
 	"fmt"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
-	e "legocy-go/pkg/auth/errors"
-	models "legocy-go/pkg/auth/models"
+	e "legocy-go/internal/domain/auth/errors"
+	models "legocy-go/internal/domain/auth/models"
 	h "legocy-go/pkg/helpers"
 )
 

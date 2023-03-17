@@ -4,7 +4,7 @@ import (
 	"golang.org/x/net/context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
-	models "legocy-go/pkg/marketplace/models"
+	models "legocy-go/internal/domain/marketplace/models"
 )
 
 type CurrencyPostgresRepository struct {

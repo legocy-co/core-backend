@@ -4,8 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
+	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/filter"
-	models "legocy-go/pkg/marketplace/models"
 )
 
 type MarketItemPostgresRepository struct {

@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	models "legocy-go/pkg/marketplace/models"
+	models "legocy-go/internal/domain/marketplace/models"
 )
 
 type CurrencyPostgres struct {

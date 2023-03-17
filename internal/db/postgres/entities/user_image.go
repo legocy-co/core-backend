@@ -1,6 +1,8 @@
 package postgres
 
-import models "legocy-go/pkg/auth/models"
+import (
+	models "legocy-go/internal/domain/auth/models"
+)
 
 type UserPostgresImage struct {
 	Model

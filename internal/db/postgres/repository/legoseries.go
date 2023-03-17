@@ -4,7 +4,7 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
-	models "legocy-go/pkg/lego/models"
+	models "legocy-go/internal/domain/lego/models"
 	"log"
 )
 
