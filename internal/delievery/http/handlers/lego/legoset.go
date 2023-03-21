@@ -5,7 +5,7 @@ import (
 	"legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/pagination"
-	s "legocy-go/internal/delievery/http/usecase/lego"
+	s "legocy-go/internal/delievery/http/service/lego"
 	"net/http"
 	"strconv"
 )

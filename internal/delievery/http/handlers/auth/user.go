@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "legocy-go/docs"
 	auth2 "legocy-go/internal/delievery/http/resources/auth"
-	ser "legocy-go/internal/delievery/http/usecase/auth"
+	ser "legocy-go/internal/delievery/http/service/auth"
 	jwt "legocy-go/internal/domain/auth/middleware"
 	"net/http"
 )

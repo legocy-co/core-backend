@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delievery/http/resources"
-	ser "legocy-go/internal/delievery/http/usecase/auth"
+	ser "legocy-go/internal/delievery/http/service/auth"
 	models "legocy-go/internal/domain/auth/models"
 	"legocy-go/internal/storage"
 	s "legocy-go/internal/storage/models"

@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delievery/http/handlers/marketplace"
 	m "legocy-go/internal/delievery/http/middleware"
-	s "legocy-go/internal/delievery/http/usecase/marketplace"
+	s "legocy-go/internal/delievery/http/service/marketplace"
 )
 
 func (r V1router) addCurrencies(rg *gin.RouterGroup, service s.CurrencyUseCase) {

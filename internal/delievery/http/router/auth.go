@@ -5,7 +5,7 @@ import (
 	_ "legocy-go/docs"
 	"legocy-go/internal/delievery/http/handlers/auth"
 	m "legocy-go/internal/delievery/http/middleware"
-	s "legocy-go/internal/delievery/http/usecase/auth"
+	s "legocy-go/internal/delievery/http/service/auth"
 )
 
 func (r V1router) addAuth(rg *gin.RouterGroup, service s.UserUseCase) {

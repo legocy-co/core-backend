@@ -3,8 +3,8 @@ package app
 import (
 	postgres "legocy-go/internal/db/postgres/repository"
 	"legocy-go/internal/domain/auth/repository"
-	repository2 "legocy-go/internal/domain/lego/repository"
-	marketplace2 "legocy-go/internal/domain/marketplace/repository"
+	lego "legocy-go/internal/domain/lego/repository"
+	marketplace "legocy-go/internal/domain/marketplace/repository"
 )
 
 func (a *App) GetUserRepo() repository.UserRepository {
@@ -15,22 +15,22 @@ func (a *App) GetUserImagesRepo() repository.UserImageRepository {
 	return postgres.NewUserImagePostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetLegoSeriesRepo() repository2.LegoSeriesRepository {
+func (a *App) GetLegoSeriesRepo() lego.LegoSeriesRepository {
 	return postgres.NewLegoSeriesPostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetLegoSetRepo() repository2.LegoSetRepository {
+func (a *App) GetLegoSetRepo() lego.LegoSetRepository {
 	return postgres.NewLegoSetPostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetLocationRepo() marketplace2.LocationRepository {
+func (a *App) GetLocationRepo() marketplace.LocationRepository {
 	return postgres.NewLocationPostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetCurrencyRepo() marketplace2.CurrencyRepository {
+func (a *App) GetCurrencyRepo() marketplace.CurrencyRepository {
 	return postgres.NewCurrencyPostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetMarketItemRepo() marketplace2.MarketItemRepository {
+func (a *App) GetMarketItemRepo() marketplace.MarketItemRepository {
 	return postgres.NewMarketItemPostgresRepository(a.GetDatabase())
 }
