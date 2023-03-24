@@ -1,0 +1,729 @@
+basePath: /api/v1
+definitions:
+  auth.JWTRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  auth.JWTResponse:
+    properties:
+      access:
+        type: string
+    type: object
+  auth.UserDetailResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      role:
+        type: integer
+      username:
+        type: string
+    type: object
+  auth.UserRegistrationRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.UserRegistrationResponse:
+    properties:
+      email:
+        type: string
+      role:
+        type: integer
+      username:
+        type: string
+    type: object
+  lego.LegoSeriesRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  lego.LegoSeriesResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  lego.LegoSetRequest:
+    properties:
+      n_pieces:
+        type: integer
+      name:
+        type: string
+      number:
+        type: integer
+      series_id:
+        type: integer
+    type: object
+  lego.LegoSetResponse:
+    properties:
+      id:
+        type: integer
+      n_pieces:
+        type: integer
+      name:
+        type: string
+      number:
+        type: integer
+      series:
+        $ref: '#/definitions/lego.LegoSeriesResponse'
+    type: object
+  marketplace.CurrencyRequest:
+    properties:
+      name:
+        type: string
+      symbol:
+        type: string
+    type: object
+  marketplace.CurrencyResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      symbol:
+        type: string
+    type: object
+  marketplace.LocationRequest:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+    type: object
+  marketplace.LocationResponse:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: integer
+    type: object
+  marketplace.MarketItemRequest:
+    properties:
+      currency_id:
+        type: integer
+      lego_set_id:
+        type: integer
+      location_id:
+        type: integer
+      price:
+        type: number
+    type: object
+  marketplace.MarketItemResponse:
+    properties:
+      currency:
+        $ref: '#/definitions/marketplace.CurrencyResponse'
+      id:
+        type: integer
+      lego_set:
+        $ref: '#/definitions/lego.LegoSetResponse'
+      location:
+        $ref: '#/definitions/marketplace.LocationResponse'
+      price:
+        type: number
+      seller:
+        $ref: '#/definitions/auth.UserDetailResponse'
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: LEGOcy is a marketplace for LEGO lovers.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: LEGOcy API
+  version: "1.0"
+paths:
+  /admin/auth:
+    post:
+      operationId: create-admin
+      parameters:
+      - description: reg request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserRegistrationRequest'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserRegistrationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create Admin User
+      tags:
+      - authentication_admin
+  /admin/currencies/:
+    post:
+      operationId: currency_create
+      parameters:
+      - description: currency symbol
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/marketplace.CurrencyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get currency by symbol
+      tags:
+      - currencies_admin
+  /admin/locations/:
+    post:
+      operationId: locations_create
+      parameters:
+      - description: location data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/marketplace.LocationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Create Location
+      tags:
+      - locations_admin
+  /admin/locations/{locID}:
+    delete:
+      operationId: locations_delete
+      parameters:
+      - description: location ID
+        in: path
+        name: locID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/marketplace.LocationResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get locations by country
+      tags:
+      - locations_admin
+  /admin/series/:
+    post:
+      operationId: create_series
+      parameters:
+      - description: create data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lego.LegoSeriesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Create LEGO Series object
+      tags:
+      - lego_series_admin
+  /admin/series/{seriesID}:
+    delete:
+      operationId: delete_series
+      parameters:
+      - description: series ID
+        in: path
+        name: seriesID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete LegoSeries object
+      tags:
+      - lego_series_admin
+  /admin/sets/:
+    post:
+      operationId: set_create
+      parameters:
+      - description: create data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lego.LegoSetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Create Lego Set object
+      tags:
+      - lego_sets_admin
+  /admin/sets/{setID}:
+    delete:
+      operationId: set_delete
+      parameters:
+      - description: LegoSet ID
+        in: path
+        name: setID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete Lego Set object
+      tags:
+      - lego_sets_admin
+  /auth/register:
+    post:
+      operationId: user-register
+      parameters:
+      - description: user data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UserRegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserRegistrationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: register new user
+      tags:
+      - authentication
+  /auth/token:
+    post:
+      operationId: create-jwt
+      parameters:
+      - description: jwt request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth.JWTRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.JWTResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: generate jwt token
+      tags:
+      - authentication
+  /currencies/:
+    get:
+      operationId: list_currencies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/marketplace.CurrencyResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get all currencies
+      tags:
+      - currencies
+  /currencies/{currencySymbol}:
+    get:
+      operationId: currency_detail
+      parameters:
+      - description: currency symbol
+        in: path
+        name: currencySymbol
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/marketplace.CurrencyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get currency by symbol
+      tags:
+      - currencies
+  /locations/:
+    get:
+      operationId: locations_list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/marketplace.LocationResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get locations
+      tags:
+      - locations
+  /locations/{country}:
+    get:
+      operationId: locations_country
+      parameters:
+      - description: country
+        in: path
+        name: country
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/marketplace.LocationResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get locations by country
+      tags:
+      - locations
+  /market-items/:
+    get:
+      operationId: list_market_items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Market Items
+      tags:
+      - market_items
+    post:
+      operationId: create_market_item
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/marketplace.MarketItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Create Market Item
+      tags:
+      - market_items
+  /market-items/{itemID}:
+    get:
+      operationId: detail_market_item
+      parameters:
+      - description: item ID
+        in: path
+        name: itemID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/marketplace.MarketItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Market Item
+      tags:
+      - market_items
+  /market-items/{itemId}:
+    delete:
+      operationId: delete_market_item
+      parameters:
+      - description: item ID
+        in: path
+        name: itemId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete Market Item
+      tags:
+      - market_items
+  /series/:
+    get:
+      operationId: list_lego_series
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/lego.LegoSeriesResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: List of LEGO Series objects
+      tags:
+      - lego_series
+  /series/{seriesID}:
+    get:
+      operationId: detail_lego_series
+      parameters:
+      - description: series ID
+        in: path
+        name: seriesID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lego.LegoSeriesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: LEGO Series by id
+      tags:
+      - lego_series
+  /sets/:
+    get:
+      operationId: list_sets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/lego.LegoSetResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: List of LegoSet objects
+      tags:
+      - lego_sets
+  /sets/{setID}:
+    get:
+      operationId: set_detail
+      parameters:
+      - description: Lego Set ID
+        in: path
+        name: setID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lego.LegoSetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get LegoSet by ID
+      tags:
+      - lego_sets
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
