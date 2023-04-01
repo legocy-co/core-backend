@@ -3,7 +3,7 @@ package auth
 import (
 	"errors"
 	c "legocy-go/internal/config"
-	"legocy-go/internal/domain/auth/models"
+	"legocy-go/internal/domain/users/models"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

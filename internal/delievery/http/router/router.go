@@ -60,11 +60,11 @@ func InitRouter(app *app.App) V1router {
 
 	v1 := r.Group("/api/v1")
 
-	//auth.go
+	//users.go
 	router.addAuth(v1, app.GetUserService())
 
 	//user_images.go
-	router.addUserImages(v1, app.GetUserImagesService(), app.GetStorage())
+	router.addUserImages(v1, app)
 
 	//legoseries.go
 	router.addLegoSeries(v1, app.GetLegoSeriesService())

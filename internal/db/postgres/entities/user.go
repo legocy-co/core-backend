@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	models "legocy-go/internal/domain/auth/models"
+	models "legocy-go/internal/domain/users/models"
 )
 
 type UserPostgres struct {

@@ -1,11 +1,11 @@
-package auth
+package users
 
 import (
 	"github.com/gin-gonic/gin"
 	_ "legocy-go/docs"
-	auth2 "legocy-go/internal/delievery/http/resources/auth"
-	ser "legocy-go/internal/delievery/http/service/auth"
-	jwt "legocy-go/internal/domain/auth/middleware"
+	auth2 "legocy-go/internal/delievery/http/resources/users"
+	ser "legocy-go/internal/delievery/http/service/users"
+	jwt "legocy-go/internal/domain/users/middleware"
 	"net/http"
 )
 
@@ -23,10 +23,10 @@ func NewTokenHandler(service ser.UserUseCase) TokenHandler {
 //	@Tags		authentication
 //	@ID			create-jwt
 //	@Produce	json
-//	@Param		data	body		auth.JWTRequest	true	"jwt request"
-//	@Success	200		{object}	auth.JWTResponse
+//	@Param		data	body		users.JWTRequest	true	"jwt request"
+//	@Success	200		{object}	users.JWTResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/auth/token [post]
+//	@Router		/users/token [post]
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	var jwtRequest auth2.JWTRequest
@@ -66,10 +66,10 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 //	@Tags		authentication
 //	@ID			user-register
 //	@Produce	json
-//	@Param		data	body		auth.UserRegistrationRequest	true	"user data"
-//	@Success	200		{object}	auth.UserRegistrationResponse
+//	@Param		data	body		users.UserRegistrationRequest	true	"user data"
+//	@Success	200		{object}	users.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/auth/register [post]
+//	@Router		/users/register [post]
 func (th *TokenHandler) UserRegister(c *gin.Context) {
 
 	var registerReq auth2.UserRegistrationRequest
@@ -96,10 +96,10 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 //	@Tags		authentication_admin
 //	@ID			create-admin
 //	@Produce	json
-//	@Param		data	body		auth.UserRegistrationRequest	true	"reg request"
-//	@Success	200		{object}	auth.UserRegistrationResponse
+//	@Param		data	body		users.UserRegistrationRequest	true	"reg request"
+//	@Success	200		{object}	users.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/admin/auth [post]
+//	@Router		/admin/users [post]
 //
 //	@Security	ApiKeyAuth
 //	@param		Authorization	header	string	true	"Authorization"

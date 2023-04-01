@@ -1,10 +1,10 @@
-package auth
+package users
 
 import (
 	"context"
-	res "legocy-go/internal/delievery/http/resources/auth"
-	models "legocy-go/internal/domain/auth/models"
-	r "legocy-go/internal/domain/auth/repository"
+	res "legocy-go/internal/delievery/http/resources/users"
+	models "legocy-go/internal/domain/users/models"
+	r "legocy-go/internal/domain/users/repository"
 )
 
 type UserUseCase struct {

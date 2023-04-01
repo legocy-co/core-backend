@@ -4,8 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entities"
-	models "legocy-go/internal/domain/auth/models"
-	"legocy-go/internal/domain/auth/repository"
+	models "legocy-go/internal/domain/users/models"
+	"legocy-go/internal/domain/users/repository"
 )
 
 type UserImagePostgresRepository struct {

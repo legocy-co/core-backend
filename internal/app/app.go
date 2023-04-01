@@ -5,17 +5,15 @@ import (
 	"legocy-go/internal/config"
 	d "legocy-go/internal/db"
 	"legocy-go/internal/fixtures"
-	"legocy-go/internal/storage"
 	"log"
 )
 
 type App struct {
-	database     d.DataBaseConnection
-	imageStorage storage.ImageStorage
+	database d.DataBaseConnection
 }
 
 func (a *App) isReady() bool {
-	return a.imageStorage.IsReady() && a.database.IsReady()
+	return a.database.IsReady()
 }
 
 func New(configFilepath string) *App {
@@ -48,13 +46,6 @@ func New(configFilepath string) *App {
 		fixtures.LoadLegoSeries(app.GetLegoSeriesRepo())
 		fixtures.LoadLegoSets(app.GetLegoSetRepo(), app.GetLegoSeriesRepo())
 	}(dbCfg.LoadFixtures)
-
-	// Item Storage
-	minioCfg := config.GetMinioConfig()
-	if minioCfg == nil {
-		log.Fatalln("empty minio config")
-	}
-	app.setStorage(*minioCfg)
 
 	// Check all deps
 	if !app.isReady() {

@@ -25,7 +25,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/auth": {
+        "/admin/users": {
             "post": {
                 "security": [
                     {
@@ -47,7 +47,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.UserRegistrationRequest"
+                            "$ref": "#/definitions/users.UserRegistrationRequest"
                         }
                     },
                     {
@@ -62,7 +62,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserRegistrationResponse"
+                            "$ref": "#/definitions/users.UserRegistrationResponse"
                         }
                     },
                     "400": {
@@ -379,7 +379,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/register": {
+        "/users/register": {
             "post": {
                 "produces": [
                     "application/json"
@@ -396,7 +396,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.UserRegistrationRequest"
+                            "$ref": "#/definitions/users.UserRegistrationRequest"
                         }
                     }
                 ],
@@ -404,7 +404,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserRegistrationResponse"
+                            "$ref": "#/definitions/users.UserRegistrationResponse"
                         }
                     },
                     "400": {
@@ -417,7 +417,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/token": {
+        "/users/token": {
             "post": {
                 "produces": [
                     "application/json"
@@ -434,7 +434,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.JWTRequest"
+                            "$ref": "#/definitions/users.JWTRequest"
                         }
                     }
                 ],
@@ -442,7 +442,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.JWTResponse"
+                            "$ref": "#/definitions/users.JWTResponse"
                         }
                     },
                     "400": {
@@ -924,7 +924,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.JWTRequest": {
+        "users.JWTRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -935,7 +935,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.JWTResponse": {
+        "users.JWTResponse": {
             "type": "object",
             "properties": {
                 "access": {
@@ -943,7 +943,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.UserDetailResponse": {
+        "users.UserDetailResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -960,7 +960,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.UserRegistrationRequest": {
+        "users.UserRegistrationRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -974,7 +974,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.UserRegistrationResponse": {
+        "users.UserRegistrationResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1130,7 +1130,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "seller": {
-                    "$ref": "#/definitions/auth.UserDetailResponse"
+                    "$ref": "#/definitions/users.UserDetailResponse"
                 }
             }
         }

@@ -1,8 +1,8 @@
 package marketplace
 
 import (
-	"legocy-go/internal/delievery/http/resources/auth"
 	"legocy-go/internal/delievery/http/resources/lego"
+	"legocy-go/internal/delievery/http/resources/users"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 
@@ -24,12 +24,12 @@ func (r *MarketItemRequest) ToMarketItemBasic(sellerID int) *models.MarketItemBa
 }
 
 type MarketItemResponse struct {
-	ID       int                     `json:"id"`
-	Price    float32                 `json:"price"`
-	Currency CurrencyResponse        `json:"currency"`
-	Location LocationResponse        `json:"location"`
-	LegoSet  lego.LegoSetResponse    `json:"lego_set"`
-	Seller   auth.UserDetailResponse `json:"seller"`
+	ID       int                      `json:"id"`
+	Price    float32                  `json:"price"`
+	Currency CurrencyResponse         `json:"currency"`
+	Location LocationResponse         `json:"location"`
+	LegoSet  lego.LegoSetResponse     `json:"lego_set"`
+	Seller   users.UserDetailResponse `json:"seller"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
@@ -39,6 +39,6 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		Currency: GetCurrencyResponse(&m.Currency),
 		Location: GetLocationResponse(&m.Location),
 		LegoSet:  lego.GetLegoSetResponse(&m.LegoSet),
-		Seller:   auth.GetUserDetailResponse(&m.Seller),
+		Seller:   users.GetUserDetailResponse(&m.Seller),
 	}
 }

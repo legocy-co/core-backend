@@ -1,0 +1,26 @@
+syntax="proto3";
+
+option go_package ="./proto";
+
+
+package s3_bucket;
+
+service S3Service{
+  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
+}
+
+message NoParam{};
+
+message UploadImageRequest {
+  ImageInfo meta = 1;
+  bytes data = 2;
+}
+
+message ImageInfo {
+  int32 id = 1;
+  string bucketName = 2;
+}
+
+message UploadImageResponse {
+  string imageURL = 1;
+}

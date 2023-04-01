@@ -13,12 +13,6 @@
         "acces_token_lifetime_hours": 2
     },
 
-    "minio": {
-        "url":"localhost:9000",
-        "user": "admin",
-        "password": "password12345",
-        "token": "dtrozSkKxVAFeuQ8",
-        "secret_token": "XB2ziVLFTHzLjrLlOrrkCEn98CRSGB72" ,
-        "ssl": false
-    }
+
+    "s3_port": ":8001"
 }

@@ -1,7 +1,7 @@
-package auth
+package users
 
 import (
-	models "legocy-go/internal/domain/auth/models"
+	models "legocy-go/internal/domain/users/models"
 )
 
 type UserRegistrationResponse struct {

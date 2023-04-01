@@ -9,9 +9,9 @@ import (
 var appConf *AppConfig // private singleton variable
 
 type AppConfig struct {
-	DbConf    DatabaseConfig `yaml:"database" json:"database"`
-	JwtConf   JWTConfig      `yaml:"jwt" json:"jwt"`
-	MinioCong MinioConfig    `yaml:"minio" json:"minio"`
+	DbConf  DatabaseConfig `yaml:"database" json:"database"`
+	JwtConf JWTConfig      `yaml:"jwt" json:"jwt"`
+	S3Port  string         `json:"s3_port"`
 }
 
 func GetAppConfig() *AppConfig {
@@ -41,15 +41,6 @@ type JWTConfig struct {
 	AccesTokenLifeTime int    `yaml:"acces_tokern_lifetime_hours" json:"acces_token_lifetime_hours"`
 }
 
-type MinioConfig struct {
-	Url         string `json:"url"`
-	User        string `json:"user"`
-	Password    string `json:"password"`
-	Token       string `json:"token"`
-	SecretToken string `json:"secret_token"`
-	Ssl         bool   `json:"ssl"`
-}
-
 func GetDBConfig() *DatabaseConfig {
 	cfg := GetAppConfig()
 	if cfg == nil {
@@ -66,15 +57,6 @@ func GetJWTConfig() *JWTConfig {
 	}
 
 	return &cfg.JwtConf
-}
-
-func GetMinioConfig() *MinioConfig {
-	cfg := GetAppConfig()
-	if cfg == nil {
-		return DefaultMinioConfig
-	}
-
-	return &cfg.MinioCong
 }
 
 func SetupFromJSON(fp string) error {

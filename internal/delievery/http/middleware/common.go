@@ -3,7 +3,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delievery/http/errors"
-	"legocy-go/internal/domain/auth/middleware"
+	"legocy-go/internal/domain/users/middleware"
 )
 
 func GetAuthTokenHeader(ctx *gin.Context) string {

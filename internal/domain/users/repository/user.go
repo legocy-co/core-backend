@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	models "legocy-go/internal/domain/auth/models"
+	models "legocy-go/internal/domain/users/models"
 )
 
 type UserRepository interface {

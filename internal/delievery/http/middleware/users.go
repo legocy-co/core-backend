@@ -2,8 +2,8 @@ package v1
 
 import (
 	"legocy-go/internal/delievery/http/errors"
-	"legocy-go/internal/domain/auth/middleware"
-	models "legocy-go/internal/domain/auth/models"
+	"legocy-go/internal/domain/users/middleware"
+	models "legocy-go/internal/domain/users/models"
 	"net/http"
 	"strconv"
 

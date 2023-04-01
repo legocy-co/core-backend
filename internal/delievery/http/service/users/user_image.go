@@ -1,9 +1,9 @@
-package auth
+package users
 
 import (
 	"context"
-	models "legocy-go/internal/domain/auth/models"
-	repo "legocy-go/internal/domain/auth/repository"
+	models "legocy-go/internal/domain/users/models"
+	repo "legocy-go/internal/domain/users/repository"
 )
 
 type UserImageUseCase struct {

@@ -7,9 +7,9 @@ import (
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/pagination"
 	s "legocy-go/internal/delievery/http/service/marketplace"
-	"legocy-go/internal/domain/auth/middleware"
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
+	"legocy-go/internal/domain/users/middleware"
 	"net/http"
 	"strconv"
 )

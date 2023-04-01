@@ -2,9 +2,9 @@ package app
 
 import (
 	postgres "legocy-go/internal/db/postgres/repository"
-	"legocy-go/internal/domain/auth/repository"
 	lego "legocy-go/internal/domain/lego/repository"
 	marketplace "legocy-go/internal/domain/marketplace/repository"
+	"legocy-go/internal/domain/users/repository"
 )
 
 func (a *App) GetUserRepo() repository.UserRepository {

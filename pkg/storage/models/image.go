@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"io"
+	"mime/multipart"
 	"strconv"
 	"time"
 )
@@ -12,6 +13,15 @@ type ImageUnit struct {
 	Payload     io.Reader
 	PayloadName string
 	PayloadSize int64
+}
+
+func ImageUnitFromFile(file multipart.File, id int, name string, size int64) *ImageUnit {
+	return &ImageUnit{
+		ID:          id,
+		Payload:     file,
+		PayloadName: name,
+		PayloadSize: size,
+	}
 }
 
 func (i *ImageUnit) GenerateObjectName() string {

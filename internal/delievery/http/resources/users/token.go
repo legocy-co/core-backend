@@ -1,4 +1,4 @@
-package auth
+package users
 
 type JWTRequest struct {
 	Email    string `json:"email"`

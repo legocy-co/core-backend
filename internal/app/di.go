@@ -6,8 +6,7 @@ import (
 	"legocy-go/internal/config"
 	"legocy-go/internal/db"
 	postgres "legocy-go/internal/db/postgres"
-	"legocy-go/internal/storage"
-	"legocy-go/internal/storage/provider"
+	"legocy-go/pkg/storage/client"
 	"log"
 )
 
@@ -26,22 +25,6 @@ func (a *App) setDatabase(dbCfg *config.DatabaseConfig) {
 	a.database = conn
 }
 
-func (a *App) GetStorage() storage.ImageStorage {
-	return a.imageStorage
-}
-
-func (a *App) setStorage(minioCfg config.MinioConfig) {
-	imgStorage, err := provider.NewMinioProvider(
-		minioCfg.Url, minioCfg.User, minioCfg.Password, minioCfg.Token, minioCfg.SecretToken, minioCfg.Ssl,
-	)
-	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Minio] %v", err.Error()))
-		return
-	}
-	err = imgStorage.Connect()
-	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Minio] %v", err.Error()))
-	}
-
-	a.imageStorage = imgStorage
+func (a *App) GetImageStorageClient() client.ImageStorage {
+	return client.NewImageStorage(config.GetAppConfig().S3Port)
 }
