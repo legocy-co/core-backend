@@ -1,9 +1,11 @@
 package users
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	resources "legocy-go/internal/delievery/http/resources/users"
 	service "legocy-go/internal/delievery/http/service/users"
+	m "legocy-go/internal/domain/users/models"
 	"legocy-go/pkg/storage"
 	"legocy-go/pkg/storage/client"
 	"legocy-go/pkg/storage/models"
@@ -49,6 +51,12 @@ func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	err = h.service.StoreUserImage(context.Background(),
+		&m.UserImage{UserID: userID, FilepathURL: imgUrl})
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
 	}
 
 	response := resources.GetUserImageUploadResponse(imgUrl)
