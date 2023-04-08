@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type S3ServiceClient interface {
 	UploadImage(ctx context.Context, in *UploadImageRequest, opts ...grpc.CallOption) (*UploadImageResponse, error)
+	DownloadImage(ctx context.Context, in *DownloadImageRequest, opts ...grpc.CallOption) (*DownloadImageResponse, error)
 }
 
 type s3ServiceClient struct {
@@ -42,11 +43,21 @@ func (c *s3ServiceClient) UploadImage(ctx context.Context, in *UploadImageReques
 	return out, nil
 }
 
+func (c *s3ServiceClient) DownloadImage(ctx context.Context, in *DownloadImageRequest, opts ...grpc.CallOption) (*DownloadImageResponse, error) {
+	out := new(DownloadImageResponse)
+	err := c.cc.Invoke(ctx, "/s3_bucket.S3Service/DownloadImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // S3ServiceServer is the server API for S3Service service.
 // All implementations must embed UnimplementedS3ServiceServer
 // for forward compatibility
 type S3ServiceServer interface {
 	UploadImage(context.Context, *UploadImageRequest) (*UploadImageResponse, error)
+	DownloadImage(context.Context, *DownloadImageRequest) (*DownloadImageResponse, error)
 	mustEmbedUnimplementedS3ServiceServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedS3ServiceServer struct {
 
 func (UnimplementedS3ServiceServer) UploadImage(context.Context, *UploadImageRequest) (*UploadImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadImage not implemented")
+}
+func (UnimplementedS3ServiceServer) DownloadImage(context.Context, *DownloadImageRequest) (*DownloadImageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadImage not implemented")
 }
 func (UnimplementedS3ServiceServer) mustEmbedUnimplementedS3ServiceServer() {}
 
@@ -88,6 +102,24 @@ func _S3Service_UploadImage_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _S3Service_DownloadImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(S3ServiceServer).DownloadImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/s3_bucket.S3Service/DownloadImage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(S3ServiceServer).DownloadImage(ctx, req.(*DownloadImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // S3Service_ServiceDesc is the grpc.ServiceDesc for S3Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var S3Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadImage",
 			Handler:    _S3Service_UploadImage_Handler,
+		},
+		{
+			MethodName: "DownloadImage",
+			Handler:    _S3Service_DownloadImage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

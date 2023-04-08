@@ -17,3 +17,7 @@ func StreamToByte(stream io.Reader) []byte {
 	buf.ReadFrom(stream)
 	return buf.Bytes()
 }
+
+func ByteToStream(data []byte) io.Reader {
+	return bytes.NewReader(data)
+}
