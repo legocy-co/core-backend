@@ -62,3 +62,32 @@ func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 	response := resources.GetUserImageUploadResponse(imgUrl)
 	c.JSON(http.StatusOK, response)
 }
+
+func (h UserImageHandler) DownloadImage(c *gin.Context) {
+	var downloadRequest *resources.UserDownloadImageRequest
+
+	if err := c.BindJSON(&downloadRequest); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	bucketName, imageName, err := downloadRequest.ToBucketNameImageName()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	imageData, err := h.storage.DownloadImage(bucketName, imageName)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusFailedDependency, err)
+		return
+	}
+
+	c.DataFromReader(
+		http.StatusOK,
+		imageData.PayloadSize,
+		"",
+		imageData.Payload,
+		map[string]string{},
+	)
+}

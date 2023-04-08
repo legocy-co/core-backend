@@ -29,6 +29,6 @@ func DownloadImageResponseToImageUnit(response *proto.DownloadImageResponse) *mo
 		ID:          0,
 		Payload:     helpers.ByteToStream(response.Data),
 		PayloadName: "",
-		PayloadSize: 0,
+		PayloadSize: int64(len(response.Data)),
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"legocy-go/internal/config"
 	d "legocy-go/internal/db"
-	entities "legocy-go/internal/db/postgres/entities"
+	entities "legocy-go/internal/db/postgres/entity"
 	"log"
 
 	postgres "gorm.io/driver/postgres"

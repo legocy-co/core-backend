@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	d "legocy-go/internal/db"
-	entities "legocy-go/internal/db/postgres/entities"
+	entities "legocy-go/internal/db/postgres/entity"
 	e "legocy-go/internal/domain/users/errors"
 	models "legocy-go/internal/domain/users/models"
 	h "legocy-go/pkg/helpers"
