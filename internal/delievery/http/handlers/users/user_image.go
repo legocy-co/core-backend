@@ -6,6 +6,7 @@ import (
 	resources "legocy-go/internal/delievery/http/resources/users"
 	service "legocy-go/internal/delievery/http/service/users"
 	m "legocy-go/internal/domain/users/models"
+	"legocy-go/pkg/helpers"
 	"legocy-go/pkg/storage"
 	"legocy-go/pkg/storage/client"
 	"legocy-go/pkg/storage/models"
@@ -87,12 +88,10 @@ func (h UserImageHandler) DownloadImage(c *gin.Context) {
 		return
 	}
 
-	c.DataFromReader(
+	c.Data(
 		http.StatusOK,
-		imageData.PayloadSize,
 		"image/png",
-		imageData.Payload,
-		map[string]string{},
+		helpers.StreamToByte(imageData.Payload),
 	)
 }
 
