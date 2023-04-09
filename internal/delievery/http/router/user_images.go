@@ -12,8 +12,10 @@ func (r V1router) addUserImages(rg *gin.RouterGroup, app *app.App) {
 		app.GetUserImagesService(),
 		app.GetImageStorageClient())
 
-	userImages := rg.Group("/users/images/").Use(m.UserIdOrAdmin("userID"))
+	userImages := rg.Group("/users/images")
 	{
-		userImages.POST("/:userID", handler.UploadUserImage)
+		userImages.GET("/:userID", m.UserIdOrAdmin("userID"), handler.ListImages)
+		userImages.POST("/:userID", m.UserIdOrAdmin("userID"), handler.UploadUserImage)
+		userImages.GET("/download", handler.DownloadImage)
 	}
 }

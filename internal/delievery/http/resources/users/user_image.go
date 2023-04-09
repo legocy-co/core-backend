@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	models "legocy-go/internal/domain/users/models"
 	"strings"
 )
 
@@ -26,10 +27,35 @@ type UserDownloadImageRequest struct {
 }
 
 func (r UserDownloadImageRequest) ToBucketNameImageName() (bucketName string, imageName string, err error) {
-	idx := strings.Index(r.ImagePath, "/")
-	if idx < 0 || len(r.ImagePath[idx+1:]) <= 0 {
+	fp := r.ImagePath
+	if f := string(fp[0]); f == "/" {
+		fp = fp[1:]
+	}
+
+	idx := strings.Index(fp, "/")
+	if idx < 0 || len(fp[idx+1:]) <= 0 {
 		return "", "", ErrInvalidImagePath
 	}
 
-	return r.ImagePath[:idx], r.ImagePath[idx:], nil
+	return fp[:idx], fp[idx:], nil
+}
+
+type UserImagesListResponse struct {
+	Images []UserImageInfoResponse `json:"images"`
+}
+
+func GetUserImagesListResponse(images []UserImageInfoResponse) UserImagesListResponse {
+	return UserImagesListResponse{Images: images}
+}
+
+type UserImageInfoResponse struct {
+	UserID   int    `json:"userID"`
+	Filepath string `json:"filepath"`
+}
+
+func GetUserInfoResponse(image *models.UserImage) UserImageInfoResponse {
+	return UserImageInfoResponse{
+		UserID:   image.UserID,
+		Filepath: image.FilepathURL,
+	}
 }

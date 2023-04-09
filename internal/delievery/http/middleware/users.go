@@ -58,13 +58,14 @@ func UserIdOrAdmin(lookUpParam string) gin.HandlerFunc {
 		if err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
 		// Get UserID param
 		userID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": errors.ErrParamNotFound})
+				http.StatusBadRequest, gin.H{"error": errors.ErrParamNotFound.Error()})
 			return
 		}
 
