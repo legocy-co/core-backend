@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (h user_image.UserImageHandler) DownloadImage(c *gin.Context) {
+func (h UserImageHandler) DownloadImage(c *gin.Context) {
 
 	imagePath := c.Query("fp")
 	if imagePath == "" {
