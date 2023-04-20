@@ -1,4 +1,4 @@
-package users
+package user_image
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func (h UserImageHandler) UploadUserImage(c *gin.Context) {
+func (h user_image.UserImageHandler) UploadUserImage(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})

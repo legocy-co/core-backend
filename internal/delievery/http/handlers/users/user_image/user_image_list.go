@@ -1,4 +1,4 @@
-package users
+package user_image
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (h UserImageHandler) ListImages(c *gin.Context) {
+func (h user_image.UserImageHandler) ListImages(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})

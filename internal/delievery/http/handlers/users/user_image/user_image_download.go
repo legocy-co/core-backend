@@ -1,4 +1,4 @@
-package users
+package user_image
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (h UserImageHandler) DownloadImage(c *gin.Context) {
+func (h user_image.UserImageHandler) DownloadImage(c *gin.Context) {
 
 	imagePath := c.Query("fp")
 	if imagePath == "" {

@@ -7,7 +7,7 @@ const (
 
 type User struct {
 	ID       int
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Role     int    // Admin/User/etc.
+	Username string
+	Email    string
+	Role     int // Admin/User/etc.
 }

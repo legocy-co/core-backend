@@ -1,4 +1,4 @@
-package users
+package user_image
 
 import (
 	service "legocy-go/internal/delievery/http/service/users"
