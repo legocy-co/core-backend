@@ -3,12 +3,12 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/app"
-	"legocy-go/internal/delievery/http/handlers/users/user_image"
+	"legocy-go/internal/delievery/http/handlers/users/userImage"
 	m "legocy-go/internal/delievery/http/middleware"
 )
 
 func (r V1router) addUserImages(rg *gin.RouterGroup, app *app.App) {
-	handler := user_image.NewUserImageHandler(
+	handler := userImage.NewUserImageHandler(
 		app.GetUserImagesService(),
 		app.GetImageStorageClient())
 

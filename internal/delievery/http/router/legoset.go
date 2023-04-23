@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	h "legocy-go/internal/delievery/http/handlers/lego"
+	h "legocy-go/internal/delievery/http/handlers/lego/legoset"
 	m "legocy-go/internal/delievery/http/middleware"
 	s "legocy-go/internal/delievery/http/service/lego"
 )

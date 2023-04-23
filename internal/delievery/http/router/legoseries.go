@@ -2,14 +2,14 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delievery/http/handlers/lego"
+	h "legocy-go/internal/delievery/http/handlers/lego/legoseries"
 	m "legocy-go/internal/delievery/http/middleware"
 	s "legocy-go/internal/delievery/http/service/lego"
 )
 
 func (r V1router) addLegoSeries(rg *gin.RouterGroup, service s.LegoSeriesService) {
 
-	handler := lego.NewLegoSeriesHandler(service)
+	handler := h.NewLegoSeriesHandler(service)
 	series := rg.Group("/series").Use(m.Auth())
 	{
 		series.GET("/", handler.ListSeries)

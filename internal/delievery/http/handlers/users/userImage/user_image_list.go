@@ -1,4 +1,4 @@
-package user_image
+package userImage
 
 import (
 	"github.com/gin-gonic/gin"
