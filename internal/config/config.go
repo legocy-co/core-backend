@@ -11,7 +11,11 @@ var appConf *AppConfig // private singleton variable
 type AppConfig struct {
 	DbConf  DatabaseConfig `yaml:"database" json:"database"`
 	JwtConf JWTConfig      `yaml:"jwt" json:"jwt"`
-	S3Port  string         `json:"s3_port"`
+
+	S3Port string `json:"s3_port"`
+
+	EventNotifierPort   string `json:"event_notifier_port"`
+	EventNotifierChatID int    `json:"event_notifier_chat_id"`
 }
 
 func GetAppConfig() *AppConfig {

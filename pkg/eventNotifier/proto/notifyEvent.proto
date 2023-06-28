@@ -1,0 +1,19 @@
+syntax="proto3";
+
+option go_package = "./proto";
+
+package telegram_notifier;
+
+service NotifyEventService {
+  rpc NotifyEvent(NotifyEventRequest) returns (NotifyEventResponse);
+};
+
+message NotifyEventRequest {
+  string chatID = 1;
+  string message = 2;
+}
+
+message NotifyEventResponse {
+  bool OK = 1;
+  string message = 2;
+}
