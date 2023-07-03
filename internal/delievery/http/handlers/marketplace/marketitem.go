@@ -1,26 +1,34 @@
 package marketplace
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/config"
 	"legocy-go/internal/delievery/http/middleware"
-	v12 "legocy-go/internal/delievery/http/resources"
+	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/pagination"
 	s "legocy-go/internal/delievery/http/service/marketplace"
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/internal/domain/users/middleware"
+	"legocy-go/pkg/eventNotifier/client"
+	clientModels "legocy-go/pkg/eventNotifier/models"
 	"net/http"
 	"strconv"
 )
 
 type MarketItemHandler struct {
-	service s.MarketItemService
+	service      s.MarketItemService
+	notifyClient client.EventNotifierClient
 }
 
-func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
+func NewMarketItemHandler(
+	service s.MarketItemService, notifyClient client.EventNotifierClient) MarketItemHandler {
+
 	return MarketItemHandler{
-		service: service,
+		service:      service,
+		notifyClient: notifyClient,
 	}
 }
 
@@ -58,12 +66,12 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	response := v12.DataMetaResponse{
+	response := resources.DataMetaResponse{
 		Data: marketItemResponse,
 		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, v12.MsgSuccess, ctx),
+			c.Request.URL.Path, resources.MsgSuccess, ctx),
 	}
-	v12.Respond(c.Writer, response)
+	resources.Respond(c.Writer, response)
 }
 
 // MarketItemDetail
@@ -131,11 +139,17 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		return
 	}
 
-	response := v12.DataMetaResponse{
+	// Track Event
+	h.notifyClient.NotifyEvent(clientModels.NotifyEventData{
+		ChatID:  config.GetAppConfig().EventNotifierChatID,
+		Message: fmt.Sprint("New MarketItem created!"),
+	})
+
+	response := resources.DataMetaResponse{
 		Data: itemRequest,
-		Meta: v12.SuccessMetaResponse,
+		Meta: resources.SuccessMetaResponse,
 	}
-	v12.Respond(c.Writer, response)
+	resources.Respond(c.Writer, response)
 }
 
 // DeleteMarketItem
