@@ -6,7 +6,8 @@ import (
 	"legocy-go/internal/config"
 	"legocy-go/internal/db"
 	postgres "legocy-go/internal/db/postgres"
-	"legocy-go/pkg/storage/client"
+	eventNotifier "legocy-go/pkg/eventNotifier/client"
+	storage "legocy-go/pkg/storage/client"
 	"log"
 )
 
@@ -25,6 +26,10 @@ func (a *App) setDatabase(dbCfg *config.DatabaseConfig) {
 	a.database = conn
 }
 
-func (a *App) GetImageStorageClient() client.ImageStorage {
-	return client.NewImageStorage(config.GetAppConfig().S3Port)
+func (a *App) GetImageStorageClient() storage.ImageStorage {
+	return storage.NewImageStorage(config.GetAppConfig().S3Port)
+}
+
+func (a *App) GetNotifyEventClient() eventNotifier.EventNotifierClient {
+	return eventNotifier.NewEventNotifierClient(config.GetAppConfig().EventNotifierPort)
 }
