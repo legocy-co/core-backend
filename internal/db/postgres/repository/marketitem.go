@@ -96,14 +96,14 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 }
 
 func (r MarketItemPostgresRepository) CreateMarketItem(
-	c context.Context, item *models.MarketItemBasic) error {
+	c context.Context, item *models.MarketItemValueObject) error {
 
 	db := r.conn.GetDB()
 	if db == nil {
 		return d.ErrConnectionLost
 	}
 
-	entity := entities.FromMarketItemBasic(item)
+	entity := entities.FromMarketItemValueObject(item)
 	if entity == nil {
 		return d.ErrItemNotFound
 	}

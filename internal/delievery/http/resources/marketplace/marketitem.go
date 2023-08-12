@@ -13,8 +13,8 @@ type MarketItemRequest struct {
 	LocationID int     `json:"location_id"`
 }
 
-func (r *MarketItemRequest) ToMarketItemBasic(sellerID int) *models.MarketItemBasic {
-	return &models.MarketItemBasic{
+func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) *models.MarketItemValueObject {
+	return &models.MarketItemValueObject{
 		LegoSetID:  r.LegoSetID,
 		SellerID:   sellerID,
 		Price:      r.Price,

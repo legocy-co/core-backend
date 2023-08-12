@@ -92,7 +92,7 @@ func (h CurrencyHandler) CreateCurrency(c *gin.Context) {
 		return
 	}
 
-	currency := currencyReq.ToCurrencyBasic()
+	currency := currencyReq.ToCurrencyValueObject()
 	err := h.service.CreateCurrency(c, currency)
 	if err != nil {
 		c.AbortWithStatusJSON(

@@ -10,6 +10,6 @@ type MarketItemRepository interface {
 	GetMarketItemByID(c context.Context, id int) (*models.MarketItem, error)
 	GetMarketItemSellerID(c context.Context, id int) (int, error)
 	GetSellerMarketItemsAmount(c context.Context, sellerID int) (int64, error)
-	CreateMarketItem(c context.Context, item *models.MarketItemBasic) error
+	CreateMarketItem(c context.Context, item *models.MarketItemValueObject) error
 	DeleteMarketItem(c context.Context, id int) error
 }

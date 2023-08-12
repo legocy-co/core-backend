@@ -9,8 +9,8 @@ type CurrencyRequest struct {
 	Symbol string `json:"symbol"`
 }
 
-func (cr *CurrencyRequest) ToCurrencyBasic() *models.CurrencyBasic {
-	return &models.CurrencyBasic{
+func (cr *CurrencyRequest) ToCurrencyValueObject() *models.CurrencyValueObject {
+	return &models.CurrencyValueObject{
 		Name:   cr.Name,
 		Symbol: cr.Symbol,
 	}

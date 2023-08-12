@@ -29,7 +29,7 @@ func (lsh *LegoSeriesHandler) SeriesCreate(c *gin.Context) {
 		return
 	}
 
-	seriesObj := seriesRequest.ToLegoSeriesBasic()
+	seriesObj := seriesRequest.ToLegoSeriesValueObject()
 	err := lsh.service.CreateLegoSeries(c.Request.Context(), seriesObj)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

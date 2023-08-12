@@ -32,7 +32,7 @@ func FromLegoSet(s *models.LegoSet) *LegoSetPostgres {
 	}
 }
 
-func FromLegoSetBasic(s *models.LegoSetBasic) *LegoSetPostgres {
+func FromLegoSetValueObject(s *models.LegoSetValueObject) *LegoSetPostgres {
 	return &LegoSetPostgres{
 		Number:               s.Number,
 		Name:                 s.Name,

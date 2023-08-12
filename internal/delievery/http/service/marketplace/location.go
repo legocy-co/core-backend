@@ -22,7 +22,7 @@ func (l *LocationUseCase) CountryLocations(c context.Context, country string) ([
 	return l.repo.GetCountryLocations(c, country)
 }
 
-func (l *LocationUseCase) CreateLocation(c context.Context, loc *models.LocationBasic) error {
+func (l *LocationUseCase) CreateLocation(c context.Context, loc *models.LocationValueObject) error {
 	return l.repo.CreateLocation(c, loc)
 }
 

@@ -9,8 +9,8 @@ type LocationRequest struct {
 	City    string `json:"city"`
 }
 
-func (loc *LocationRequest) ToLocationBasic() *models.LocationBasic {
-	return &models.LocationBasic{
+func (loc *LocationRequest) ToLocationValueObject() *models.LocationValueObject {
+	return &models.LocationValueObject{
 		Country: loc.Country,
 		City:    loc.City,
 	}

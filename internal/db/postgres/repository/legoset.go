@@ -16,14 +16,14 @@ func NewLegoSetPostgresRepository(conn d.DataBaseConnection) LegoSetPostgresRepo
 	return LegoSetPostgresRepository{conn: conn}
 }
 
-func (psql LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetBasic) error {
+func (psql LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetValueObject) error {
 	db := psql.conn.GetDB()
 
 	if db == nil {
 		return d.ErrConnectionLost
 	}
 
-	entity := entities.FromLegoSetBasic(s)
+	entity := entities.FromLegoSetValueObject(s)
 	db.Create(entity)
 	return nil
 }

@@ -6,7 +6,7 @@ type Currency struct {
 	Symbol string
 }
 
-type CurrencyBasic struct {
+type CurrencyValueObject struct {
 	Name   string
 	Symbol string
 }

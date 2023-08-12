@@ -64,8 +64,8 @@ func (h *LocationHandler) CreateLocation(c *gin.Context) {
 		return
 	}
 
-	locationBasic := locationRequest.ToLocationBasic()
-	err := h.service.CreateLocation(c, locationBasic)
+	locationValueObject := locationRequest.ToLocationValueObject()
+	err := h.service.CreateLocation(c, locationValueObject)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		c.Abort()

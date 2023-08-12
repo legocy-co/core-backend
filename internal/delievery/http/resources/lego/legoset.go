@@ -11,8 +11,8 @@ type LegoSetRequest struct {
 	LegoSeriesID int    `json:"series_id"`
 }
 
-func (l *LegoSetRequest) ToLegoSeriesBasic() *models.LegoSetBasic {
-	return &models.LegoSetBasic{
+func (l *LegoSetRequest) ToLegoSeriesValueObject() *models.LegoSetValueObject {
+	return &models.LegoSetValueObject{
 		Name:     l.Name,
 		Number:   l.Number,
 		NPieces:  l.NPieces,

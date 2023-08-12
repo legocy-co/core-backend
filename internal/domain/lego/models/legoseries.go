@@ -5,6 +5,6 @@ type LegoSeries struct {
 	Name string `json:"name"`
 }
 
-type LegoSeriesBasic struct {
+type LegoSeriesValueObject struct {
 	Name string `json:"name"`
 }

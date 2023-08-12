@@ -22,6 +22,6 @@ func (s CurrencyUseCase) CurrencyDetail(c context.Context, symbol string) (*mode
 	return s.repo.GetCurrency(c, symbol)
 }
 
-func (s CurrencyUseCase) CreateCurrency(c context.Context, curr *models.CurrencyBasic) error {
+func (s CurrencyUseCase) CreateCurrency(c context.Context, curr *models.CurrencyValueObject) error {
 	return s.repo.CreateCurrency(c, curr)
 }
