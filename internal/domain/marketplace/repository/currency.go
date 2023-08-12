@@ -8,5 +8,5 @@ import (
 type CurrencyRepository interface {
 	GetCurrencies(c context.Context) ([]*models.Currency, error)
 	GetCurrency(c context.Context, symbol string) (*models.Currency, error)
-	CreateCurrency(c context.Context, currency *models.CurrencyBasic) error
+	CreateCurrency(c context.Context, currency *models.CurrencyValueObject) error
 }

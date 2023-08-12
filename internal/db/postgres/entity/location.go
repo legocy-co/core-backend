@@ -18,7 +18,7 @@ func (lp *LocationPostgres) ToLocation() *models.Location {
 	}
 }
 
-func FromLocationBasic(loc *models.LocationBasic) *LocationPostgres {
+func FromLocationValueObject(loc *models.LocationValueObject) *LocationPostgres {
 	return &LocationPostgres{
 		City:    loc.City,
 		Country: loc.Country,

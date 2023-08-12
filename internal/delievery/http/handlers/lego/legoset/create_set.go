@@ -26,8 +26,8 @@ func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
 		return
 	}
 
-	legoSetBasic := setRequest.ToLegoSeriesBasic()
-	err := lsh.service.LegoSetCreate(c.Request.Context(), legoSetBasic)
+	legoSetValueObject := setRequest.ToLegoSeriesValueObject()
+	err := lsh.service.LegoSetCreate(c.Request.Context(), legoSetValueObject)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()

@@ -24,8 +24,8 @@ type legoSet struct {
 	NDetails  int    `json:"n_details"`
 }
 
-func (l legoSet) toLegoSetBasic(
-	r repository2.LegoSeriesRepository) *models.LegoSetBasic {
+func (l legoSet) toLegoSetValueObject(
+	r repository2.LegoSeriesRepository) *models.LegoSetValueObject {
 
 	series, err := r.GetLegoSeriesByName(context.Background(), l.Series)
 	if err != nil {
@@ -37,7 +37,7 @@ func (l legoSet) toLegoSetBasic(
 		return nil
 	}
 
-	return &models.LegoSetBasic{
+	return &models.LegoSetValueObject{
 		Number:   setNumber,
 		Name:     l.Title,
 		NPieces:  l.NDetails,
@@ -67,7 +67,7 @@ func LoadLegoSets(
 	}
 
 	for _, set := range setsList {
-		setCreate := set.toLegoSetBasic(seriesRepo)
+		setCreate := set.toLegoSetValueObject(seriesRepo)
 		if setCreate == nil {
 			continue
 		}

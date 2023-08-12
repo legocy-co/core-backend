@@ -62,13 +62,13 @@ func (lpr LocationPostgresRepository) GetCountryLocations(c context.Context, cou
 	return locations, err
 }
 
-func (lpr LocationPostgresRepository) CreateLocation(c context.Context, location *models.LocationBasic) error {
+func (lpr LocationPostgresRepository) CreateLocation(c context.Context, location *models.LocationValueObject) error {
 	db := lpr.conn.GetDB()
 	if db == nil {
 		return database.ErrConnectionLost
 	}
 
-	var entity *entities.LocationPostgres = entities.FromLocationBasic(location)
+	var entity *entities.LocationPostgres = entities.FromLocationValueObject(location)
 	if entity == nil {
 		return database.ErrItemNotFound
 	}

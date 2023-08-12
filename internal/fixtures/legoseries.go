@@ -21,8 +21,8 @@ type legoSeries struct {
 	Name string `json:"name"`
 }
 
-func (l legoSeries) toLegoSeriesBasic() *models.LegoSeriesBasic {
-	return &models.LegoSeriesBasic{
+func (l legoSeries) toLegoSeriesValueObject() *models.LegoSeriesValueObject {
+	return &models.LegoSeriesValueObject{
 		Name: l.Name,
 	}
 }
@@ -46,7 +46,7 @@ func LoadLegoSeries(r repository.LegoSeriesRepository) {
 	}
 
 	for _, series := range seriesList {
-		err = r.CreateLegoSeries(context.Background(), series.toLegoSeriesBasic())
+		err = r.CreateLegoSeries(context.Background(), series.toLegoSeriesValueObject())
 		if err != nil {
 			logrus.Errorf("Error creating LegoSeries %v", err)
 			continue

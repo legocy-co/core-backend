@@ -22,7 +22,7 @@ func (u *LegoSetUseCase) LegoSetDetail(c context.Context, id int) (*models.LegoS
 	return u.repo.GetLegoSetByID(c, id)
 }
 
-func (u *LegoSetUseCase) LegoSetCreate(c context.Context, legoSet *models.LegoSetBasic) error {
+func (u *LegoSetUseCase) LegoSetCreate(c context.Context, legoSet *models.LegoSetValueObject) error {
 	return u.repo.CreateLegoSet(c, legoSet)
 }
 

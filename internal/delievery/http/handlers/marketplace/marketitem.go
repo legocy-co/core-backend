@@ -133,7 +133,7 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	}
 
 	// Payload ID as SellerID
-	err := h.service.CreateMarketItem(c, itemRequest.ToMarketItemBasic(userPayload.ID))
+	err := h.service.CreateMarketItem(c, itemRequest.ToMarketItemValueObject(userPayload.ID))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

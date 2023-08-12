@@ -6,7 +6,7 @@ type Location struct {
 	City    string
 }
 
-type LocationBasic struct {
+type LocationValueObject struct {
 	Country string
 	City    string
 }

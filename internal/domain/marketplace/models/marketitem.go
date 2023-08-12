@@ -14,7 +14,7 @@ type MarketItem struct {
 	Location Location
 }
 
-type MarketItemBasic struct {
+type MarketItemValueObject struct {
 	LegoSetID  int
 	SellerID   int
 	Price      float32

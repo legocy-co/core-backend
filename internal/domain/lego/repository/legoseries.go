@@ -6,7 +6,7 @@ import (
 )
 
 type LegoSeriesRepository interface {
-	CreateLegoSeries(c context.Context, s *models.LegoSeriesBasic) error
+	CreateLegoSeries(c context.Context, s *models.LegoSeriesValueObject) error
 	GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error)
 	GetLegoSeries(c context.Context, id int) (*models.LegoSeries, error)
 	GetLegoSeriesByName(c context.Context, name string) (*models.LegoSeries, error)

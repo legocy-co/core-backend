@@ -28,7 +28,7 @@ func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 	}
 }
 
-func FromMarketItemBasic(mi *models.MarketItemBasic) *MarketItemPostgres {
+func FromMarketItemValueObject(mi *models.MarketItemValueObject) *MarketItemPostgres {
 	return &MarketItemPostgres{
 		Price:              mi.Price,
 		CurrencyPostgresID: uint(mi.CurrencyID),
