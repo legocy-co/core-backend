@@ -2,6 +2,7 @@ package marketplace
 
 import (
 	"golang.org/x/net/context"
+	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	r "legocy-go/internal/domain/marketplace/repository"
 )
@@ -30,4 +31,14 @@ func (ms *MarketItemService) MarketItemDetail(c context.Context, id int) (*model
 
 func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) error {
 	return ms.repo.DeleteMarketItem(c, id)
+}
+
+func (ms *MarketItemService) UpdateMarketItemByID(
+	c context.Context, currentUserID int, id int, vo *models.MarketItemValueObject) (*models.MarketItem, error) {
+
+	if currentUserID != vo.SellerID {
+		return nil, errors.ErrMarketItemInvalidSellerID
+	}
+
+	return ms.repo.UpdateMarketItemByID(c, id, vo)
 }

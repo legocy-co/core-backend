@@ -17,6 +17,7 @@ func (r V1router) addMarketItems(
 	items := rg.Group("/market-items").Use(v1.Auth())
 	{
 		items.GET("/", handler.ListMarketItems)
+		items.GET("/:itemID", handler.MarketItemDetail)
 
 		items.Use(
 			v1.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
@@ -26,6 +27,10 @@ func (r V1router) addMarketItems(
 		items.Use(v1.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
 		{
 			items.DELETE("/:itemId", handler.DeleteMarketItem)
+		}
+		items.Use(v1.ItemOwnerOrAdmin("itemID", app.GetMarketItemRepo()))
+		{
+			items.PUT("/:itemID", handler.UpdateMarketItemByID)
 		}
 	}
 }

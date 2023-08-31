@@ -167,8 +167,8 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemId"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
@@ -179,4 +179,51 @@ func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]bool{"status": true})
+}
+
+// UpdateMarketItemByID
+//
+//	@Summary	Update Market Item
+//	@Tags		market_items
+//	@ID			update_market_item
+//	@Param		itemID	path	int	true	"item ID"
+//	@Param		data	body	marketplace.MarketItemRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	marketplace.MarketItemResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/{itemID} [put]
+//
+//	@Security	JWT
+func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
+	itemID, err := strconv.Atoi(c.Param("itemID"))
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
+		return
+	}
+
+	tokenString := v1.GetAuthTokenHeader(c)
+	userPayload, ok := auth.ParseTokenClaims(tokenString)
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusUnauthorized,
+			gin.H{"error": "invalid token credentials"})
+		return
+	}
+
+	var itemRequest *marketplace.MarketItemRequest
+	if err := c.ShouldBindJSON(&itemRequest); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	marketItem, err := h.service.UpdateMarketItemByID(
+		c, userPayload.ID, itemID, itemRequest.ToMarketItemValueObject(userPayload.ID))
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
+		return
+	}
+
+	marketItemResponse := marketplace.GetMarketItemResponse(marketItem)
+	c.JSON(http.StatusOK, marketItemResponse)
 }

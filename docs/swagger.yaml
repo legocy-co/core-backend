@@ -571,6 +571,37 @@ paths:
       summary: Get Market Item
       tags:
       - market_items
+    put:
+      operationId: update_market_item
+      parameters:
+      - description: item ID
+        in: path
+        name: itemID
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update Market Item
+      tags:
+      - market_items
   /market-items/{itemId}:
     delete:
       operationId: delete_market_item

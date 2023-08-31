@@ -37,3 +37,13 @@ func FromMarketItemValueObject(mi *models.MarketItemValueObject) *MarketItemPost
 		LocationPostgresID: uint(mi.LocationID),
 	}
 }
+
+func (mp *MarketItemPostgres) GetUpdatedMarketItem(vo models.MarketItemValueObject) *MarketItemPostgres {
+	mp.CurrencyPostgresID = uint(vo.CurrencyID)
+	mp.LegoSetPostgresID = uint(vo.LegoSetID)
+	mp.LocationPostgresID = uint(vo.LocationID)
+	mp.Price = vo.Price
+	mp.UserPostgresID = uint(vo.SellerID)
+
+	return mp
+}

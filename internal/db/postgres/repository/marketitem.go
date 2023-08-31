@@ -4,8 +4,10 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entity"
+	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/filter"
+	"log"
 )
 
 type MarketItemPostgresRepository struct {
@@ -54,11 +56,15 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	}
 
 	var entity *entities.MarketItemPostgres
-	result := db.First(&entity, id)
+	result := db.Preload("Seller").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("Currency").Preload("Location").First(&entity, id)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	log.Printf("GetMarketItemByID repository: %v", entity.ID)
 
 	return entity.ToMarketItem(), nil
 }
@@ -122,4 +128,25 @@ func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int
 
 	result := db.Delete(entities.MarketItemPostgres{}, id)
 	return result.Error
+}
+
+func (r MarketItemPostgresRepository) UpdateMarketItemByID(c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error) {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var entity *entities.MarketItemPostgres
+	_ = db.First(&entity, id)
+	if entity == nil {
+		return nil, errors.ErrMarketItemsNotFound
+	}
+
+	log.Printf("Entity DB ID: %v", entity.ID)
+
+	entityUpdated := entity.GetUpdatedMarketItem(*item)
+	db.Save(entityUpdated)
+
+	return r.GetMarketItemByID(c, id)
 }
