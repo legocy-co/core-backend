@@ -76,16 +76,16 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 // MarketItemDetail
 //
-//		@Summary	Get Market Item
-//		@Tags		market_items
-//		@ID			detail_market_item
-//	 	@Param 		itemID 	path  int true "item ID"
-//		@Produce	json
-//		@Success	200	{object}	marketplace.MarketItemResponse
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/market-items/{itemID} [get]
+//	@Summary	Get Market Item
+//	@Tags		market_items
+//	@ID			detail_market_item
+//	@Param		itemID	path	int	true	"item ID"
+//	@Produce	json
+//	@Success	200	{object}	marketplace.MarketItemResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/{itemID} [get]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemID"))
 	if err != nil {
@@ -106,16 +106,16 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 
 // CreateMarketItem
 //
-//		@Summary	Create Market Item
-//		@Tags		market_items
-//		@ID			create_market_item
-//	 	@Param 		data 	body marketplace.MarketItemRequest true "data"
-//		@Produce	json
-//		@Success	200	{object}	map[string]interface{}
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/market-items/ [post]
+//	@Summary	Create Market Item
+//	@Tags		market_items
+//	@ID			create_market_item
+//	@Param		data	body	marketplace.MarketItemRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/ [post]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := v1.GetAuthTokenHeader(c)
@@ -154,16 +154,16 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 
 // DeleteMarketItem
 //
-//		@Summary	Delete Market Item
-//		@Tags		market_items
-//		@ID			delete_market_item
-//	 	@Param 		itemId 	path	int true "item ID"
-//		@Produce	json
-//		@Success	200	{object}	map[string]bool
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/market-items/{itemId} [delete]
+//	@Summary	Delete Market Item
+//	@Tags		market_items
+//	@ID			delete_market_item
+//	@Param		itemId	path	int	true	"item ID"
+//	@Produce	json
+//	@Success	200	{object}	map[string]bool
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/{itemId} [delete]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemId"))
 	if err != nil {

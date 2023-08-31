@@ -76,16 +76,16 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 
 // UserReviewDetail
 //
-//		@Summary	Get User Review
-//		@Tags		user_reviews
-//		@ID			detail_user_review
-//	 	@Param 		reviewID 	path  int true "review ID"
-//		@Produce	json
-//		@Success	200	{object}	marketplace.UserReviewResponse
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/user-reviews/{reviewID} [get]
+//	@Summary	Get User Review
+//	@Tags		user_reviews
+//	@ID			detail_user_review
+//	@Param		reviewID	path	int	true	"review ID"
+//	@Produce	json
+//	@Success	200	{object}	marketplace.UserReviewResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/user-reviews/{reviewID} [get]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 	reviewID, err := strconv.Atoi(c.Param("reviewID"))
 	if err != nil {
@@ -106,16 +106,16 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 
 // CreateUserReview
 //
-//		@Summary	Create User Review
-//		@Tags		user_reviews
-//		@ID			create_user_review
-//	 	@Param 		data 	body marketplace.UserReviewRequest true "data"
-//		@Produce	json
-//		@Success	200	{object}	map[string]interface{}
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/user-reviews/ [post]
+//	@Summary	Create User Review
+//	@Tags		user_reviews
+//	@ID			create_user_review
+//	@Param		data	body	marketplace.UserReviewRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/user-reviews/ [post]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := v1.GetAuthTokenHeader(c)
@@ -160,16 +160,16 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 
 // DeleteUserReview
 //
-//		@Summary	Delete User Review
-//		@Tags		user_reviews
-//		@ID			delete_user_review
-//	 	@Param 		reviewId 	path	int true "review ID"
-//		@Produce	json
-//		@Success	200	{object}	map[string]bool
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/user-reviews/{reviewId} [delete]
+//	@Summary	Delete User Review
+//	@Tags		user_reviews
+//	@ID			delete_user_review
+//	@Param		reviewId	path	int	true	"review ID"
+//	@Produce	json
+//	@Success	200	{object}	map[string]bool
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/user-reviews/{reviewId} [delete]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {
 	reviewID, err := strconv.Atoi(c.Param("reviewId"))
 	if err != nil {

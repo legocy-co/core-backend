@@ -8,16 +8,17 @@ import (
 )
 
 // SetCreate
-// @Summary	Create Lego Set object
-// @Tags		lego_sets_admin
-// @ID			set_create
-// @Param		data	body	lego.LegoSetRequest	true	"create data"
-// @Produce	json
-// @Success	200	{object}	map[string]interface{}
-// @Failure	400	{object}	map[string]interface{}
-// @Router		/admin/sets/ [post]
 //
-// @Security	JWT
+//	@Summary	Create Lego Set object
+//	@Tags		lego_sets_admin
+//	@ID			set_create
+//	@Param		data	body	lego.LegoSetRequest	true	"create data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/admin/sets/ [post]
+//
+//	@Security	JWT
 func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
 	var setRequest lego.LegoSetRequest
 	if err := c.ShouldBindJSON(&setRequest); err != nil {

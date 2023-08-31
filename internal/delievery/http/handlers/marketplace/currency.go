@@ -45,16 +45,16 @@ func (h CurrencyHandler) ListCurrencies(c *gin.Context) {
 
 // CurrencyDetail
 //
-//		@Summary	Get currency by symbol
-//		@Tags		currencies
-//		@ID			currency_detail
-//	 	@Param 		currencySymbol 	path string true "currency symbol"
-//		@Produce	json
-//		@Success	200	{object}	marketplace.CurrencyResponse
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/currencies/{currencySymbol} [get]
+//	@Summary	Get currency by symbol
+//	@Tags		currencies
+//	@ID			currency_detail
+//	@Param		currencySymbol	path	string	true	"currency symbol"
+//	@Produce	json
+//	@Success	200	{object}	marketplace.CurrencyResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/currencies/{currencySymbol} [get]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h CurrencyHandler) CurrencyDetail(c *gin.Context) {
 	currencySymbol := c.Param("currencySymbol")
 	if currencySymbol == "" {
@@ -77,7 +77,7 @@ func (h CurrencyHandler) CurrencyDetail(c *gin.Context) {
 //	@Summary	Get currency by symbol
 //	@Tags		currencies_admin
 //	@ID			currency_create
-//	@Param 		data	body 	marketplace.CurrencyRequest true "currency symbol"
+//	@Param		data	body	marketplace.CurrencyRequest	true	"currency symbol"
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}

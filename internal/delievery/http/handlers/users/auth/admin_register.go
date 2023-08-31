@@ -13,8 +13,8 @@ import (
 //	@Tags		authentication_admin
 //	@ID			create-admin
 //	@Produce	json
-//	@Param		data	body		users.UserRegistrationRequest	true	"reg request"
-//	@Success	200		{object}	users.UserRegistrationResponse
+//	@Param		data	body		resources.UserRegistrationRequest	true	"reg request"
+//	@Success	200		{object}	resources.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/admin/users [post]
 //

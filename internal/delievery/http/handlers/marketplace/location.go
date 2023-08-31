@@ -46,16 +46,16 @@ func (h *LocationHandler) ListLocations(c *gin.Context) {
 
 // CreateLocation
 //
-//		@Summary	Create Location
-//		@Tags		locations_admin
-//		@ID			locations_create
-//	 	@Param 		data body marketplace.LocationRequest true "location data"
-//		@Produce	json
-//		@Success	200	{object}	map[string]interface{}
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/admin/locations/ [post]
+//	@Summary	Create Location
+//	@Tags		locations_admin
+//	@ID			locations_create
+//	@Param		data	body	marketplace.LocationRequest	true	"location data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/admin/locations/ [post]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *LocationHandler) CreateLocation(c *gin.Context) {
 	var locationRequest marketplace.LocationRequest
 	if err := c.ShouldBindJSON(&locationRequest); err != nil {
@@ -78,16 +78,16 @@ func (h *LocationHandler) CreateLocation(c *gin.Context) {
 
 // CountryLocations
 //
-//		@Summary	Get locations by country
-//		@Tags		locations
-//		@ID			locations_country
-//	 	@Param 		country path string true "country"
-//		@Produce	json
-//		@Success	200	{object}	[]marketplace.LocationResponse
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/locations/{country} [get]
+//	@Summary	Get locations by country
+//	@Tags		locations
+//	@ID			locations_country
+//	@Param		country	path	string	true	"country"
+//	@Produce	json
+//	@Success	200	{object}	[]marketplace.LocationResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/locations/{country} [get]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *LocationHandler) CountryLocations(c *gin.Context) {
 	country := c.Param("country")
 	if country == "" {
@@ -118,16 +118,16 @@ func (h *LocationHandler) CountryLocations(c *gin.Context) {
 
 // LocationDelete
 //
-//		@Summary	Get locations by country
-//		@Tags		locations_admin
-//		@ID			locations_delete
-//	 	@Param 		locID path int true "location ID"
-//		@Produce	json
-//		@Success	200	{object}	[]marketplace.LocationResponse
-//		@Failure	400	{object}	map[string]interface{}
-//		@Router		/admin/locations/{locID} [delete]
+//	@Summary	Get locations by country
+//	@Tags		locations_admin
+//	@ID			locations_delete
+//	@Param		locID	path	int	true	"location ID"
+//	@Produce	json
+//	@Success	200	{object}	[]marketplace.LocationResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/admin/locations/{locID} [delete]
 //
-//		@Security	JWT
+//	@Security	JWT
 func (h *LocationHandler) LocationDelete(c *gin.Context) {
 	locID, err := strconv.Atoi(c.Param("locID"))
 	if err != nil {

@@ -13,8 +13,8 @@ import (
 //	@Tags		authentication
 //	@ID			user-register
 //	@Produce	json
-//	@Param		data	body		users.UserRegistrationRequest	true	"user data"
-//	@Success	200		{object}	users.UserRegistrationResponse
+//	@Param		data	body		resources.UserRegistrationRequest	true	"user data"
+//	@Success	200		{object}	resources.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/register [post]
 func (th *TokenHandler) UserRegister(c *gin.Context) {
