@@ -135,6 +135,28 @@ definitions:
       seller:
         $ref: '#/definitions/auth.UserDetailResponse'
     type: object
+  marketplace.UserReviewRequest:
+    properties:
+      seller_id:
+        type: integer
+      rating:
+        type: integer
+      message:
+        type: string
+    type: object
+  marketplace.UserReviewResponse:
+    properties:
+      id:
+        type: integer
+      seller:
+        $ref: '#/definitions/auth.UserDetailResponse'
+      rating:
+        type: integer
+      message:
+        type: string
+      reviewer:
+        $ref: '#/definitions/auth.UserDetailResponse'
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -721,6 +743,108 @@ paths:
       summary: Get LegoSet by ID
       tags:
       - lego_sets
+  /user-reviews/:
+    get:
+      operationId: list_user_reviews
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+        - JWT: [ ]
+      summary: Get User Reviews
+      tags:
+        - user_reviews
+    post:
+      operationId: create_user_review
+      parameters:
+        - description: data
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/marketplace.UserReviewRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+        - JWT: [ ]
+      summary: Create User Review
+      tags:
+        - user_reviews
+  /user-reviews/{reviewID}:
+    get:
+      operationId: detail_user_review
+      parameters:
+        - description: review ID
+          in: path
+          name: reviewID
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/marketplace.UserReviewResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+        - JWT: [ ]
+      summary: Get User Review
+      tags:
+        - user_reviews
+  /user-reviews/{reviewId}:
+    delete:
+      operationId: delete_user_review
+      parameters:
+        - description: review ID
+          in: path
+          name: reviewId
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+        - JWT: [ ]
+      summary: Delete User Review
+      tags:
+        - user_reviews
 securityDefinitions:
   JWT:
     in: header

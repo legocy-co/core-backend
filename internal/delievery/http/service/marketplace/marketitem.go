@@ -10,7 +10,7 @@ type MarketItemService struct {
 	repo r.MarketItemRepository
 }
 
-func NewMarketItemSerivce(repo r.MarketItemRepository) MarketItemService {
+func NewMarketItemService(repo r.MarketItemRepository) MarketItemService {
 	return MarketItemService{repo: repo}
 }
 

@@ -2,4 +2,7 @@ package errors
 
 import "errors"
 
-var ErrMarketItemsNotFound = errors.New("marketItems not found")
+var (
+	ErrMarketItemsNotFound = errors.New("marketItems not found")
+	ErrUserReviewsNotFound = errors.New("userReviews not found")
+)

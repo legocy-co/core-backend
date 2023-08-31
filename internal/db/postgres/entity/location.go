@@ -7,7 +7,7 @@ import (
 type LocationPostgres struct {
 	Model
 	Country string `gorm:"uniqueIndex:idx_country_city"`
-	City    string `gorm:"uniqueIndex:idx_country_city""`
+	City    string `gorm:"uniqueIndex:idx_country_city"`
 }
 
 func (lp *LocationPostgres) ToLocation() *models.Location {
