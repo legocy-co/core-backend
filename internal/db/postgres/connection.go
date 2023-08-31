@@ -60,6 +60,8 @@ func (psql *PostgresConnection) Init() {
 		entities.MarketItemPostgres{},
 
 		entities.UserPostgresImage{},
+
+		entities.UserReviewPostgres{},
 	)
 
 	if err != nil {

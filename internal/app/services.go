@@ -31,5 +31,9 @@ func (a *App) GetCurrencyService() marketplace.CurrencyUseCase {
 }
 
 func (a *App) GetMarketItemService() marketplace.MarketItemService {
-	return marketplace.NewMarketItemSerivce(a.GetMarketItemRepo())
+	return marketplace.NewMarketItemService(a.GetMarketItemRepo())
+}
+
+func (a *App) GetUserReviewService() marketplace.UserReviewService {
+	return marketplace.NewUserReviewService(a.GetUserReviewRepo())
 }

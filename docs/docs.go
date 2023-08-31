@@ -921,6 +921,166 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+		"/user-reviews/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_reviews"
+                ],
+                "summary": "Get User Reviews",
+                "operationId": "list_user_reviews",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_reviews"
+                ],
+                "summary": "Create User Review",
+                "operationId": "create_user_review",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/marketplace.UserReviewRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/user-reviews/{reviewID}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_reviews"
+                ],
+                "summary": "Get User Review",
+                "operationId": "detail_user_review",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "review ID",
+                        "name": "reviewID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/marketplace.UserReviewResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/user-reviews/{reviewId}": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_reviews"
+                ],
+                "summary": "Delete User Review",
+                "operationId": "delete_user_review",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "review ID",
+                        "name": "reviewId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1133,7 +1293,41 @@ const docTemplate = `{
                     "$ref": "#/definitions/users.UserDetailResponse"
                 }
             }
-        }
+        },
+		"marketplace.UserReviewRequest": {
+				"type": "object",
+				"properties": {
+					"seller_id": {
+						"type": "integer"
+					},
+					"rating": {
+						"type": "integer"
+					},
+					"message": {
+						"type": "string"
+					}
+				}
+		},
+		"marketplace.UserReviewResponse": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"seller": {
+					"$ref": "#/definitions/users.UserDetailResponse"
+				},
+				"rating": {
+					"type": "integer"
+				},
+				"message": {
+					"type": "string"
+				},
+				"reviewer": {
+					"$ref": "#/definitions/users.UserDetailResponse"
+				}
+			}
+		}
     },
     "securityDefinitions": {
         "JWT": {

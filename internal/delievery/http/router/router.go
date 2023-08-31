@@ -80,5 +80,8 @@ func InitRouter(app *app.App) V1router {
 	//marketitem.go
 	router.addMarketItems(v1, app)
 
+	//userreview.go
+	router.addUserReviews(v1, app)
+
 	return router
 }
