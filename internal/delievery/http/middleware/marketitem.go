@@ -25,6 +25,7 @@ func ItemOwnerOrAdmin(
 
 		if tokenPayload.Role == models.ADMIN {
 			ctx.Next()
+			return
 		}
 
 		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))

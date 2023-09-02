@@ -143,8 +143,6 @@ func (r MarketItemPostgresRepository) UpdateMarketItemByID(c context.Context, id
 		return nil, errors.ErrMarketItemsNotFound
 	}
 
-	log.Printf("Entity DB ID: %v", entity.ID)
-
 	entityUpdated := entity.GetUpdatedMarketItem(*item)
 	db.Save(entityUpdated)
 
