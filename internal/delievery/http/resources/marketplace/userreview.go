@@ -36,7 +36,7 @@ func GetUserReviewResponse(m *models.UserReview) UserReviewResponse {
 		ID:       m.ID,
 		Rating:   m.Rating,
 		Message:  m.Message,
-		Date:     time.Now().Format("02.01.06"),
+		Date:     m.Date,
 		Seller:   users.GetUserDetailResponse(&m.Seller),
 		Reviewer: users.GetUserDetailResponse(&m.Reviewer),
 	}

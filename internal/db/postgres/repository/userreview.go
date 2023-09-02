@@ -59,12 +59,12 @@ func (r UserReviewPostgresRepository) GetUserReviewByID(
 	}
 
 	var entity *entities.UserReviewPostgres
-	result := db.First(&entity, id)
-
+	result := db.Preload("Reviewer").
+		Preload("Seller").
+		First(&entity, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-
 	return entity.ToUserReview()
 }
 

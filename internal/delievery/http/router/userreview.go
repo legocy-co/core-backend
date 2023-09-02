@@ -17,6 +17,8 @@ func (r V1router) addUserReviews(
 	items := rg.Group("/user-reviews").Use(v1.Auth())
 	{
 		items.GET("/", handler.ListUserReviews)
+		items.GET("/:reviewID", handler.UserReviewDetail)
+
 		{
 			items.POST("/", handler.CreateUserReview)
 		}
