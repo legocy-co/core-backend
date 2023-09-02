@@ -89,8 +89,7 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 	reviewID, err := strconv.Atoi(c.Param("reviewID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
@@ -167,14 +166,13 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	map[string]bool
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/{reviewId} [delete]
+//	@Router		/user-reviews/{reviewID} [delete]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {
 	reviewID, err := strconv.Atoi(c.Param("reviewId"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 

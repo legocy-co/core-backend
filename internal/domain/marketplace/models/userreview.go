@@ -72,11 +72,3 @@ func NewUserReviewValueObject(SellerID int, ReviewerID int, Rating int, Message 
 		Date:       Date,
 	}, nil
 }
-
-/*type UserReviewValueObject struct {
-	SellerID   int
-	ReviewerID int
-	Rating     int
-	Message    string
-	Date       string
-}*/
