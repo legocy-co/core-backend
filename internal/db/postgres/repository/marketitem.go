@@ -30,9 +30,9 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 
 	res := db.Model(&entities.MarketItemPostgres{}).
 		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
-		Joins("Seller").
-		Joins("LegoSet").Joins("LegoSet.LegoSeries").
-		Joins("Currency").Joins("Location").
+		Preload("Seller").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("Currency").Preload("Location").
 		Find(&itemsDB)
 	if res.Error != nil {
 		return nil, res.Error
@@ -55,9 +55,9 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	}
 
 	var entity *entities.MarketItemPostgres
-	result := db.Joins("Seller").
-		Joins("LegoSet").Joins("LegoSet.LegoSeries").
-		Joins("Currency").Joins("Location").First(&entity, id)
+	result := db.Preload("Seller").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("Currency").Preload("Location").First(&entity, id)
 
 	if result.Error != nil {
 		return nil, result.Error
