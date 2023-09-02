@@ -7,7 +7,6 @@ import (
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/filter"
-	"log"
 )
 
 type MarketItemPostgresRepository struct {
@@ -63,8 +62,6 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	if result.Error != nil {
 		return nil, result.Error
 	}
-
-	log.Printf("GetMarketItemByID repository: %v", entity.ID)
 
 	return entity.ToMarketItem(), nil
 }
