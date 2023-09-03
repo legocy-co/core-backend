@@ -5,16 +5,16 @@ import (
 	_ "legocy-go/docs"
 	"legocy-go/internal/delievery/http/handlers/users/auth"
 	m "legocy-go/internal/delievery/http/middleware"
-	s "legocy-go/internal/delievery/http/service/users"
+	s "legocy-go/internal/domain/users/service"
 )
 
 func (r V1router) addAuth(rg *gin.RouterGroup, service s.UserUseCase) {
 	handler := auth.NewTokenHandler(service)
 
-	auth := rg.Group("/users")
+	authRouter := rg.Group("/users")
 	{
-		auth.POST("/token", handler.GenerateToken)
-		auth.POST("/register", handler.UserRegister)
+		authRouter.POST("/token", handler.GenerateToken)
+		authRouter.POST("/register", handler.UserRegister)
 	}
 
 	authPrivate := rg.Group("/admin/users").Use(m.AdminUserOnly())

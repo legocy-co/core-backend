@@ -2,7 +2,7 @@ package auth
 
 import (
 	_ "legocy-go/docs"
-	ser "legocy-go/internal/delievery/http/service/users"
+	ser "legocy-go/internal/domain/users/service"
 )
 
 type TokenHandler struct {

@@ -1,7 +1,7 @@
 package userImage
 
 import (
-	service "legocy-go/internal/delievery/http/service/users"
+	"legocy-go/internal/domain/users/service"
 	"legocy-go/pkg/storage/client"
 )
 

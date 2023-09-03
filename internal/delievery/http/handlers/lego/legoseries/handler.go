@@ -1,7 +1,7 @@
 package legoseries
 
 import (
-	service "legocy-go/internal/delievery/http/service/lego"
+	"legocy-go/internal/domain/lego/service"
 )
 
 type LegoSeriesHandler struct {

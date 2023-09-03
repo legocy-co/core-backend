@@ -8,9 +8,9 @@ import (
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/pagination"
-	s "legocy-go/internal/delievery/http/service/marketplace"
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
+	s "legocy-go/internal/domain/marketplace/service"
 	"legocy-go/internal/domain/users/middleware"
 	"legocy-go/pkg/eventNotifier/client"
 	clientModels "legocy-go/pkg/eventNotifier/models"
@@ -145,7 +145,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	}
 
 	// Track Event
-	h.notifyClient.NotifyEvent(clientModels.NotifyEventData{
+	err = h.notifyClient.NotifyEvent(clientModels.NotifyEventData{
 		ChatID:  config.GetAppConfig().EventNotifierChatID,
 		Message: fmt.Sprint("New UserReview created!"),
 	})

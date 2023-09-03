@@ -1,4 +1,4 @@
-package marketplace
+package service
 
 import (
 	"context"

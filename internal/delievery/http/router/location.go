@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	h "legocy-go/internal/delievery/http/handlers/marketplace"
 	m "legocy-go/internal/delievery/http/middleware"
-	s "legocy-go/internal/delievery/http/service/marketplace"
+	s "legocy-go/internal/domain/marketplace/service"
 )
 
 func (r V1router) addLocations(rg *gin.RouterGroup, ser s.LocationUseCase) {

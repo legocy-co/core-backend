@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
-	s "legocy-go/internal/delievery/http/service/marketplace"
+	s "legocy-go/internal/domain/marketplace/service"
 	"net/http"
 	"strconv"
 )

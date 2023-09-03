@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	h "legocy-go/internal/delievery/http/handlers/lego/legoseries"
 	m "legocy-go/internal/delievery/http/middleware"
-	s "legocy-go/internal/delievery/http/service/lego"
+	s "legocy-go/internal/domain/lego/service"
 )
 
 func (r V1router) addLegoSeries(rg *gin.RouterGroup, service s.LegoSeriesService) {

@@ -1,6 +1,8 @@
 package legoset
 
-import s "legocy-go/internal/delievery/http/service/lego"
+import (
+	s "legocy-go/internal/domain/lego/service"
+)
 
 type LegoSetHandler struct {
 	service s.LegoSetUseCase
