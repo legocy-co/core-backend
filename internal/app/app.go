@@ -2,9 +2,11 @@ package app
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"legocy-go/internal/config"
 	d "legocy-go/internal/db"
 	"legocy-go/internal/fixtures"
+	"legocy-go/pkg/kafka"
 	"log"
 )
 
@@ -13,7 +15,20 @@ type App struct {
 }
 
 func (a *App) isReady() bool {
-	return a.database.IsReady()
+	dbReady := a.database.IsReady()
+
+	if !dbReady {
+		logrus.Error("DB Connection Failed...")
+		return false
+	}
+
+	kafkaReady := kafka.IsKafkaConnected()
+	if !kafkaReady {
+		logrus.Error("Kafka Connection Failed...")
+		return false
+	}
+
+	return true
 }
 
 func New(configFilepath string) *App {

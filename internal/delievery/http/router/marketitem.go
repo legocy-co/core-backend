@@ -12,7 +12,7 @@ func (r V1router) addMarketItems(
 	app *a.App) {
 
 	handler := marketplace.NewMarketItemHandler(
-		app.GetMarketItemService(), app.GetNotifyEventClient())
+		app.GetMarketItemService())
 
 	items := rg.Group("/market-items").Use(v1.Auth())
 	{

@@ -1,9 +1,7 @@
 package marketplace
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/config"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
@@ -12,23 +10,19 @@ import (
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
 	"legocy-go/internal/domain/users/middleware"
-	"legocy-go/pkg/eventNotifier/client"
-	clientModels "legocy-go/pkg/eventNotifier/models"
 	"net/http"
 	"strconv"
 )
 
 type MarketItemHandler struct {
-	service      s.MarketItemService
-	notifyClient client.EventNotifierClient
+	service s.MarketItemService
 }
 
 func NewMarketItemHandler(
-	service s.MarketItemService, notifyClient client.EventNotifierClient) MarketItemHandler {
+	service s.MarketItemService) MarketItemHandler {
 
 	return MarketItemHandler{
-		service:      service,
-		notifyClient: notifyClient,
+		service: service,
 	}
 }
 
@@ -138,12 +132,6 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// Track Event
-	err = h.notifyClient.NotifyEvent(clientModels.NotifyEventData{
-		ChatID:  config.GetAppConfig().EventNotifierChatID,
-		Message: fmt.Sprint("New MarketItem created!"),
-	})
 
 	response := resources.DataMetaResponse{
 		Data: itemRequest,
