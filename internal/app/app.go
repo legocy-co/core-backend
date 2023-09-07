@@ -22,6 +22,7 @@ func (a *App) isReady() bool {
 		return false
 	}
 
+	logrus.Info("Checking Kafka...")
 	kafkaReady := kafka.IsKafkaConnected()
 	if !kafkaReady {
 		logrus.Error("Kafka Connection Failed...")

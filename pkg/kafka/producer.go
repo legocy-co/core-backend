@@ -6,13 +6,17 @@ import (
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
 	"legocy-go/internal/config"
+	"time"
 )
 
-func NewKafkaProducer(topicName string) *kafka.Writer {
-	return kafka.NewWriter(kafka.WriterConfig{
-		Brokers: []string{config.AppConfigInstance.KafkaConf.URI},
-		Topic:   topicName,
-	})
+func NewKafkaProducer(topicName string) (*kafka.Conn, error) {
+	ctx, cf := context.WithTimeout(context.Background(), time.Second*2)
+	defer cf()
+	return kafka.DialLeader(
+		ctx,
+		"tcp",
+		config.AppConfigInstance.KafkaConf.URI,
+		topicName, 1)
 }
 
 func ProduceJSONEvent(topicName string, data any) error {
@@ -21,11 +25,14 @@ func ProduceJSONEvent(topicName string, data any) error {
 		return ErrUnjsonableData
 	}
 
-	kafkaProducer := NewKafkaProducer(topicName)
+	kafkaProducer, err := NewKafkaProducer(topicName)
+	if err != nil {
+		return err
+	}
 
-	logrus.Debug("Sending Kafka Message...")
+	logrus.Info("Sending Kafka Message...")
 
-	return kafkaProducer.WriteMessages(
-		context.Background(),
-		kafka.Message{Value: dataJson, Partition: 0})
+	_, err = kafkaProducer.WriteMessages(
+		kafka.Message{Value: dataJson})
+	return err
 }

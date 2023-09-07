@@ -107,19 +107,21 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 		return d.ErrConnectionLost
 	}
 
+	tx := db.Begin()
+
 	entity := entities.FromMarketItemValueObject(item)
 	if entity == nil {
 		return d.ErrItemNotFound
 	}
 
-	result := db.Create(&entity)
+	result := tx.Create(&entity)
 
 	err := kafka.ProduceJSONEvent(
 		kafka.MARKET_ITEM_UPDATES_TOPIC, map[string]interface{}{
 			"userID": entity.ID,
 		})
 	if err != nil {
-		db.Rollback()
+		tx.Rollback()
 		return err
 	}
 
