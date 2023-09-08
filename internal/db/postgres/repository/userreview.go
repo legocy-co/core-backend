@@ -12,7 +12,8 @@ type UserReviewPostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
-func NewUserReviewPostgresRepository(conn d.DataBaseConnection) UserReviewPostgresRepository {
+func NewUserReviewPostgresRepository(
+	conn d.DataBaseConnection) UserReviewPostgresRepository {
 	return UserReviewPostgresRepository{conn: conn}
 }
 
@@ -66,6 +67,41 @@ func (r UserReviewPostgresRepository) GetUserReviewByID(
 		return nil, result.Error
 	}
 	return entity.ToUserReview()
+}
+
+func (r UserReviewPostgresRepository) GetUserReviewsBySellerID(
+	c context.Context, sellerID int) ([]*models.UserReview, error) {
+
+	var userReviewsDB []*entities.UserReviewPostgres
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	result := db.Model(&entities.UserReviewPostgres{SellerPostgresID: uint(sellerID)}).
+		Preload("Reviewer").
+		Preload("Seller").
+		Find(&userReviewsDB, "seller_postgres_id = ?", sellerID)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	if len(userReviewsDB) == 0 {
+		return nil, d.ErrItemNotFound
+	}
+
+	userReviews := make([]*models.UserReview, 0, len(userReviewsDB))
+	for _, entity := range userReviewsDB {
+		userReview, err := entity.ToUserReview()
+
+		if err != nil {
+			return userReviews, nil
+		}
+
+		userReviews = append(userReviews, userReview)
+	}
+
+	return userReviews, nil
 }
 
 func (r UserReviewPostgresRepository) GetReviewerID(

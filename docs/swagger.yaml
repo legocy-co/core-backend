@@ -94,6 +94,23 @@ definitions:
       seller:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
     type: object
+  legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse:
+    properties:
+      marketItems:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+        type: array
+      user:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      userImages:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+        type: array
+      userReviews:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserReviewResponse'
+        type: array
+    type: object
   legocy-go_internal_delievery_http_resources_marketplace.UserReviewRequest:
     properties:
       message:
@@ -140,6 +157,13 @@ definitions:
         type: integer
       username:
         type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse:
+    properties:
+      filepath:
+        type: string
+      userID:
+        type: integer
     type: object
   legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest:
     properties:
@@ -726,6 +750,32 @@ paths:
       summary: Get LegoSet by ID
       tags:
       - lego_sets
+  /user-profile-pages/{userID}:
+    get:
+      operationId: detail_user_profile_page
+      parameters:
+      - description: user ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get User Profile Page
+      tags:
+      - user_profile_pages
   /user-reviews/:
     get:
       operationId: list_user_reviews

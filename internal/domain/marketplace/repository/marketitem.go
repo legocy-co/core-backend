@@ -7,6 +7,7 @@ import (
 
 type MarketItemRepository interface {
 	GetMarketItems(c context.Context) ([]*models.MarketItem, error)
+	GetMarketItemsBySellerID(c context.Context, sellerID int) ([]*models.MarketItem, error)
 	GetMarketItemByID(c context.Context, id int) (*models.MarketItem, error)
 	GetMarketItemSellerID(c context.Context, id int) (int, error)
 	GetSellerMarketItemsAmount(c context.Context, sellerID int) (int64, error)

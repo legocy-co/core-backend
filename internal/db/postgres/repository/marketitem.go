@@ -66,6 +66,32 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	return entity.ToMarketItem(), nil
 }
 
+func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
+	c context.Context, sellerID int) ([]*models.MarketItem, error) {
+
+	var itemsDB []*entities.MarketItemPostgres
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	result := db.Model(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
+		Preload("Seller").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("Currency").Preload("Location").
+		Find(&itemsDB, "user_postgres_id = ?", sellerID)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
+	for _, entity := range itemsDB {
+		marketItems = append(marketItems, entity.ToMarketItem())
+	}
+
+	return marketItems, nil
+}
+
 func (r MarketItemPostgresRepository) GetMarketItemSellerID(
 	c context.Context, id int) (int, error) {
 

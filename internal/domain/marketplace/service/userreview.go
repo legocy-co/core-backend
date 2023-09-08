@@ -24,6 +24,11 @@ func (ms *UserReviewService) ListUserReviews(
 	return ms.repo.GetUserReviews(c)
 }
 
+func (ms *UserReviewService) UserReviewsBySellerID(
+	c context.Context, sellerID int) ([]*models.UserReview, error) {
+	return ms.repo.GetUserReviewsBySellerID(c, sellerID)
+}
+
 func (ms *UserReviewService) UserReviewDetail(c context.Context, id int) (*models.UserReview, error) {
 	return ms.repo.GetUserReviewByID(c, id)
 }
