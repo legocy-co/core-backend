@@ -118,7 +118,7 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 
 	err := kafka.ProduceJSONEvent(
 		kafka.MARKET_ITEM_UPDATES_TOPIC, map[string]interface{}{
-			"userID": entity.ID,
+			"userID": int(entity.ID),
 		})
 	if err != nil {
 		tx.Rollback()

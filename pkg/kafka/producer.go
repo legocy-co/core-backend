@@ -19,7 +19,7 @@ func newKafkaProducer(topicName, uri string) kafka.Writer {
 	return kafka.Writer{
 		Addr:     kafka.TCP(uri),
 		Topic:    topicName,
-		Balancer: &kafka.LeastBytes{},
+		Balancer: &kafka.Hash{},
 	}
 }
 

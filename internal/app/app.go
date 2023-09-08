@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"legocy-go/internal/config"
@@ -8,6 +9,7 @@ import (
 	"legocy-go/internal/fixtures"
 	"legocy-go/pkg/kafka"
 	"log"
+	"time"
 )
 
 type App struct {
@@ -23,7 +25,11 @@ func (a *App) isReady() bool {
 	}
 
 	logrus.Info("Checking Kafka...")
-	kafkaReady := kafka.IsKafkaConnected()
+
+	ctx, cf := context.WithTimeout(context.Background(), time.Second*3)
+	defer cf()
+
+	kafkaReady := kafka.IsKafkaConnected(ctx)
 	if !kafkaReady {
 		logrus.Error("Kafka Connection Failed...")
 		return false
