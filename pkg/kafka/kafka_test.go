@@ -7,13 +7,6 @@ import (
 	"time"
 )
 
-// TestHappyPass is always True
-func TestHappyPass(t *testing.T) {
-	if 1 != 1 {
-		t.Fatal("Failed")
-	}
-}
-
 // TestKafkaConnection calls new Apache Kafka Producer
 func TestKafkaConnection(t *testing.T) {
 
