@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"context"
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
 )
@@ -14,7 +15,8 @@ func IsKafkaConnected() bool {
 
 	logrus.Info("Checking Kafka Connection...")
 
-	_, err = producer.WriteMessages(
+	err = producer.WriteMessages(
+		context.Background(),
 		kafka.Message{Value: []byte("OK"), Partition: 1})
 	return err != nil
 }
