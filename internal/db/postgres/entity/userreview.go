@@ -8,9 +8,9 @@ type UserReviewPostgres struct {
 	Model
 	Rating             int
 	Message            string
-	SellerPostgresID   uint         `filter:"param:sellerId; searchable, filterable; uniqueIndex:compositeindex"`
-	Seller             UserPostgres `gorm:"ForeignKey:SellerPostgresID; uniqueIndex:compositeindex"`
-	ReviewerPostgresID uint         `filter:"param:reviewerId; searchable, filterable"`
+	SellerPostgresID   uint         `filter:"param:sellerId; searchable, filterable" gorm:"primaryKey"`
+	Seller             UserPostgres `gorm:"ForeignKey:SellerPostgresID"`
+	ReviewerPostgresID uint         `filter:"param:reviewerId; searchable, filterable" gorm:"primaryKey"`
 	Reviewer           UserPostgres `gorm:"ForeignKey:ReviewerPostgresID"`
 	Date               string
 }
