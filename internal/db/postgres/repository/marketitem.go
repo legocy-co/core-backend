@@ -153,7 +153,8 @@ func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int
 	return result.Error
 }
 
-func (r MarketItemPostgresRepository) UpdateMarketItemByID(c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error) {
+func (r MarketItemPostgresRepository) UpdateMarketItemByID(
+	c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error) {
 	db := r.conn.GetDB()
 
 	if db == nil {

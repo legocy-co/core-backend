@@ -68,10 +68,6 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 	userResponse := users.GetUserDetailResponse(user)
 
 	userReviews, err := h.userReviewService.UserReviewsBySellerID(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
 	userReviewsResponse := make([]marketplace.UserReviewResponse, 0, len(userReviews))
 	for _, ur := range userReviews {
