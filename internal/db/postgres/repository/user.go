@@ -83,24 +83,6 @@ func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, err
 	return users, errOutput
 }
 
-func (r UserPostgresRepository) GetUser(c context.Context, id int) (*models.User, error) {
-	var user *models.User
-	var entity *entities.UserPostgres
-
-	db := r.conn.GetDB()
-	if db == nil {
-		return user, d.ErrConnectionLost
-	}
-
-	db.First(entity, id)
-	if entity == nil {
-		return user, e.ErrUserNotFound
-	}
-
-	user = entity.ToUser()
-	return user, nil
-}
-
 func (r UserPostgresRepository) GetUserByEmail(c context.Context, email string) (*models.User, error) {
 	var user *models.User
 	var entity *entities.UserPostgres
@@ -111,6 +93,24 @@ func (r UserPostgresRepository) GetUserByEmail(c context.Context, email string) 
 	}
 
 	db.Where("email = ?", email).First(&entity)
+	if entity == nil {
+		return user, e.ErrUserNotFound
+	}
+
+	user = entity.ToUser()
+	return user, nil
+}
+
+func (r UserPostgresRepository) GetUserByID(c context.Context, id int) (*models.User, error) {
+	var user *models.User
+	var entity *entities.UserPostgres
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return user, d.ErrConnectionLost
+	}
+
+	db.First(&entity, id)
 	if entity == nil {
 		return user, e.ErrUserNotFound
 	}

@@ -7,6 +7,7 @@ import (
 
 type UserReviewRepository interface {
 	GetUserReviews(c context.Context) ([]*models.UserReview, error)
+	GetUserReviewsBySellerID(c context.Context, sellerID int) ([]*models.UserReview, error)
 	GetUserReviewByID(c context.Context, id int) (*models.UserReview, error)
 	GetReviewerID(c context.Context, id int) (int, error)
 	CreateUserReview(c context.Context, review *models.UserReviewValueObject) error

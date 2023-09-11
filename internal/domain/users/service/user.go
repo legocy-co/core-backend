@@ -26,3 +26,7 @@ func (s *UserUseCase) CreateUser(c context.Context, u *models.User, password str
 func (s *UserUseCase) GetUserByEmail(c context.Context, email string) (*models.User, error) {
 	return s.repo.GetUserByEmail(c, email)
 }
+
+func (s *UserUseCase) GetUserByID(c context.Context, id int) (*models.User, error) {
+	return s.repo.GetUserByID(c, id)
+}
