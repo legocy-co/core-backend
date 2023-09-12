@@ -52,6 +52,49 @@ func ItemOwnerOrAdmin(
 	}
 }
 
+// IsMarketItemOwner checks if Current User is owner of MarketItem
+func IsMarketItemOwner(
+	lookUpParam string, repo r.MarketItemRepository) gin.HandlerFunc {
+
+	return func(ctx *gin.Context) {
+		// Get Token Header
+		tokenPayload, err := GetUserPayload(ctx)
+		if err != nil {
+			ctx.AbortWithStatusJSON(
+				http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if tokenPayload.Role == models.ADMIN {
+			ctx.AbortWithStatusJSON(
+				http.StatusBadRequest, gin.H{"error": "user method"})
+			return
+		}
+
+		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))
+		if err != nil {
+			ctx.AbortWithStatusJSON(
+				http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		sellerID, err := repo.GetMarketItemSellerID(ctx, itemID)
+		if err != nil {
+			ctx.AbortWithStatusJSON(
+				http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if tokenPayload.ID != sellerID {
+			ctx.AbortWithStatusJSON(
+				http.StatusBadRequest, gin.H{"error": "User does not have permission"})
+			return
+		}
+
+		ctx.Next()
+	}
+}
+
 // HasFreeMarketItemsSlot Checks if Given User
 func HasFreeMarketItemsSlot(
 	maxAmount int, repo r.MarketItemRepository) gin.HandlerFunc {

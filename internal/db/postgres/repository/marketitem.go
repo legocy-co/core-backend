@@ -201,3 +201,23 @@ func (r MarketItemPostgresRepository) UpdateMarketItemByID(
 
 	return r.GetMarketItemByID(c, id)
 }
+
+func (r MarketItemPostgresRepository) UpdateMarketItemByIDAdmin(
+	c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error) {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var entity *entities.MarketItemPostgres
+	_ = db.First(&entity, id)
+	if entity == nil {
+		return nil, errors.ErrMarketItemsNotFound
+	}
+
+	entityUpdated := entity.GetUpdatedMarketItem(*item)
+	db.Save(entityUpdated)
+
+	return r.GetMarketItemByID(c, id)
+}
