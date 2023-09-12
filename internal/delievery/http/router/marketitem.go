@@ -17,6 +17,7 @@ func (r V1router) addMarketItems(
 	items := rg.Group("/market-items").Use(v1.Auth())
 	{
 		items.GET("/", handler.ListMarketItems)
+		items.GET("/authorized/", handler.ListMarketItemsAuthorized)
 		items.GET("/:itemID", handler.MarketItemDetail)
 
 		items.Use(

@@ -608,6 +608,39 @@ const docTemplate = `{
                 }
             }
         },
+        "/market-items/authorized/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Get Market Items Authorized",
+                "operationId": "list_market_items_authorized",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/market-items/{itemID}": {
             "get": {
                 "security": [
@@ -1476,6 +1509,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "LEGOcy is a marketplace for LEGO lovers.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

@@ -74,6 +74,58 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 	resources.Respond(c.Writer, response)
 }
 
+// ListMarketItemsAuthorized
+//
+//	@Summary	Get Market Items Authorized
+//	@Tags		market_items
+//	@ID			list_market_items_authorized
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/authorized/ [get]
+//
+//	@Security	JWT
+func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
+
+	ctx := pagination.GetPaginationContext(c)
+
+	var marketItems []*models.MarketItem
+
+	tokenPayload, err := v1.GetUserPayload(c)
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userID := tokenPayload.ID
+
+	marketItems, err = h.service.ListMarketItemsAuthorized(ctx, userID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": err.Error()})
+	}
+
+	if len(marketItems) == 0 {
+		c.AbortWithStatusJSON(
+			http.StatusNotFound,
+			gin.H{"error": errors.ErrMarketItemsNotFound.Error()})
+		return
+	}
+
+	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
+	for _, m := range marketItems {
+		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
+	}
+
+	response := resources.DataMetaResponse{
+		Data: marketItemResponse,
+		Meta: pagination.GetPaginatedMetaResponse(
+			c.Request.URL.Path, resources.MsgSuccess, ctx),
+	}
+	resources.Respond(c.Writer, response)
+}
+
 // MarketItemDetail
 //
 //	@Summary	Get Market Item
