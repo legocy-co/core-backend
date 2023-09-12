@@ -156,6 +156,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/market-items/{itemID}": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items_admin"
+                ],
+                "summary": "Update Market Item",
+                "operationId": "update_market_item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "item ID",
+                        "name": "itemID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/admin/series/": {
             "post": {
                 "security": [
@@ -590,6 +640,39 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/market-items/authorized/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Get Market Items Authorized",
+                "operationId": "list_market_items_authorized",
                 "responses": {
                     "200": {
                         "description": "OK",

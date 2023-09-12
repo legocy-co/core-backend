@@ -17,6 +17,7 @@ func (r V1router) addMarketItems(
 	items := rg.Group("/market-items").Use(v1.Auth())
 	{
 		items.GET("/", handler.ListMarketItems)
+		items.GET("/authorized/", handler.ListMarketItemsAuthorized)
 		items.GET("/:itemID", handler.MarketItemDetail)
 
 		items.Use(
@@ -28,9 +29,13 @@ func (r V1router) addMarketItems(
 		{
 			items.DELETE("/:itemId", handler.DeleteMarketItem)
 		}
-		items.Use(v1.ItemOwnerOrAdmin("itemID", app.GetMarketItemRepo()))
+		items.Use(v1.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
 		{
 			items.PUT("/:itemID", handler.UpdateMarketItemByID)
 		}
+	}
+	itemsAdmin := rg.Group("/admin/market-items").Use(v1.AdminUserOnly())
+	{
+		itemsAdmin.PUT("/:itemID", handler.UpdateMarketItemByIDAdmin)
 	}
 }
