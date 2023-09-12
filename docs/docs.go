@@ -1509,8 +1509,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "LEGOcy is a marketplace for LEGO lovers.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {
