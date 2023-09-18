@@ -11,6 +11,7 @@ type MarketItemRequest struct {
 	Price      float32 `json:"price"`
 	CurrencyID int     `json:"currency_id"`
 	LocationID int     `json:"location_id"`
+	Status     string  `json:"status"`
 }
 
 func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) *models.MarketItemValueObject {
@@ -20,6 +21,7 @@ func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) *models.Market
 		Price:      r.Price,
 		CurrencyID: r.CurrencyID,
 		LocationID: r.LocationID,
+		Status:     models.CheckRequired,
 	}
 }
 
@@ -30,6 +32,7 @@ type MarketItemResponse struct {
 	Location LocationResponse         `json:"location"`
 	LegoSet  lego.LegoSetResponse     `json:"lego_set"`
 	Seller   users.UserDetailResponse `json:"seller"`
+	Status   string                   `json:"status"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
@@ -40,5 +43,6 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		Location: GetLocationResponse(&m.Location),
 		LegoSet:  lego.GetLegoSetResponse(&m.LegoSet),
 		Seller:   users.GetUserDetailResponse(&m.Seller),
+		Status:   m.Status,
 	}
 }

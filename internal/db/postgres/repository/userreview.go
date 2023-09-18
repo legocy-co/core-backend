@@ -40,7 +40,6 @@ func (r UserReviewPostgresRepository) GetUserReviews(
 	userReviews := make([]*models.UserReview, 0, len(itemsDB))
 	for _, entity := range itemsDB {
 		userReview, err := entity.ToUserReview()
-
 		if err != nil {
 			return nil, err
 		}
@@ -114,8 +113,8 @@ func (r UserReviewPostgresRepository) GetReviewerID(
 		return count, d.ErrConnectionLost
 	}
 
-	err := db.Model(entities.UserReviewPostgres{}).Where(
-		"id=?", id).Select("user_postgres_id").First(&count).Error
+	err := db.Model(entities.UserReviewPostgres{}).
+		Where("id = ?", id).Select("user_postgres_id").First(&count).Error
 
 	return count, err
 }

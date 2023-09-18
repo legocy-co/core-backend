@@ -5,6 +5,11 @@ import (
 	"legocy-go/internal/domain/users/models"
 )
 
+const (
+	CheckRequired = "CHECK_REQUIRED"
+	Active        = "ACTIVE"
+)
+
 type MarketItem struct {
 	ID       int
 	LegoSet  lego.LegoSet
@@ -12,6 +17,7 @@ type MarketItem struct {
 	Price    float32
 	Currency Currency
 	Location Location
+	Status   string // CheckRequired / Active / etc.
 }
 
 type MarketItemValueObject struct {
@@ -20,4 +26,5 @@ type MarketItemValueObject struct {
 	Price      float32
 	CurrencyID int
 	LocationID int
+	Status     string
 }
