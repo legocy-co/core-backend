@@ -7,6 +7,7 @@ import (
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/filter"
+	"legocy-go/pkg/kafka"
 )
 
 type MarketItemPostgresRepository struct {
@@ -162,12 +163,24 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 		return d.ErrConnectionLost
 	}
 
+	tx := db.Begin()
+
 	entity := entities.FromMarketItemValueObject(item)
 	if entity == nil {
 		return d.ErrItemNotFound
 	}
 
-	result := db.Create(&entity)
+	result := tx.Create(&entity)
+
+	err := kafka.ProduceJSONEvent(
+		kafka.MARKET_ITEM_UPDATES_TOPIC, map[string]interface{}{
+			"itemID": int(entity.ID),
+		})
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	return result.Error
 }
 

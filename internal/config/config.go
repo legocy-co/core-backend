@@ -6,11 +6,12 @@ import (
 	"legocy-go/pkg/helpers"
 )
 
-var appConf *AppConfig // private singleton variable
+var AppConfigInstance *AppConfig // private singleton variable
 
 type AppConfig struct {
-	DbConf  DatabaseConfig `yaml:"database" json:"database"`
-	JwtConf JWTConfig      `yaml:"jwt" json:"jwt"`
+	DbConf    DatabaseConfig `yaml:"database" json:"database"`
+	JwtConf   JWTConfig      `yaml:"jwt" json:"jwt"`
+	KafkaConf KafkaConfig    `yaml:"kafka" json:"kafka"`
 
 	S3Port string `json:"s3_port"`
 
@@ -19,15 +20,15 @@ type AppConfig struct {
 }
 
 func GetAppConfig() *AppConfig {
-	return appConf
+	return AppConfigInstance
 }
 
 func SetAppConfig(cfg *AppConfig) error {
-	if appConf != nil {
+	if AppConfigInstance != nil {
 		return ErrConfigAlreadyExists
 	}
 
-	appConf = cfg
+	AppConfigInstance = cfg
 	return nil
 }
 
@@ -43,6 +44,10 @@ type DatabaseConfig struct {
 type JWTConfig struct {
 	SecretKey          string `yaml:"secret_key" json:"secret_key"`
 	AccesTokenLifeTime int    `yaml:"acces_tokern_lifetime_hours" json:"acces_token_lifetime_hours"`
+}
+
+type KafkaConfig struct {
+	URI string `json:"uri"`
 }
 
 func GetDBConfig() *DatabaseConfig {
