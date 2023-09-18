@@ -94,6 +94,23 @@ definitions:
       seller:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
     type: object
+  legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse:
+    properties:
+      marketItems:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+        type: array
+      user:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      userImages:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+        type: array
+      userReviews:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserReviewResponse'
+        type: array
+    type: object
   legocy-go_internal_delievery_http_resources_marketplace.UserReviewRequest:
     properties:
       message:
@@ -140,6 +157,13 @@ definitions:
         type: integer
       username:
         type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse:
+    properties:
+      filepath:
+        type: string
+      userID:
+        type: integer
     type: object
   legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest:
     properties:
@@ -257,6 +281,38 @@ paths:
       summary: Get locations by country
       tags:
       - locations_admin
+  /admin/market-items/{itemID}:
+    put:
+      operationId: update_market_item
+      parameters:
+      - description: item ID
+        in: path
+        name: itemID
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update Market Item
+      tags:
+      - market_items_admin
   /admin/series/:
     post:
       operationId: create_series
@@ -630,6 +686,27 @@ paths:
       summary: Delete Market Item
       tags:
       - market_items
+  /market-items/authorized/:
+    get:
+      operationId: list_market_items_authorized
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Market Items Authorized
+      tags:
+      - market_items
   /series/:
     get:
       operationId: list_lego_series
@@ -726,6 +803,32 @@ paths:
       summary: Get LegoSet by ID
       tags:
       - lego_sets
+  /user-profile-pages/{userID}:
+    get:
+      operationId: detail_user_profile_page
+      parameters:
+      - description: user ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get User Profile Page
+      tags:
+      - user_profile_pages
   /user-reviews/:
     get:
       operationId: list_user_reviews

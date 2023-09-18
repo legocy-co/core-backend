@@ -166,7 +166,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	map[string]bool
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/{reviewID} [delete]
+//	@Router		/user-reviews/{reviewId} [delete]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {

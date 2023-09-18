@@ -48,7 +48,8 @@ func NewUserReview(ID int, Seller auth.User, Reviewer auth.User, Rating int, Mes
 	}, nil
 }
 
-func NewUserReviewValueObject(SellerID int, ReviewerID int, Rating int, Message string, Date string) (*UserReviewValueObject, error) {
+func NewUserReviewValueObject(
+	SellerID int, ReviewerID int, Rating int, Message string, Date string) (*UserReviewValueObject, error) {
 	if Rating > 5 || Rating < 1 {
 		err := errors.New("wrong Rating value (1-5)")
 		return nil, err

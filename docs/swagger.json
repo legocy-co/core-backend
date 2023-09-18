@@ -150,6 +150,56 @@
                 }
             }
         },
+        "/admin/market-items/{itemID}": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items_admin"
+                ],
+                "summary": "Update Market Item",
+                "operationId": "update_market_item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "item ID",
+                        "name": "itemID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/admin/series/": {
             "post": {
                 "security": [
@@ -602,6 +652,39 @@
                 }
             }
         },
+        "/market-items/authorized/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Get Market Items Authorized",
+                "operationId": "list_market_items_authorized",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/market-items/{itemID}": {
             "get": {
                 "security": [
@@ -875,6 +958,47 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/user-profile-pages/{userID}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_profile_pages"
+                ],
+                "summary": "Get User Profile Page",
+                "operationId": "detail_user_profile_page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse"
                         }
                     },
                     "400": {
@@ -1271,6 +1395,32 @@
                 }
             }
         },
+        "legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse": {
+            "type": "object",
+            "properties": {
+                "marketItems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                },
+                "userImages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse"
+                    }
+                },
+                "userReviews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserReviewResponse"
+                    }
+                }
+            }
+        },
         "legocy-go_internal_delievery_http_resources_marketplace.UserReviewRequest": {
             "type": "object",
             "properties": {
@@ -1341,6 +1491,17 @@
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse": {
+            "type": "object",
+            "properties": {
+                "filepath": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
                 }
             }
         },

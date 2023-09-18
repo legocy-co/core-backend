@@ -68,6 +68,58 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 	resources.Respond(c.Writer, response)
 }
 
+// ListMarketItemsAuthorized
+//
+//	@Summary	Get Market Items Authorized
+//	@Tags		market_items
+//	@ID			list_market_items_authorized
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/authorized/ [get]
+//
+//	@Security	JWT
+func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
+
+	ctx := pagination.GetPaginationContext(c)
+
+	var marketItems []*models.MarketItem
+
+	tokenPayload, err := v1.GetUserPayload(c)
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userID := tokenPayload.ID
+
+	marketItems, err = h.service.ListMarketItemsAuthorized(ctx, userID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": err.Error()})
+	}
+
+	if len(marketItems) == 0 {
+		c.AbortWithStatusJSON(
+			http.StatusNotFound,
+			gin.H{"error": errors.ErrMarketItemsNotFound.Error()})
+		return
+	}
+
+	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
+	for _, m := range marketItems {
+		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
+	}
+
+	response := resources.DataMetaResponse{
+		Data: marketItemResponse,
+		Meta: pagination.GetPaginatedMetaResponse(
+			c.Request.URL.Path, resources.MsgSuccess, ctx),
+	}
+	resources.Respond(c.Writer, response)
+}
+
 // MarketItemDetail
 //
 //	@Summary	Get Market Item
@@ -206,6 +258,52 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 
 	marketItem, err := h.service.UpdateMarketItemByID(
 		c, userPayload.ID, itemID, itemRequest.ToMarketItemValueObject(userPayload.ID))
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
+		return
+	}
+
+	marketItemResponse := marketplace.GetMarketItemResponse(marketItem)
+	c.JSON(http.StatusOK, marketItemResponse)
+}
+
+// UpdateMarketItemByIDAdmin
+//
+//	@Summary	Update Market Item
+//	@Tags		market_items_admin
+//	@ID			update_market_item
+//	@Param		itemID	path	int	true	"item ID"
+//	@Param		data	body	marketplace.MarketItemRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	marketplace.MarketItemResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/admin/market-items/{itemID} [put]
+//
+//	@Security	JWT
+func (h *MarketItemHandler) UpdateMarketItemByIDAdmin(c *gin.Context) {
+	itemID, err := strconv.Atoi(c.Param("itemID"))
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
+		return
+	}
+
+	var itemRequest *marketplace.MarketItemRequest
+	if err := c.ShouldBindJSON(&itemRequest); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	sellerID, err := h.service.GetMarketItemSellerID(c, itemID)
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	marketItem, err := h.service.UpdateMarketItemByIDAdmin(
+		c, itemID, itemRequest.ToMarketItemValueObject(sellerID))
 
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})

@@ -83,5 +83,8 @@ func InitRouter(app *app.App) V1router {
 	//userreview.go
 	router.addUserReviews(v1, app)
 
+	//userprofilepage.go
+	router.addUserProfilePages(v1, app)
+
 	return router
 }
