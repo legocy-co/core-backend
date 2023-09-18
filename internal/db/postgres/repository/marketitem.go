@@ -33,7 +33,7 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Find(&itemsDB)
+		Find(&itemsDB, "status = 'ACTIVE'")
 	if res.Error != nil {
 		return nil, res.Error
 	}
@@ -62,7 +62,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Find(&itemsDB, "user_postgres_id <> ?", userID)
+		Find(&itemsDB, "user_postgres_id <> ? and status = 'ACTIVE'", userID)
 	if res.Error != nil {
 		return nil, res.Error
 	}
@@ -86,7 +86,8 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	var entity *entities.MarketItemPostgres
 	result := db.Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Preload("Currency").Preload("Location").First(&entity, id)
+		Preload("Currency").Preload("Location").
+		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -108,7 +109,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Find(&itemsDB, "user_postgres_id = ?", sellerID)
+		Find(&itemsDB, "user_postgres_id = ? and status = 'ACTIVE'", sellerID)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -216,7 +217,7 @@ func (r MarketItemPostgresRepository) UpdateMarketItemByIDAdmin(
 		return nil, errors.ErrMarketItemsNotFound
 	}
 
-	entityUpdated := entity.GetUpdatedMarketItem(*item)
+	entityUpdated := entity.GetUpdatedMarketItemAdmin(*item)
 	db.Save(entityUpdated)
 
 	return r.GetMarketItemByID(c, id)

@@ -15,6 +15,7 @@ type MarketItemRepository interface {
 	CreateMarketItem(c context.Context, item *models.MarketItemValueObject) error
 	UpdateMarketItemByID(
 		c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
-	UpdateMarketItemByIDAdmin(c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
+	UpdateMarketItemByIDAdmin(
+		c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
 	DeleteMarketItem(c context.Context, id int) error
 }
