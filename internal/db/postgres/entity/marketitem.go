@@ -47,3 +47,13 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItem(vo models.MarketItemValueObje
 
 	return mp
 }
+
+func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *MarketItemPostgres {
+	return &MarketItemPostgres{
+		Price:              vo.Price,
+		CurrencyPostgresID: uint(vo.CurrencyID),
+		LegoSetPostgresID:  uint(vo.LegoSetID),
+		UserPostgresID:     uint(vo.SellerID),
+		LocationPostgresID: uint(vo.LocationID),
+	}
+}

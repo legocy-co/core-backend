@@ -38,3 +38,7 @@ func (a *App) GetMarketItemRepo() marketplace.MarketItemRepository {
 func (a *App) GetUserReviewRepo() marketplace.UserReviewRepository {
 	return postgres.NewUserReviewPostgresRepository(a.GetDatabase())
 }
+
+func (a *App) GetMarketItemAdminRepository() marketplace.MarketItemAdminRepository {
+	return postgres.NewMarketItemAdminPostgresRepository(a.GetDatabase())
+}
