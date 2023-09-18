@@ -11,15 +11,18 @@ import (
 func TestKafkaConnection(t *testing.T) {
 
 	uri := "localhost:29092"
-	ctx, cf := context.WithTimeout(context.Background(), time.Second*3)
+	_, cf := context.WithTimeout(context.Background(), time.Second*3)
 
 	defer cf()
 
-	producer := newKafkaProducer(HEALTHCHECK_TOPIC, uri)
+	producer, err := newKafkaProducer(HEALTHCHECK_TOPIC, uri)
+	if err != nil {
+		t.Error(err)
+	}
+
 	defer producer.Close()
 
-	err := producer.WriteMessages(
-		ctx,
+	_, err = producer.WriteMessages(
 		k.Message{Value: []byte("OK")},
 	)
 	if err != nil {

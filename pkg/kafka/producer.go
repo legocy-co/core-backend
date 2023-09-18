@@ -9,18 +9,15 @@ import (
 	"time"
 )
 
-func NewKafkaProducer(topicName string) (kafka.Writer, error) {
-	_, cf := context.WithTimeout(context.Background(), time.Second*2)
+func NewKafkaProducer(topicName string) (*kafka.Conn, error) {
+	_, cf := context.WithTimeout(context.Background(), time.Second*3)
 	defer cf()
-	return newKafkaProducer(topicName, config.AppConfigInstance.KafkaConf.URI), nil
+	return newKafkaProducer(topicName, config.AppConfigInstance.KafkaConf.URI)
 }
 
-func newKafkaProducer(topicName, uri string) kafka.Writer {
-	return kafka.Writer{
-		Addr:     kafka.TCP(uri),
-		Topic:    topicName,
-		Balancer: &kafka.Hash{},
-	}
+func newKafkaProducer(topicName, uri string) (*kafka.Conn, error) {
+	return kafka.DialLeader(
+		context.Background(), "tcp", uri, topicName, 0)
 }
 
 func ProduceJSONEvent(topicName string, data any) error {
@@ -36,7 +33,7 @@ func ProduceJSONEvent(topicName string, data any) error {
 
 	logrus.Info("Sending Kafka Message...")
 
-	return kafkaProducer.WriteMessages(
-		context.Background(),
+	_, err = kafkaProducer.WriteMessages(
 		kafka.Message{Value: dataJson})
+	return err
 }

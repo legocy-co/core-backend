@@ -17,8 +17,7 @@ func IsKafkaConnected(ctx context.Context) bool {
 
 	logrus.Info("Checking Kafka Connection...")
 
-	err = producer.WriteMessages(
-		ctx,
+	_, err = producer.WriteMessages(
 		kafka.Message{Value: []byte("OK")})
 
 	return err == nil
