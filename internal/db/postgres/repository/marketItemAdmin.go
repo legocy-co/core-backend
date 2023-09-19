@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	d "legocy-go/internal/db"
+	entities "legocy-go/internal/db/postgres/entity"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 
@@ -14,9 +15,34 @@ func NewMarketItemAdminPostgresRepository(conn d.DataBaseConnection) MarketItemA
 	return MarketItemAdminPostgresRepository{conn: conn}
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
-	//TODO implement me
-	panic("implement me")
+func (r MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return []*models.MarketItemAdmin{}, d.ErrConnectionLost
+	}
+
+	var itemsDB []*entities.MarketItemPostgres
+	res := db.Model(
+		&entities.MarketItemPostgres{}).
+		Preload("Seller").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Preload("Currency").
+		Preload("Location").
+		Find(&itemsDB)
+
+	if res.Error != nil {
+		return []*models.MarketItemAdmin{}, res.Error
+	}
+
+	marketItemsAdmin := make([]*models.MarketItemAdmin, 0, len(itemsDB))
+	for _, entity := range itemsDB {
+		marketItemsAdmin = append(marketItemsAdmin, entity.ToMarketItemAdmin())
+	}
+
+	return marketItemsAdmin, nil
+
 }
 
 func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context) (*models.MarketItemAdmin, error) {

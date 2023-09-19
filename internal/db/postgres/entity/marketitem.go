@@ -74,3 +74,14 @@ func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *Marke
 		LocationPostgresID: uint(vo.LocationID),
 	}
 }
+
+func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
+	return &models.MarketItemAdmin{
+		ID:       int(mp.ID),
+		LegoSet:  *mp.LegoSet.ToLegoSet(),
+		Seller:   *mp.Seller.ToUser(),
+		Price:    mp.Price,
+		Currency: *mp.Currency.ToCurrency(),
+		Location: *mp.Location.ToLocation(),
+	}
+}
