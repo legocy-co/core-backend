@@ -230,7 +230,7 @@ func (r MarketItemPostgresRepository) UpdateMarketItemByIDAdmin(
 		return nil, errors.ErrMarketItemsNotFound
 	}
 
-	entityUpdated := entity.GetUpdatedMarketItemAdmin(*item)
+	entityUpdated := entity.GetUpdatedMarketItem(*item)
 	db.Save(entityUpdated)
 
 	return r.GetMarketItemByID(c, id)

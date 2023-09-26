@@ -54,7 +54,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItem(
 }
 
 func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
-	vo models.MarketItemValueObject) *MarketItemPostgres {
+	vo models.MarketItemAdminValueObject) *MarketItemPostgres {
 	mp.CurrencyPostgresID = uint(vo.CurrencyID)
 	mp.LegoSetPostgresID = uint(vo.LegoSetID)
 	mp.LocationPostgresID = uint(vo.LocationID)

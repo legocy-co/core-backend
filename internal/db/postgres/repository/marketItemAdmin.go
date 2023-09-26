@@ -4,7 +4,9 @@ import (
 	"context"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entity"
+	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
+	"legocy-go/pkg/kafka"
 )
 
 type MarketItemAdminPostgresRepository struct {
@@ -15,9 +17,9 @@ func NewMarketItemAdminPostgresRepository(conn d.DataBaseConnection) MarketItemA
 	return MarketItemAdminPostgresRepository{conn: conn}
 }
 
-func (r MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
+func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
 
-	db := r.conn.GetDB()
+	db := m.conn.GetDB()
 	if db == nil {
 		return []*models.MarketItemAdmin{}, d.ErrConnectionLost
 	}
@@ -45,22 +47,79 @@ func (r MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]
 
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context) (*models.MarketItemAdmin, error) {
-	//TODO implement me
-	panic("implement me")
+func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error) {
+	db := m.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var entity *entities.MarketItemPostgres
+	result := db.Preload("Seller").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("Currency").Preload("Location").
+		Find(&entity, "id = ? and status = 'ACTIVE'", id)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return entity.ToMarketItemAdmin(), nil
 }
 
 func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error {
-	//TODO implement me
-	panic("implement me")
+	db := m.conn.GetDB()
+	if db == nil {
+		return d.ErrConnectionLost
+	}
+
+	tx := db.Begin()
+
+	entity := entities.FromMarketItemAdminValueObject(*vo)
+	if entity == nil {
+		return d.ErrItemNotFound
+	}
+
+	result := tx.Create(&entity)
+
+	err := kafka.ProduceJSONEvent(
+		kafka.MARKET_ITEM_UPDATES_TOPIC, map[string]interface{}{
+			"itemID": int(entity.ID),
+		})
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return result.Error
 }
 
-func (m MarketItemAdminPostgresRepository) UpdateMarketItemByID(c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error) {
-	//TODO implement me
-	panic("implement me")
+func (m MarketItemAdminPostgresRepository) UpdateMarketItemByID(
+	c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error) {
+	db := m.conn.GetDB()
+
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var entity *entities.MarketItemPostgres
+	_ = db.First(&entity, itemId)
+	if entity == nil {
+		return nil, errors.ErrMarketItemsNotFound
+	}
+
+	entityUpdated := entity.GetUpdatedMarketItemAdmin(*vo)
+	db.Save(entityUpdated)
+
+	return m.GetMarketItemByID(c, itemId)
 }
 
 func (m MarketItemAdminPostgresRepository) DeleteMarketItemByID(c context.Context, itemId int) error {
-	//TODO implement me
-	panic("implement me")
+	db := m.conn.GetDB()
+
+	if db == nil {
+		return d.ErrConnectionLost
+	}
+
+	result := db.Delete(entities.MarketItemPostgres{}, itemId)
+	return result.Error
 }

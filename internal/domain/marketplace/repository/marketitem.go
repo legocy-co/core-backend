@@ -22,7 +22,7 @@ type MarketItemRepository interface {
 
 type MarketItemAdminRepository interface {
 	GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error)
-	GetMarketItemByID(c context.Context) (*models.MarketItemAdmin, error)
+	GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error)
 	CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error
 	UpdateMarketItemByID(c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error)
 	DeleteMarketItemByID(c context.Context, itemId int) error
