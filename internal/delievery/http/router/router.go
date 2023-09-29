@@ -58,6 +58,7 @@ func InitRouter(app *app.App) V1router {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.Group("/api/v1")
+	v1Admin := r.Group("/api/v1/admin")
 
 	//users.go
 	router.addAuth(v1, app.GetUserService())
@@ -85,6 +86,9 @@ func InitRouter(app *app.App) V1router {
 
 	//userprofilepage.go
 	router.addUserProfilePages(v1, app)
+
+	//admin_market_item.go
+	router.addAdminMarketItems(v1Admin, app.GetMarketItemAdminService())
 
 	return router
 }

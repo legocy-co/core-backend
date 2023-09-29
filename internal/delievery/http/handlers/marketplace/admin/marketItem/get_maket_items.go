@@ -1,4 +1,4 @@
-package marketItemAdmin
+package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
