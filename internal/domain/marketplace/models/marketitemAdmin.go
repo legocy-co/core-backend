@@ -11,6 +11,7 @@ type MarketItemAdminValueObject struct {
 	Price      float32
 	CurrencyID int
 	LocationID int
+	Status     int
 }
 
 type MarketItemAdmin struct {
@@ -20,4 +21,5 @@ type MarketItemAdmin struct {
 	Price    float32
 	Currency Currency
 	Location Location
+	Status   string
 }
