@@ -9,6 +9,17 @@ import (
 	"net/http"
 )
 
+// GetMarketItemsAdmin
+//
+//	@Summary	Get Market Items (Admin)
+//	@Tags		market_items_admin
+//	@ID			list_market_items_admin
+//	@Produce	json
+//	@Success	200	{object}	resources.DataMetaResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/authorized/ [get]
+//
+//	@Security	JWT
 func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 	var marketItems []*models.MarketItemAdmin
 

@@ -4,6 +4,7 @@ import (
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
+	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 
@@ -11,8 +12,40 @@ type MarketItemAdminCreateRequest struct {
 	models.MarketItemAdminValueObject
 }
 
+func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
+
+	if !models.IsValidStatus(r.Status) {
+		return nil, errors.ErrMarketItemInvalidStatus
+	}
+
+	return &models.MarketItemAdminValueObject{
+		LegoSetID:  r.LegoSetID,
+		SellerID:   r.SellerID,
+		Price:      r.Price,
+		CurrencyID: r.CurrencyID,
+		LocationID: r.LocationID,
+		Status:     r.Status,
+	}, nil
+}
+
 type MarketItemAdminUpdateRequest struct {
 	models.MarketItemAdminValueObject
+}
+
+func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
+
+	if !models.IsValidStatus(r.Status) {
+		return nil, errors.ErrMarketItemInvalidStatus
+	}
+
+	return &models.MarketItemAdminValueObject{
+		LegoSetID:  r.LegoSetID,
+		SellerID:   r.SellerID,
+		Price:      r.Price,
+		CurrencyID: r.CurrencyID,
+		LocationID: r.LocationID,
+		Status:     r.Status,
+	}, nil
 }
 
 type MarketItemAdminResponse struct {

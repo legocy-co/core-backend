@@ -10,6 +10,10 @@ const (
 	Active        = "ACTIVE"
 )
 
+func IsValidStatus(status string) bool {
+	return status == CheckRequired || status == Active
+}
+
 type MarketItem struct {
 	ID       int
 	LegoSet  lego.LegoSet
