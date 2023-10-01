@@ -63,6 +63,10 @@ func InitRouter(app *app.App) V1router {
 	//users.go
 	router.addAuth(v1, app.GetUserService())
 
+	router.addAuthAdmin(v1, app.GetUserAdminService())
+
+	router.addUserAdmin(v1, app.GetUserAdminService())
+
 	//user_images.go
 	router.addUserImages(v1, app)
 

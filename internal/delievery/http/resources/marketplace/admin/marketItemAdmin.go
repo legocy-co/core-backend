@@ -4,7 +4,7 @@ import (
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
-	models "legocy-go/internal/domain/marketplace/models"
+	models "legocy-go/internal/domain/marketplace/models/admin"
 )
 
 type MarketItemAdminCreateRequest struct {

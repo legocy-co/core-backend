@@ -78,6 +78,8 @@ definitions:
         type: integer
       price:
         type: number
+      status:
+        type: string
     type: object
   legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse:
     properties:
@@ -93,6 +95,8 @@ definitions:
         type: number
       seller:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      status:
+        type: string
     type: object
   legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse:
     properties:
@@ -175,6 +179,24 @@ definitions:
         type: string
     type: object
   legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse:
+    properties:
+      email:
+        type: string
+      role:
+        type: integer
+      username:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationResponse:
     properties:
       email:
         type: string
@@ -423,7 +445,35 @@ paths:
       summary: Delete Lego Set object
       tags:
       - lego_sets_admin
-  /admin/users:
+  /admin/users/{userID}:
+    delete:
+      operationId: delete_user
+      parameters:
+      - description: user ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete User
+      tags:
+      - user_admin
+  /admin/users/register:
     post:
       operationId: create-admin
       parameters:
@@ -432,7 +482,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest'
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest'
       - description: Authorization
         in: header
         name: Authorization
@@ -444,7 +494,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse'
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationResponse'
         "400":
           description: Bad Request
           schema:

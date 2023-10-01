@@ -2,6 +2,7 @@ package postgres
 
 import (
 	models "legocy-go/internal/domain/marketplace/models"
+	admin "legocy-go/internal/domain/marketplace/models/admin"
 )
 
 type MarketItemPostgres struct {
@@ -54,7 +55,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItem(
 }
 
 func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
-	vo models.MarketItemAdminValueObject) *MarketItemPostgres {
+	vo admin.MarketItemAdminValueObject) *MarketItemPostgres {
 	mp.CurrencyPostgresID = uint(vo.CurrencyID)
 	mp.LegoSetPostgresID = uint(vo.LegoSetID)
 	mp.LocationPostgresID = uint(vo.LocationID)
@@ -65,7 +66,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
 	return mp
 }
 
-func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *MarketItemPostgres {
+func FromMarketItemAdminValueObject(vo admin.MarketItemAdminValueObject) *MarketItemPostgres {
 	return &MarketItemPostgres{
 		Price:              vo.Price,
 		CurrencyPostgresID: uint(vo.CurrencyID),
@@ -75,8 +76,8 @@ func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *Marke
 	}
 }
 
-func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
-	return &models.MarketItemAdmin{
+func (mp *MarketItemPostgres) ToMarketItemAdmin() *admin.MarketItemAdmin {
+	return &admin.MarketItemAdmin{
 		ID:       int(mp.ID),
 		LegoSet:  *mp.LegoSet.ToLegoSet(),
 		Seller:   *mp.Seller.ToUser(),

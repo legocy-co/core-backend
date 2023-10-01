@@ -51,8 +51,8 @@ func (r UserPostgresRepository) ValidateUser(c context.Context, email, password 
 		return e.ErrUserNotFound
 	}
 
-	passwordsMacthed := h.CheckPasswordHash(password, entity.Password)
-	if !passwordsMacthed {
+	passwordsMatched := h.CheckPasswordHash(password, entity.Password)
+	if !passwordsMatched {
 		return e.ErrWrongPassword
 	}
 

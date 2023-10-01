@@ -2,7 +2,7 @@ package admin
 
 import (
 	"context"
-	models "legocy-go/internal/domain/marketplace/models"
+	models "legocy-go/internal/domain/marketplace/models/admin"
 	marketplace "legocy-go/internal/domain/marketplace/repository"
 )
 
@@ -14,19 +14,23 @@ func NewMarketItemAdminService(r marketplace.MarketItemAdminRepository) MarketIt
 	return MarketItemAdminService{repo: r}
 }
 
-func (s MarketItemAdminService) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
+func (s MarketItemAdminService) GetMarketItems(
+	c context.Context) ([]*models.MarketItemAdmin, error) {
 	return s.repo.GetMarketItems(c)
 }
 
-func (s MarketItemAdminService) GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error) {
+func (s MarketItemAdminService) GetMarketItemByID(
+	c context.Context, id int) (*models.MarketItemAdmin, error) {
 	return s.repo.GetMarketItemByID(c, id)
 }
 
-func (s MarketItemAdminService) CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error {
+func (s MarketItemAdminService) CreateMarketItem(
+	c context.Context, vo *models.MarketItemAdminValueObject) error {
 	return s.repo.CreateMarketItem(c, vo)
 }
 
-func (s MarketItemAdminService) UpdateMarketItem(c context.Context, id int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error) {
+func (s MarketItemAdminService) UpdateMarketItem(
+	c context.Context, id int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error) {
 	return s.repo.UpdateMarketItemByID(c, id, vo)
 }
 

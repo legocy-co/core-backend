@@ -181,6 +181,7 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 		return err
 	}
 
+	tx.Commit()
 	return result.Error
 }
 

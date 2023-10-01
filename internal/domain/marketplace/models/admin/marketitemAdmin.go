@@ -2,6 +2,7 @@ package marketplace
 
 import (
 	lego "legocy-go/internal/domain/lego/models"
+	"legocy-go/internal/domain/marketplace/models"
 	auth "legocy-go/internal/domain/users/models"
 )
 
@@ -19,7 +20,7 @@ type MarketItemAdmin struct {
 	LegoSet  lego.LegoSet
 	Seller   auth.User
 	Price    float32
-	Currency Currency
-	Location Location
+	Currency marketplace.Currency
+	Location marketplace.Location
 	Status   string
 }
