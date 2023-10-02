@@ -12,7 +12,7 @@ type MarketItemAdminValueObject struct {
 	Price      float32
 	CurrencyID int
 	LocationID int
-	Status     int
+	Status     string
 }
 
 type MarketItemAdmin struct {

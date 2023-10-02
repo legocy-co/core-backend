@@ -6,4 +6,5 @@ var (
 	ErrMarketItemsNotFound       = errors.New("marketItems not found")
 	ErrUserReviewsNotFound       = errors.New("userReviews not found")
 	ErrMarketItemInvalidSellerID = errors.New("invalid SellerID")
+	ErrMarketItemInvalidStatus   = errors.New("invalid status value")
 )

@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  legocy-go_internal_delievery_http_resources.DataMetaResponse:
+    properties:
+      data: {}
+      meta: {}
+    type: object
   legocy-go_internal_delievery_http_resources_lego.LegoSeriesRequest:
     properties:
       name:
@@ -138,6 +143,53 @@ definitions:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
       seller:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+    type: object
+  legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest:
+    properties:
+      currencyID:
+        type: integer
+      legoSetID:
+        type: integer
+      locationID:
+        type: integer
+      price:
+        type: number
+      sellerID:
+        type: integer
+      status:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse:
+    properties:
+      currency:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse'
+      id:
+        type: integer
+      lego_set:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+      location:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse'
+      price:
+        type: number
+      seller:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      status:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest:
+    properties:
+      currencyID:
+        type: integer
+      legoSetID:
+        type: integer
+      locationID:
+        type: integer
+      price:
+        type: number
+      sellerID:
+        type: integer
+      status:
+        type: string
     type: object
   legocy-go_internal_delievery_http_resources_users.JWTRequest:
     properties:
@@ -303,7 +355,62 @@ paths:
       summary: Get locations by country
       tags:
       - locations_admin
+  /admin/market-items/:
+    post:
+      operationId: create_market_item_admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest'
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Create Market Item (Admin)
+      tags:
+      - market_items_admin
   /admin/market-items/{itemID}:
+    get:
+      operationId: detail_market_item_admin
+      parameters:
+      - description: item ID
+        in: path
+        name: itemId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Market Item by ID (Admin)
+      tags:
+      - market_items_admin
     put:
       operationId: update_market_item
       parameters:
