@@ -150,7 +150,92 @@
                 }
             }
         },
+        "/admin/market-items/": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items_admin"
+                ],
+                "summary": "Create Market Item (Admin)",
+                "operationId": "create_market_item_admin",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/admin/market-items/{itemID}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items_admin"
+                ],
+                "summary": "Get Market Item by ID (Admin)",
+                "operationId": "detail_market_item_admin",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "item ID",
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -1249,6 +1334,13 @@
         }
     },
     "definitions": {
+        "legocy-go_internal_delievery_http_resources.DataMetaResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "meta": {}
+            }
+        },
         "legocy-go_internal_delievery_http_resources_lego.LegoSeriesRequest": {
             "type": "object",
             "properties": {
@@ -1369,6 +1461,9 @@
                 },
                 "price": {
                     "type": "number"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -1392,6 +1487,9 @@
                 },
                 "seller": {
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -1455,6 +1553,78 @@
                 },
                 "seller": {
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest": {
+            "type": "object",
+            "properties": {
+                "currencyID": {
+                    "type": "integer"
+                },
+                "legoSetID": {
+                    "type": "integer"
+                },
+                "locationID": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "sellerID": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lego_set": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse"
+                },
+                "location": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "seller": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "currencyID": {
+                    "type": "integer"
+                },
+                "legoSetID": {
+                    "type": "integer"
+                },
+                "locationID": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "sellerID": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },

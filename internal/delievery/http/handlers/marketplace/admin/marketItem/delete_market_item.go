@@ -6,6 +6,18 @@ import (
 	"strconv"
 )
 
+// DeleteMarketItemById
+//
+//	@Summary	Delete Market Item (Admin)
+//	@Tags		market_items_admin
+//	@ID			delete_market_item
+//	@Param		itemId	path	int	true	"item ID"
+//	@Produce	json
+//	@Success	200	{object}	map[string]bool
+//	@Failure	404	{object}	map[string]interface{}
+//	@Router		/market-items/{itemId} [delete]
+//
+//	@Security	JWT
 func (h Handler) DeleteMarketItemById(c *gin.Context) {
 
 	itemID, err := strconv.Atoi(c.Param("itemId"))

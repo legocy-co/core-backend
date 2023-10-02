@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+// CreateMarketItem
+//
+//	@Summary	Create Market Item (Admin)
+//	@Tags		market_items_admin
+//	@ID			create_market_item_admin
+//	@Produce	json
+//	@Success	200	{object}	admin.MarketItemAdminCreateRequest
+//	@Failure	409	{object}	map[string]interface{}
+//	@Failure	422	{object}	map[string]interface{}
+//	@Router		/admin/market-items/ [post]
+//
+//	@Security	JWT
 func (h Handler) CreateMarketItem(c *gin.Context) {
 	var itemRequest *admin.MarketItemAdminCreateRequest
 	if err := c.ShouldBindJSON(&itemRequest); err != nil {
