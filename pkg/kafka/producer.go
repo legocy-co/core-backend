@@ -12,7 +12,7 @@ import (
 func NewKafkaProducer(topicName string) (*kafka.Conn, error) {
 	_, cf := context.WithTimeout(context.Background(), time.Second*3)
 	defer cf()
-	return newKafkaProducer(topicName, config.AppConfigInstance.KafkaConf.URI)
+	return newKafkaProducer(topicName, config.GetAppConfig().KafkaConf.URI)
 }
 
 func newKafkaProducer(topicName, uri string) (*kafka.Conn, error) {
