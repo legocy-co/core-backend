@@ -21,7 +21,7 @@ func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) *models.Market
 		Price:      r.Price,
 		CurrencyID: r.CurrencyID,
 		LocationID: r.LocationID,
-		Status:     models.CheckRequired,
+		Status:     models.ListingStatusCheckRequired,
 	}
 }
 

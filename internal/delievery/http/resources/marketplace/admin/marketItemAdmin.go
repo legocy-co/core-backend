@@ -14,7 +14,7 @@ type MarketItemAdminCreateRequest struct {
 
 func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
 
-	if !models.IsValidStatus(r.Status) {
+	if !models.IsValidListingStatus(r.Status) {
 		return nil, errors.ErrMarketItemInvalidStatus
 	}
 
@@ -34,7 +34,7 @@ type MarketItemAdminUpdateRequest struct {
 
 func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
 
-	if !models.IsValidStatus(r.Status) {
+	if !models.IsValidListingStatus(r.Status) {
 		return nil, errors.ErrMarketItemInvalidStatus
 	}
 
