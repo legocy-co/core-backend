@@ -9,7 +9,13 @@ import (
 )
 
 type MarketItemAdminCreateRequest struct {
-	models.MarketItemAdminValueObject
+	LegoSetID  int     `json:"lego_set_id"`
+	SellerID   int     `json:"seller_id"`
+	Price      float32 `json:"price"`
+	CurrencyID int     `json:"currency_id"`
+	LocationID int     `json:"location_id"`
+	Status     string  `json:"status"`
+	SetState   string  `json:"set_state"`
 }
 
 func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
@@ -34,7 +40,13 @@ func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.Ma
 }
 
 type MarketItemAdminUpdateRequest struct {
-	models.MarketItemAdminValueObject
+	LegoSetID  int     `json:"lego_set_id"`
+	SellerID   int     `json:"seller_id"`
+	Price      float32 `json:"price"`
+	CurrencyID int     `json:"currency_id"`
+	LocationID int     `json:"location_id"`
+	Status     string  `json:"status"`
+	SetState   string  `json:"set_state"`
 }
 
 func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
