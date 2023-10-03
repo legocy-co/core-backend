@@ -12,6 +12,7 @@ type MarketItemAdminValueObject struct {
 	CurrencyID int
 	LocationID int
 	Status     string
+	SetState   string
 }
 
 type MarketItemAdmin struct {
@@ -22,4 +23,5 @@ type MarketItemAdmin struct {
 	Currency Currency
 	Location Location
 	Status   string
+	SetState string
 }

@@ -179,7 +179,12 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	}
 
 	// Payload ID as SellerID
-	err := h.service.CreateMarketItem(c, itemRequest.ToMarketItemValueObject(userPayload.ID))
+	vo, err := itemRequest.ToMarketItemValueObject(userPayload.ID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	}
+
+	err = h.service.CreateMarketItem(c, vo)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -256,9 +261,13 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 		return
 	}
 
-	marketItem, err := h.service.UpdateMarketItemByID(
-		c, userPayload.ID, itemID, itemRequest.ToMarketItemValueObject(userPayload.ID))
+	vo, err := itemRequest.ToMarketItemValueObject(userPayload.ID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
 
+	marketItem, err := h.service.UpdateMarketItemByID(c, userPayload.ID, itemID, vo)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
@@ -302,9 +311,13 @@ func (h *MarketItemHandler) UpdateMarketItemByIDAdmin(c *gin.Context) {
 		return
 	}
 
-	marketItem, err := h.service.UpdateMarketItemByIDAdmin(
-		c, itemID, itemRequest.ToMarketItemValueObject(sellerID))
+	vo, err := itemRequest.ToMarketItemValueObject(sellerID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
 
+	marketItem, err := h.service.UpdateMarketItemByIDAdmin(c, itemID, vo)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return

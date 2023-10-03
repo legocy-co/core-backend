@@ -3,6 +3,7 @@ package marketplace
 import (
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/users"
+	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 
@@ -11,10 +12,15 @@ type MarketItemRequest struct {
 	Price      float32 `json:"price"`
 	CurrencyID int     `json:"currency_id"`
 	LocationID int     `json:"location_id"`
-	Status     string  `json:"status"`
+	SetState   string  `json:"set_state"`
 }
 
-func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) *models.MarketItemValueObject {
+func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) (*models.MarketItemValueObject, error) {
+
+	if !models.IsValidSetState(r.SetState) {
+		return nil, errors.ErrMarketItemInvalidSetState
+	}
+
 	return &models.MarketItemValueObject{
 		LegoSetID:  r.LegoSetID,
 		SellerID:   sellerID,
@@ -22,7 +28,7 @@ func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) *models.Market
 		CurrencyID: r.CurrencyID,
 		LocationID: r.LocationID,
 		Status:     models.ListingStatusCheckRequired,
-	}
+	}, nil
 }
 
 type MarketItemResponse struct {
@@ -33,6 +39,7 @@ type MarketItemResponse struct {
 	LegoSet  lego.LegoSetResponse     `json:"lego_set"`
 	Seller   users.UserDetailResponse `json:"seller"`
 	Status   string                   `json:"status"`
+	SetState string                   `json:"set_state"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
@@ -44,5 +51,6 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		LegoSet:  lego.GetLegoSetResponse(&m.LegoSet),
 		Seller:   users.GetUserDetailResponse(&m.Seller),
 		Status:   m.Status,
+		SetState: m.SetState,
 	}
 }

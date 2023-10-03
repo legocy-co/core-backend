@@ -16,6 +16,7 @@ type MarketItemPostgres struct {
 	LocationPostgresID uint             `filter:"param:locationId;searchable,filterable"`
 	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID"`
 	Status             string
+	SetState           string
 }
 
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
@@ -27,6 +28,7 @@ func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 		Currency: *mp.Currency.ToCurrency(),
 		Location: *mp.Location.ToLocation(),
 		Status:   mp.Status,
+		SetState: mp.SetState,
 	}
 }
 
@@ -38,6 +40,7 @@ func FromMarketItemValueObject(mi *models.MarketItemValueObject) *MarketItemPost
 		UserPostgresID:     uint(mi.SellerID),
 		LocationPostgresID: uint(mi.LocationID),
 		Status:             mi.Status,
+		SetState:           mi.SetState,
 	}
 }
 
@@ -49,6 +52,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItem(
 	mp.Price = vo.Price
 	mp.UserPostgresID = uint(vo.SellerID)
 	mp.Status = vo.Status
+	mp.SetState = vo.SetState
 
 	return mp
 }
@@ -61,6 +65,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
 	mp.Price = vo.Price
 	mp.UserPostgresID = uint(vo.SellerID)
 	mp.Status = models.ListingStatusActive
+	mp.SetState = vo.SetState
 
 	return mp
 }
@@ -72,6 +77,8 @@ func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *Marke
 		LegoSetPostgresID:  uint(vo.LegoSetID),
 		UserPostgresID:     uint(vo.SellerID),
 		LocationPostgresID: uint(vo.LocationID),
+		Status:             vo.Status,
+		SetState:           vo.SetState,
 	}
 }
 
@@ -83,5 +90,7 @@ func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
 		Price:    mp.Price,
 		Currency: *mp.Currency.ToCurrency(),
 		Location: *mp.Location.ToLocation(),
+		Status:   mp.Status,
+		SetState: mp.SetState,
 	}
 }

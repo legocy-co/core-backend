@@ -18,6 +18,10 @@ func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.Ma
 		return nil, errors.ErrMarketItemInvalidStatus
 	}
 
+	if !models.IsValidSetState(r.SetState) {
+		return nil, errors.ErrMarketItemInvalidSetState
+	}
+
 	return &models.MarketItemAdminValueObject{
 		LegoSetID:  r.LegoSetID,
 		SellerID:   r.SellerID,
@@ -25,6 +29,7 @@ func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.Ma
 		CurrencyID: r.CurrencyID,
 		LocationID: r.LocationID,
 		Status:     r.Status,
+		SetState:   r.SetState,
 	}, nil
 }
 
@@ -38,6 +43,10 @@ func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.Ma
 		return nil, errors.ErrMarketItemInvalidStatus
 	}
 
+	if !models.IsValidSetState(r.SetState) {
+		return nil, errors.ErrMarketItemInvalidSetState
+	}
+
 	return &models.MarketItemAdminValueObject{
 		LegoSetID:  r.LegoSetID,
 		SellerID:   r.SellerID,
@@ -45,6 +54,7 @@ func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.Ma
 		CurrencyID: r.CurrencyID,
 		LocationID: r.LocationID,
 		Status:     r.Status,
+		SetState:   r.SetState,
 	}, nil
 }
 
@@ -56,6 +66,7 @@ type MarketItemAdminResponse struct {
 	LegoSet  lego.LegoSetResponse         `json:"lego_set"`
 	Seller   users.UserDetailResponse     `json:"seller"`
 	Status   string                       `json:"status"`
+	SetState string                       `json:"set_state"`
 }
 
 func GetMarketItemAdminResponse(mi *models.MarketItemAdmin) MarketItemAdminResponse {

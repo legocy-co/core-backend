@@ -90,6 +90,8 @@ func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, v
 		return err
 	}
 
+	tx.Commit()
+
 	return result.Error
 }
 

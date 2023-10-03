@@ -172,6 +172,17 @@ const docTemplate = `{
                 ],
                 "summary": "Create Market Item (Admin)",
                 "operationId": "create_market_item_admin",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1469,7 +1480,7 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "status": {
+                "set_state": {
                     "type": "string"
                 }
             }
@@ -1494,6 +1505,9 @@ const docTemplate = `{
                 },
                 "seller": {
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                },
+                "set_state": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"
@@ -1581,6 +1595,9 @@ const docTemplate = `{
                 "sellerID": {
                     "type": "integer"
                 },
+                "setState": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 }
@@ -1607,6 +1624,9 @@ const docTemplate = `{
                 "seller": {
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
                 },
+                "set_state": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 }
@@ -1629,6 +1649,9 @@ const docTemplate = `{
                 },
                 "sellerID": {
                     "type": "integer"
+                },
+                "setState": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"

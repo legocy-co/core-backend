@@ -11,6 +11,7 @@ import (
 //	@Summary	Create Market Item (Admin)
 //	@Tags		market_items_admin
 //	@ID			create_market_item_admin
+//	@Param		data	body	admin.MarketItemAdminCreateRequest	true	"data"
 //	@Produce	json
 //	@Success	200	{object}	admin.MarketItemAdminCreateRequest
 //	@Failure	409	{object}	map[string]interface{}
