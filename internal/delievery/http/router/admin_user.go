@@ -10,8 +10,12 @@ import (
 func (r V1router) addUserAdmin(rg *gin.RouterGroup, service s.UserAdminService) {
 	handler := h.NewUserAdminHandler(service)
 
-	userAdmin := rg.Group("/admin/users").Use(m.AdminUserOnly())
+	usersAdmin := rg.Group("/users").Use(m.AdminUserOnly())
 	{
-		userAdmin.DELETE("/:userID", handler.DeleteUser)
+		usersAdmin.GET("/", handler.GetUsersAdmin)
+		usersAdmin.GET("/:userId", handler.GetUserByID)
+		usersAdmin.POST("/register", handler.AdminRegister)
+		usersAdmin.PUT("/:userId", handler.UpdateUserByID)
+		usersAdmin.DELETE("/:userId", handler.DeleteUser)
 	}
 }

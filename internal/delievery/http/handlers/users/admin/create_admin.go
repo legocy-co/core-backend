@@ -1,4 +1,4 @@
-package auth
+package admin
 
 import (
 	"github.com/gin-gonic/gin"
@@ -8,8 +8,8 @@ import (
 
 // AdminRegister
 //
-//	@Summary	Create Admin User
-//	@Tags		authentication_admin
+//	@Summary	Create Admin
+//	@Tags		users_admin
 //	@ID			create-admin
 //	@Produce	json
 //	@Param		data	body		resources.AdminRegistrationRequest	true	"reg request"
@@ -19,7 +19,7 @@ import (
 //
 //	@Security	ApiKeyAuth
 //	@param		Authorization	header	string	true	"Authorization"
-func (uah *AdminHandler) AdminRegister(c *gin.Context) {
+func (uah *UserAdminHandler) AdminRegister(c *gin.Context) {
 
 	var registerReq resources.AdminRegistrationRequest
 

@@ -9,15 +9,15 @@ import (
 
 // UpdateMarketItemByID
 //
-//	@Summary	Update Market Item
-//	@Tags		market_items
-//	@ID			update_market_item
+//	@Summary	Update Market Item (Admin)
+//	@Tags		market_items_admin
+//	@ID			update_market_item_admin
 //	@Param		itemId	path	int	true  "item ID"
 //	@Param		data	body	admin.MarketItemAdminUpdateRequest	true	"data"
 //	@Produce	json
 //	@Success	200	{object}	admin.MarketItemAdminResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/market-items/{itemID} [put]
+//	@Router		/admin/market-items/{itemId} [put]
 //
 //	@Security	JWT
 func (h Handler) UpdateMarketItemByID(c *gin.Context) {
@@ -29,7 +29,7 @@ func (h Handler) UpdateMarketItemByID(c *gin.Context) {
 	}
 
 	var itemRequest *admin.MarketItemAdminUpdateRequest
-	if err := c.ShouldBindJSON(itemRequest); err != nil {
+	if err := c.ShouldBindJSON(&itemRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}

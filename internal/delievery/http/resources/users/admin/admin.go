@@ -1,14 +1,8 @@
 package admin
 
 import (
-	"legocy-go/internal/domain/users/models/admin"
+	models "legocy-go/internal/domain/users/models"
 )
-
-type AdminRegistrationResponse struct {
-	Email    string `json:"email"`
-	Role     int    `json:"role"`
-	Username string `json:"username"`
-}
 
 type AdminRegistrationRequest struct {
 	Email    string `json:"email"`
@@ -16,20 +10,40 @@ type AdminRegistrationRequest struct {
 	Password string `json:"password"`
 }
 
-func (uar *AdminRegistrationRequest) ToAdmin() *admin.UserAdmin {
-	return &admin.UserAdmin{
+func (uar *AdminRegistrationRequest) ToAdmin() *models.UserAdmin {
+	return &models.UserAdmin{
 		Email:    uar.Email,
 		Username: uar.Username,
-		Role:     admin.ADMIN,
+		Role:     models.ADMIN,
 	}
 }
 
-func GetAdminResponse(ua *admin.UserAdmin) *AdminRegistrationResponse {
+type AdminRegistrationResponse struct {
+	Email    string `json:"email"`
+	Role     int    `json:"role"`
+	Username string `json:"username"`
+}
+
+func GetAdminResponse(ua *models.UserAdmin) *AdminRegistrationResponse {
 	return &AdminRegistrationResponse{
 		Email:    ua.Email,
 		Role:     ua.Role,
 		Username: ua.Username,
 	}
+}
+
+type UserAdminUpdateRequest struct {
+	models.UserAdminValueObject
+}
+
+func (r UserAdminUpdateRequest) ToUserAdminValueObject() (
+	*models.UserAdminValueObject, error) {
+
+	return &models.UserAdminValueObject{
+		Username: r.Username,
+		Email:    r.Email,
+		Role:     r.Role,
+	}, nil
 }
 
 type UserAdminDetailResponse struct {
@@ -39,7 +53,7 @@ type UserAdminDetailResponse struct {
 	Role     int    `json:"role"`
 }
 
-func GetUserAdminDetailResponse(ua *admin.UserAdmin) UserAdminDetailResponse {
+func GetUserAdminDetailResponse(ua *models.UserAdmin) UserAdminDetailResponse {
 	return UserAdminDetailResponse{
 		ID:       ua.ID,
 		Username: ua.Username,

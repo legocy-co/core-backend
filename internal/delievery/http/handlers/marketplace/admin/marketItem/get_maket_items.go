@@ -5,7 +5,7 @@ import (
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace/admin"
 	"legocy-go/internal/delievery/http/resources/pagination"
-	marketplace "legocy-go/internal/domain/marketplace/models/admin"
+	"legocy-go/internal/domain/marketplace/models"
 	"net/http"
 )
 

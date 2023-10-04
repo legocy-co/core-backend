@@ -5,7 +5,7 @@ import (
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entity"
 	"legocy-go/internal/domain/marketplace/errors"
-	models "legocy-go/internal/domain/marketplace/models/admin"
+	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/kafka"
 )
 
@@ -60,7 +60,7 @@ func (m MarketItemAdminPostgresRepository) GetMarketItemByID(
 	result := db.Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Find(&entity, "id = ? and status = 'ACTIVE'", id)
+		Find(&entity, "id = ?", id)
 
 	if result.Error != nil {
 		return nil, result.Error

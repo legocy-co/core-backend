@@ -5,80 +5,118 @@ import (
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entity"
 	e "legocy-go/internal/domain/users/errors"
-	"legocy-go/internal/domain/users/models/admin"
+	models "legocy-go/internal/domain/users/models"
 	h "legocy-go/pkg/helpers"
+	"legocy-go/pkg/kafka"
 )
 
 type UserAdminPostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
-func NewUserAdminPostgresRepository(conn d.DataBaseConnection) UserAdminPostgresRepository {
+func NewUserAdminPostgresRepository(
+	conn d.DataBaseConnection) UserAdminPostgresRepository {
 	return UserAdminPostgresRepository{conn: conn}
 }
 
-func (r UserAdminPostgresRepository) CreateAdmin(
-	c context.Context, ua *admin.UserAdmin, password string) error {
-	db := r.conn.GetDB()
+func (r UserAdminPostgresRepository) GetUsers(
+	c context.Context) ([]*models.UserAdmin, error) {
+	var usersAdminDb []*entities.UserPostgres
 
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	db.Find(&usersAdminDb)
+
+	users := make([]*models.UserAdmin, 0, len(usersAdminDb))
+	for _, usersAdminDb := range usersAdminDb {
+		users = append(users, usersAdminDb.ToUserAdmin())
+	}
+
+	var errOutput error
+
+	if len(users) == 0 {
+		errOutput = e.ErrUserNotFound
+	}
+
+	return users, errOutput
+}
+
+func (r UserAdminPostgresRepository) GetUserByID(
+	c context.Context, id int) (*models.UserAdmin, error) {
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var userAdmin *models.UserAdmin
+
+	var entity *entities.UserPostgres
+	db.First(&entity, id)
+	if entity == nil {
+		return userAdmin, e.ErrUserNotFound
+	}
+
+	userAdmin = entity.ToUserAdmin()
+	return userAdmin, nil
+}
+
+func (r UserAdminPostgresRepository) CreateAdmin(
+	c context.Context, ua *models.UserAdmin, password string) error {
+	db := r.conn.GetDB()
 	if db == nil {
 		return d.ErrConnectionLost
 	}
+
+	tx := db.Begin()
+
 	passwordHash, err := h.HashPassword(password)
 	if err != nil {
 		return h.ErrHashError
 	}
 
-	var entity entities.UserPostgres = *entities.FromAdmin(ua, passwordHash)
-
+	var entity = *entities.FromAdmin(ua, passwordHash)
 	result := db.Create(&entity)
+	err = kafka.ProduceJSONEvent(kafka.USER_UPDATES_TOPIC, map[string]interface{}{
+		"userID": int(entity.ID),
+	})
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
 	return result.Error
 }
 
-func (r UserAdminPostgresRepository) GetUserByEmail(
-	c context.Context, email string) (*admin.UserAdmin, error) {
-	var user *admin.UserAdmin
-	var entity *entities.UserPostgres
-
+func (r UserAdminPostgresRepository) UpdateUserByID(
+	c context.Context, userId int, vo *models.UserAdminValueObject) (*models.UserAdmin, error) {
 	db := r.conn.GetDB()
+
 	if db == nil {
-		return user, d.ErrConnectionLost
+		return nil, d.ErrConnectionLost
 	}
 
-	db.Where("email = ?", email).First(&entity)
+	var entity *entities.UserPostgres
+	_ = db.First(&entity, userId)
 	if entity == nil {
-		return user, e.ErrUserNotFound
+		return nil, e.ErrUserNotFound
 	}
 
-	user = entity.ToUserAdmin()
-	return user, nil
+	entityUpdated := entity.GetUpdatedUserAdmin(*vo)
+	db.Save(entityUpdated)
+
+	return r.GetUserByID(c, userId)
 }
 
-func (r UserAdminPostgresRepository) GetUserByID(c context.Context, id int) (*admin.UserAdmin, error) {
-	var user *admin.UserAdmin
-	var entity *entities.UserPostgres
-
-	db := r.conn.GetDB()
-	if db == nil {
-		return user, d.ErrConnectionLost
-	}
-
-	db.First(&entity, id)
-	if entity == nil {
-		return user, e.ErrUserNotFound
-	}
-
-	user = entity.ToUserAdmin()
-	return user, nil
-}
-
-func (r UserAdminPostgresRepository) DeleteUser(c context.Context, id int) error {
+func (r UserAdminPostgresRepository) DeleteUser(c context.Context, userId int) error {
 	db := r.conn.GetDB()
 	if db == nil {
 		return d.ErrConnectionLost
 	}
 
-	db.Delete(&entities.UserPostgres{}, id)
-	db.Commit()
-	return nil
+	result := db.Delete(entities.UserPostgres{}, userId)
+	return result.Error
 }

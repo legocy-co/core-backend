@@ -34,8 +34,4 @@ func (r V1router) addMarketItems(
 			items.PUT("/:itemID", handler.UpdateMarketItemByID)
 		}
 	}
-	itemsAdmin := rg.Group("/admin/market-items").Use(v1.AdminUserOnly())
-	{
-		itemsAdmin.PUT("/:itemID", handler.UpdateMarketItemByIDAdmin)
-	}
 }

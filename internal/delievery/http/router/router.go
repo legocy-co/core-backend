@@ -63,10 +63,6 @@ func InitRouter(app *app.App) V1router {
 	//users.go
 	router.addAuth(v1, app.GetUserService())
 
-	router.addAuthAdmin(v1, app.GetUserAdminService())
-
-	router.addUserAdmin(v1, app.GetUserAdminService())
-
 	//user_images.go
 	router.addUserImages(v1, app)
 
@@ -93,6 +89,9 @@ func InitRouter(app *app.App) V1router {
 
 	//admin_market_item.go
 	router.addAdminMarketItems(v1Admin, app.GetMarketItemAdminService())
+
+	// admin_user.go
+	router.addUserAdmin(v1Admin, app.GetUserAdminService())
 
 	return router
 }

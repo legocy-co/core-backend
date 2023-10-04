@@ -3,7 +3,6 @@ package marketplace
 import (
 	"context"
 	models "legocy-go/internal/domain/marketplace/models"
-	admin "legocy-go/internal/domain/marketplace/models/admin"
 )
 
 type MarketItemRepository interface {
@@ -16,15 +15,14 @@ type MarketItemRepository interface {
 	CreateMarketItem(c context.Context, item *models.MarketItemValueObject) error
 	UpdateMarketItemByID(
 		c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
-	UpdateMarketItemByIDAdmin(
-		c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
 	DeleteMarketItem(c context.Context, id int) error
 }
 
 type MarketItemAdminRepository interface {
-	GetMarketItems(c context.Context) ([]*admin.MarketItemAdmin, error)
-	GetMarketItemByID(c context.Context, id int) (*admin.MarketItemAdmin, error)
-	CreateMarketItem(c context.Context, vo *admin.MarketItemAdminValueObject) error
-	UpdateMarketItemByID(c context.Context, itemId int, vo *admin.MarketItemAdminValueObject) (*admin.MarketItemAdmin, error)
+	GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error)
+	GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error)
+	CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error
+	UpdateMarketItemByID(
+		c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error)
 	DeleteMarketItemByID(c context.Context, itemId int) error
 }

@@ -257,6 +257,27 @@ definitions:
       username:
         type: string
     type: object
+  legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      role:
+        type: integer
+      username:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users_admin.UserAdminUpdateRequest:
+    properties:
+      email:
+        type: string
+      role:
+        description: Admin/User/etc.
+        type: integer
+      username:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -358,13 +379,20 @@ paths:
   /admin/market-items/:
     post:
       operationId: create_market_item_admin
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest'
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse'
         "409":
           description: Conflict
           schema:
@@ -380,7 +408,7 @@ paths:
       summary: Create Market Item (Admin)
       tags:
       - market_items_admin
-  /admin/market-items/{itemID}:
+  /admin/market-items/{itemId}:
     get:
       operationId: detail_market_item_admin
       parameters:
@@ -412,11 +440,11 @@ paths:
       tags:
       - market_items_admin
     put:
-      operationId: update_market_item
+      operationId: update_market_item_admin
       parameters:
       - description: item ID
         in: path
-        name: itemID
+        name: itemId
         required: true
         type: integer
       - description: data
@@ -424,14 +452,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest'
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse'
         "400":
           description: Bad Request
           schema:
@@ -439,7 +467,7 @@ paths:
             type: object
       security:
       - JWT: []
-      summary: Update Market Item
+      summary: Update Market Item (Admin)
       tags:
       - market_items_admin
   /admin/series/:
@@ -552,15 +580,42 @@ paths:
       summary: Delete Lego Set object
       tags:
       - lego_sets_admin
-  /admin/users/{userID}:
+  /admin/users/:
+    get:
+      operationId: list_users_admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Users (Admin)
+      tags:
+      - users_admin
+  /admin/users/{userId}:
     delete:
-      operationId: delete_user
+      operationId: delete_user_admin
       parameters:
       - description: user ID
         in: path
-        name: userID
+        name: userId
         required: true
         type: integer
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -576,10 +631,76 @@ paths:
             additionalProperties: true
             type: object
       security:
-      - JWT: []
+      - ApiKeyAuth: []
       summary: Delete User
       tags:
-      - user_admin
+      - users_admin
+    get:
+      operationId: detail_user_admin
+      parameters:
+      - description: user ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get User by ID (Admin)
+      tags:
+      - users_admin
+    put:
+      operationId: update_user
+      parameters:
+      - description: user ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminUpdateRequest'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update User
+      tags:
+      - users_admin
   /admin/users/register:
     post:
       operationId: create-admin
@@ -609,9 +730,9 @@ paths:
             type: object
       security:
       - ApiKeyAuth: []
-      summary: Create Admin User
+      summary: Create Admin
       tags:
-      - authentication_admin
+      - users_admin
   /currencies/:
     get:
       operationId: list_currencies

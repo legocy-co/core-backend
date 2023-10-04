@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	models "legocy-go/internal/domain/users/models"
-	"legocy-go/internal/domain/users/models/admin"
 )
 
 type UserRepository interface {
@@ -16,8 +15,9 @@ type UserRepository interface {
 }
 
 type UserAdminRepository interface {
-	CreateAdmin(c context.Context, u *admin.UserAdmin, password string) error
-	GetUserByEmail(c context.Context, email string) (*admin.UserAdmin, error)
-	GetUserByID(c context.Context, id int) (*admin.UserAdmin, error)
+	CreateAdmin(c context.Context, ua *models.UserAdmin, password string) error
+	GetUsers(c context.Context) ([]*models.UserAdmin, error)
+	GetUserByID(c context.Context, id int) (*models.UserAdmin, error)
 	DeleteUser(c context.Context, id int) error
+	UpdateUserByID(c context.Context, itemId int, vo *models.UserAdminValueObject) (*models.UserAdmin, error)
 }

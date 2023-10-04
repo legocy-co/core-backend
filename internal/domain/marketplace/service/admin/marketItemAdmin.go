@@ -2,7 +2,7 @@ package admin
 
 import (
 	"context"
-	models "legocy-go/internal/domain/marketplace/models/admin"
+	models "legocy-go/internal/domain/marketplace/models"
 	marketplace "legocy-go/internal/domain/marketplace/repository"
 )
 
@@ -10,7 +10,8 @@ type MarketItemAdminService struct {
 	repo marketplace.MarketItemAdminRepository
 }
 
-func NewMarketItemAdminService(r marketplace.MarketItemAdminRepository) MarketItemAdminService {
+func NewMarketItemAdminService(
+	r marketplace.MarketItemAdminRepository) MarketItemAdminService {
 	return MarketItemAdminService{repo: r}
 }
 
