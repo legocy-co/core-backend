@@ -2,6 +2,7 @@ package app
 
 import (
 	postgres "legocy-go/internal/db/postgres/repository"
+	"legocy-go/internal/db/postgres/repository/admin"
 	lego "legocy-go/internal/domain/lego/repository"
 	marketplace "legocy-go/internal/domain/marketplace/repository"
 	"legocy-go/internal/domain/users/repository"
@@ -40,5 +41,9 @@ func (a *App) GetUserReviewRepo() marketplace.UserReviewRepository {
 }
 
 func (a *App) GetMarketItemAdminRepository() marketplace.MarketItemAdminRepository {
-	return postgres.NewMarketItemAdminPostgresRepository(a.GetDatabase())
+	return admin.NewMarketItemAdminPostgresRepository(a.GetDatabase())
+}
+
+func (a *App) GetUserAdminRepository() repository.UserAdminRepository {
+	return admin.NewUserAdminPostgresRepository(a.GetDatabase())
 }

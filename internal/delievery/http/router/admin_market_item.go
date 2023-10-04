@@ -10,12 +10,12 @@ import (
 func (r V1router) addAdminMarketItems(rg *gin.RouterGroup, service s.MarketItemAdminService) {
 	handler := h.NewMarketItemAdminHandler(service)
 
-	marketItemsAdmin := rg.Group("market-items").Use(v1.IsAdminUser())
+	marketItemsAdmin := rg.Group("/market-items").Use(v1.IsAdminUser())
 	{
 		marketItemsAdmin.GET("/", handler.GetMarketItemsAdmin)
-		marketItemsAdmin.GET("/{itemId}", handler.GetMarketItemByID)
+		marketItemsAdmin.GET("/:itemId", handler.GetMarketItemByID)
 		marketItemsAdmin.POST("/", handler.CreateMarketItem)
-		marketItemsAdmin.PUT("/{itemId}", handler.UpdateMarketItemByID)
-		marketItemsAdmin.DELETE("/{itemId}", handler.DeleteMarketItemById)
+		marketItemsAdmin.PUT("/:itemId", handler.UpdateMarketItemByID)
+		marketItemsAdmin.DELETE("/:itemId", handler.DeleteMarketItemById)
 	}
 }

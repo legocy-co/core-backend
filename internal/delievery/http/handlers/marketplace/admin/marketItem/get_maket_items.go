@@ -5,7 +5,7 @@ import (
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace/admin"
 	"legocy-go/internal/delievery/http/resources/pagination"
-	models "legocy-go/internal/domain/marketplace/models"
+	"legocy-go/internal/domain/marketplace/models"
 	"net/http"
 )
 
@@ -21,7 +21,7 @@ import (
 //
 //	@Security	JWT
 func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
-	var marketItems []*models.MarketItemAdmin
+	var marketItems []*marketplace.MarketItemAdmin
 
 	marketItems, err := h.service.GetMarketItems(c)
 	if err != nil {

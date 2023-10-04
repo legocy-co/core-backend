@@ -49,7 +49,7 @@ func GetPaginatedMetaResponse(
 }
 
 type paginationUrls struct {
-	Prev string `json:"previous""`
+	Prev string `json:"previous"`
 	Curr string `json:"current"`
 	Next string `json:"next"`
 }

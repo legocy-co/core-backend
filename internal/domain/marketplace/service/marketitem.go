@@ -54,11 +54,6 @@ func (ms *MarketItemService) UpdateMarketItemByID(
 	return ms.repo.UpdateMarketItemByID(c, id, vo)
 }
 
-func (ms *MarketItemService) UpdateMarketItemByIDAdmin(
-	c context.Context, id int, vo *models.MarketItemValueObject) (*models.MarketItem, error) {
-	return ms.repo.UpdateMarketItemByIDAdmin(c, id, vo)
-}
-
 func (ms *MarketItemService) GetMarketItemSellerID(c context.Context, id int) (int, error) {
 	return ms.repo.GetMarketItemSellerID(c, id)
 }

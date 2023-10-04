@@ -90,5 +90,8 @@ func InitRouter(app *app.App) V1router {
 	//admin_market_item.go
 	router.addAdminMarketItems(v1Admin, app.GetMarketItemAdminService())
 
+	// admin_user.go
+	router.addUserAdmin(v1Admin, app.GetUserAdminService())
+
 	return router
 }

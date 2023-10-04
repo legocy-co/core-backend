@@ -19,7 +19,8 @@ type MarketItemAdminCreateRequest struct {
 	Description string  `json:"description"`
 }
 
-func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
+func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (
+	*models.MarketItemAdminValueObject, error) {
 
 	if !models.IsValidListingStatus(r.Status) {
 		return nil, errors.ErrMarketItemInvalidStatus
@@ -52,7 +53,8 @@ type MarketItemAdminUpdateRequest struct {
 	Description string  `json:"description"`
 }
 
-func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
+func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (
+	*models.MarketItemAdminValueObject, error) {
 
 	if !models.IsValidListingStatus(r.Status) {
 		return nil, errors.ErrMarketItemInvalidStatus
@@ -86,7 +88,8 @@ type MarketItemAdminResponse struct {
 	Description string                       `json:"description"`
 }
 
-func GetMarketItemAdminResponse(mi *models.MarketItemAdmin) MarketItemAdminResponse {
+func GetMarketItemAdminResponse(
+	mi *models.MarketItemAdmin) MarketItemAdminResponse {
 	return MarketItemAdminResponse{
 		ID:          mi.ID,
 		Price:       mi.Price,

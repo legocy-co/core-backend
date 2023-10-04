@@ -17,14 +17,13 @@ import (
 //	@Success	200	{object}	admin.MarketItemAdminResponse
 //	@Failure	404	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/admin/market-items/{itemID} [get]
+//	@Router		/admin/market-items/{itemId} [get]
 //
 //	@Security	JWT
 func (h Handler) GetMarketItemByID(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemId"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 

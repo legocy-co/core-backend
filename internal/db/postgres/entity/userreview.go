@@ -8,10 +8,10 @@ type UserReviewPostgres struct {
 	Model
 	Rating             int
 	Message            string
-	SellerPostgresID   uint         `filter:"param:sellerId; searchable, filterable" gorm:"primaryKey"`
-	Seller             UserPostgres `gorm:"ForeignKey:SellerPostgresID"`
-	ReviewerPostgresID uint         `filter:"param:reviewerId; searchable, filterable" gorm:"primaryKey"`
-	Reviewer           UserPostgres `gorm:"ForeignKey:ReviewerPostgresID"`
+	SellerPostgresID   uint         `filter:"param:sellerId; searchable, filterable"`
+	Seller             UserPostgres `gorm:"ForeignKey:SellerPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	ReviewerPostgresID uint         `filter:"param:reviewerId; searchable, filterable"`
+	Reviewer           UserPostgres `gorm:"ForeignKey:ReviewerPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Date               string
 }
 

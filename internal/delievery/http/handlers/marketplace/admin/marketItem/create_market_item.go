@@ -13,7 +13,7 @@ import (
 //	@ID			create_market_item_admin
 //	@Param		data	body	admin.MarketItemAdminCreateRequest	true	"data"
 //	@Produce	json
-//	@Success	200	{object}	admin.MarketItemAdminCreateRequest
+//	@Success	200	{object}	admin.MarketItemAdminResponse
 //	@Failure	409	{object}	map[string]interface{}
 //	@Failure	422	{object}	map[string]interface{}
 //	@Router		/admin/market-items/ [post]
