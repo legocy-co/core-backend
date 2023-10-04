@@ -25,4 +25,5 @@ go.work
 .idea
 
 deploy/data/
+deploy/.*
 internal/config/json/
