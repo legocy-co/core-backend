@@ -5,30 +5,25 @@ import (
 	"legocy-go/internal/domain/users/models"
 )
 
-const (
-	CheckRequired = "CHECK_REQUIRED"
-	Active        = "ACTIVE"
-)
-
-func IsValidStatus(status string) bool {
-	return status == CheckRequired || status == Active
-}
-
 type MarketItem struct {
-	ID       int
-	LegoSet  lego.LegoSet
-	Seller   auth.User
-	Price    float32
-	Currency Currency
-	Location Location
-	Status   string // CheckRequired / Active / etc.
+	ID          int
+	LegoSet     lego.LegoSet
+	Seller      auth.User
+	Price       float32
+	Currency    Currency
+	Location    Location
+	SetState    string // SetStateBrandNew / etc.
+	Status      string // ListingStatusCheckRequired / ListingStatusActive / etc.
+	Description string
 }
 
 type MarketItemValueObject struct {
-	LegoSetID  int
-	SellerID   int
-	Price      float32
-	CurrencyID int
-	LocationID int
-	Status     string
+	LegoSetID   int
+	SellerID    int
+	Price       float32
+	CurrencyID  int
+	LocationID  int
+	Status      string
+	SetState    string // SetStateBrandNew / etc.
+	Description string
 }

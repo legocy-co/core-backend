@@ -1666,7 +1666,7 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "status": {
+                "set_state": {
                     "type": "string"
                 }
             }
@@ -1691,6 +1691,9 @@ const docTemplate = `{
                 },
                 "seller": {
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                },
+                "set_state": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"
@@ -1778,6 +1781,9 @@ const docTemplate = `{
                 "sellerID": {
                     "type": "integer"
                 },
+                "setState": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 }
@@ -1804,6 +1810,9 @@ const docTemplate = `{
                 "seller": {
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
                 },
+                "set_state": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 }
@@ -1826,6 +1835,9 @@ const docTemplate = `{
                 },
                 "sellerID": {
                     "type": "integer"
+                },
+                "setState": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"

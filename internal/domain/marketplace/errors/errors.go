@@ -8,4 +8,5 @@ var (
 	ErrUsersNotFound             = errors.New("users not found")
 	ErrMarketItemInvalidSellerID = errors.New("invalid SellerID")
 	ErrMarketItemInvalidStatus   = errors.New("invalid status value")
+	ErrMarketItemInvalidSetState = errors.New("invalid set state")
 )

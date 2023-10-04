@@ -1,4 +1,4 @@
-package admin
+package postgres
 
 import (
 	"context"
@@ -13,13 +13,11 @@ type MarketItemAdminPostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
-func NewMarketItemAdminPostgresRepository(
-	conn d.DataBaseConnection) MarketItemAdminPostgresRepository {
+func NewMarketItemAdminPostgresRepository(conn d.DataBaseConnection) MarketItemAdminPostgresRepository {
 	return MarketItemAdminPostgresRepository{conn: conn}
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItems(
-	c context.Context) ([]*models.MarketItemAdmin, error) {
+func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
 
 	db := m.conn.GetDB()
 	if db == nil {
@@ -49,8 +47,7 @@ func (m MarketItemAdminPostgresRepository) GetMarketItems(
 
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItemByID(
-	c context.Context, id int) (*models.MarketItemAdmin, error) {
+func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error) {
 	db := m.conn.GetDB()
 	if db == nil {
 		return nil, d.ErrConnectionLost
@@ -60,7 +57,7 @@ func (m MarketItemAdminPostgresRepository) GetMarketItemByID(
 	result := db.Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
-		Find(&entity, "id = ?", id)
+		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -69,8 +66,7 @@ func (m MarketItemAdminPostgresRepository) GetMarketItemByID(
 	return entity.ToMarketItemAdmin(), nil
 }
 
-func (m MarketItemAdminPostgresRepository) CreateMarketItem(
-	c context.Context, vo *models.MarketItemAdminValueObject) error {
+func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error {
 	db := m.conn.GetDB()
 	if db == nil {
 		return d.ErrConnectionLost
@@ -95,6 +91,7 @@ func (m MarketItemAdminPostgresRepository) CreateMarketItem(
 	}
 
 	tx.Commit()
+
 	return result.Error
 }
 
@@ -118,8 +115,7 @@ func (m MarketItemAdminPostgresRepository) UpdateMarketItemByID(
 	return m.GetMarketItemByID(c, itemId)
 }
 
-func (m MarketItemAdminPostgresRepository) DeleteMarketItemByID(
-	c context.Context, itemId int) error {
+func (m MarketItemAdminPostgresRepository) DeleteMarketItemByID(c context.Context, itemId int) error {
 	db := m.conn.GetDB()
 
 	if db == nil {

@@ -6,7 +6,7 @@ import (
 	"legocy-go/pkg/helpers"
 )
 
-var AppConfigInstance *AppConfig // private singleton variable
+var appConfigInstance *AppConfig // private singleton variable
 
 type AppConfig struct {
 	DbConf    DatabaseConfig `yaml:"database" json:"database"`
@@ -20,15 +20,15 @@ type AppConfig struct {
 }
 
 func GetAppConfig() *AppConfig {
-	return AppConfigInstance
+	return appConfigInstance
 }
 
 func SetAppConfig(cfg *AppConfig) error {
-	if AppConfigInstance != nil {
+	if appConfigInstance != nil {
 		return ErrConfigAlreadyExists
 	}
 
-	AppConfigInstance = cfg
+	appConfigInstance = cfg
 	return nil
 }
 
