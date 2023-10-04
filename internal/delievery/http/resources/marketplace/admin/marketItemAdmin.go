@@ -9,13 +9,14 @@ import (
 )
 
 type MarketItemAdminCreateRequest struct {
-	LegoSetID  int     `json:"lego_set_id"`
-	SellerID   int     `json:"seller_id"`
-	Price      float32 `json:"price"`
-	CurrencyID int     `json:"currency_id"`
-	LocationID int     `json:"location_id"`
-	Status     string  `json:"status"`
-	SetState   string  `json:"set_state"`
+	LegoSetID   int     `json:"lego_set_id"`
+	SellerID    int     `json:"seller_id"`
+	Price       float32 `json:"price"`
+	CurrencyID  int     `json:"currency_id"`
+	LocationID  int     `json:"location_id"`
+	Status      string  `json:"status"`
+	SetState    string  `json:"set_state"`
+	Description string  `json:"description"`
 }
 
 func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
@@ -29,24 +30,26 @@ func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (*models.Ma
 	}
 
 	return &models.MarketItemAdminValueObject{
-		LegoSetID:  r.LegoSetID,
-		SellerID:   r.SellerID,
-		Price:      r.Price,
-		CurrencyID: r.CurrencyID,
-		LocationID: r.LocationID,
-		Status:     r.Status,
-		SetState:   r.SetState,
+		LegoSetID:   r.LegoSetID,
+		SellerID:    r.SellerID,
+		Price:       r.Price,
+		CurrencyID:  r.CurrencyID,
+		LocationID:  r.LocationID,
+		Status:      r.Status,
+		SetState:    r.SetState,
+		Description: r.Description,
 	}, nil
 }
 
 type MarketItemAdminUpdateRequest struct {
-	LegoSetID  int     `json:"lego_set_id"`
-	SellerID   int     `json:"seller_id"`
-	Price      float32 `json:"price"`
-	CurrencyID int     `json:"currency_id"`
-	LocationID int     `json:"location_id"`
-	Status     string  `json:"status"`
-	SetState   string  `json:"set_state"`
+	LegoSetID   int     `json:"lego_set_id"`
+	SellerID    int     `json:"seller_id"`
+	Price       float32 `json:"price"`
+	CurrencyID  int     `json:"currency_id"`
+	LocationID  int     `json:"location_id"`
+	Status      string  `json:"status"`
+	SetState    string  `json:"set_state"`
+	Description string  `json:"description"`
 }
 
 func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.MarketItemAdminValueObject, error) {
@@ -60,35 +63,39 @@ func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (*models.Ma
 	}
 
 	return &models.MarketItemAdminValueObject{
-		LegoSetID:  r.LegoSetID,
-		SellerID:   r.SellerID,
-		Price:      r.Price,
-		CurrencyID: r.CurrencyID,
-		LocationID: r.LocationID,
-		Status:     r.Status,
-		SetState:   r.SetState,
+		LegoSetID:   r.LegoSetID,
+		SellerID:    r.SellerID,
+		Price:       r.Price,
+		CurrencyID:  r.CurrencyID,
+		LocationID:  r.LocationID,
+		Status:      r.Status,
+		SetState:    r.SetState,
+		Description: r.Description,
 	}, nil
 }
 
 type MarketItemAdminResponse struct {
-	ID       int                          `json:"id"`
-	Price    float32                      `json:"price"`
-	Currency marketplace.CurrencyResponse `json:"currency"`
-	Location marketplace.LocationResponse `json:"location"`
-	LegoSet  lego.LegoSetResponse         `json:"lego_set"`
-	Seller   users.UserDetailResponse     `json:"seller"`
-	Status   string                       `json:"status"`
-	SetState string                       `json:"set_state"`
+	ID          int                          `json:"id"`
+	Price       float32                      `json:"price"`
+	Currency    marketplace.CurrencyResponse `json:"currency"`
+	Location    marketplace.LocationResponse `json:"location"`
+	LegoSet     lego.LegoSetResponse         `json:"lego_set"`
+	Seller      users.UserDetailResponse     `json:"seller"`
+	Status      string                       `json:"status"`
+	SetState    string                       `json:"set_state"`
+	Description string                       `json:"description"`
 }
 
 func GetMarketItemAdminResponse(mi *models.MarketItemAdmin) MarketItemAdminResponse {
 	return MarketItemAdminResponse{
-		ID:       mi.ID,
-		Price:    mi.Price,
-		Currency: marketplace.GetCurrencyResponse(&mi.Currency),
-		Location: marketplace.GetLocationResponse(&mi.Location),
-		LegoSet:  lego.GetLegoSetResponse(&mi.LegoSet),
-		Seller:   users.GetUserDetailResponse(&mi.Seller),
-		Status:   mi.Status,
+		ID:          mi.ID,
+		Price:       mi.Price,
+		Currency:    marketplace.GetCurrencyResponse(&mi.Currency),
+		Location:    marketplace.GetLocationResponse(&mi.Location),
+		LegoSet:     lego.GetLegoSetResponse(&mi.LegoSet),
+		Seller:      users.GetUserDetailResponse(&mi.Seller),
+		Status:      mi.Status,
+		SetState:    mi.SetState,
+		Description: mi.Description,
 	}
 }

@@ -6,22 +6,24 @@ import (
 )
 
 type MarketItemAdminValueObject struct {
-	LegoSetID  int
-	SellerID   int
-	Price      float32
-	CurrencyID int
-	LocationID int
-	Status     string
-	SetState   string
+	LegoSetID   int
+	SellerID    int
+	Price       float32
+	CurrencyID  int
+	LocationID  int
+	Status      string
+	SetState    string
+	Description string
 }
 
 type MarketItemAdmin struct {
-	ID       int
-	LegoSet  lego.LegoSet
-	Seller   auth.User
-	Price    float32
-	Currency Currency
-	Location Location
-	Status   string
-	SetState string
+	ID          int
+	LegoSet     lego.LegoSet
+	Seller      auth.User
+	Price       float32
+	Currency    Currency
+	Location    Location
+	Status      string
+	SetState    string
+	Description string
 }

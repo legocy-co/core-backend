@@ -6,22 +6,24 @@ import (
 )
 
 type MarketItem struct {
-	ID       int
-	LegoSet  lego.LegoSet
-	Seller   auth.User
-	Price    float32
-	Currency Currency
-	Location Location
-	SetState string // SetStateBrandNew / etc.
-	Status   string // ListingStatusCheckRequired / ListingStatusActive / etc.
+	ID          int
+	LegoSet     lego.LegoSet
+	Seller      auth.User
+	Price       float32
+	Currency    Currency
+	Location    Location
+	SetState    string // SetStateBrandNew / etc.
+	Status      string // ListingStatusCheckRequired / ListingStatusActive / etc.
+	Description string
 }
 
 type MarketItemValueObject struct {
-	LegoSetID  int
-	SellerID   int
-	Price      float32
-	CurrencyID int
-	LocationID int
-	Status     string
-	SetState   string // SetStateBrandNew / etc.
+	LegoSetID   int
+	SellerID    int
+	Price       float32
+	CurrencyID  int
+	LocationID  int
+	Status      string
+	SetState    string // SetStateBrandNew / etc.
+	Description string
 }

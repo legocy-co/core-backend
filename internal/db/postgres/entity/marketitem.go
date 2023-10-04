@@ -17,18 +17,20 @@ type MarketItemPostgres struct {
 	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID"`
 	Status             string
 	SetState           string
+	Description        string
 }
 
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 	return &models.MarketItem{
-		ID:       int(mp.ID),
-		LegoSet:  *mp.LegoSet.ToLegoSet(),
-		Seller:   *mp.Seller.ToUser(),
-		Price:    mp.Price,
-		Currency: *mp.Currency.ToCurrency(),
-		Location: *mp.Location.ToLocation(),
-		Status:   mp.Status,
-		SetState: mp.SetState,
+		ID:          int(mp.ID),
+		LegoSet:     *mp.LegoSet.ToLegoSet(),
+		Seller:      *mp.Seller.ToUser(),
+		Price:       mp.Price,
+		Currency:    *mp.Currency.ToCurrency(),
+		Location:    *mp.Location.ToLocation(),
+		Status:      mp.Status,
+		SetState:    mp.SetState,
+		Description: mp.Description,
 	}
 }
 
@@ -41,6 +43,7 @@ func FromMarketItemValueObject(mi *models.MarketItemValueObject) *MarketItemPost
 		LocationPostgresID: uint(mi.LocationID),
 		Status:             mi.Status,
 		SetState:           mi.SetState,
+		Description:        mi.Description,
 	}
 }
 
@@ -53,6 +56,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItem(
 	mp.UserPostgresID = uint(vo.SellerID)
 	mp.Status = vo.Status
 	mp.SetState = vo.SetState
+	mp.Description = vo.Description
 
 	return mp
 }
@@ -66,6 +70,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
 	mp.UserPostgresID = uint(vo.SellerID)
 	mp.Status = models.ListingStatusActive
 	mp.SetState = vo.SetState
+	mp.Description = vo.Description
 
 	return mp
 }
@@ -79,18 +84,20 @@ func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *Marke
 		LocationPostgresID: uint(vo.LocationID),
 		Status:             vo.Status,
 		SetState:           vo.SetState,
+		Description:        vo.Description,
 	}
 }
 
 func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
 	return &models.MarketItemAdmin{
-		ID:       int(mp.ID),
-		LegoSet:  *mp.LegoSet.ToLegoSet(),
-		Seller:   *mp.Seller.ToUser(),
-		Price:    mp.Price,
-		Currency: *mp.Currency.ToCurrency(),
-		Location: *mp.Location.ToLocation(),
-		Status:   mp.Status,
-		SetState: mp.SetState,
+		ID:          int(mp.ID),
+		LegoSet:     *mp.LegoSet.ToLegoSet(),
+		Seller:      *mp.Seller.ToUser(),
+		Price:       mp.Price,
+		Currency:    *mp.Currency.ToCurrency(),
+		Location:    *mp.Location.ToLocation(),
+		Status:      mp.Status,
+		SetState:    mp.SetState,
+		Description: mp.Description,
 	}
 }
