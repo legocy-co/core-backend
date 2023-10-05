@@ -8,7 +8,7 @@ RUN go mod download
 
 WORKDIR /src/app/cmd/legocy
 
-RUN go build -o /legocy_bin
+RUN CGO_ENABLED=0 GOOS=linux go build -o /legocy_bin
 
 WORKDIR /src/app
 
