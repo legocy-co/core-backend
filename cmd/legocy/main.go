@@ -1,16 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"legocy-go/internal/app"
 	r "legocy-go/internal/delievery/http/router"
-	"os"
+	"legocy-go/pkg/helpers"
 )
 
-const configFilepath = "/internal/config/json/config.json"
+var configFilepath string = helpers.GetConfigFilepath("/internal/config/json/config.json")
 
 func main() {
-	cwd, _ := os.Getwd()
-	_app := app.New(cwd + configFilepath)
+	fmt.Printf("config fp: %v", configFilepath)
+	_app := app.New(configFilepath)
 
 	v1 := r.InitRouter(_app)
 	v1.Run("8080")

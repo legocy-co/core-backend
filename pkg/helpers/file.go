@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func FileExists(fp string) bool {
@@ -20,4 +21,9 @@ func StreamToByte(stream io.Reader) []byte {
 
 func ByteToStream(data []byte) io.Reader {
 	return bytes.NewReader(data)
+}
+
+func GetConfigFilepath(fp string) string {
+	cwd, _ := os.Getwd()
+	return filepath.Dir(cwd) + "/" + filepath.Base(cwd) + fp
 }
