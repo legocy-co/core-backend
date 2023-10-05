@@ -14,4 +14,4 @@ WORKDIR /src/app
 
 EXPOSE 8080
 
-CMD ["cmd/legocy/legocy_bin"]
+CMD ["/cmd/legocy/legocy_bin"]
