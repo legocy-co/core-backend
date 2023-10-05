@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"legocy-go/internal/app"
 	r "legocy-go/internal/delievery/http/router"
-	"legocy-go/pkg/helpers"
 )
 
-var configFilepath string = helpers.GetConfigFilepath("/internal/config/json/config.json")
+var configFilepath string = "internal/config/json/config.json"
 
 func main() {
 	fmt.Printf("config fp: %v", configFilepath)

@@ -10,6 +10,8 @@ WORKDIR /src/app/cmd/legocy
 
 RUN go build -o /legocy_bin
 
+WORKDIR /src/app
+
 EXPOSE 8080
 
-CMD ["/legocy_bin"]
+CMD ["cmd/legocy/legocy_bin"]
