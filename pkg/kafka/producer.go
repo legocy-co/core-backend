@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
-	"legocy-go/internal/config"
+	"legocy-go/config"
 	"time"
 )
 

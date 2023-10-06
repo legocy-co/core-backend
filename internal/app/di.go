@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"legocy-go/internal/config"
+	"legocy-go/config"
 	"legocy-go/internal/db"
 	postgres "legocy-go/internal/db/postgres"
 	eventNotifier "legocy-go/pkg/eventNotifier/client"

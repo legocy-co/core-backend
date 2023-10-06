@@ -1,17 +1,18 @@
-FROM golang:1.20
+FROM golang:1.20-alpine AS builder
 
-WORKDIR /src/app
+RUN go version
 
-COPY ../ ./
+COPY . /src/app
+WORKDIR /src/app/
 
 RUN go mod download
+RUN GOOS=linux go build -o ./.bin/app ./cmd/legocy/main.go
 
-WORKDIR /src/app/cmd/legocy
+FROM alpine:latest
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /legocy_bin
+WORKDIR /root/
 
-WORKDIR /src/app
+COPY --from=0 /src/app/.bin/app .
+COPY --from=0 /src/app/config ./config
 
-EXPOSE 8080
-
-CMD ["/cmd/legocy/legocy_bin"]
+CMD ["./app"]

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"legocy-go/pkg/helpers"
+	"os"
+	"strconv"
 )
 
 var appConfigInstance *AppConfig // private singleton variable
@@ -85,6 +87,51 @@ func SetupFromJSON(fp string) error {
 		return err
 	}
 
-	SetAppConfig(&cfg)
-	return nil
+	return SetAppConfig(&cfg)
+}
+
+func SetupFromEnv() error {
+	dbHost := os.Getenv("DB_HOST")
+	dbPort, _ := strconv.Atoi(os.Getenv("DB_PORT"))
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbDatabaseName := os.Getenv("DB_DATABASE_NAME")
+	loadFixtures := os.Getenv("DB_LOAD_FIXTURES") == "true"
+
+	dbConfig := DatabaseConfig{
+		Hostname:     dbHost,
+		Port:         dbPort,
+		DbName:       dbDatabaseName,
+		DbUser:       dbUser,
+		DbPassword:   dbPassword,
+		LoadFixtures: loadFixtures,
+	}
+
+	jwtSecretKey := os.Getenv("JWT_SECRET_KEY")
+	jwtAccessTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_ACCESS_TOKEN_LIFETIME"))
+
+	jwtConfig := JWTConfig{
+		SecretKey:          jwtSecretKey,
+		AccesTokenLifeTime: jwtAccessTokenLifetimeHours,
+	}
+
+	kafkaUri := os.Getenv("KAFKA_URI")
+
+	kafkaConfig := KafkaConfig{kafkaUri}
+
+	s3Port := os.Getenv("S3_PORT")
+
+	eventNotifierPort := "<REMOVE ME>"
+	eventNotifierChatID := 0
+
+	appConfig := AppConfig{
+		DbConf:              dbConfig,
+		JwtConf:             jwtConfig,
+		KafkaConf:           kafkaConfig,
+		S3Port:              s3Port,
+		EventNotifierPort:   eventNotifierPort,
+		EventNotifierChatID: eventNotifierChatID,
+	}
+
+	return SetAppConfig(&appConfig)
 }

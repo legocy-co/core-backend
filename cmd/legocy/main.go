@@ -1,16 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"github.com/joho/godotenv"
 	"legocy-go/internal/app"
 	r "legocy-go/internal/delievery/http/router"
 )
 
-var configFilepath string = "internal/config/json/config.json"
-
 func main() {
-	fmt.Printf("config fp: %v", configFilepath)
-	_app := app.New(configFilepath)
+	godotenv.Load()
+
+	_app := app.New()
 
 	v1 := r.InitRouter(_app)
 	v1.Run("8080")
