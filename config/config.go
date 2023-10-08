@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"legocy-go/pkg/helpers"
 	"os"
@@ -92,9 +93,13 @@ func SetupFromJSON(fp string) error {
 
 func SetupFromEnv() error {
 	dbHost := os.Getenv("DB_HOST")
+	logrus.Printf("DB_HOST = %v", dbHost)
 	dbPort, _ := strconv.Atoi(os.Getenv("DB_PORT"))
+	logrus.Printf("DB_PORT = %v", dbPort)
 	dbUser := os.Getenv("DB_USER")
+	logrus.Printf("DB_USER = %v", dbUser)
 	dbPassword := os.Getenv("DB_PASSWORD")
+	logrus.Printf("DB_PASSWORD = %v", dbPassword)
 	dbDatabaseName := os.Getenv("DB_DATABASE_NAME")
 	loadFixtures := os.Getenv("DB_LOAD_FIXTURES") == "true"
 
