@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"fmt"
-	"legocy-go/internal/config"
+	"legocy-go/config"
 	d "legocy-go/internal/db"
 	entities "legocy-go/internal/db/postgres/entity"
 	"log"

@@ -2,7 +2,7 @@ package kafka
 
 import (
 	"github.com/segmentio/kafka-go"
-	"legocy-go/internal/config"
+	"legocy-go/config"
 )
 
 func NewKafkaConsumer(topicName string, partition int) *kafka.Reader {

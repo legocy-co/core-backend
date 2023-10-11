@@ -180,7 +180,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest"
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse"
                         }
                     },
                     "409": {
@@ -200,7 +200,7 @@
                 }
             }
         },
-        "/admin/market-items/{itemID}": {
+        "/admin/market-items/{itemId}": {
             "get": {
                 "security": [
                     {
@@ -259,13 +259,13 @@
                 "tags": [
                     "market_items_admin"
                 ],
-                "summary": "Update Market Item",
-                "operationId": "update_market_item",
+                "summary": "Update Market Item (Admin)",
+                "operationId": "update_market_item_admin",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "item ID",
-                        "name": "itemID",
+                        "name": "itemId",
                         "in": "path",
                         "required": true
                     },
@@ -275,7 +275,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest"
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest"
                         }
                     }
                 ],
@@ -283,7 +283,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse"
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse"
                         }
                     },
                     "400": {
@@ -468,7 +468,42 @@
                 }
             }
         },
-        "/admin/users": {
+        "/admin/users/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users_admin"
+                ],
+                "summary": "Get Users (Admin)",
+                "operationId": "list_users_admin",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/register": {
             "post": {
                 "security": [
                     {
@@ -479,9 +514,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "authentication_admin"
+                    "users_admin"
                 ],
-                "summary": "Create Admin User",
+                "summary": "Create Admin",
                 "operationId": "create-admin",
                 "parameters": [
                     {
@@ -490,7 +525,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest"
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest"
                         }
                     },
                     {
@@ -505,7 +540,159 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse"
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/{userId}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users_admin"
+                ],
+                "summary": "Get User by ID (Admin)",
+                "operationId": "detail_user_admin",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users_admin"
+                ],
+                "summary": "Update User",
+                "operationId": "update_user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminUpdateRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users_admin"
+                ],
+                "summary": "Delete User",
+                "operationId": "delete_user_admin",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
                         }
                     },
                     "400": {
@@ -1719,6 +1906,66 @@
                     "type": "string"
                 },
                 "role": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users_admin.UserAdminUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "role": {
+                    "description": "Admin/User/etc.",
                     "type": "integer"
                 },
                 "username": {

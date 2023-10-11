@@ -3,7 +3,7 @@ package marketplace
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/config"
+	"legocy-go/config"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"

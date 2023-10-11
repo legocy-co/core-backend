@@ -13,3 +13,11 @@ type UserRepository interface {
 	GetUserByID(c context.Context, id int) (*models.User, error)
 	DeleteUser(c context.Context, id int) error
 }
+
+type UserAdminRepository interface {
+	CreateAdmin(c context.Context, ua *models.UserAdmin, password string) error
+	GetUsers(c context.Context) ([]*models.UserAdmin, error)
+	GetUserByID(c context.Context, id int) (*models.UserAdmin, error)
+	DeleteUser(c context.Context, id int) error
+	UpdateUserByID(c context.Context, itemId int, vo *models.UserAdminValueObject) (*models.UserAdmin, error)
+}

@@ -15,8 +15,6 @@ type MarketItemRepository interface {
 	CreateMarketItem(c context.Context, item *models.MarketItemValueObject) error
 	UpdateMarketItemByID(
 		c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
-	UpdateMarketItemByIDAdmin(
-		c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error)
 	DeleteMarketItem(c context.Context, id int) error
 }
 
@@ -24,6 +22,7 @@ type MarketItemAdminRepository interface {
 	GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error)
 	GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error)
 	CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error
-	UpdateMarketItemByID(c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error)
+	UpdateMarketItemByID(
+		c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error)
 	DeleteMarketItemByID(c context.Context, itemId int) error
 }

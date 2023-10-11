@@ -8,13 +8,13 @@ type MarketItemPostgres struct {
 	Model
 	Price              float32
 	CurrencyPostgresID uint             `filter:"param:currencyId;searchable,filterable"`
-	Currency           CurrencyPostgres `gorm:"ForeignKey:CurrencyPostgresID"`
+	Currency           CurrencyPostgres `gorm:"ForeignKey:CurrencyPostgresID;"`
 	LegoSetPostgresID  uint             `filter:"param:setId;searchable,filterable"`
-	LegoSet            LegoSetPostgres  `gorm:"ForeignKey:LegoSetPostgresID"`
+	LegoSet            LegoSetPostgres  `gorm:"ForeignKey:LegoSetPostgresID;"`
 	UserPostgresID     uint             `filter:"param:sellerId;searchable,filterable"`
-	Seller             UserPostgres     `gorm:"ForeignKey:UserPostgresID"`
+	Seller             UserPostgres     `gorm:"ForeignKey:UserPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	LocationPostgresID uint             `filter:"param:locationId;searchable,filterable"`
-	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID"`
+	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID;"`
 	Status             string
 	SetState           string
 	Description        string

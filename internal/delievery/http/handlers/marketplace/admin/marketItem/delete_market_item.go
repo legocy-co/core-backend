@@ -10,7 +10,7 @@ import (
 //
 //	@Summary	Delete Market Item (Admin)
 //	@Tags		market_items_admin
-//	@ID			delete_market_item
+//	@ID			delete_market_item_admin
 //	@Param		itemId	path	int	true	"item ID"
 //	@Produce	json
 //	@Success	200	{object}	map[string]bool

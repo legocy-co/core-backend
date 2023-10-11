@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"legocy-go/internal/config"
+	"legocy-go/config"
 	d "legocy-go/internal/db"
 	"legocy-go/internal/fixtures"
 	"legocy-go/pkg/kafka"
@@ -38,12 +38,12 @@ func (a *App) isReady() bool {
 	return true
 }
 
-func New(configFilepath string) *App {
+func New() *App {
 
 	app := App{}
 
 	// Load config
-	err := config.SetupFromJSON(configFilepath)
+	err := config.SetupFromEnv()
 	if err != nil {
 		log.Fatalln(fmt.Sprintf("[Config] %v", err.Error()))
 	}
