@@ -62,6 +62,7 @@ func (psql *PostgresConnection) Init() {
 		entities.UserPostgresImage{},
 
 		entities.UserReviewPostgres{},
+		entities.UserLegoSetPostgres{},
 	)
 
 	if err != nil {
