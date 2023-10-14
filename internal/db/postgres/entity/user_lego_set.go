@@ -29,3 +29,23 @@ func (lsp UserLegoSetPostgres) ToCollectionLegoSet() models.CollectionLegoSet {
 		Currency:     *lsp.Currency.ToCurrency(),
 	}
 }
+
+func GetUpdatedUserLegoSet(vo *models.CollectionLegoSetValueObject, entity *UserLegoSetPostgres, userID int) *UserLegoSetPostgres {
+	entity.LegoSetID = vo.LegoSetID
+	entity.UserID = userID
+	entity.CurrencyID = vo.CurrencyID
+	entity.State = vo.CurrentState
+	entity.BuyPrice = vo.BuyPrice
+
+	return entity
+}
+
+func GetCreatedUserLegoSet(vo *models.CollectionLegoSetValueObject, userID int) *UserLegoSetPostgres {
+	return &UserLegoSetPostgres{
+		UserID:     userID,
+		LegoSetID:  vo.LegoSetID,
+		State:      vo.CurrentState,
+		BuyPrice:   vo.BuyPrice,
+		CurrencyID: vo.CurrencyID,
+	}
+}

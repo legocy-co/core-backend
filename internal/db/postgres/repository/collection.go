@@ -47,14 +47,45 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 	return &models.LegoCollection{User: *user, Sets: legoSetsDomain}, nil
 }
 
-func (r CollectionPostgresRepository) AddSetToUserCollection(c context.Context, userID int, collectionSet models.CollectionLegoSetValueObject) error {
-	//TODO implement me
-	panic("implement me")
+func (r CollectionPostgresRepository) AddSetToUserCollection(
+	c context.Context, userID int, collectionSet models.CollectionLegoSetValueObject) error {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return d.ErrConnectionLost
+	}
+
+	tx := db.Begin()
+
+	entity := entities.GetCreatedUserLegoSet(&collectionSet, userID)
+	result := tx.Create(entity)
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+
+	tx.Commit()
+
+	return nil
 }
 
 func (r CollectionPostgresRepository) RemoveSetFromUserCollection(c context.Context, userID int, collectionSetID int) error {
-	//TODO implement me
-	panic("implement me")
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return d.ErrConnectionLost
+	}
+
+	tx := db.Begin()
+
+	res := tx.Delete(&entities.UserLegoSetPostgres{UserID: userID}, collectionSetID)
+	if res != nil {
+		tx.Rollback()
+		return res.Error
+	}
+
+	tx.Commit()
+	return nil
 }
 
 func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) error {
