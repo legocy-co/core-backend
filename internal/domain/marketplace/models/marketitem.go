@@ -12,8 +12,8 @@ type MarketItem struct {
 	Price       float32
 	Currency    Currency
 	Location    Location
-	SetState    string // SetStateBrandNew / etc.
-	Status      string // ListingStatusCheckRequired / ListingStatusActive / etc.
+	SetState    string // lego.SetStateBrandNew / etc.
+	Status      string // lego.ListingStatusCheckRequired / lego.ListingStatusActive / etc.
 	Description string
 }
 
