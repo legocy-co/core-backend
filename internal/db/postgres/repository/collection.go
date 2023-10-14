@@ -89,6 +89,27 @@ func (r CollectionPostgresRepository) RemoveSetFromUserCollection(c context.Cont
 }
 
 func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) error {
-	//TODO implement me
-	panic("implement me")
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return d.ErrConnectionLost
+	}
+
+	var entity *entities.UserLegoSetPostgres
+	res := db.Model(entities.UserLegoSetPostgres{UserID: userID}).First(&entity, setID)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	tx := db.Begin()
+	entity = entities.GetUpdatedUserLegoSet(&collectionSet, entity, userID)
+	res = tx.Save(entity)
+
+	if res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
+
+	tx.Commit()
+	return nil
 }
