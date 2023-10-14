@@ -1,0 +1,63 @@
+package postgres
+
+import (
+	"context"
+	d "legocy-go/internal/db"
+	entities "legocy-go/internal/db/postgres/entity"
+	"legocy-go/internal/domain/collections/models"
+	auth "legocy-go/internal/domain/users/models"
+)
+
+type CollectionPostgresRepository struct {
+	conn d.DataBaseConnection
+}
+
+func NewCollectionPostgresRepository(conn d.DataBaseConnection) CollectionPostgresRepository {
+	return CollectionPostgresRepository{conn: conn}
+}
+
+func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, error) {
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var userLegoSetsDB []*entities.UserLegoSetPostgres
+
+	res := db.Model(&entities.UserLegoSetPostgres{}).
+		Preload("User").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("Currency").
+		Find(&userLegoSetsDB, "user_id = ?", userID)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	legoSetsDomain := make([]models.CollectionLegoSet, 0, len(userLegoSetsDB))
+	var user *auth.User
+	for _, legoSetDB := range userLegoSetsDB {
+		legoSetsDomain = append(legoSetsDomain, legoSetDB.ToCollectionLegoSet())
+
+		if user == nil {
+			user = legoSetDB.User.ToUser()
+		}
+	}
+
+	return &models.LegoCollection{User: *user, Sets: legoSetsDomain}, nil
+}
+
+func (r CollectionPostgresRepository) AddSetToUserCollection(c context.Context, userID int, collectionSet models.CollectionLegoSetValueObject) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r CollectionPostgresRepository) RemoveSetFromUserCollection(c context.Context, userID int, collectionSetID int) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) error {
+	//TODO implement me
+	panic("implement me")
+}

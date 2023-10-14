@@ -54,6 +54,7 @@ func (psql *PostgresConnection) Init() {
 
 		entities.LegoSeriesPostgres{},
 		entities.LegoSetPostgres{},
+		entities.LegoSetValuation{},
 
 		entities.CurrencyPostgres{},
 		entities.LocationPostgres{},

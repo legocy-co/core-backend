@@ -1,5 +1,9 @@
 package postgres
 
+import (
+	"legocy-go/internal/domain/collections/models"
+)
+
 type UserLegoSetPostgres struct {
 	Model
 	UserID     int              `gorm:"index;not null"`
@@ -14,4 +18,14 @@ type UserLegoSetPostgres struct {
 
 func (UserLegoSetPostgres) TableName() string {
 	return "users_lego_sets"
+}
+
+func (lsp UserLegoSetPostgres) ToCollectionLegoSet() models.CollectionLegoSet {
+	return models.CollectionLegoSet{
+		ID:           int(lsp.ID),
+		LegoSet:      *lsp.LegoSet.ToLegoSet(),
+		CurrentState: lsp.State,
+		BuyPrice:     lsp.BuyPrice,
+		Currency:     *lsp.Currency.ToCurrency(),
+	}
 }
