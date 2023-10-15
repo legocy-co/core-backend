@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"legocy-go/config"
-	"legocy-go/internal/db"
-	postgres "legocy-go/internal/db/postgres"
+	"legocy-go/internal/data"
+	postgres "legocy-go/internal/data/postgres"
 	eventNotifier "legocy-go/pkg/eventNotifier/client"
 	storage "legocy-go/pkg/storage/client"
 	"log"
 )
 
-func (a *App) GetDatabase() db.DataBaseConnection {
+func (a *App) GetDatabase() data.DataBaseConnection {
 	return a.database
 }
 

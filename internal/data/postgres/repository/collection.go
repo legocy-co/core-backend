@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"context"
-	d "legocy-go/internal/db"
-	entities "legocy-go/internal/db/postgres/entity"
+	d "legocy-go/internal/data"
+	entities "legocy-go/internal/data/postgres/entity"
 	"legocy-go/internal/domain/collections/models"
 	auth "legocy-go/internal/domain/users/models"
 )
@@ -69,7 +69,8 @@ func (r CollectionPostgresRepository) AddSetToUserCollection(
 	return nil
 }
 
-func (r CollectionPostgresRepository) RemoveSetFromUserCollection(c context.Context, userID int, collectionSetID int) error {
+func (r CollectionPostgresRepository) RemoveSetFromUserCollection(
+	c context.Context, userID int, collectionSetID int) error {
 	db := r.conn.GetDB()
 
 	if db == nil {
@@ -88,7 +89,8 @@ func (r CollectionPostgresRepository) RemoveSetFromUserCollection(c context.Cont
 	return nil
 }
 
-func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) error {
+func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(
+	c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) error {
 
 	db := r.conn.GetDB()
 	if db == nil {

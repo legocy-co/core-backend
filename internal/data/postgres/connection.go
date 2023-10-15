@@ -3,8 +3,8 @@ package postgres
 import (
 	"fmt"
 	"legocy-go/config"
-	d "legocy-go/internal/db"
-	entities "legocy-go/internal/db/postgres/entity"
+	d "legocy-go/internal/data"
+	entities "legocy-go/internal/data/postgres/entity"
 	"log"
 
 	postgres "gorm.io/driver/postgres"

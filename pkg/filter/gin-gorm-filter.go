@@ -133,11 +133,11 @@ func expressionByField(
 // Note: Don't forget to initialize DB Model first, otherwise filter and search won't work
 // Example:
 //
-//	db.Model(&UserModel).Scope(filter.FilterByQuery(ctx, filter.ALL)).Find(&users)
+//	data.Model(&UserModel).Scope(filter.FilterByQuery(ctx, filter.ALL)).Find(&users)
 //
 // Or if only pagination and order is needed:
 //
-//	db.Model(&UserModel).Scope(filter.FilterByQuery(ctx, filter.PAGINATION|filter.ORDER_BY)).Find(&users)
+//	data.Model(&UserModel).Scope(filter.FilterByQuery(ctx, filter.PAGINATION|filter.ORDER_BY)).Find(&users)
 //
 // And models should have appropriate`fitler` tags:
 //

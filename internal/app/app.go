@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"legocy-go/config"
-	d "legocy-go/internal/db"
+	d "legocy-go/internal/data"
 	"legocy-go/internal/fixtures"
 	"legocy-go/pkg/kafka"
 	"log"
@@ -56,7 +56,7 @@ func New() *App {
 	//Database
 	dbCfg := config.GetDBConfig()
 	if cfg == nil {
-		log.Fatalln("empty db config")
+		log.Fatalln("empty data config")
 	}
 	app.setDatabase(dbCfg)
 

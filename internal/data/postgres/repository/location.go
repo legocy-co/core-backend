@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"golang.org/x/net/context"
-	database "legocy-go/internal/db"
-	entities "legocy-go/internal/db/postgres/entity"
+	database "legocy-go/internal/data"
+	entities "legocy-go/internal/data/postgres/entity"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 
