@@ -7,7 +7,7 @@ import (
 
 type UserLegoSetCollectionResponse struct {
 	User users.UserDetailResponse    `json:"user"`
-	Sets []CollectionLegoSetResponse `json:"sets"`
+	Sets []CollectionLegoSetResponse `json:"collection_sets"`
 }
 
 func GetUserLegoCollectionResponse(collection models.LegoCollection) UserLegoSetCollectionResponse {
