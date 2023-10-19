@@ -14,7 +14,7 @@ func (r V1router) addUserReviews(
 	handler := marketplace.NewUserReviewHandler(
 		app.GetUserReviewService(), app.GetNotifyEventClient())
 
-	items := rg.Group("/user-reviews").Use(v1.Auth())
+	items := rg.Group("/user-reviews").Use(middleware.Auth())
 	{
 		items.GET("/", handler.ListUserReviews)
 		items.GET("/:reviewID", handler.UserReviewDetail)
@@ -22,7 +22,7 @@ func (r V1router) addUserReviews(
 		{
 			items.POST("/", handler.CreateUserReview)
 		}
-		items.Use(v1.ReviewOwnerOrAdmin("reviewId", app.GetUserReviewRepo()))
+		items.Use(middleware.ReviewOwnerOrAdmin("reviewId", app.GetUserReviewRepo()))
 		{
 			items.DELETE("/:reviewId", handler.DeleteUserReview)
 		}

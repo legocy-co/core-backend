@@ -117,7 +117,7 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 //	@Security	JWT
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	// If we get here, then token payload is valid
-	tokenString := v1.GetAuthTokenHeader(c)
+	tokenString := middleware.GetAuthTokenHeader(c)
 	userPayload, ok := auth.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,

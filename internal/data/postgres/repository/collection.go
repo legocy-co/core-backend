@@ -115,3 +115,17 @@ func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(
 	tx.Commit()
 	return nil
 }
+
+func (r CollectionPostgresRepository) GetCollectionSetOwner(c context.Context, collectionSetID int) (int, error) {
+	db := r.conn.GetDB()
+	if db == nil {
+		return -1, d.ErrConnectionLost
+	}
+
+	var ownerID int
+	err := db.Model(
+		entities.UserLegoSetPostgres{},
+	).Where("id=?", collectionSetID).Select("user_id").First(&ownerID).Error
+
+	return ownerID, err
+}
