@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+// AddLegoSetToUserCollection
+//
+//	@Summary	Add Set To Collection
+//	@Tags		user_collections
+//	@ID			add_set_user_collections
+//	@Param		data	body	collections.CollectionLegoSetAddRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/collections/ [post]
+//
+//	@Security	JWT
 func (h UserLegoCollectionHandler) AddLegoSetToUserCollection(c *gin.Context) {
 	tokenPayload, err := v1.GetUserPayload(c)
 	if err != nil {

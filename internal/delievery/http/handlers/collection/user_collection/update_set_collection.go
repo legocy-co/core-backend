@@ -8,6 +8,19 @@ import (
 	"strconv"
 )
 
+// UpdateUserCollectionSet
+//
+//	@Summary	Update Collection Set Info
+//	@Tags		user_collections
+//	@ID			update_set_user_collection
+//	@Param		setID	path	int	true	"set ID"
+//	@Param		data	body	collections.CollectionLegoSetUpdateRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/collections/{setID} [put]
+//
+//	@Security	JWT
 func (h UserLegoCollectionHandler) UpdateUserCollectionSet(c *gin.Context) {
 	tokenPayload, err := v1.GetUserPayload(c)
 	if err != nil {

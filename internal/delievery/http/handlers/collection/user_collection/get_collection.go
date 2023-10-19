@@ -7,6 +7,17 @@ import (
 	"net/http"
 )
 
+// GetUserCollection
+//
+//	@Summary	Get User Collection
+//	@Tags		user_collections
+//	@ID			get_user_collection
+//	@Produce	json
+//	@Success	200	{object} 	collections.UserLegoSetCollectionResponse
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/collections/ [get]
+//
+//	@Security	JWT
 func (h UserLegoCollectionHandler) GetUserCollection(c *gin.Context) {
 	tokenPayload, err := v1.GetUserPayload(c)
 	if err != nil {
