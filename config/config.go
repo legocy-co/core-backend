@@ -121,6 +121,7 @@ func SetupFromEnv() error {
 	}
 
 	kafkaUri := os.Getenv("KAFKA_URI")
+	logrus.Printf("KAFKA_URL = %v", kafkaUri)
 
 	kafkaConfig := KafkaConfig{kafkaUri}
 

@@ -30,7 +30,7 @@ func (h UserLegoCollectionHandler) AddLegoSetToUserCollection(c *gin.Context) {
 	userID := tokenPayload.ID
 
 	var createRequest *collections.CollectionLegoSetAddRequest
-	if err := c.ShouldBindJSON(createRequest); err != nil {
+	if err := c.ShouldBindJSON(&createRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}

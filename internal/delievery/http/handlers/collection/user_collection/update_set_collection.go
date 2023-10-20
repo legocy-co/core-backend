@@ -38,13 +38,13 @@ func (h UserLegoCollectionHandler) UpdateUserCollectionSet(c *gin.Context) {
 	}
 
 	var updateRequest *collections.CollectionLegoSetUpdateRequest
-	if err := c.ShouldBindJSON(updateRequest); err != nil {
+	if err := c.ShouldBindJSON(&updateRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}
 
 	vo, err := updateRequest.ToCollectionLegoSetValueObject()
-	if err := c.ShouldBindJSON(updateRequest); err != nil {
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}

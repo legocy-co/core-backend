@@ -11,7 +11,7 @@ type UserLegoSetPostgres struct {
 	LegoSetID  int              `gorm:"index; not null"`
 	LegoSet    LegoSetPostgres  `gorm:"foreignKey:LegoSetID;constraint:OnDelete:CASCADE"`
 	State      string           `gorm:"not null;"`
-	BuyPrice   float32          `gorm:"not null;type:numeric"`
+	BuyPrice   float32          `gorm:"not null;type:decimal(25,2);"`
 	CurrencyID int              `gorm:"index;not null"`
 	Currency   CurrencyPostgres `gorm:"foreignKey:CurrencyID;constraint:OnDelete: SET NULL"`
 }
