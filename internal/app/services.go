@@ -1,6 +1,7 @@
 package app
 
 import (
+	collection "legocy-go/internal/domain/collections/service/collection"
 	lego "legocy-go/internal/domain/lego/service"
 	marketplace "legocy-go/internal/domain/marketplace/service"
 	"legocy-go/internal/domain/marketplace/service/admin"
@@ -46,4 +47,8 @@ func (a *App) GetUserAdminService() useradmin.UserAdminService {
 
 func (a *App) GetMarketItemAdminService() admin.MarketItemAdminService {
 	return admin.NewMarketItemAdminService(a.GetMarketItemAdminRepository())
+}
+
+func (a *App) GetUserCollectionService() collection.UserCollectionService {
+	return collection.NewUserCollectionService(a.GetUserLegoSetsRepository())
 }

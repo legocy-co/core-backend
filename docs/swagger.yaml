@@ -5,6 +5,50 @@ definitions:
       data: {}
       meta: {}
     type: object
+  legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetAddRequest:
+    properties:
+      buy_price:
+        type: number
+      currency_id:
+        type: integer
+      lego_set_id:
+        type: integer
+      state:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetResponse:
+    properties:
+      buy_price:
+        type: number
+      currency:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse'
+      id:
+        type: integer
+      lego_set:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+      state:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetUpdateRequest:
+    properties:
+      buy_price:
+        type: number
+      currency_id:
+        type: integer
+      lego_set_id:
+        type: integer
+      state:
+        type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_collections.UserLegoSetCollectionResponse:
+    properties:
+      collection_sets:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetResponse'
+        type: array
+      user:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+    type: object
   legocy-go_internal_delievery_http_resources_lego.LegoSeriesRequest:
     properties:
       name:
@@ -77,6 +121,8 @@ definitions:
     properties:
       currency_id:
         type: integer
+      description:
+        type: string
       lego_set_id:
         type: integer
       location_id:
@@ -90,6 +136,8 @@ definitions:
     properties:
       currency:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse'
+      description:
+        type: string
       id:
         type: integer
       lego_set:
@@ -148,17 +196,19 @@ definitions:
     type: object
   legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest:
     properties:
-      currencyID:
+      currency_id:
         type: integer
-      legoSetID:
+      description:
+        type: string
+      lego_set_id:
         type: integer
-      locationID:
+      location_id:
         type: integer
       price:
         type: number
-      sellerID:
+      seller_id:
         type: integer
-      setState:
+      set_state:
         type: string
       status:
         type: string
@@ -167,6 +217,8 @@ definitions:
     properties:
       currency:
         $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse'
+      description:
+        type: string
       id:
         type: integer
       lego_set:
@@ -184,17 +236,19 @@ definitions:
     type: object
   legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest:
     properties:
-      currencyID:
+      currency_id:
         type: integer
-      legoSetID:
+      description:
+        type: string
+      lego_set_id:
         type: integer
-      locationID:
+      location_id:
         type: integer
       price:
         type: number
-      sellerID:
+      seller_id:
         type: integer
-      setState:
+      set_state:
         type: string
       status:
         type: string
@@ -741,6 +795,113 @@ paths:
       summary: Create Admin
       tags:
       - users_admin
+  /collections/:
+    get:
+      operationId: get_user_collection
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.UserLegoSetCollectionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get User Collection
+      tags:
+      - user_collections
+    post:
+      operationId: add_set_user_collections
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetAddRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Add Set To Collection
+      tags:
+      - user_collections
+  /collections/{setID}:
+    delete:
+      operationId: delete_set_user_collections
+      parameters:
+      - description: set ID
+        in: path
+        name: setID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete User Collection Set
+      tags:
+      - user_collections
+    put:
+      operationId: update_set_user_collection
+      parameters:
+      - description: set ID
+        in: path
+        name: setID
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update Collection Set Info
+      tags:
+      - user_collections
   /currencies/:
     get:
       operationId: list_currencies

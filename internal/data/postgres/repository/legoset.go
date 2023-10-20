@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"context"
-	d "legocy-go/internal/db"
-	entities "legocy-go/internal/db/postgres/entity"
+	d "legocy-go/internal/data"
+	entities "legocy-go/internal/data/postgres/entity"
 	models "legocy-go/internal/domain/lego/models"
 	"legocy-go/pkg/filter"
 )

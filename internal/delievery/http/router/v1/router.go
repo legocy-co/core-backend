@@ -93,5 +93,8 @@ func InitRouter(app *app.App) V1router {
 	// admin_user.go
 	router.addUserAdmin(v1Admin, app.GetUserAdminService())
 
+	// collection.go
+	router.addUserCollections(v1, app)
+
 	return router
 }

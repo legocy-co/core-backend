@@ -14,22 +14,22 @@ func (r V1router) addMarketItems(
 	handler := marketplace.NewMarketItemHandler(
 		app.GetMarketItemService())
 
-	items := rg.Group("/market-items").Use(v1.Auth())
+	items := rg.Group("/market-items").Use(middleware.Auth())
 	{
 		items.GET("/", handler.ListMarketItems)
 		items.GET("/authorized/", handler.ListMarketItemsAuthorized)
 		items.GET("/:itemID", handler.MarketItemDetail)
 
 		items.Use(
-			v1.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
+			middleware.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
 		{
 			items.POST("/", handler.CreateMarketItem)
 		}
-		items.Use(v1.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
+		items.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
 		{
 			items.DELETE("/:itemId", handler.DeleteMarketItem)
 		}
-		items.Use(v1.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
+		items.Use(middleware.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
 		{
 			items.PUT("/:itemID", handler.UpdateMarketItemByID)
 		}
