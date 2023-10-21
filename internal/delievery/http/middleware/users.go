@@ -1,4 +1,4 @@
-package v1
+package middleware
 
 import (
 	"legocy-go/internal/delievery/http/errors"

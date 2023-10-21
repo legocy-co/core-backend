@@ -4,6 +4,7 @@ import (
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
+	legoDomain "legocy-go/internal/domain/lego/models"
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 )
@@ -26,7 +27,7 @@ func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (
 		return nil, errors.ErrMarketItemInvalidStatus
 	}
 
-	if !models.IsValidSetState(r.SetState) {
+	if !legoDomain.IsValidSetState(r.SetState) {
 		return nil, errors.ErrMarketItemInvalidSetState
 	}
 
@@ -60,7 +61,7 @@ func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (
 		return nil, errors.ErrMarketItemInvalidStatus
 	}
 
-	if !models.IsValidSetState(r.SetState) {
+	if !legoDomain.IsValidSetState(r.SetState) {
 		return nil, errors.ErrMarketItemInvalidSetState
 	}
 

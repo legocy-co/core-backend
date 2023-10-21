@@ -85,7 +85,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	var marketItems []*models.MarketItem
 
-	tokenPayload, err := v1.GetUserPayload(c)
+	tokenPayload, err := middleware.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -164,7 +164,7 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 //	@Security	JWT
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
-	tokenString := v1.GetAuthTokenHeader(c)
+	tokenString := middleware.GetAuthTokenHeader(c)
 	userPayload, ok := auth.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
@@ -247,7 +247,7 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 		return
 	}
 
-	tokenString := v1.GetAuthTokenHeader(c)
+	tokenString := middleware.GetAuthTokenHeader(c)
 	userPayload, ok := auth.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,

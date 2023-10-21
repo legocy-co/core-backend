@@ -1,8 +1,9 @@
 package marketplace
 
 import (
-	"legocy-go/internal/delievery/http/resources/lego"
+	legoResources "legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/users"
+	lego "legocy-go/internal/domain/lego/models"
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 )
@@ -18,7 +19,7 @@ type MarketItemRequest struct {
 
 func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) (*models.MarketItemValueObject, error) {
 
-	if !models.IsValidSetState(r.SetState) {
+	if !lego.IsValidSetState(r.SetState) {
 		return nil, errors.ErrMarketItemInvalidSetState
 	}
 
@@ -34,15 +35,15 @@ func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) (*models.Marke
 }
 
 type MarketItemResponse struct {
-	ID          int                      `json:"id"`
-	Price       float32                  `json:"price"`
-	Currency    CurrencyResponse         `json:"currency"`
-	Location    LocationResponse         `json:"location"`
-	LegoSet     lego.LegoSetResponse     `json:"lego_set"`
-	Seller      users.UserDetailResponse `json:"seller"`
-	Status      string                   `json:"status"`
-	SetState    string                   `json:"set_state"`
-	Description string                   `json:"description"`
+	ID          int                           `json:"id"`
+	Price       float32                       `json:"price"`
+	Currency    CurrencyResponse              `json:"currency"`
+	Location    LocationResponse              `json:"location"`
+	LegoSet     legoResources.LegoSetResponse `json:"lego_set"`
+	Seller      users.UserDetailResponse      `json:"seller"`
+	Status      string                        `json:"status"`
+	SetState    string                        `json:"set_state"`
+	Description string                        `json:"description"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
@@ -51,7 +52,7 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		Price:       m.Price,
 		Currency:    GetCurrencyResponse(&m.Currency),
 		Location:    GetLocationResponse(&m.Location),
-		LegoSet:     lego.GetLegoSetResponse(&m.LegoSet),
+		LegoSet:     legoResources.GetLegoSetResponse(&m.LegoSet),
 		Seller:      users.GetUserDetailResponse(&m.Seller),
 		Status:      m.Status,
 		SetState:    m.SetState,
