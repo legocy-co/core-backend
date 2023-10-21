@@ -1,9 +1,7 @@
 package marketplace
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"legocy-go/config"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
@@ -12,23 +10,19 @@ import (
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
 	"legocy-go/internal/domain/users/middleware"
-	"legocy-go/pkg/eventNotifier/client"
-	clientModels "legocy-go/pkg/eventNotifier/models"
 	"net/http"
 	"strconv"
 )
 
 type UserReviewHandler struct {
-	service      s.UserReviewService
-	notifyClient client.EventNotifierClient
+	service s.UserReviewService
 }
 
 func NewUserReviewHandler(
-	service s.UserReviewService, notifyClient client.EventNotifierClient) UserReviewHandler {
+	service s.UserReviewService) UserReviewHandler {
 
 	return UserReviewHandler{
-		service:      service,
-		notifyClient: notifyClient,
+		service: service,
 	}
 }
 
@@ -143,12 +137,6 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// Track Event
-	err = h.notifyClient.NotifyEvent(clientModels.NotifyEventData{
-		ChatID:  config.GetAppConfig().EventNotifierChatID,
-		Message: fmt.Sprint("New UserReview created!"),
-	})
 
 	response := resources.DataMetaResponse{
 		Data: reviewRequest,

@@ -6,7 +6,6 @@ import (
 	"legocy-go/internal/delievery/http/resources/users"
 	s "legocy-go/internal/domain/marketplace/service"
 	ser "legocy-go/internal/domain/users/service"
-	"legocy-go/pkg/eventNotifier/client"
 	"net/http"
 	"strconv"
 )
@@ -16,20 +15,19 @@ type UserProfilePageHandler struct {
 	userService       ser.UserUseCase
 	userReviewService s.UserReviewService
 	userImageService  ser.UserImageUseCase
-	notifyClient      client.EventNotifierClient
 }
 
 func NewUserProfilePageHandler(
-	marketItemService s.MarketItemService, userService ser.UserUseCase,
-	userReviewService s.UserReviewService, userImageService ser.UserImageUseCase,
-	notifyClient client.EventNotifierClient) UserProfilePageHandler {
+	marketItemService s.MarketItemService,
+	userService ser.UserUseCase,
+	userReviewService s.UserReviewService,
+	userImageService ser.UserImageUseCase) UserProfilePageHandler {
 
 	return UserProfilePageHandler{
 		marketItemService: marketItemService,
 		userService:       userService,
 		userReviewService: userReviewService,
 		userImageService:  userImageService,
-		notifyClient:      notifyClient,
 	}
 }
 

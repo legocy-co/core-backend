@@ -12,8 +12,7 @@ func (r V1router) addUserProfilePages(
 	app *a.App) {
 
 	handler := marketplace.NewUserProfilePageHandler(
-		app.GetMarketItemService(), app.GetUserService(), app.GetUserReviewService(),
-		app.GetUserImagesService(), app.GetNotifyEventClient())
+		app.GetMarketItemService(), app.GetUserService(), app.GetUserReviewService(), app.GetUserImagesService())
 
 	items := rg.Group("/user-profile-pages/").Use(v1.Auth())
 	{

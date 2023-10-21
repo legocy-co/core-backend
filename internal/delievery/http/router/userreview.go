@@ -11,8 +11,7 @@ func (r V1router) addUserReviews(
 	rg *gin.RouterGroup,
 	app *a.App) {
 
-	handler := marketplace.NewUserReviewHandler(
-		app.GetUserReviewService(), app.GetNotifyEventClient())
+	handler := marketplace.NewUserReviewHandler(app.GetUserReviewService())
 
 	items := rg.Group("/user-reviews").Use(v1.Auth())
 	{

@@ -17,9 +17,6 @@ type AppConfig struct {
 	KafkaConf KafkaConfig    `yaml:"kafka" json:"kafka"`
 
 	S3Port string `json:"s3_port"`
-
-	EventNotifierPort   string `json:"event_notifier_port"`
-	EventNotifierChatID int    `json:"event_notifier_chat_id"`
 }
 
 func GetAppConfig() *AppConfig {
@@ -126,16 +123,11 @@ func SetupFromEnv() error {
 
 	s3Port := os.Getenv("S3_PORT")
 
-	eventNotifierPort := "<REMOVE ME>"
-	eventNotifierChatID := 0
-
 	appConfig := AppConfig{
-		DbConf:              dbConfig,
-		JwtConf:             jwtConfig,
-		KafkaConf:           kafkaConfig,
-		S3Port:              s3Port,
-		EventNotifierPort:   eventNotifierPort,
-		EventNotifierChatID: eventNotifierChatID,
+		DbConf:    dbConfig,
+		JwtConf:   jwtConfig,
+		KafkaConf: kafkaConfig,
+		S3Port:    s3Port,
 	}
 
 	return SetAppConfig(&appConfig)
