@@ -96,5 +96,8 @@ func InitRouter(app *app.App) V1router {
 	// collection.go
 	router.addUserCollections(v1, app)
 
+	// healthcheck.go
+	router.addHealthCheck(v1)
+
 	return router
 }
