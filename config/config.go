@@ -42,8 +42,8 @@ type DatabaseConfig struct {
 }
 
 type JWTConfig struct {
-	SecretKey          string `yaml:"secret_key" json:"secret_key"`
-	AccesTokenLifeTime int    `yaml:"acces_tokern_lifetime_hours" json:"acces_token_lifetime_hours"`
+	SecretKey           string `yaml:"secret_key" json:"secret_key"`
+	AccessTokenLifeTime int    `yaml:"access_token_lifetime_hours" json:"access_token_lifetime_hours"`
 }
 
 type KafkaConfig struct {
@@ -113,8 +113,8 @@ func SetupFromEnv() error {
 	jwtAccessTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_ACCESS_TOKEN_LIFETIME"))
 
 	jwtConfig := JWTConfig{
-		SecretKey:          jwtSecretKey,
-		AccesTokenLifeTime: jwtAccessTokenLifetimeHours,
+		SecretKey:           jwtSecretKey,
+		AccessTokenLifeTime: jwtAccessTokenLifetimeHours,
 	}
 
 	kafkaUri := os.Getenv("KAFKA_URI")
