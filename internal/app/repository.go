@@ -52,3 +52,7 @@ func (a *App) GetUserAdminRepository() repository.UserAdminRepository {
 func (a *App) GetUserLegoSetsRepository() collections.UserCollectionRepository {
 	return postgres.NewCollectionPostgresRepository(a.GetDatabase())
 }
+
+func (a *App) GetLegoSetsValuationRepository() collections.LegoSetValuationRepository {
+	return postgres.NewLegoSetValuationPostgresRepository(a.GetDatabase())
+}

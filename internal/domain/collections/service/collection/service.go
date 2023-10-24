@@ -4,15 +4,25 @@ import (
 	"context"
 	"legocy-go/internal/domain/collections/models"
 	"legocy-go/internal/domain/collections/repository"
+	auth "legocy-go/internal/domain/users/models"
+	users "legocy-go/internal/domain/users/repository"
 )
 
 type UserCollectionService struct {
 	collectionRepository repository.UserCollectionRepository
 	valuationRepository  repository.LegoSetValuationRepository
+	usersRepository      users.UserRepository
 }
 
-func NewUserCollectionService(r repository.UserCollectionRepository) UserCollectionService {
-	return UserCollectionService{collectionRepository: r}
+func NewUserCollectionService(
+	collectionRepo repository.UserCollectionRepository,
+	valuationRepo repository.LegoSetValuationRepository,
+	usersRepo users.UserRepository) UserCollectionService {
+	return UserCollectionService{
+		collectionRepository: collectionRepo,
+		valuationRepository:  valuationRepo,
+		usersRepository:      usersRepo,
+	}
 }
 
 func (s UserCollectionService) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, error) {
@@ -31,10 +41,10 @@ func (s UserCollectionService) UpdateUserCollectionSet(c context.Context, userID
 	return s.collectionRepository.UpdateUserCollectionSetByID(c, userID, collectionSetID, vo)
 }
 
-func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, error) {
+func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, *auth.User, error) {
 	userCollection, err := s.GetUserCollection(c, userID)
 	if err != nil {
-		return []models.LegoSetValuation{}, err
+		return []models.LegoSetValuation{}, nil, err
 	}
 
 	var setValuations []models.LegoSetValuation
@@ -45,11 +55,16 @@ func (s UserCollectionService) GetUserCollectionValuation(c context.Context, use
 		)
 
 		if err != nil {
-			return []models.LegoSetValuation{}, err
+			return []models.LegoSetValuation{}, nil, err
 		}
 
 		setValuations = append(setValuations, *setValuation)
 	}
 
-	return setValuations, nil
+	user, err := s.usersRepository.GetUserByID(c, userID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return setValuations, user, nil
 }

@@ -14,6 +14,7 @@ func (router V1router) addUserCollections(rg *gin.RouterGroup, app *a.App) {
 	{
 		userCollection.GET("/", handler.GetUserCollection)
 		userCollection.POST("/", handler.AddLegoSetToUserCollection)
+		userCollection.GET("/valuation/:currencyID", handler.GetUserCollectionValuation)
 		userCollection.Use(
 			middleware.CollectionSetOwnerOrAdmin("setID", app.GetUserLegoSetsRepository()))
 		{

@@ -4,11 +4,16 @@ import (
 	"context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/internal/domain/collections"
 	"legocy-go/internal/domain/collections/models"
 )
 
 type LegoSetValuationPostgresRepository struct {
 	conn d.DataBaseConnection
+}
+
+func NewLegoSetValuationPostgresRepository(conn d.DataBaseConnection) LegoSetValuationPostgresRepository {
+	return LegoSetValuationPostgresRepository{conn: conn}
 }
 
 func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.Context, legoSetID int) ([]models.LegoSetValuation, error) {
@@ -35,26 +40,42 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.C
 }
 
 func (r LegoSetValuationPostgresRepository) GetLegoSetValuationByID(c context.Context, id int) (*models.LegoSetValuation, error) {
-	//TODO implement me
-	panic("implement me")
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
+
+	var entity *entities.LegoSetValuation
+	res := db.Model(
+		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(&entity, id)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	if entity == nil {
+		return nil, collections.ErrValuationNotFound
+	}
+
+	return entity.ToLegoSetValuation(), nil
 }
 
 func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string, currencyID int) (*models.LegoSetValuation, error) {
-	//TODO implement me
-	panic("implement me")
-}
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, d.ErrConnectionLost
+	}
 
-func (r LegoSetValuationPostgresRepository) AddLegoSetValuation(c context.Context, vo models.LegoSetValuationValueObject) error {
-	//TODO implement me
-	panic("implement me")
-}
+	var entity *entities.LegoSetValuation
+	res := db.Model(
+		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(
+		&entity, "lego_set_id = ?", setID, "state = ?", setState, "currency_id = ?", currencyID)
+	if res.Error != nil {
+		return nil, res.Error
+	}
 
-func (r LegoSetValuationPostgresRepository) DeleteLegoSetValuationByID(c context.Context, id int) error {
-	//TODO implement me
-	panic("implement me")
-}
+	if entity == nil {
+		return nil, collections.ErrValuationNotFound
+	}
 
-func (r LegoSetValuationPostgresRepository) UpdateLegoSetValuationByID(c context.Context, id int, vo models.LegoSetValuationValueObject) error {
-	//TODO implement me
-	panic("implement me")
+	return entity.ToLegoSetValuation(), nil
 }

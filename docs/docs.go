@@ -786,6 +786,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/collections/valuation/{currencyID}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_collections"
+                ],
+                "summary": "Get User Collection Valuation",
+                "operationId": "get_user_collection_valuation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "currency ID",
+                        "name": "currencyID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/collections/{setID}": {
             "put": {
                 "security": [
@@ -1767,6 +1808,26 @@ const docTemplate = `{
                 }
             }
         },
+        "legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
+                },
+                "total": {
+                    "type": "number"
+                },
+                "user": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse"
+                },
+                "valuations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse"
+                    }
+                }
+            }
+        },
         "legocy-go_internal_delievery_http_resources_collections.UserLegoSetCollectionResponse": {
             "type": "object",
             "properties": {
@@ -2227,6 +2288,26 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lego_set": {
+                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "valuation": {
+                    "type": "number"
                 }
             }
         }

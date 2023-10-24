@@ -50,5 +50,9 @@ func (a *App) GetMarketItemAdminService() admin.MarketItemAdminService {
 }
 
 func (a *App) GetUserCollectionService() collection.UserCollectionService {
-	return collection.NewUserCollectionService(a.GetUserLegoSetsRepository())
+	return collection.NewUserCollectionService(
+		a.GetUserLegoSetsRepository(),
+		a.GetLegoSetsValuationRepository(),
+		a.GetUserRepo(),
+	)
 }

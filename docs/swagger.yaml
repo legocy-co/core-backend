@@ -40,6 +40,19 @@ definitions:
       state:
         type: string
     type: object
+  legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse:
+    properties:
+      currency:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse'
+      total:
+        type: number
+      user:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      valuations:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse'
+        type: array
+    type: object
   legocy-go_internal_delievery_http_resources_collections.UserLegoSetCollectionResponse:
     properties:
       collection_sets:
@@ -339,6 +352,19 @@ definitions:
         type: integer
       username:
         type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse:
+    properties:
+      currency:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse'
+      id:
+        type: integer
+      lego_set:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+      state:
+        type: string
+      valuation:
+        type: number
     type: object
 host: localhost:8080
 info:
@@ -900,6 +926,32 @@ paths:
       security:
       - JWT: []
       summary: Update Collection Set Info
+      tags:
+      - user_collections
+  /collections/valuation/{currencyID}:
+    get:
+      operationId: get_user_collection_valuation
+      parameters:
+      - description: currency ID
+        in: path
+        name: currencyID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get User Collection Valuation
       tags:
       - user_collections
   /currencies/:
