@@ -33,11 +33,14 @@ func (r UserDownloadImageRequest) ToBucketNameImageName() (bucketName string, im
 	}
 
 	idx := strings.Index(fp, "/")
+	if idx == len(fp)-1 {
+		return "", "", ErrInvalidImagePath
+	}
 	if idx < 0 || len(fp[idx+1:]) <= 0 {
 		return "", "", ErrInvalidImagePath
 	}
 
-	return fp[:idx], fp[idx:], nil
+	return fp[:idx], fp[idx+1:], nil
 }
 
 type UserImagesListResponse struct {
