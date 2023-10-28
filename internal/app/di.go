@@ -26,5 +26,5 @@ func (a *App) setDatabase(dbCfg *config.DatabaseConfig) {
 }
 
 func (a *App) GetImageStorageClient() storage.ImageStorage {
-	return storage.NewImageStorage(config.GetAppConfig().S3Port)
+	return storage.NewImageStorage(config.GetAppConfig().S3Host, config.GetAppConfig().S3Port)
 }

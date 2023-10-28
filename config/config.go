@@ -16,6 +16,7 @@ type AppConfig struct {
 	JwtConf   JWTConfig      `yaml:"jwt" json:"jwt"`
 	KafkaConf KafkaConfig    `yaml:"kafka" json:"kafka"`
 
+	S3Host string `json:"s3_host"`
 	S3Port string `json:"s3_port"`
 }
 
@@ -122,12 +123,14 @@ func SetupFromEnv() error {
 
 	kafkaConfig := KafkaConfig{kafkaUri}
 
+	s3Host := os.Getenv("S3_HOST")
 	s3Port := os.Getenv("S3_PORT")
 
 	appConfig := AppConfig{
 		DbConf:    dbConfig,
 		JwtConf:   jwtConfig,
 		KafkaConf: kafkaConfig,
+		S3Host:    s3Host,
 		S3Port:    s3Port,
 	}
 

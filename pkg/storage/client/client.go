@@ -6,14 +6,15 @@ import (
 )
 
 type ImageStorage struct {
+	host string
 	port string
 }
 
-func NewImageStorage(port string) ImageStorage {
-	return ImageStorage{port: port}
+func NewImageStorage(host string, port string) ImageStorage {
+	return ImageStorage{host: host, port: port}
 }
 
 func (s ImageStorage) getConnection() (*grpc.ClientConn, error) {
-	return grpc.Dial("localhost"+s.port,
+	return grpc.Dial(s.host+s.port,
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 }
