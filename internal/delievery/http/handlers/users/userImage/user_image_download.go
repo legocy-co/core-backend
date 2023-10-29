@@ -7,6 +7,15 @@ import (
 	"net/http"
 )
 
+// DownloadImage
+//
+//	@Summary	Download User Image
+//	@Tags		users_images
+//	@ID			download_user_image
+//	@Param		fp	query string	true	"filepath"
+//	@Success	200		{file}	file
+//	@Failure	400		{object}	map[string]interface{}
+//	@Router		/users/images/download [get]
 func (h UserImageHandler) DownloadImage(c *gin.Context) {
 
 	imagePath := c.Query("fp")
@@ -14,7 +23,12 @@ func (h UserImageHandler) DownloadImage(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No fp query argument given"})
 		return
 	}
-	downloadRequest := resources.UserDownloadImageRequest{ImagePath: imagePath}
+
+	downloadRequest, err := resources.NewUserDownloadImageRequest(imagePath)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
 
 	bucketName, imageName, err := downloadRequest.ToBucketNameImageName()
 	log.Printf("%v %v %v", bucketName, imageName, err)

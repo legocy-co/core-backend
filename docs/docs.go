@@ -1669,6 +1669,112 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/images/:userID": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users_images"
+                ],
+                "summary": "Get User Images List",
+                "operationId": "get_user_images",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserImagesListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users_images"
+                ],
+                "summary": "Download User Image",
+                "operationId": "upload_user_image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "filepath",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageUploadResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/users/images/download": {
+            "get": {
+                "tags": [
+                    "users_images"
+                ],
+                "summary": "Download User Image",
+                "operationId": "download_user_image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "filepath",
+                        "name": "fp",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/users/register": {
             "post": {
                 "produces": [
@@ -2195,11 +2301,36 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse": {
             "type": "object",
             "properties": {
+                "downloadURL": {
+                    "type": "string"
+                },
                 "filepath": {
                     "type": "string"
                 },
                 "userID": {
                     "type": "integer"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users.UserImageUploadResponse": {
+            "type": "object",
+            "properties": {
+                "imageURL": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "legocy-go_internal_delievery_http_resources_users.UserImagesListResponse": {
+            "type": "object",
+            "properties": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse"
+                    }
                 }
             }
         },

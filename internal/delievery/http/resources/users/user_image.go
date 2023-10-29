@@ -1,15 +1,12 @@
 package users
 
 import (
-	"errors"
 	"legocy-go/config"
+	"legocy-go/internal/delievery/http/constants"
+	"legocy-go/internal/delievery/http/errors"
 	models "legocy-go/internal/domain/users/models"
 	"legocy-go/pkg/helpers"
 	"strings"
-)
-
-var (
-	ErrInvalidImagePath = errors.New("invalid image path")
 )
 
 type UserImageUploadResponse struct {
@@ -28,6 +25,19 @@ type UserDownloadImageRequest struct {
 	ImagePath string `json:"imagePath"`
 }
 
+func NewUserDownloadImageRequest(query string) (*UserDownloadImageRequest, error) {
+	if len(query) < len(constants.UserImagesBucketName) {
+		return nil, errors.ErrInvalidImageFilepath
+	}
+
+	// Check if bucket
+	if query[:5] != constants.UserImagesBucketName {
+		return nil, errors.ErrInvalidImageFilepath
+	}
+
+	return &UserDownloadImageRequest{ImagePath: query}, nil
+}
+
 func (r UserDownloadImageRequest) ToBucketNameImageName() (bucketName string, imageName string, err error) {
 	fp := r.ImagePath
 	if f := string(fp[0]); f == "/" {
@@ -36,10 +46,10 @@ func (r UserDownloadImageRequest) ToBucketNameImageName() (bucketName string, im
 
 	idx := strings.Index(fp, "/")
 	if idx == len(fp)-1 {
-		return "", "", ErrInvalidImagePath
+		return "", "", errors.ErrInvalidImageFilepath
 	}
 	if idx < 0 || len(fp[idx+1:]) <= 0 {
-		return "", "", ErrInvalidImagePath
+		return "", "", errors.ErrInvalidImageFilepath
 	}
 
 	return fp[:idx], fp[idx+1:], nil

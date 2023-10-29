@@ -11,6 +11,17 @@ import (
 	"strconv"
 )
 
+// UploadUserImage
+//
+//	@Summary	Download User Image
+//	@Tags		users_images
+//	@ID			upload_user_image
+//	@Accept		multipart/form-data
+//	@Produce	json
+//	@Param		file	formData  file	true	"filepath"
+//	@Success	200		{object}	resources.UserImageUploadResponse
+//	@Failure	400		{object}	map[string]interface{}
+//	@Router		/users/images/:userID [post]
 func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {

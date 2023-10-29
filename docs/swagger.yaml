@@ -291,10 +291,26 @@ definitions:
     type: object
   legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse:
     properties:
+      downloadURL:
+        type: string
       filepath:
         type: string
       userID:
         type: integer
+    type: object
+  legocy-go_internal_delievery_http_resources_users.UserImageUploadResponse:
+    properties:
+      imageURL:
+        type: string
+      ok:
+        type: boolean
+    type: object
+  legocy-go_internal_delievery_http_resources_users.UserImagesListResponse:
+    properties:
+      images:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+        type: array
     type: object
   legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest:
     properties:
@@ -1430,6 +1446,77 @@ paths:
       summary: Delete User Review
       tags:
       - user_reviews
+  /users/images/:userID:
+    get:
+      operationId: get_user_images
+      parameters:
+      - description: user ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImagesListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get User Images List
+      tags:
+      - users_images
+    post:
+      consumes:
+      - multipart/form-data
+      operationId: upload_user_image
+      parameters:
+      - description: filepath
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageUploadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Download User Image
+      tags:
+      - users_images
+  /users/images/download:
+    get:
+      operationId: download_user_image
+      parameters:
+      - description: filepath
+        in: query
+        name: fp
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Download User Image
+      tags:
+      - users_images
   /users/register:
     post:
       operationId: user-register

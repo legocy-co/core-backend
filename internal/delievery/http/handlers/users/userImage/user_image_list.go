@@ -7,6 +7,16 @@ import (
 	"strconv"
 )
 
+// ListImages
+//
+//	@Summary	Get User Images List
+//	@Tags		users_images
+//	@ID			get_user_images
+//	@Produce	json
+//	@Param		userID	path int	true	"user ID"
+//	@Success	200		{object}	resources.UserImagesListResponse
+//	@Failure	400		{object}	map[string]interface{}
+//	@Router		/users/images/:userID [get]
 func (h UserImageHandler) ListImages(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
