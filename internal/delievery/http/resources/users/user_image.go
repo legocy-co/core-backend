@@ -2,7 +2,9 @@ package users
 
 import (
 	"errors"
+	"legocy-go/config"
 	models "legocy-go/internal/domain/users/models"
+	"legocy-go/pkg/helpers"
 	"strings"
 )
 
@@ -52,13 +54,15 @@ func GetUserImagesListResponse(images []UserImageInfoResponse) UserImagesListRes
 }
 
 type UserImageInfoResponse struct {
-	UserID   int    `json:"userID"`
-	Filepath string `json:"filepath"`
+	UserID      int    `json:"userID"`
+	Filepath    string `json:"filepath"`
+	DownloadURL string `json:"downloadURL"`
 }
 
 func GetUserInfoResponse(image *models.UserImage) UserImageInfoResponse {
 	return UserImageInfoResponse{
-		UserID:   image.UserID,
-		Filepath: image.FilepathURL,
+		UserID:      image.UserID,
+		Filepath:    image.FilepathURL,
+		DownloadURL: config.GetAppConfig().BaseURL + "/api/v1/users/images?fp=" + helpers.EncodeURLString(image.FilepathURL),
 	}
 }

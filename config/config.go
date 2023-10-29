@@ -1,10 +1,7 @@
 package config
 
 import (
-	"encoding/json"
 	"github.com/sirupsen/logrus"
-	"io/ioutil"
-	"legocy-go/pkg/helpers"
 	"os"
 	"strconv"
 )
@@ -12,6 +9,8 @@ import (
 var appConfigInstance *AppConfig // private singleton variable
 
 type AppConfig struct {
+	BaseURL string `json:"base_url"`
+
 	DbConf    DatabaseConfig `yaml:"database" json:"database"`
 	JwtConf   JWTConfig      `yaml:"jwt" json:"jwt"`
 	KafkaConf KafkaConfig    `yaml:"kafka" json:"kafka"`
@@ -69,27 +68,13 @@ func GetJWTConfig() *JWTConfig {
 	return &cfg.JwtConf
 }
 
-func SetupFromJSON(fp string) error {
-	var cfg AppConfig
-
-	if fileExists := helpers.FileExists(fp); !fileExists {
-		return ErrConfigFileDoesNotExist
-	}
-
-	raw, err := ioutil.ReadFile(fp)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(raw, &cfg)
-	if err != nil {
-		return err
-	}
-
-	return SetAppConfig(&cfg)
-}
-
 func SetupFromEnv() error {
+
+	baseUrl := os.Getenv("BASE_URL")
+	if baseUrl == "" {
+		baseUrl = "localhost"
+	}
+
 	dbHost := os.Getenv("DB_HOST")
 	logrus.Printf("DB_HOST = %v", dbHost)
 	dbPort, _ := strconv.Atoi(os.Getenv("DB_PORT"))
@@ -127,6 +112,7 @@ func SetupFromEnv() error {
 	s3Port := os.Getenv("S3_PORT")
 
 	appConfig := AppConfig{
+		BaseURL:   baseUrl,
 		DbConf:    dbConfig,
 		JwtConf:   jwtConfig,
 		KafkaConf: kafkaConfig,
