@@ -1,5 +1,7 @@
 package errors
 
-import "errors"
+import (
+	"net/http"
+)
 
-var ErrParamNotFound = errors.New("requested URL param not found")
+var ErrParamNotFound = NewHttpResponseError(http.StatusBadRequest, "requested URL param not found")

@@ -6,6 +6,7 @@ import (
 	entities "legocy-go/internal/data/postgres/entity"
 	"legocy-go/internal/domain/collections"
 	"legocy-go/internal/domain/collections/models"
+	"legocy-go/internal/domain/errors"
 )
 
 type LegoSetValuationPostgresRepository struct {
@@ -28,7 +29,7 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.C
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").Find(
 		&setValuations, "lego_set_id = ?", legoSetID)
 	if res.Error != nil {
-		return nil, res.Error
+		return nil, errors.NewAppError(errors.ConflictError, res.Error.Error())
 	}
 
 	setValuationsDomain := make([]models.LegoSetValuation, 0, len(setValuations))
@@ -49,7 +50,7 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationByID(c context.Co
 	res := db.Model(
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(&entity, id)
 	if res.Error != nil {
-		return nil, res.Error
+		return nil, errors.NewAppError(errors.ConflictError, res.Error.Error())
 	}
 
 	if entity == nil {
@@ -70,7 +71,7 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrenc
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(
 		&entity, "lego_set_id = ?", setID, "state = ?", setState, "currency_id = ?", currencyID)
 	if res.Error != nil {
-		return nil, res.Error
+		return nil, errors.NewAppError(errors.ConflictError, res.Error.Error())
 	}
 
 	if entity == nil {

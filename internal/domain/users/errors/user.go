@@ -1,9 +1,9 @@
-package auth
+package errors
 
 import (
-	"errors"
+	"legocy-go/internal/domain/errors"
 )
 
-var ErrUserAlreadyExists = errors.New("user with this credentials already exists")
-var ErrUserNotFound = errors.New("user not found")
-var ErrWrongPassword = errors.New("wrong password")
+var ErrUserNotFound = errors.NewAppError(errors.NotFoundError, "user not found")
+var ErrWrongPassword = errors.NewAppError(errors.PermissionError, "wrong password")
+var ErrInvalidImageFilepath = errors.NewAppError(errors.ValidationError, "invalid image filepath")

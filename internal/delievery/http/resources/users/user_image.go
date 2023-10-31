@@ -3,7 +3,7 @@ package users
 import (
 	"legocy-go/config"
 	"legocy-go/internal/delievery/http/constants"
-	"legocy-go/internal/delievery/http/errors"
+	"legocy-go/internal/domain/users/errors"
 	models "legocy-go/internal/domain/users/models"
 	"legocy-go/pkg/helpers"
 	"strings"

@@ -1,7 +1,9 @@
 package collections
 
-import "errors"
+import (
+	"legocy-go/internal/domain/errors"
+)
 
 var (
-	ErrValuationNotFound = errors.New("LegoSet Valuation Not Found")
+	ErrValuationNotFound = errors.NewAppError(errors.NotFoundError, "LegoSet Valuation Not Found")
 )
