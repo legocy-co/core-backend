@@ -9,7 +9,6 @@ import (
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
-	"legocy-go/internal/domain/users/middleware"
 	"net/http"
 	"strconv"
 )
@@ -112,7 +111,7 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := auth.ParseTokenClaims(tokenString)
+	userPayload, ok := middleware.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
 			gin.H{"error": "invalid token credentials"})

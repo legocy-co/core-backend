@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	r "legocy-go/internal/domain/marketplace/repository"
-	"legocy-go/internal/domain/users/middleware"
 	models "legocy-go/internal/domain/users/models"
 	"net/http"
 	"strconv"
@@ -107,7 +106,7 @@ func HasFreeMarketItemsSlot(
 			return
 		}
 
-		tokenPayload, ok := auth.ParseTokenClaims(tokenString)
+		tokenPayload, ok := ParseTokenClaims(tokenString)
 		if !ok {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{" error": "Error parsing Token Claims"})

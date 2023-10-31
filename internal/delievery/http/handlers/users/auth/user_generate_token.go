@@ -3,8 +3,8 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	_ "legocy-go/docs"
+	jwt "legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources/users"
-	jwt "legocy-go/internal/domain/users/middleware"
 	"net/http"
 )
 
