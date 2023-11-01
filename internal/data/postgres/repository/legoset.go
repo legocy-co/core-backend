@@ -24,8 +24,9 @@ func (psql LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models
 	}
 
 	entity := entities.FromLegoSetValueObject(s)
-	db.Create(entity)
-	return nil
+	result := db.Create(entity)
+
+	return result.Error
 }
 
 func (psql LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, error) {

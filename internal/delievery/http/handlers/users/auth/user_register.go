@@ -16,7 +16,7 @@ import (
 //	@Param		data	body		resources.UserRegistrationRequest	true	"user data"
 //	@Success	200		{object}	resources.UserRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/users/register [post]
+//	@Router		/users/auth/register [post]
 func (th *TokenHandler) UserRegister(c *gin.Context) {
 
 	var registerReq resources.UserRegistrationRequest

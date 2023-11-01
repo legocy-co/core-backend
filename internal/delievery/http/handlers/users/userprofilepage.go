@@ -1,4 +1,4 @@
-package marketplace
+package users
 
 import (
 	"github.com/gin-gonic/gin"
@@ -38,9 +38,9 @@ func NewUserProfilePageHandler(
 //	@ID			detail_user_profile_page
 //	@Param		userID	path	int	true	"user ID"
 //	@Produce	json
-//	@Success	200	{object}	marketplace.UserProfilePageResponse
+//	@Success	200	{object}	users.UserProfilePageResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-profile-pages/{userID} [get]
+//	@Router		/users/profile/{userID} [get]
 //
 //	@Security	JWT
 func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
@@ -67,9 +67,9 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 
 	userReviews, err := h.userReviewService.UserReviewsBySellerID(c, userID)
 
-	userReviewsResponse := make([]marketplace.UserReviewResponse, 0, len(userReviews))
+	userReviewsResponse := make([]users.UserReviewResponse, 0, len(userReviews))
 	for _, ur := range userReviews {
-		userReviewsResponse = append(userReviewsResponse, marketplace.GetUserReviewResponse(ur))
+		userReviewsResponse = append(userReviewsResponse, users.GetUserReviewResponse(ur))
 	}
 
 	userImages, err := h.userImageService.GetUserImages(c, userID)
@@ -79,7 +79,7 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		userImagesResponse = append(userImagesResponse, users.GetUserInfoResponse(ui))
 	}
 
-	userProfilePageResponse := marketplace.GetUserProfilePageResponse(
+	userProfilePageResponse := users.GetUserProfilePageResponse(
 		marketItemsResponse, userResponse, userReviewsResponse, userImagesResponse)
 	c.JSON(http.StatusOK, userProfilePageResponse)
 }

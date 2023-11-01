@@ -1,11 +1,11 @@
-package marketplace
+package users
 
 import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
-	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/pagination"
+	"legocy-go/internal/delievery/http/resources/users"
 	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
@@ -33,7 +33,7 @@ func NewUserReviewHandler(
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/ [get]
+//	@Router		/users/reviews/ [get]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
@@ -54,9 +54,9 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 		return
 	}
 
-	userReviewResponse := make([]marketplace.UserReviewResponse, 0, len(userReviews))
+	userReviewResponse := make([]users.UserReviewResponse, 0, len(userReviews))
 	for _, m := range userReviews {
-		userReviewResponse = append(userReviewResponse, marketplace.GetUserReviewResponse(m))
+		userReviewResponse = append(userReviewResponse, users.GetUserReviewResponse(m))
 	}
 
 	response := resources.DataMetaResponse{
@@ -74,9 +74,9 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 //	@ID			detail_user_review
 //	@Param		reviewID	path	int	true	"review ID"
 //	@Produce	json
-//	@Success	200	{object}	marketplace.UserReviewResponse
+//	@Success	200	{object}	users.UserReviewResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/{reviewID} [get]
+//	@Router		/users/reviews/{reviewID} [get]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
@@ -92,7 +92,7 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 		return
 	}
 
-	userReviewResponse := marketplace.GetUserReviewResponse(userReview)
+	userReviewResponse := users.GetUserReviewResponse(userReview)
 	c.JSON(http.StatusOK, userReviewResponse)
 }
 
@@ -101,11 +101,11 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 //	@Summary	Create User Review
 //	@Tags		user_reviews
 //	@ID			create_user_review
-//	@Param		data	body	marketplace.UserReviewRequest	true	"data"
+//	@Param		data	body	users.UserReviewRequest	true	"data"
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/ [post]
+//	@Router		/users/reviews/ [post]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
@@ -118,7 +118,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 		return
 	}
 
-	var reviewRequest *marketplace.UserReviewRequest
+	var reviewRequest *users.UserReviewRequest
 	if err := c.ShouldBindJSON(&reviewRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -153,7 +153,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	map[string]bool
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/{reviewId} [delete]
+//	@Router		/users/reviews/{reviewId} [delete]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {

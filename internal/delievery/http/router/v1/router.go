@@ -61,10 +61,7 @@ func InitRouter(app *app.App) V1router {
 	v1Admin := r.Group("/api/v1/admin")
 
 	//users.go
-	router.addAuth(v1, app.GetUserService())
-
-	//user_images.go
-	router.addUserImages(v1, app)
+	router.addUsers(v1, app)
 
 	//legoseries.go
 	router.addLegoSeries(v1, app.GetLegoSeriesService())
@@ -80,12 +77,6 @@ func InitRouter(app *app.App) V1router {
 
 	//marketitem.go
 	router.addMarketItems(v1, app)
-
-	//userreview.go
-	router.addUserReviews(v1, app)
-
-	//userprofilepage.go
-	router.addUserProfilePages(v1, app)
 
 	//admin_market_item.go
 	router.addAdminMarketItems(v1Admin, app.GetMarketItemAdminService())

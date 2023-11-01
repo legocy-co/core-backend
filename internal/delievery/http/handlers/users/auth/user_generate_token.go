@@ -17,7 +17,7 @@ import (
 //	@Param		data	body		resources.JWTRequest	true	"jwt request"
 //	@Success	200		{object}	resources.JWTResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/users/token [post]
+//	@Router		/users/auth/token [post]
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
 	var jwtRequest resources.JWTRequest

@@ -1,7 +1,6 @@
-package marketplace
+package users
 
 import (
-	"legocy-go/internal/delievery/http/resources/users"
 	models "legocy-go/internal/domain/marketplace/models"
 	"time"
 )
@@ -23,12 +22,12 @@ func (r *UserReviewRequest) ToUserReviewValueObject(reviewerID int) (*models.Use
 }
 
 type UserReviewResponse struct {
-	ID       int                      `json:"id"`
-	Rating   int                      `json:"rating"`
-	Message  string                   `json:"message"`
-	Date     string                   `json:"date"`
-	Seller   users.UserDetailResponse `json:"seller"`
-	Reviewer users.UserDetailResponse `json:"reviewer"`
+	ID       int                `json:"id"`
+	Rating   int                `json:"rating"`
+	Message  string             `json:"message"`
+	Date     string             `json:"date"`
+	Seller   UserDetailResponse `json:"seller"`
+	Reviewer UserDetailResponse `json:"reviewer"`
 }
 
 func GetUserReviewResponse(m *models.UserReview) UserReviewResponse {
@@ -37,7 +36,7 @@ func GetUserReviewResponse(m *models.UserReview) UserReviewResponse {
 		Rating:   m.Rating,
 		Message:  m.Message,
 		Date:     m.Date,
-		Seller:   users.GetUserDetailResponse(&m.Seller),
-		Reviewer: users.GetUserDetailResponse(&m.Reviewer),
+		Seller:   GetUserDetailResponse(&m.Seller),
+		Reviewer: GetUserDetailResponse(&m.Reviewer),
 	}
 }
