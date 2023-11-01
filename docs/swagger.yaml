@@ -271,23 +271,6 @@ definitions:
           $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
         type: array
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserProfilePageResponse:
-    properties:
-      marketItems:
-        items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
-        type: array
-      user:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
-      userImages:
-        items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
-        type: array
-      userReviews:
-        items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewResponse'
-        type: array
-    type: object
   legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest:
     properties:
       email:
@@ -368,6 +351,23 @@ definitions:
         type: integer
       username:
         type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users_profile.UserProfilePageResponse:
+    properties:
+      marketItems:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+        type: array
+      user:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      userImages:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+        type: array
+      userReviews:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewResponse'
+        type: array
     type: object
   legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse:
     properties:
@@ -1454,7 +1454,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserProfilePageResponse'
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_profile.UserProfilePageResponse'
         "400":
           description: Bad Request
           schema:

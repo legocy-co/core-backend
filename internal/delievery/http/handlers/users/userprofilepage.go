@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
+	"legocy-go/internal/delievery/http/resources/users/profile"
 	s "legocy-go/internal/domain/marketplace/service"
 	ser "legocy-go/internal/domain/users/service"
 	"net/http"
@@ -38,7 +39,7 @@ func NewUserProfilePageHandler(
 //	@ID			detail_user_profile_page
 //	@Param		userID	path	int	true	"user ID"
 //	@Produce	json
-//	@Success	200	{object}	users.UserProfilePageResponse
+//	@Success	200	{object}	profile.UserProfilePageResponse
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/users/profile/{userID} [get]
 //
@@ -79,7 +80,7 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		userImagesResponse = append(userImagesResponse, users.GetUserInfoResponse(ui))
 	}
 
-	userProfilePageResponse := users.GetUserProfilePageResponse(
+	userProfilePageResponse := profile.GetUserProfilePageResponse(
 		marketItemsResponse, userResponse, userReviewsResponse, userImagesResponse)
 	c.JSON(http.StatusOK, userProfilePageResponse)
 }
