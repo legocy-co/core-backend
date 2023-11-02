@@ -5,6 +5,7 @@ import (
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
 	"legocy-go/internal/domain/collections/models"
+	"legocy-go/internal/domain/errors"
 	auth "legocy-go/internal/domain/users/models"
 )
 
@@ -16,10 +17,10 @@ func NewCollectionPostgresRepository(conn d.DataBaseConnection) CollectionPostgr
 	return CollectionPostgresRepository{conn: conn}
 }
 
-func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, error) {
+func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var userLegoSetsDB []*entities.UserLegoSetPostgres
@@ -31,7 +32,8 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 		Find(&userLegoSetsDB, "user_id = ?", userID)
 
 	if res.Error != nil {
-		return nil, res.Error
+		_error := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &_error
 	}
 
 	legoSetsDomain := make([]models.CollectionLegoSet, 0, len(userLegoSetsDB))
@@ -48,11 +50,11 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 }
 
 func (r CollectionPostgresRepository) AddSetToUserCollection(
-	c context.Context, userID int, collectionSet models.CollectionLegoSetValueObject) error {
+	c context.Context, userID int, collectionSet models.CollectionLegoSetValueObject) *errors.AppError {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -61,7 +63,8 @@ func (r CollectionPostgresRepository) AddSetToUserCollection(
 	result := tx.Create(entity)
 	if result.Error != nil {
 		tx.Rollback()
-		return result.Error
+		_error := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &_error
 	}
 
 	tx.Commit()
@@ -70,11 +73,11 @@ func (r CollectionPostgresRepository) AddSetToUserCollection(
 }
 
 func (r CollectionPostgresRepository) RemoveSetFromUserCollection(
-	c context.Context, userID int, collectionSetID int) error {
+	c context.Context, userID int, collectionSetID int) *errors.AppError {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -82,7 +85,8 @@ func (r CollectionPostgresRepository) RemoveSetFromUserCollection(
 	res := tx.Delete(&entities.UserLegoSetPostgres{UserID: userID}, collectionSetID)
 	if res != nil {
 		tx.Rollback()
-		return res.Error
+		_error := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return &_error
 	}
 
 	tx.Commit()
@@ -90,17 +94,18 @@ func (r CollectionPostgresRepository) RemoveSetFromUserCollection(
 }
 
 func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(
-	c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) error {
+	c context.Context, userID int, setID int, collectionSet models.CollectionLegoSetValueObject) *errors.AppError {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	var entity *entities.UserLegoSetPostgres
 	res := db.Model(entities.UserLegoSetPostgres{UserID: userID}).First(&entity, setID)
 	if res.Error != nil {
-		return res.Error
+		_error := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return &_error
 	}
 
 	tx := db.Begin()
@@ -109,17 +114,18 @@ func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(
 
 	if res.Error != nil {
 		tx.Rollback()
-		return res.Error
+		_error := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return &_error
 	}
 
 	tx.Commit()
 	return nil
 }
 
-func (r CollectionPostgresRepository) GetCollectionSetOwner(c context.Context, collectionSetID int) (int, error) {
+func (r CollectionPostgresRepository) GetCollectionSetOwner(c context.Context, collectionSetID int) (int, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return -1, d.ErrConnectionLost
+		return -1, &d.ErrConnectionLost
 	}
 
 	var ownerID int
@@ -127,5 +133,9 @@ func (r CollectionPostgresRepository) GetCollectionSetOwner(c context.Context, c
 		entities.UserLegoSetPostgres{},
 	).Where("id=?", collectionSetID).Select("user_id").First(&ownerID).Error
 
-	return ownerID, err
+	var _error *errors.AppError
+	if err != nil {
+		*_error = errors.NewAppError(errors.NotFoundError, err.Error())
+	}
+	return ownerID, _error
 }
