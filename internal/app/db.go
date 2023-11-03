@@ -5,8 +5,7 @@ import (
 	"gorm.io/gorm"
 	"legocy-go/config"
 	"legocy-go/internal/data"
-	postgres "legocy-go/internal/data/postgres"
-	storage "legocy-go/pkg/storage/client"
+	"legocy-go/internal/data/postgres"
 	"log"
 )
 
@@ -23,8 +22,4 @@ func (a *App) setDatabase(dbCfg *config.DatabaseConfig) {
 	}
 	conn.Init()
 	a.database = conn
-}
-
-func (a *App) GetImageStorageClient() storage.ImageStorage {
-	return storage.NewImageStorage(config.GetAppConfig().S3Host, config.GetAppConfig().S3Port)
 }
