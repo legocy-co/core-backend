@@ -7,7 +7,7 @@ import (
 	s "legocy-go/internal/domain/lego/service"
 )
 
-func (r V1router) addLegoSets(rg *gin.RouterGroup, service s.LegoSetUseCase) {
+func (r V1router) addLegoSets(rg *gin.RouterGroup, service s.LegoSetService) {
 	handler := h.NewLegoSetHandler(service)
 
 	sets := rg.Group("/sets").Use(m.Auth())

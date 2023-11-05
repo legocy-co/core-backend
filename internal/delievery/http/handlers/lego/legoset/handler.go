@@ -5,9 +5,9 @@ import (
 )
 
 type LegoSetHandler struct {
-	service s.LegoSetUseCase
+	service s.LegoSetService
 }
 
-func NewLegoSetHandler(service s.LegoSetUseCase) LegoSetHandler {
+func NewLegoSetHandler(service s.LegoSetService) LegoSetHandler {
 	return LegoSetHandler{service: service}
 }

@@ -21,8 +21,8 @@ func (a *App) GetLegoSeriesService() lego.LegoSeriesService {
 	return lego.NewLegoSeriesService(a.GetLegoSeriesRepo())
 }
 
-func (a *App) GetLegoSetService() lego.LegoSetUseCase {
-	return lego.NewLegoSetUseCase(a.GetLegoSetRepo())
+func (a *App) GetLegoSetService() lego.LegoSetService {
+	return lego.NewLegoSetService(a.GetLegoSetRepo())
 }
 
 func (a *App) GetLocationService() marketplace.LocationUseCase {
