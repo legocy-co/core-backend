@@ -2,6 +2,7 @@ package user_collection
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	v1 "legocy-go/internal/delievery/http/middleware"
 	"legocy-go/internal/delievery/http/resources/collections"
 	"net/http"
@@ -41,9 +42,10 @@ func (h UserLegoCollectionHandler) AddLegoSetToUserCollection(c *gin.Context) {
 		return
 	}
 
-	err = h.s.AddSetToUserCollection(c, userID, *vo)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
+	appErr := h.s.AddSetToUserCollection(c, userID, *vo)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

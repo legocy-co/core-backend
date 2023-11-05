@@ -7,6 +7,7 @@ const (
 	NotFoundError   = AppErrorType("notFound")
 	ValidationError = AppErrorType("validationFailed")
 	PermissionError = AppErrorType("accessDenied")
+	InternalError   = AppErrorType("internalError")
 )
 
 type AppError struct {

@@ -42,7 +42,7 @@ func (s UserCollectionService) UpdateUserCollectionSet(c context.Context, userID
 	return s.collectionRepository.UpdateUserCollectionSetByID(c, userID, collectionSetID, vo)
 }
 
-func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, *auth.User, error) {
+func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, *auth.User, *errors.AppError) {
 	userCollection, err := s.GetUserCollection(c, userID)
 	if err != nil {
 		return []models.LegoSetValuation{}, nil, err

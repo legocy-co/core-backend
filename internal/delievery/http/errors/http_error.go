@@ -20,7 +20,7 @@ func NewHttpResponseError(status int, message string) HttpResponseError {
 	return HttpResponseError{Status: status, Message: gin.H{"error": message}}
 }
 
-func (HttpResponseError) FromAppError(e errors.AppError) HttpResponseError {
+func FromAppError(e errors.AppError) HttpResponseError {
 	var status int = http.StatusInternalServerError
 
 	switch et := e.GetErrorType(); et {

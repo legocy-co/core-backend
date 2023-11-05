@@ -2,6 +2,7 @@ package user_collection
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	v1 "legocy-go/internal/delievery/http/middleware"
 	"legocy-go/internal/delievery/http/resources/collections"
 	"net/http"
@@ -28,9 +29,10 @@ func (h UserLegoCollectionHandler) GetUserCollection(c *gin.Context) {
 
 	userID := tokenPayload.ID
 
-	userCollection, err := h.s.GetUserCollection(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	userCollection, appErr := h.s.GetUserCollection(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

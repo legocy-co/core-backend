@@ -1,14 +1,19 @@
 package helpers
 
 import (
-	"errors"
 	"golang.org/x/crypto/bcrypt"
+	"legocy-go/internal/domain/errors"
 )
 
-var ErrHashError = errors.New("could not hash string")
+var ErrHashError = errors.NewAppError(errors.InternalError, "could not hash string")
 
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+func HashPassword(password string) (string, *errors.AppError) {
+	var err *errors.AppError
+	bytes, _e := bcrypt.GenerateFromPassword([]byte(password), 14)
+
+	if _e != nil {
+		*err = ErrHashError
+	}
 	return string(bytes), err
 }
 

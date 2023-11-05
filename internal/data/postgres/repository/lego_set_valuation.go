@@ -17,10 +17,10 @@ func NewLegoSetValuationPostgresRepository(conn d.DataBaseConnection) LegoSetVal
 	return LegoSetValuationPostgresRepository{conn: conn}
 }
 
-func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.Context, legoSetID int) ([]models.LegoSetValuation, error) {
+func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.Context, legoSetID int) ([]models.LegoSetValuation, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var setValuations []entities.LegoSetValuation
@@ -29,7 +29,8 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.C
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").Find(
 		&setValuations, "lego_set_id = ?", legoSetID)
 	if res.Error != nil {
-		return nil, errors.NewAppError(errors.ConflictError, res.Error.Error())
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &appErr
 	}
 
 	setValuationsDomain := make([]models.LegoSetValuation, 0, len(setValuations))
@@ -40,30 +41,31 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.C
 	return setValuationsDomain, nil
 }
 
-func (r LegoSetValuationPostgresRepository) GetLegoSetValuationByID(c context.Context, id int) (*models.LegoSetValuation, error) {
+func (r LegoSetValuationPostgresRepository) GetLegoSetValuationByID(c context.Context, id int) (*models.LegoSetValuation, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.LegoSetValuation
 	res := db.Model(
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(&entity, id)
 	if res.Error != nil {
-		return nil, errors.NewAppError(errors.ConflictError, res.Error.Error())
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &appErr
 	}
 
 	if entity == nil {
-		return nil, collections.ErrValuationNotFound
+		return nil, &collections.ErrValuationNotFound
 	}
 
 	return entity.ToLegoSetValuation(), nil
 }
 
-func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string, currencyID int) (*models.LegoSetValuation, error) {
+func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string, currencyID int) (*models.LegoSetValuation, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.LegoSetValuation
@@ -71,11 +73,12 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrenc
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(
 		&entity, "lego_set_id = ?", setID, "state = ?", setState, "currency_id = ?", currencyID)
 	if res.Error != nil {
-		return nil, errors.NewAppError(errors.ConflictError, res.Error.Error())
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &appErr
 	}
 
 	if entity == nil {
-		return nil, collections.ErrValuationNotFound
+		return nil, &collections.ErrValuationNotFound
 	}
 
 	return entity.ToLegoSetValuation(), nil
