@@ -2,6 +2,7 @@ package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/marketplace/admin"
 	"net/http"
 	"strconv"
@@ -40,9 +41,10 @@ func (h Handler) UpdateMarketItemByID(c *gin.Context) {
 		return
 	}
 
-	marketItemDomain, err := h.service.UpdateMarketItem(c, itemID, vo)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	marketItemDomain, appErr := h.service.UpdateMarketItem(c, itemID, vo)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

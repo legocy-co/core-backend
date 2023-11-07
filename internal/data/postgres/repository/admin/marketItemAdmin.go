@@ -4,7 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/marketplace/errors"
+	"legocy-go/internal/domain/errors"
+	e "legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/kafka"
 )
@@ -17,11 +18,11 @@ func NewMarketItemAdminPostgresRepository(conn d.DataBaseConnection) MarketItemA
 	return MarketItemAdminPostgresRepository{conn: conn}
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, error) {
+func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, *errors.AppError) {
 
 	db := m.conn.GetDB()
 	if db == nil {
-		return []*models.MarketItemAdmin{}, d.ErrConnectionLost
+		return []*models.MarketItemAdmin{}, &d.ErrConnectionLost
 	}
 
 	var itemsDB []*entities.MarketItemPostgres
@@ -35,7 +36,8 @@ func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]
 		Find(&itemsDB)
 
 	if res.Error != nil {
-		return []*models.MarketItemAdmin{}, res.Error
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return []*models.MarketItemAdmin{}, &appErr
 	}
 
 	marketItemsAdmin := make([]*models.MarketItemAdmin, 0, len(itemsDB))
@@ -47,10 +49,10 @@ func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]
 
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, error) {
+func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, *errors.AppError) {
 	db := m.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.MarketItemPostgres
@@ -60,53 +62,62 @@ func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, 
 		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
 	if result.Error != nil {
-		return nil, result.Error
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return nil, &appErr
 	}
 
 	return entity.ToMarketItemAdmin(), nil
 }
 
-func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) error {
+func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) *errors.AppError {
 	db := m.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	tx := db.Begin()
 
 	entity := entities.FromMarketItemAdminValueObject(*vo)
 	if entity == nil {
-		return d.ErrItemNotFound
+		return &d.ErrItemNotFound
 	}
 
 	result := tx.Create(&entity)
 
-	err := kafka.ProduceJSONEvent(
-		kafka.MARKET_ITEM_UPDATES_TOPIC, map[string]interface{}{
-			"itemID": int(entity.ID),
-		})
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
 	tx.Commit()
 
-	return result.Error
+	err := kafka.ProduceJSONEvent(
+		kafka.MARKET_ITEM_UPDATES_TOPIC,
+		map[string]interface{}{
+			"itemID": int(entity.ID),
+		},
+	)
+	if err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.InternalError, err.Error())
+		return &appErr
+	}
+
+	if result.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &appErr
+	}
+
+	return nil
 }
 
 func (m MarketItemAdminPostgresRepository) UpdateMarketItemByID(
-	c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, error) {
+	c context.Context, itemId int, vo *models.MarketItemAdminValueObject) (*models.MarketItemAdmin, *errors.AppError) {
 	db := m.conn.GetDB()
 
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.MarketItemPostgres
 	_ = db.First(&entity, itemId)
 	if entity == nil {
-		return nil, errors.ErrMarketItemsNotFound
+		return nil, &e.ErrMarketItemsNotFound
 	}
 
 	entityUpdated := entity.GetUpdatedMarketItemAdmin(*vo)
@@ -115,13 +126,18 @@ func (m MarketItemAdminPostgresRepository) UpdateMarketItemByID(
 	return m.GetMarketItemByID(c, itemId)
 }
 
-func (m MarketItemAdminPostgresRepository) DeleteMarketItemByID(c context.Context, itemId int) error {
+func (m MarketItemAdminPostgresRepository) DeleteMarketItemByID(c context.Context, itemId int) *errors.AppError {
 	db := m.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	result := db.Delete(entities.MarketItemPostgres{}, itemId)
-	return result.Error
+	if result.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &appErr
+	}
+
+	return nil
 }

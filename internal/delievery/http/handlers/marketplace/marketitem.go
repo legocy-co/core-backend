@@ -121,8 +121,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
@@ -154,8 +153,9 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	tokenString := middleware.GetAuthTokenHeader(c)
 	userPayload, ok := middleware.ParseTokenClaims(tokenString)
 	if !ok {
-		c.AbortWithStatusJSON(http.StatusUnauthorized,
-			gin.H{"error": "invalid token credentials"})
+		c.AbortWithStatusJSON(
+			http.StatusUnauthorized, gin.H{"error": "invalid token credentials"},
+		)
 		return
 	}
 
@@ -169,6 +169,7 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	vo, err := itemRequest.ToMarketItemValueObject(userPayload.ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
 	}
 
 	err = h.service.CreateMarketItem(c, vo)

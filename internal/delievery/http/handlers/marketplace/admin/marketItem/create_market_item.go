@@ -2,6 +2,7 @@ package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/marketplace/admin"
 	"net/http"
 )
@@ -32,9 +33,10 @@ func (h Handler) CreateMarketItem(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateMarketItem(c, vo)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
+	appErr := h.service.CreateMarketItem(c, vo)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
