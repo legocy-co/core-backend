@@ -4,6 +4,7 @@ import (
 	"context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/internal/domain/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/filter"
 )
@@ -18,14 +19,14 @@ func NewUserReviewPostgresRepository(
 }
 
 func (r UserReviewPostgresRepository) GetUserReviews(
-	c context.Context) ([]*models.UserReview, error) {
+	c context.Context) ([]*models.UserReview, *errors.AppError) {
 
 	var itemsDB []*entities.UserReviewPostgres
 	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	res := db.Model(&entities.UserReviewPostgres{}).
@@ -34,14 +35,16 @@ func (r UserReviewPostgresRepository) GetUserReviews(
 		Preload("Seller").
 		Find(&itemsDB)
 	if res.Error != nil {
-		return nil, res.Error
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &appErr
 	}
 
 	userReviews := make([]*models.UserReview, 0, len(itemsDB))
 	for _, entity := range itemsDB {
 		userReview, err := entity.ToUserReview()
 		if err != nil {
-			return nil, err
+			appErr := errors.NewAppError(errors.InternalError, err.Error())
+			return nil, &appErr
 		}
 
 		userReviews = append(userReviews, userReview)
@@ -51,11 +54,11 @@ func (r UserReviewPostgresRepository) GetUserReviews(
 }
 
 func (r UserReviewPostgresRepository) GetUserReviewByID(
-	c context.Context, id int) (*models.UserReview, error) {
+	c context.Context, id int) (*models.UserReview, *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.UserReviewPostgres
@@ -63,18 +66,26 @@ func (r UserReviewPostgresRepository) GetUserReviewByID(
 		Preload("Seller").
 		First(&entity, id)
 	if result.Error != nil {
-		return nil, result.Error
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return nil, &appErr
 	}
-	return entity.ToUserReview()
+
+	userReview, err := entity.ToUserReview()
+	if err != nil {
+		appErr := errors.NewAppError(errors.InternalError, err.Error())
+		return userReview, &appErr
+	}
+
+	return userReview, nil
 }
 
 func (r UserReviewPostgresRepository) GetUserReviewsBySellerID(
-	c context.Context, sellerID int) ([]*models.UserReview, error) {
+	c context.Context, sellerID int) ([]*models.UserReview, *errors.AppError) {
 
 	var userReviewsDB []*entities.UserReviewPostgres
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	result := db.Model(&entities.UserReviewPostgres{SellerPostgresID: uint(sellerID)}).
@@ -82,11 +93,12 @@ func (r UserReviewPostgresRepository) GetUserReviewsBySellerID(
 		Preload("Seller").
 		Find(&userReviewsDB, "seller_postgres_id = ?", sellerID)
 	if result.Error != nil {
-		return nil, result.Error
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return nil, &appErr
 	}
 
 	if len(userReviewsDB) == 0 {
-		return nil, d.ErrItemNotFound
+		return nil, &d.ErrItemNotFound
 	}
 
 	userReviews := make([]*models.UserReview, 0, len(userReviewsDB))
@@ -104,46 +116,63 @@ func (r UserReviewPostgresRepository) GetUserReviewsBySellerID(
 }
 
 func (r UserReviewPostgresRepository) GetReviewerID(
-	c context.Context, id int) (int, error) {
+	c context.Context, id int) (int, *errors.AppError) {
 
 	var count int
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return count, d.ErrConnectionLost
+		return count, &d.ErrConnectionLost
 	}
 
 	err := db.Model(entities.UserReviewPostgres{}).
 		Where("id = ?", id).Select("user_postgres_id").First(&count).Error
 
-	return count, err
+	var appErr *errors.AppError
+	if err != nil {
+		*appErr = errors.NewAppError(errors.ConflictError, err.Error())
+	}
+
+	return count, appErr
 }
 
 func (r UserReviewPostgresRepository) CreateUserReview(
-	c context.Context, review *models.UserReviewValueObject) error {
+	c context.Context, review *models.UserReviewValueObject) *errors.AppError {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	entity := entities.FromUserReviewValueObject(review)
 	if entity == nil {
-		return d.ErrItemNotFound
+		return &d.ErrItemNotFound
 	}
 
 	result := db.Create(&entity)
-	return result.Error
+
+	var appErr *errors.AppError
+	if result.Error != nil {
+		*appErr = errors.NewAppError(errors.ConflictError, result.Error.Error())
+	}
+
+	return appErr
 }
 
-func (r UserReviewPostgresRepository) DeleteUserReview(c context.Context, id int) error {
+func (r UserReviewPostgresRepository) DeleteUserReview(c context.Context, id int) *errors.AppError {
 
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	result := db.Delete(entities.UserReviewPostgres{}, id)
-	return result.Error
+
+	var appErr *errors.AppError
+	if result.Error != nil {
+		*appErr = errors.NewAppError(errors.ConflictError, result.Error.Error())
+	}
+
+	return appErr
 }

@@ -2,6 +2,7 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
 	"legocy-go/internal/delievery/http/resources/users/profile"
@@ -66,7 +67,12 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 
 	userResponse := users.GetUserDetailResponse(user)
 
-	userReviews, err := h.userReviewService.UserReviewsBySellerID(c, userID)
+	userReviews, appErr := h.userReviewService.UserReviewsBySellerID(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
 
 	userReviewsResponse := make([]users.UserReviewResponse, 0, len(userReviews))
 	for _, ur := range userReviews {

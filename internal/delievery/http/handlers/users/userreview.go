@@ -2,11 +2,11 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/pagination"
 	"legocy-go/internal/delievery/http/resources/users"
-	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
 	"net/http"
@@ -43,14 +43,8 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 	var userReviews []*models.UserReview
 	userReviews, err := h.service.ListUserReviews(ctx)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest,
-			gin.H{"error": err.Error()})
-	}
-
-	if len(userReviews) == 0 {
-		c.AbortWithStatusJSON(
-			http.StatusNotFound,
-			gin.H{"error": errors.ErrUserReviewsNotFound.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -86,9 +80,10 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 		return
 	}
 
-	userReview, err := h.service.UserReviewDetail(c, reviewID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	userReview, appErr := h.service.UserReviewDetail(c, reviewID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -131,9 +126,10 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateUserReview(c, userReviewValueObject)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	appErr := h.service.CreateUserReview(c, userReviewValueObject)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -163,10 +159,11 @@ func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {
 		return
 	}
 
-	err = h.service.DeleteUserReview(c, reviewID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError,
-			"Error deleting UserReview object")
+	appErr := h.service.DeleteUserReview(c, reviewID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]bool{"status": true})
