@@ -9,8 +9,8 @@ import (
 	useradmin "legocy-go/internal/domain/users/service/admin"
 )
 
-func (a *App) GetUserService() users.UserUseCase {
-	return users.NewUserUsecase(a.GetUserRepo())
+func (a *App) GetUserService() users.UserService {
+	return users.NewUserService(a.GetUserRepo())
 }
 
 func (a *App) GetUserImagesService() users.UserImageUseCase {

@@ -14,14 +14,14 @@ import (
 
 type UserProfilePageHandler struct {
 	marketItemService s.MarketItemService
-	userService       ser.UserUseCase
+	userService       ser.UserService
 	userReviewService s.UserReviewService
 	userImageService  ser.UserImageUseCase
 }
 
 func NewUserProfilePageHandler(
 	marketItemService s.MarketItemService,
-	userService ser.UserUseCase,
+	userService ser.UserService,
 	userReviewService s.UserReviewService,
 	userImageService ser.UserImageUseCase) UserProfilePageHandler {
 

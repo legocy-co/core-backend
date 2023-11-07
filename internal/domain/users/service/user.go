@@ -3,30 +3,31 @@ package service
 import (
 	"context"
 	res "legocy-go/internal/delievery/http/resources/users"
+	"legocy-go/internal/domain/errors"
 	models "legocy-go/internal/domain/users/models"
 	r "legocy-go/internal/domain/users/repository"
 )
 
-type UserUseCase struct {
+type UserService struct {
 	repo r.UserRepository
 }
 
-func NewUserUsecase(repo r.UserRepository) UserUseCase {
-	return UserUseCase{repo: repo}
+func NewUserService(repo r.UserRepository) UserService {
+	return UserService{repo: repo}
 }
 
-func (s *UserUseCase) ValidateUser(c context.Context, req res.JWTRequest) error {
+func (s *UserService) ValidateUser(c context.Context, req res.JWTRequest) *errors.AppError {
 	return s.repo.ValidateUser(c, req.Email, req.Password)
 }
 
-func (s *UserUseCase) CreateUser(c context.Context, u *models.User, password string) error {
+func (s *UserService) CreateUser(c context.Context, u *models.User, password string) *errors.AppError {
 	return s.repo.CreateUser(c, u, password)
 }
 
-func (s *UserUseCase) GetUserByEmail(c context.Context, email string) (*models.User, error) {
+func (s *UserService) GetUserByEmail(c context.Context, email string) (*models.User, *errors.AppError) {
 	return s.repo.GetUserByEmail(c, email)
 }
 
-func (s *UserUseCase) GetUserByID(c context.Context, id int) (*models.User, error) {
+func (s *UserService) GetUserByID(c context.Context, id int) (*models.User, *errors.AppError) {
 	return s.repo.GetUserByID(c, id)
 }

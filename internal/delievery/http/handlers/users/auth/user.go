@@ -6,9 +6,9 @@ import (
 )
 
 type TokenHandler struct {
-	service ser.UserUseCase
+	service ser.UserService
 }
 
-func NewTokenHandler(service ser.UserUseCase) TokenHandler {
+func NewTokenHandler(service ser.UserService) TokenHandler {
 	return TokenHandler{service: service}
 }
