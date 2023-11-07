@@ -4,6 +4,7 @@ import (
 	"golang.org/x/net/context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/internal/domain/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 
@@ -15,12 +16,12 @@ func NewCurrencyPostgresRepository(conn d.DataBaseConnection) *CurrencyPostgresR
 	return &CurrencyPostgresRepository{conn: conn}
 }
 
-func (cpr *CurrencyPostgresRepository) GetCurrencies(c context.Context) ([]*models.Currency, error) {
+func (cpr *CurrencyPostgresRepository) GetCurrencies(c context.Context) ([]*models.Currency, *errors.AppError) {
 	var currenciesDB []*entities.CurrencyPostgres
 	db := cpr.conn.GetDB()
 
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	db.Find(&currenciesDB)
@@ -33,34 +34,40 @@ func (cpr *CurrencyPostgresRepository) GetCurrencies(c context.Context) ([]*mode
 	return currencies, nil
 }
 
-func (cpr *CurrencyPostgresRepository) GetCurrency(c context.Context, symbol string) (*models.Currency, error) {
+func (cpr *CurrencyPostgresRepository) GetCurrency(c context.Context, symbol string) (*models.Currency, *errors.AppError) {
 	var currency *models.Currency
 	var currencyDB *entities.CurrencyPostgres
 	db := cpr.conn.GetDB()
 
 	if db == nil {
-		return currency, d.ErrConnectionLost
+		return currency, &d.ErrConnectionLost
 	}
 
 	db.Model(entities.CurrencyPostgres{}).First(&currencyDB,
 		entities.CurrencyPostgres{Symbol: symbol})
 
 	if currencyDB == nil {
-		return currency, d.ErrItemNotFound
+		return currency, &d.ErrItemNotFound
 	}
 
 	currency = currencyDB.ToCurrency()
 	return currency, nil
 }
 
-func (cpr *CurrencyPostgresRepository) CreateCurrency(c context.Context, currency *models.CurrencyValueObject) error {
+func (cpr *CurrencyPostgresRepository) CreateCurrency(c context.Context, currency *models.CurrencyValueObject) *errors.AppError {
 	db := cpr.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	var entity *entities.CurrencyPostgres = entities.FromCurrencyValueObject(currency)
 	result := db.Create(&entity)
-	return result.Error
+
+	var err *errors.AppError
+	if result.Error != nil {
+		*err = errors.NewAppError(errors.ConflictError, result.Error.Error())
+	}
+
+	return err
 }
