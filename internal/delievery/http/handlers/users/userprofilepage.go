@@ -59,9 +59,10 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		marketItemsResponse = append(marketItemsResponse, marketplace.GetMarketItemResponse(mi))
 	}
 
-	user, err := h.userService.GetUserByID(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	user, appErr := h.userService.GetUserByID(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

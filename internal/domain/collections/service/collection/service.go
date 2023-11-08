@@ -62,8 +62,8 @@ func (s UserCollectionService) GetUserCollectionValuation(c context.Context, use
 		setValuations = append(setValuations, *setValuation)
 	}
 
-	user, e := s.usersRepository.GetUserByID(c, userID)
-	if e != nil {
+	user, err := s.usersRepository.GetUserByID(c, userID)
+	if err != nil {
 		return nil, nil, err
 	}
 

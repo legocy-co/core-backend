@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	_ "legocy-go/docs"
+	"legocy-go/internal/delievery/http/errors"
 	jwt "legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources/users"
 	"net/http"
@@ -27,21 +28,23 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 		return
 	}
 
-	err := th.service.ValidateUser(c.Request.Context(), jwtRequest)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	appErr := th.service.ValidateUser(c.Request.Context(), jwtRequest)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	user, err := th.service.GetUserByEmail(c.Request.Context(), jwtRequest.Email)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	user, appErr := th.service.GetUserByEmail(c.Request.Context(), jwtRequest.Email)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
 	token, err := jwt.GenerateJWT(user.Email, user.ID, user.Role)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
