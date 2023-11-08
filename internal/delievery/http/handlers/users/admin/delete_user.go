@@ -22,7 +22,7 @@ import (
 //
 //	@Security	ApiKeyAuth
 //	@param		Authorization	header	string	true	"Authorization"
-func (uah *UserAdminHandler) DeleteUser(c *gin.Context) {
+func (h *UserAdminHandler) DeleteUser(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -30,7 +30,7 @@ func (uah *UserAdminHandler) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	appErr := uah.service.DeleteUser(c, userID)
+	appErr := h.service.DeleteUser(c, userID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

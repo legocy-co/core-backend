@@ -20,7 +20,7 @@ import (
 //
 //	@Security	ApiKeyAuth
 //	@param		Authorization	header	string	true	"Authorization"
-func (uah *UserAdminHandler) AdminRegister(c *gin.Context) {
+func (h *UserAdminHandler) AdminRegister(c *gin.Context) {
 
 	var registerReq resources.AdminRegistrationRequest
 
@@ -30,7 +30,7 @@ func (uah *UserAdminHandler) AdminRegister(c *gin.Context) {
 	}
 
 	userAdmin := registerReq.ToAdmin()
-	if appErr := uah.service.CreateAdmin(c, userAdmin, registerReq.Password); appErr != nil {
+	if appErr := h.service.CreateAdmin(c, userAdmin, registerReq.Password); appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return

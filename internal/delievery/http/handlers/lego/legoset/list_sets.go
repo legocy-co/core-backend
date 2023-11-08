@@ -3,7 +3,7 @@ package legoset
 import (
 	"github.com/gin-gonic/gin"
 	_ "legocy-go/docs"
-	v1 "legocy-go/internal/delievery/http/resources"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/pagination"
 	"net/http"
@@ -26,18 +26,14 @@ func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
 
 	setsList, err := lsh.service.ListLegoSets(ctx)
 	if err != nil {
-		v1.ErrorRespond(c.Writer, err.Error())
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
 	setsResponse := make([]lego.LegoSetResponse, 0, len(setsList))
 	for _, legoSet := range setsList {
 		setsResponse = append(setsResponse, lego.GetLegoSetResponse(legoSet))
-	}
-
-	if len(setsResponse) == 0 {
-		v1.ErrorRespond(c.Writer, "No data found")
-		return
 	}
 
 	c.JSON(http.StatusOK, setsResponse)

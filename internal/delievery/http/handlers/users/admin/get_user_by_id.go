@@ -21,7 +21,7 @@ import (
 //	@Router		/admin/users/{userId} [get]
 //
 //	@Security	JWT
-func (uah *UserAdminHandler) GetUserByID(c *gin.Context) {
+func (h *UserAdminHandler) GetUserByID(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
@@ -29,7 +29,7 @@ func (uah *UserAdminHandler) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	userDomain, appErr := uah.service.GetUserByID(c, userID)
+	userDomain, appErr := h.service.GetUserByID(c, userID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

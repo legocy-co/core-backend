@@ -19,10 +19,10 @@ import (
 //	@Router		/admin/users/ [get]
 //
 //	@Security	JWT
-func (uah *UserAdminHandler) GetUsersAdmin(c *gin.Context) {
+func (h *UserAdminHandler) GetUsersAdmin(c *gin.Context) {
 	var users []*models.UserAdmin
 
-	users, err := uah.service.GetUsers(c)
+	users, err := h.service.GetUsers(c)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

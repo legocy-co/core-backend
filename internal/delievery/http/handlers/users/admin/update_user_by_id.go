@@ -22,7 +22,7 @@ import (
 //
 //	@Security	ApiKeyAuth
 //	@param		Authorization	header	string	true	"Authorization"
-func (uah *UserAdminHandler) UpdateUserByID(c *gin.Context) {
+func (h *UserAdminHandler) UpdateUserByID(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -42,7 +42,7 @@ func (uah *UserAdminHandler) UpdateUserByID(c *gin.Context) {
 		return
 	}
 
-	userDomain, appErr := uah.service.UpdateUser(c, userID, vo)
+	userDomain, appErr := h.service.UpdateUser(c, userID, vo)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
