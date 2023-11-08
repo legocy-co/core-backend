@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"net/http"
 	"strconv"
 )
@@ -29,9 +30,11 @@ func (uah *UserAdminHandler) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	err = uah.service.DeleteUser(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	appErr := uah.service.DeleteUser(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]bool{"status": true})

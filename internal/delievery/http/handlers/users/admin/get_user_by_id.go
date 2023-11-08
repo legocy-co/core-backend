@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/users/admin"
 	"net/http"
 	"strconv"
@@ -28,9 +29,10 @@ func (uah *UserAdminHandler) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	userDomain, err := uah.service.GetUserByID(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	userDomain, appErr := uah.service.GetUserByID(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 	}
 
 	userResponse := admin.GetUserAdminDetailResponse(userDomain)

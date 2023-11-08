@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	resources "legocy-go/internal/delievery/http/resources/users/admin"
 	"net/http"
 )
@@ -29,8 +30,9 @@ func (uah *UserAdminHandler) AdminRegister(c *gin.Context) {
 	}
 
 	userAdmin := registerReq.ToAdmin()
-	if err := uah.service.CreateAdmin(c, userAdmin, registerReq.Password); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if appErr := uah.service.CreateAdmin(c, userAdmin, registerReq.Password); appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
