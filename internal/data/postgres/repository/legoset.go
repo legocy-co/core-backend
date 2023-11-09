@@ -5,6 +5,7 @@ import (
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
 	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/domain/lego"
 	models "legocy-go/internal/domain/lego/models"
 	"legocy-go/pkg/filter"
 )
@@ -74,10 +75,15 @@ func (r LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*m
 	}
 
 	var entity *entities.LegoSetPostgres
-	_err := db.Preload("LegoSeries").First(&entity, id).Error
-	if _err != nil {
-		*err = errors.NewAppError(errors.NotFoundError, _err.Error())
-		return legoSet, err
+	query := db.Preload("LegoSeries").First(&entity, id)
+
+	if query.Error != nil {
+		*err = errors.NewAppError(errors.NotFoundError, query.Error.Error())
+		return nil, err
+	}
+
+	if query.RowsAffected == 0 {
+		return nil, &lego.ErrLegoSetsNotFound
 	}
 
 	legoSet = entity.ToLegoSet()

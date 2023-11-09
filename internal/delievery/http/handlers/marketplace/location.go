@@ -2,6 +2,7 @@ package marketplace
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	s "legocy-go/internal/domain/marketplace/service"
@@ -31,8 +32,8 @@ func NewLocationHandler(service s.LocationUseCase) LocationHandler {
 func (h *LocationHandler) ListLocations(c *gin.Context) {
 	locationsList, err := h.service.ListLocations(c)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -58,9 +59,8 @@ func (h *LocationHandler) ListLocations(c *gin.Context) {
 //	@Security	JWT
 func (h *LocationHandler) CreateLocation(c *gin.Context) {
 	var locationRequest marketplace.LocationRequest
-	if err := c.ShouldBindJSON(&locationRequest); err != nil {
-		c.JSON(http.StatusBadRequest, "Invalid request body")
-		c.Abort()
+	if _err := c.ShouldBindJSON(&locationRequest); _err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid request body")
 		return
 	}
 
@@ -68,7 +68,6 @@ func (h *LocationHandler) CreateLocation(c *gin.Context) {
 	err := h.service.CreateLocation(c, locationValueObject)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
-		c.Abort()
 		return
 	}
 
@@ -98,8 +97,8 @@ func (h *LocationHandler) CountryLocations(c *gin.Context) {
 
 	locations, err := h.service.CountryLocations(c.Request.Context(), country)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -129,17 +128,16 @@ func (h *LocationHandler) CountryLocations(c *gin.Context) {
 //
 //	@Security	JWT
 func (h *LocationHandler) LocationDelete(c *gin.Context) {
-	locID, err := strconv.Atoi(c.Param("locID"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+	locID, _err := strconv.Atoi(c.Param("locID"))
+	if _err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
-	err = h.service.DeleteLocation(c.Request.Context(), locID)
+	err := h.service.DeleteLocation(c.Request.Context(), locID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
-		c.Abort()
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

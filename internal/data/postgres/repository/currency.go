@@ -43,8 +43,7 @@ func (cpr *CurrencyPostgresRepository) GetCurrency(c context.Context, symbol str
 		return currency, &d.ErrConnectionLost
 	}
 
-	db.Model(entities.CurrencyPostgres{}).First(&currencyDB,
-		entities.CurrencyPostgres{Symbol: symbol})
+	db.Model(entities.CurrencyPostgres{}).First(&currencyDB, "symbol = ?", symbol)
 
 	if currencyDB == nil {
 		return currency, &d.ErrItemNotFound

@@ -55,8 +55,8 @@ func (r UserAdminPostgresRepository) GetUserByID(
 	var userAdmin *models.UserAdmin
 
 	var entity *entities.UserPostgres
-	db.First(&entity, id)
-	if entity == nil {
+	ok := db.First(&entity, id).RowsAffected > 0
+	if !ok {
 		return userAdmin, &e.ErrUserNotFound
 	}
 

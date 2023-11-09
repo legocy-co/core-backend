@@ -56,14 +56,19 @@ func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, 
 	}
 
 	var entity *entities.MarketItemPostgres
-	result := db.Preload("Seller").
+	query := db.Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
 		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
-	if result.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+	if query.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
 		return nil, &appErr
+	}
+
+	// Not Found
+	if query.RowsAffected == 0 {
+		return nil, &e.ErrMarketItemsNotFound
 	}
 
 	return entity.ToMarketItemAdmin(), nil

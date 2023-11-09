@@ -32,8 +32,8 @@ func (l legoSet) toLegoSetValueObject(
 		return nil
 	}
 
-	setNumber, err := strconv.Atoi(l.SetNumber)
-	if err != nil {
+	setNumber, _err := strconv.Atoi(l.SetNumber)
+	if _err != nil {
 		return nil
 	}
 
