@@ -1,9 +1,11 @@
-package marketplace
+package users
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
+	"legocy-go/internal/delievery/http/resources/users/profile"
 	s "legocy-go/internal/domain/marketplace/service"
 	ser "legocy-go/internal/domain/users/service"
 	"net/http"
@@ -12,14 +14,14 @@ import (
 
 type UserProfilePageHandler struct {
 	marketItemService s.MarketItemService
-	userService       ser.UserUseCase
+	userService       ser.UserService
 	userReviewService s.UserReviewService
 	userImageService  ser.UserImageUseCase
 }
 
 func NewUserProfilePageHandler(
 	marketItemService s.MarketItemService,
-	userService ser.UserUseCase,
+	userService ser.UserService,
 	userReviewService s.UserReviewService,
 	userImageService ser.UserImageUseCase) UserProfilePageHandler {
 
@@ -38,9 +40,9 @@ func NewUserProfilePageHandler(
 //	@ID			detail_user_profile_page
 //	@Param		userID	path	int	true	"user ID"
 //	@Produce	json
-//	@Success	200	{object}	marketplace.UserProfilePageResponse
+//	@Success	200	{object}	profile.UserProfilePageResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-profile-pages/{userID} [get]
+//	@Router		/users/profile/{userID} [get]
 //
 //	@Security	JWT
 func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
@@ -57,19 +59,25 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		marketItemsResponse = append(marketItemsResponse, marketplace.GetMarketItemResponse(mi))
 	}
 
-	user, err := h.userService.GetUserByID(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	user, appErr := h.userService.GetUserByID(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
 	userResponse := users.GetUserDetailResponse(user)
 
-	userReviews, err := h.userReviewService.UserReviewsBySellerID(c, userID)
+	userReviews, appErr := h.userReviewService.UserReviewsBySellerID(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
 
-	userReviewsResponse := make([]marketplace.UserReviewResponse, 0, len(userReviews))
+	userReviewsResponse := make([]users.UserReviewResponse, 0, len(userReviews))
 	for _, ur := range userReviews {
-		userReviewsResponse = append(userReviewsResponse, marketplace.GetUserReviewResponse(ur))
+		userReviewsResponse = append(userReviewsResponse, users.GetUserReviewResponse(ur))
 	}
 
 	userImages, err := h.userImageService.GetUserImages(c, userID)
@@ -79,7 +87,7 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		userImagesResponse = append(userImagesResponse, users.GetUserInfoResponse(ui))
 	}
 
-	userProfilePageResponse := marketplace.GetUserProfilePageResponse(
+	userProfilePageResponse := profile.GetUserProfilePageResponse(
 		marketItemsResponse, userResponse, userReviewsResponse, userImagesResponse)
 	c.JSON(http.StatusOK, userProfilePageResponse)
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/internal/domain/errors"
 	e "legocy-go/internal/domain/users/errors"
 	models "legocy-go/internal/domain/users/models"
 	h "legocy-go/pkg/helpers"
@@ -18,29 +19,35 @@ func NewUserPostgresRepository(conn d.DataBaseConnection) UserPostgresRepository
 	return UserPostgresRepository{conn: conn}
 }
 
-func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, password string) error {
+func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, password string) *errors.AppError {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 	passwordHash, err := h.HashPassword(password)
 	if err != nil {
-		return h.ErrHashError
+		return &h.ErrHashError
 	}
 
 	var entity entities.UserPostgres = *entities.FromUser(u, passwordHash)
 
 	result := db.Create(&entity)
-	return result.Error
+
+	if result.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &appErr
+	}
+
+	return nil
 }
 
-func (r UserPostgresRepository) ValidateUser(c context.Context, email, password string) error {
+func (r UserPostgresRepository) ValidateUser(c context.Context, email, password string) *errors.AppError {
 
 	db := r.conn.GetDB()
 	if db == nil {
 		fmt.Println("Error Connecting to database!")
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	var entity *entities.UserPostgres
@@ -48,23 +55,23 @@ func (r UserPostgresRepository) ValidateUser(c context.Context, email, password 
 
 	if entity == nil {
 		fmt.Printf("User with email = %v not found", email)
-		return e.ErrUserNotFound
+		return &e.ErrUserNotFound
 	}
 
 	passwordsMatched := h.CheckPasswordHash(password, entity.Password)
 	if !passwordsMatched {
-		return e.ErrWrongPassword
+		return &e.ErrWrongPassword
 	}
 
 	return nil
 }
 
-func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, error) {
+func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, *errors.AppError) {
 	var usersDb []*entities.UserPostgres
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	db.Find(usersDb)
@@ -74,55 +81,55 @@ func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, err
 		users = append(users, userDb.ToUser())
 	}
 
-	var errOutput error
+	var errOutput *errors.AppError
 
 	if len(users) == 0 {
-		errOutput = e.ErrUserNotFound
+		errOutput = &e.ErrUserNotFound
 	}
 
 	return users, errOutput
 }
 
-func (r UserPostgresRepository) GetUserByEmail(c context.Context, email string) (*models.User, error) {
+func (r UserPostgresRepository) GetUserByEmail(c context.Context, email string) (*models.User, *errors.AppError) {
 	var user *models.User
 	var entity *entities.UserPostgres
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return user, d.ErrConnectionLost
+		return user, &d.ErrConnectionLost
 	}
 
 	db.Where("email = ?", email).First(&entity)
 	if entity == nil {
-		return user, e.ErrUserNotFound
+		return user, &e.ErrUserNotFound
 	}
 
 	user = entity.ToUser()
 	return user, nil
 }
 
-func (r UserPostgresRepository) GetUserByID(c context.Context, id int) (*models.User, error) {
+func (r UserPostgresRepository) GetUserByID(c context.Context, id int) (*models.User, *errors.AppError) {
 	var user *models.User
 	var entity *entities.UserPostgres
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return user, d.ErrConnectionLost
+		return user, &d.ErrConnectionLost
 	}
 
 	db.First(&entity, id)
 	if entity == nil {
-		return user, e.ErrUserNotFound
+		return user, &e.ErrUserNotFound
 	}
 
 	user = entity.ToUser()
 	return user, nil
 }
 
-func (r UserPostgresRepository) DeleteUser(c context.Context, id int) error {
+func (r UserPostgresRepository) DeleteUser(c context.Context, id int) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	db.Delete(&entities.UserPostgres{}, id)

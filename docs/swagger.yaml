@@ -166,47 +166,6 @@ definitions:
       status:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse:
-    properties:
-      marketItems:
-        items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
-        type: array
-      user:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
-      userImages:
-        items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
-        type: array
-      userReviews:
-        items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserReviewResponse'
-        type: array
-    type: object
-  legocy-go_internal_delievery_http_resources_marketplace.UserReviewRequest:
-    properties:
-      message:
-        type: string
-      rating:
-        type: integer
-      seller_id:
-        type: integer
-    type: object
-  legocy-go_internal_delievery_http_resources_marketplace.UserReviewResponse:
-    properties:
-      date:
-        type: string
-      id:
-        type: integer
-      message:
-        type: string
-      rating:
-        type: integer
-      reviewer:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
-      seller:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
-    type: object
   legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest:
     properties:
       currency_id:
@@ -330,6 +289,30 @@ definitions:
       username:
         type: string
     type: object
+  legocy-go_internal_delievery_http_resources_users.UserReviewRequest:
+    properties:
+      message:
+        type: string
+      rating:
+        type: integer
+      seller_id:
+        type: integer
+    type: object
+  legocy-go_internal_delievery_http_resources_users.UserReviewResponse:
+    properties:
+      date:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      rating:
+        type: integer
+      reviewer:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      seller:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+    type: object
   legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest:
     properties:
       email:
@@ -368,6 +351,23 @@ definitions:
         type: integer
       username:
         type: string
+    type: object
+  legocy-go_internal_delievery_http_resources_users_profile.UserProfilePageResponse:
+    properties:
+      marketItems:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+        type: array
+      user:
+        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+      userImages:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+        type: array
+      userReviews:
+        items:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewResponse'
+        type: array
     type: object
   legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse:
     properties:
@@ -1318,134 +1318,56 @@ paths:
       summary: Get LegoSet by ID
       tags:
       - lego_sets
-  /user-profile-pages/{userID}:
-    get:
-      operationId: detail_user_profile_page
-      parameters:
-      - description: user ID
-        in: path
-        name: userID
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserProfilePageResponse'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - JWT: []
-      summary: Get User Profile Page
-      tags:
-      - user_profile_pages
-  /user-reviews/:
-    get:
-      operationId: list_user_reviews
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - JWT: []
-      summary: Get User Reviews
-      tags:
-      - user_reviews
+  /users/auth/register:
     post:
-      operationId: create_user_review
+      operationId: user-register
       parameters:
-      - description: data
+      - description: user data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserReviewRequest'
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse'
         "400":
           description: Bad Request
           schema:
             additionalProperties: true
             type: object
-      security:
-      - JWT: []
-      summary: Create User Review
+      summary: register new user
       tags:
-      - user_reviews
-  /user-reviews/{reviewID}:
-    get:
-      operationId: detail_user_review
+      - authentication
+  /users/auth/token:
+    post:
+      operationId: create-jwt
       parameters:
-      - description: review ID
-        in: path
-        name: reviewID
+      - description: jwt request
+        in: body
+        name: data
         required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.JWTRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.UserReviewResponse'
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.JWTResponse'
         "400":
           description: Bad Request
           schema:
             additionalProperties: true
             type: object
-      security:
-      - JWT: []
-      summary: Get User Review
+      summary: generate jwt token
       tags:
-      - user_reviews
-  /user-reviews/{reviewId}:
-    delete:
-      operationId: delete_user_review
-      parameters:
-      - description: review ID
-        in: path
-        name: reviewId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: boolean
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - JWT: []
-      summary: Delete User Review
-      tags:
-      - user_reviews
+      - authentication
   /users/images/:userID:
     get:
       operationId: get_user_images
@@ -1517,56 +1439,134 @@ paths:
       summary: Download User Image
       tags:
       - users_images
-  /users/register:
-    post:
-      operationId: user-register
+  /users/profile/{userID}:
+    get:
+      operationId: detail_user_profile_page
       parameters:
-      - description: user data
-        in: body
-        name: data
+      - description: user ID
+        in: path
+        name: userID
         required: true
-        schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest'
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse'
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_profile.UserProfilePageResponse'
         "400":
           description: Bad Request
           schema:
             additionalProperties: true
             type: object
-      summary: register new user
+      security:
+      - JWT: []
+      summary: Get User Profile Page
       tags:
-      - authentication
-  /users/token:
-    post:
-      operationId: create-jwt
-      parameters:
-      - description: jwt request
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.JWTRequest'
+      - user_profile_pages
+  /users/reviews/:
+    get:
+      operationId: list_user_reviews
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.JWTResponse'
+            additionalProperties: true
+            type: object
         "400":
           description: Bad Request
           schema:
             additionalProperties: true
             type: object
-      summary: generate jwt token
+      security:
+      - JWT: []
+      summary: Get User Reviews
       tags:
-      - authentication
+      - user_reviews
+    post:
+      operationId: create_user_review
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Create User Review
+      tags:
+      - user_reviews
+  /users/reviews/{reviewID}:
+    get:
+      operationId: detail_user_review
+      parameters:
+      - description: review ID
+        in: path
+        name: reviewID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get User Review
+      tags:
+      - user_reviews
+  /users/reviews/{reviewId}:
+    delete:
+      operationId: delete_user_review
+      parameters:
+      - description: review ID
+        in: path
+        name: reviewId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete User Review
+      tags:
+      - user_reviews
 securityDefinitions:
   JWT:
     in: header

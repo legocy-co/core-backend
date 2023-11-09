@@ -2,7 +2,8 @@ package service
 
 import (
 	"golang.org/x/net/context"
-	"legocy-go/internal/domain/marketplace/errors"
+	"legocy-go/internal/domain/errors"
+	e "legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	r "legocy-go/internal/domain/marketplace/repository"
 )
@@ -16,44 +17,63 @@ func NewMarketItemService(repo r.MarketItemRepository) MarketItemService {
 }
 
 func (ms *MarketItemService) CreateMarketItem(
-	c context.Context, item *models.MarketItemValueObject) error {
+	c context.Context, item *models.MarketItemValueObject) *errors.AppError {
 	return ms.repo.CreateMarketItem(c, item)
 }
 
 func (ms *MarketItemService) ListMarketItems(
-	c context.Context) ([]*models.MarketItem, error) {
-	return ms.repo.GetMarketItems(c)
+	c context.Context) ([]*models.MarketItem, *errors.AppError) {
+
+	marketItems, err := ms.repo.GetMarketItems(c)
+	if err != nil {
+		return marketItems, err
+	}
+
+	if len(marketItems) == 0 {
+		return marketItems, &e.ErrMarketItemsNotFound
+	}
+
+	return marketItems, err
 }
 
 func (ms *MarketItemService) ListMarketItemsAuthorized(
-	c context.Context, userID int) ([]*models.MarketItem, error) {
-	return ms.repo.GetMarketItemsAuthorized(c, userID)
+	c context.Context, userID int) ([]*models.MarketItem, *errors.AppError) {
+	marketItems, err := ms.repo.GetMarketItemsAuthorized(c, userID)
+	if err != nil {
+		return marketItems, err
+	}
+
+	if len(marketItems) == 0 {
+		return marketItems, &e.ErrMarketItemsNotFound
+	}
+
+	return marketItems, err
 }
 
 func (ms *MarketItemService) MarketItemsBySellerID(
-	c context.Context, sellerID int) ([]*models.MarketItem, error) {
+	c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
 	return ms.repo.GetMarketItemsBySellerID(c, sellerID)
 }
 
 func (ms *MarketItemService) MarketItemDetail(
-	c context.Context, id int) (*models.MarketItem, error) {
+	c context.Context, id int) (*models.MarketItem, *errors.AppError) {
 	return ms.repo.GetMarketItemByID(c, id)
 }
 
-func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) error {
+func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) *errors.AppError {
 	return ms.repo.DeleteMarketItem(c, id)
 }
 
 func (ms *MarketItemService) UpdateMarketItemByID(
-	c context.Context, currentUserID int, id int, vo *models.MarketItemValueObject) (*models.MarketItem, error) {
+	c context.Context, currentUserID int, id int, vo *models.MarketItemValueObject) (*models.MarketItem, *errors.AppError) {
 
 	if currentUserID != vo.SellerID {
-		return nil, errors.ErrMarketItemInvalidSellerID
+		return nil, &e.ErrMarketItemInvalidSellerID
 	}
 
 	return ms.repo.UpdateMarketItemByID(c, id, vo)
 }
 
-func (ms *MarketItemService) GetMarketItemSellerID(c context.Context, id int) (int, error) {
+func (ms *MarketItemService) GetMarketItemSellerID(c context.Context, id int) (int, *errors.AppError) {
 	return ms.repo.GetMarketItemSellerID(c, id)
 }

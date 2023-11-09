@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"legocy-go/internal/delievery/http/errors"
-	"legocy-go/internal/domain/users/middleware"
 	models "legocy-go/internal/domain/users/models"
 	"net/http"
 	"strconv"
@@ -20,7 +19,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
-		err := auth.ValidateToken(tokenString)
+		err := ValidateToken(tokenString)
 		if err != nil {
 			ctx.JSON(401, gin.H{"error": err.Error()})
 			ctx.Abort()
@@ -40,7 +39,7 @@ func AdminUserOnly() gin.HandlerFunc {
 			return
 		}
 
-		err := auth.ValidateAdminToken(tokenString)
+		err := ValidateAdminToken(tokenString)
 		if err != nil {
 			ctx.JSON(401, gin.H{"error": err.Error()})
 			ctx.Abort()

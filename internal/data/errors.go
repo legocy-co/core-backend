@@ -1,10 +1,9 @@
 package data
 
 import (
-	"errors"
+	"legocy-go/internal/domain/errors"
 )
 
-var ErrConnectionLost = errors.New("connection lost")
-var ErrConnectionAlreadyExists = errors.New("connection already established")
-
-var ErrItemNotFound = errors.New("item(s) not found")
+var ErrConnectionLost = errors.NewAppError(errors.InternalError, "connection lost")
+var ErrConnectionAlreadyExists = errors.NewAppError(errors.ConflictError, "connection already established")
+var ErrItemNotFound = errors.NewAppError(errors.NotFoundError, "item(s) not found")

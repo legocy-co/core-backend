@@ -2,11 +2,11 @@ package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace/admin"
 	"legocy-go/internal/delievery/http/resources/pagination"
 	"legocy-go/internal/domain/marketplace/models"
-	"net/http"
 )
 
 // GetMarketItemsAdmin
@@ -25,7 +25,8 @@ func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 
 	marketItems, err := h.service.GetMarketItems(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -37,7 +38,9 @@ func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 	dataMetaResponse := resources.DataMetaResponse{
 		Data: response,
 		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, resources.MsgSuccess, c),
+			c.Request.URL.Path,
+			resources.MsgSuccess,
+			c),
 	}
 	resources.Respond(c.Writer, dataMetaResponse)
 

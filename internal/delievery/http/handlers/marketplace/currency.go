@@ -2,6 +2,7 @@ package marketplace
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	s "legocy-go/internal/domain/marketplace/service"
@@ -30,8 +31,8 @@ func NewCurrencyHandler(service s.CurrencyUseCase) CurrencyHandler {
 func (h CurrencyHandler) ListCurrencies(c *gin.Context) {
 	currenciesList, err := h.service.CurrenciesList(c)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		c.Abort()
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -65,7 +66,9 @@ func (h CurrencyHandler) CurrencyDetail(c *gin.Context) {
 
 	curr, err := h.service.CurrencyDetail(c, currencySymbol)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
 	}
 
 	currResponse := marketplace.GetCurrencyResponse(curr)
@@ -95,8 +98,8 @@ func (h CurrencyHandler) CreateCurrency(c *gin.Context) {
 	currency := currencyReq.ToCurrencyValueObject()
 	err := h.service.CreateCurrency(c, currency)
 	if err != nil {
-		c.AbortWithStatusJSON(
-			http.StatusInternalServerError, gin.H{"error": err.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

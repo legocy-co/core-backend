@@ -4,7 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/marketplace/errors"
+	"legocy-go/internal/domain/errors"
+	e "legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	"legocy-go/pkg/filter"
 	"legocy-go/pkg/kafka"
@@ -19,14 +20,14 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 }
 
 func (r MarketItemPostgresRepository) GetMarketItems(
-	c context.Context) ([]*models.MarketItem, error) {
+	c context.Context) ([]*models.MarketItem, *errors.AppError) {
 
 	var itemsDB []*entities.MarketItemPostgres
 	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	res := db.Model(&entities.MarketItemPostgres{}).
@@ -36,7 +37,8 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		Preload("Currency").Preload("Location").
 		Find(&itemsDB, "status = 'ACTIVE'")
 	if res.Error != nil {
-		return nil, res.Error
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &appErr
 	}
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
@@ -48,14 +50,14 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
-	c context.Context, userID int) ([]*models.MarketItem, error) {
+	c context.Context, userID int) ([]*models.MarketItem, *errors.AppError) {
 
 	var itemsDB []*entities.MarketItemPostgres
 	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	res := db.Model(&entities.MarketItemPostgres{}).
@@ -65,7 +67,8 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 		Preload("Currency").Preload("Location").
 		Find(&itemsDB, "user_postgres_id <> ? and status = 'ACTIVE'", userID)
 	if res.Error != nil {
-		return nil, res.Error
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return nil, &appErr
 	}
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
@@ -77,33 +80,33 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemByID(
-	c context.Context, id int) (*models.MarketItem, error) {
+	c context.Context, id int) (*models.MarketItem, *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.MarketItemPostgres
-	result := db.Preload("Seller").
+	query := db.Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Preload("Currency").Preload("Location").
 		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
-	if result.Error != nil {
-		return nil, result.Error
+	if query.RowsAffected == 0 {
+		return nil, &e.ErrMarketItemsNotFound
 	}
 
 	return entity.ToMarketItem(), nil
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
-	c context.Context, sellerID int) ([]*models.MarketItem, error) {
+	c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
 
 	var itemsDB []*entities.MarketItemPostgres
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	result := db.Model(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
@@ -112,7 +115,8 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 		Preload("Currency").Preload("Location").
 		Find(&itemsDB, "user_postgres_id = ? and status = 'ACTIVE'", sellerID)
 	if result.Error != nil {
-		return nil, result.Error
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return nil, &appErr
 	}
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
@@ -124,53 +128,69 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemSellerID(
-	c context.Context, id int) (int, error) {
+	c context.Context, id int) (int, *errors.AppError) {
 
 	var count int
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return count, d.ErrConnectionLost
+		return count, &d.ErrConnectionLost
 	}
 
 	err := db.Model(entities.MarketItemPostgres{}).Where(
 		"id=?", id).Select("user_postgres_id").First(&count).Error
+	if err != nil {
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return count, &appErr
+	}
 
-	return count, err
+	return count, nil
 }
 
 func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
-	c context.Context, sellerID int) (int64, error) {
+	c context.Context, sellerID int) (int64, *errors.AppError) {
 
 	var count int64
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return count, d.ErrConnectionLost
+		return count, &d.ErrConnectionLost
 	}
 
 	res := db.Model(
 		entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).Count(&count)
 
-	return count, res.Error
+	if res.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+		return count, &appErr
+	}
+
+	return count, nil
 }
 
 func (r MarketItemPostgresRepository) CreateMarketItem(
-	c context.Context, item *models.MarketItemValueObject) error {
+	c context.Context, item *models.MarketItemValueObject) *errors.AppError {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	tx := db.Begin()
 
 	entity := entities.FromMarketItemValueObject(item)
 	if entity == nil {
-		return d.ErrItemNotFound
+		return &d.ErrItemNotFound
 	}
 
 	result := tx.Create(&entity)
+
+	if result.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &appErr
+	}
+
+	tx.Commit()
 
 	err := kafka.ProduceJSONEvent(
 		kafka.MARKET_ITEM_UPDATES_TOPIC, map[string]interface{}{
@@ -178,37 +198,42 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 		})
 	if err != nil {
 		tx.Rollback()
-		return err
+		appErr := errors.NewAppError(errors.InternalError, err.Error())
+		return &appErr
 	}
 
-	tx.Commit()
-	return result.Error
+	return nil
 }
 
-func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int) error {
+func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int) *errors.AppError {
 
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	result := db.Delete(entities.MarketItemPostgres{}, id)
-	return result.Error
+	if result.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &appErr
+	}
+
+	return nil
 }
 
 func (r MarketItemPostgresRepository) UpdateMarketItemByID(
-	c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, error) {
+	c context.Context, id int, item *models.MarketItemValueObject) (*models.MarketItem, *errors.AppError) {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.MarketItemPostgres
 	_ = db.First(&entity, id)
 	if entity == nil {
-		return nil, errors.ErrMarketItemsNotFound
+		return nil, &e.ErrMarketItemsNotFound
 	}
 
 	entityUpdated := entity.GetUpdatedMarketItem(*item)

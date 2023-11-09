@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/users/admin"
 	"net/http"
 	"strconv"
@@ -20,7 +21,7 @@ import (
 //	@Router		/admin/users/{userId} [get]
 //
 //	@Security	JWT
-func (uah *UserAdminHandler) GetUserByID(c *gin.Context) {
+func (h *UserAdminHandler) GetUserByID(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
@@ -28,9 +29,10 @@ func (uah *UserAdminHandler) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	userDomain, err := uah.service.GetUserByID(c, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	userDomain, appErr := h.service.GetUserByID(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 	}
 
 	userResponse := admin.GetUserAdminDetailResponse(userDomain)

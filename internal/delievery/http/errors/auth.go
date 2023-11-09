@@ -1,6 +1,8 @@
 package errors
 
-import "errors"
+import (
+	"net/http"
+)
 
-var ErrTokenHeaderNotFound = errors.New("token header not found")
-var ErrParsingClaims = errors.New("error parsing token claims")
+var ErrTokenHeaderNotFound = NewHttpResponseError(http.StatusBadRequest, "token header not found")
+var ErrParsingClaims = NewHttpResponseError(http.StatusBadRequest, "error parsing token claims")

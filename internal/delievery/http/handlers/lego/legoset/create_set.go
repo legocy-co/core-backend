@@ -2,7 +2,7 @@ package legoset
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "legocy-go/internal/delievery/http/resources"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/lego"
 	"net/http"
 )
@@ -21,24 +21,18 @@ import (
 //	@Security	JWT
 func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
 	var setRequest lego.LegoSetRequest
-	if err := c.ShouldBindJSON(&setRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		c.Abort()
+	if _err := c.ShouldBindJSON(&setRequest); _err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": _err.Error()})
 		return
 	}
 
 	legoSetValueObject := setRequest.ToLegoSeriesValueObject()
 	err := lsh.service.LegoSetCreate(c.Request.Context(), legoSetValueObject)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		c.Abort()
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	response := v1.DataMetaResponse{
-		Data: true,
-		Meta: v1.SuccessMetaResponse,
-	}
-
-	v1.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, gin.H{"message": "ok"})
 }

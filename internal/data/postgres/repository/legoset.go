@@ -4,6 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/domain/lego"
 	models "legocy-go/internal/domain/lego/models"
 	"legocy-go/pkg/filter"
 )
@@ -16,62 +18,91 @@ func NewLegoSetPostgresRepository(conn d.DataBaseConnection) LegoSetPostgresRepo
 	return LegoSetPostgresRepository{conn: conn}
 }
 
-func (psql LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetValueObject) error {
-	db := psql.conn.GetDB()
+func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetValueObject) *errors.AppError {
+	db := r.conn.GetDB()
+
+	var err *errors.AppError
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
 	entity := entities.FromLegoSetValueObject(s)
-	db.Create(entity)
-	return nil
+	result := db.Create(entity)
+
+	if result.Error != nil {
+		*err = errors.NewAppError(errors.ConflictError, result.Error.Error())
+	}
+
+	return err
 }
 
-func (psql LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, error) {
-	db := psql.conn.GetDB()
+func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, *errors.AppError) {
+	db := r.conn.GetDB()
+
+	var err *errors.AppError
 
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	var entitiesList []*entities.LegoSetPostgres
-	db.Model(entities.LegoSetPostgres{}).
+	_err := db.Model(entities.LegoSetPostgres{}).
 		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
-		Preload("LegoSeries").Find(&entitiesList)
+		Preload("LegoSeries").Find(&entitiesList).Error
+
+	if _err != nil {
+		*err = errors.NewAppError(errors.InternalError, _err.Error())
+	}
 
 	legoSets := make([]*models.LegoSet, 0, len(entitiesList))
 	for _, entity := range entitiesList {
 		legoSets = append(legoSets, entity.ToLegoSet())
 	}
 
-	return legoSets, nil
+	return legoSets, err
 
 }
 
-func (psql LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*models.LegoSet, error) {
+func (r LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*models.LegoSet, *errors.AppError) {
 	var legoSet *models.LegoSet
-	db := psql.conn.GetDB()
+	var err *errors.AppError
+	db := r.conn.GetDB()
 
 	if db == nil {
-		return legoSet, d.ErrConnectionLost
+		return legoSet, &d.ErrConnectionLost
 	}
 
 	var entity *entities.LegoSetPostgres
-	db.Preload("LegoSeries").First(&entity, id)
+	query := db.Preload("LegoSeries").First(&entity, id)
 
-	legoSet = entity.ToLegoSet()
-	return legoSet, nil
-}
-
-func (psql LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) error {
-	db := psql.conn.GetDB()
-
-	if db == nil {
-		return d.ErrConnectionLost
+	if query.Error != nil {
+		*err = errors.NewAppError(errors.NotFoundError, query.Error.Error())
+		return nil, err
 	}
 
-	db.Delete(&entities.LegoSetPostgres{}, id)
+	if query.RowsAffected == 0 {
+		return nil, &lego.ErrLegoSetsNotFound
+	}
+
+	legoSet = entity.ToLegoSet()
+	return legoSet, err
+}
+
+func (r LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) *errors.AppError {
+	db := r.conn.GetDB()
+
+	var err *errors.AppError
+
+	if db == nil {
+		return &d.ErrConnectionLost
+	}
+
+	_err := db.Delete(&entities.LegoSetPostgres{}, id).Error
+	if _err != nil {
+		*err = errors.NewAppError(errors.ConflictError, _err.Error())
+	}
+
 	return nil
 }

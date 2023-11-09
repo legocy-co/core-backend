@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/users/admin"
 	"net/http"
 	"strconv"
@@ -21,7 +22,7 @@ import (
 //
 //	@Security	ApiKeyAuth
 //	@param		Authorization	header	string	true	"Authorization"
-func (uah *UserAdminHandler) UpdateUserByID(c *gin.Context) {
+func (h *UserAdminHandler) UpdateUserByID(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userId"))
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -41,9 +42,10 @@ func (uah *UserAdminHandler) UpdateUserByID(c *gin.Context) {
 		return
 	}
 
-	userDomain, err := uah.service.UpdateUser(c, userID, vo)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	userDomain, appErr := h.service.UpdateUser(c, userID, vo)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

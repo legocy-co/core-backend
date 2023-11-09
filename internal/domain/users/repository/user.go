@@ -2,22 +2,23 @@ package repository
 
 import (
 	"context"
+	"legocy-go/internal/domain/errors"
 	models "legocy-go/internal/domain/users/models"
 )
 
 type UserRepository interface {
-	CreateUser(c context.Context, u *models.User, password string) error
-	ValidateUser(c context.Context, email, password string) error
-	GetUsers(c context.Context) ([]*models.User, error)
-	GetUserByEmail(c context.Context, email string) (*models.User, error)
-	GetUserByID(c context.Context, id int) (*models.User, error)
-	DeleteUser(c context.Context, id int) error
+	CreateUser(c context.Context, u *models.User, password string) *errors.AppError
+	ValidateUser(c context.Context, email, password string) *errors.AppError
+	GetUsers(c context.Context) ([]*models.User, *errors.AppError)
+	GetUserByEmail(c context.Context, email string) (*models.User, *errors.AppError)
+	GetUserByID(c context.Context, id int) (*models.User, *errors.AppError)
+	DeleteUser(c context.Context, id int) *errors.AppError
 }
 
 type UserAdminRepository interface {
-	CreateAdmin(c context.Context, ua *models.UserAdmin, password string) error
-	GetUsers(c context.Context) ([]*models.UserAdmin, error)
-	GetUserByID(c context.Context, id int) (*models.UserAdmin, error)
-	DeleteUser(c context.Context, id int) error
-	UpdateUserByID(c context.Context, itemId int, vo *models.UserAdminValueObject) (*models.UserAdmin, error)
+	CreateAdmin(c context.Context, ua *models.UserAdmin, password string) *errors.AppError
+	GetUsers(c context.Context) ([]*models.UserAdmin, *errors.AppError)
+	GetUserByID(c context.Context, id int) (*models.UserAdmin, *errors.AppError)
+	DeleteUser(c context.Context, id int) *errors.AppError
+	UpdateUserByID(c context.Context, itemId int, vo *models.UserAdminValueObject) (*models.UserAdmin, *errors.AppError)
 }

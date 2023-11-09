@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/users/admin"
 	models "legocy-go/internal/domain/users/models"
 	"net/http"
@@ -18,12 +19,13 @@ import (
 //	@Router		/admin/users/ [get]
 //
 //	@Security	JWT
-func (uah *UserAdminHandler) GetUsersAdmin(c *gin.Context) {
+func (h *UserAdminHandler) GetUsersAdmin(c *gin.Context) {
 	var users []*models.UserAdmin
 
-	users, err := uah.service.GetUsers(c)
+	users, err := h.service.GetUsers(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

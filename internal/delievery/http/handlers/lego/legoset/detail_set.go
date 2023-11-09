@@ -2,6 +2,7 @@ package legoset
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/resources/lego"
 	"net/http"
 	"strconv"
@@ -20,17 +21,16 @@ import (
 //
 //	@Security	JWT
 func (lsh *LegoSetHandler) SetDetail(c *gin.Context) {
-	setID, err := strconv.Atoi(c.Param("setID"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+	setID, _err := strconv.Atoi(c.Param("setID"))
+	if _err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
 	legoSet, err := lsh.service.LegoSetDetail(c.Request.Context(), setID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		c.Abort()
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

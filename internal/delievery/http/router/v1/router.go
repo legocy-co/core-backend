@@ -35,25 +35,10 @@ func (r V1router) Run(port string) error {
 //
 // @externalDocs.description	OpenAPI
 // @externalDocs.url			https://swagger.io/resources/open-api/
-func InitRouter(app *app.App) V1router {
+func GetV1Router(app *app.App) V1router {
 
 	r := gin.Default()
 	router := V1router{router: r}
-
-	r.Use(func(c *gin.Context) {
-		// add header Access-Control-Allow-Origin
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Max-Age", "86400")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, UPDATE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, X-Max")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(200)
-		} else {
-			c.Next()
-		}
-	})
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -61,10 +46,7 @@ func InitRouter(app *app.App) V1router {
 	v1Admin := r.Group("/api/v1/admin")
 
 	//users.go
-	router.addAuth(v1, app.GetUserService())
-
-	//user_images.go
-	router.addUserImages(v1, app)
+	router.addUsers(v1, app)
 
 	//legoseries.go
 	router.addLegoSeries(v1, app.GetLegoSeriesService())
@@ -80,12 +62,6 @@ func InitRouter(app *app.App) V1router {
 
 	//marketitem.go
 	router.addMarketItems(v1, app)
-
-	//userreview.go
-	router.addUserReviews(v1, app)
-
-	//userprofilepage.go
-	router.addUserProfilePages(v1, app)
 
 	//admin_market_item.go
 	router.addAdminMarketItems(v1Admin, app.GetMarketItemAdminService())

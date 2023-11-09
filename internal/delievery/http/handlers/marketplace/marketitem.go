@@ -2,14 +2,13 @@ package marketplace
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/pagination"
-	"legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
-	"legocy-go/internal/domain/users/middleware"
 	"net/http"
 	"strconv"
 )
@@ -44,14 +43,8 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 	var marketItems []*models.MarketItem
 	marketItems, err := h.service.ListMarketItems(ctx)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest,
-			gin.H{"error": err.Error()})
-	}
-
-	if len(marketItems) == 0 {
-		c.AbortWithStatusJSON(
-			http.StatusNotFound,
-			gin.H{"error": errors.ErrMarketItemsNotFound.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -94,17 +87,10 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	userID := tokenPayload.ID
 
-	marketItems, err = h.service.ListMarketItemsAuthorized(ctx, userID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest,
-			gin.H{"error": err.Error()})
-	}
-
-	if len(marketItems) == 0 {
-		c.AbortWithStatusJSON(
-			http.StatusNotFound,
-			gin.H{"error": errors.ErrMarketItemsNotFound.Error()})
-		return
+	marketItems, appErr := h.service.ListMarketItemsAuthorized(ctx, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 	}
 
 	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
@@ -135,14 +121,14 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 	itemID, err := strconv.Atoi(c.Param("itemID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
-	marketItem, err := h.service.MarketItemDetail(c, itemID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	marketItem, appErr := h.service.MarketItemDetail(c, itemID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -165,10 +151,11 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := auth.ParseTokenClaims(tokenString)
+	userPayload, ok := middleware.ParseTokenClaims(tokenString)
 	if !ok {
-		c.AbortWithStatusJSON(http.StatusUnauthorized,
-			gin.H{"error": "invalid token credentials"})
+		c.AbortWithStatusJSON(
+			http.StatusUnauthorized, gin.H{"error": "invalid token credentials"},
+		)
 		return
 	}
 
@@ -182,6 +169,7 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	vo, err := itemRequest.ToMarketItemValueObject(userPayload.ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
 	}
 
 	err = h.service.CreateMarketItem(c, vo)
@@ -248,7 +236,7 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 	}
 
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := auth.ParseTokenClaims(tokenString)
+	userPayload, ok := middleware.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
 			gin.H{"error": "invalid token credentials"})

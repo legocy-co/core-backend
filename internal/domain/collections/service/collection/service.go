@@ -4,6 +4,7 @@ import (
 	"context"
 	"legocy-go/internal/domain/collections/models"
 	"legocy-go/internal/domain/collections/repository"
+	"legocy-go/internal/domain/errors"
 	auth "legocy-go/internal/domain/users/models"
 	users "legocy-go/internal/domain/users/repository"
 )
@@ -25,23 +26,23 @@ func NewUserCollectionService(
 	}
 }
 
-func (s UserCollectionService) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, error) {
+func (s UserCollectionService) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, *errors.AppError) {
 	return s.collectionRepository.GetUserCollection(c, userID)
 }
 
-func (s UserCollectionService) AddSetToUserCollection(c context.Context, userID int, vo models.CollectionLegoSetValueObject) error {
+func (s UserCollectionService) AddSetToUserCollection(c context.Context, userID int, vo models.CollectionLegoSetValueObject) *errors.AppError {
 	return s.collectionRepository.AddSetToUserCollection(c, userID, vo)
 }
 
-func (s UserCollectionService) RemoveSetFromUserCollection(c context.Context, userID int, collectionSetID int) error {
+func (s UserCollectionService) RemoveSetFromUserCollection(c context.Context, userID int, collectionSetID int) *errors.AppError {
 	return s.collectionRepository.RemoveSetFromUserCollection(c, userID, collectionSetID)
 }
 
-func (s UserCollectionService) UpdateUserCollectionSet(c context.Context, userID int, collectionSetID int, vo models.CollectionLegoSetValueObject) error {
+func (s UserCollectionService) UpdateUserCollectionSet(c context.Context, userID int, collectionSetID int, vo models.CollectionLegoSetValueObject) *errors.AppError {
 	return s.collectionRepository.UpdateUserCollectionSetByID(c, userID, collectionSetID, vo)
 }
 
-func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, *auth.User, error) {
+func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, *auth.User, *errors.AppError) {
 	userCollection, err := s.GetUserCollection(c, userID)
 	if err != nil {
 		return []models.LegoSetValuation{}, nil, err

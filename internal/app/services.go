@@ -9,8 +9,8 @@ import (
 	useradmin "legocy-go/internal/domain/users/service/admin"
 )
 
-func (a *App) GetUserService() users.UserUseCase {
-	return users.NewUserUsecase(a.GetUserRepo())
+func (a *App) GetUserService() users.UserService {
+	return users.NewUserService(a.GetUserRepo())
 }
 
 func (a *App) GetUserImagesService() users.UserImageUseCase {
@@ -21,8 +21,8 @@ func (a *App) GetLegoSeriesService() lego.LegoSeriesService {
 	return lego.NewLegoSeriesService(a.GetLegoSeriesRepo())
 }
 
-func (a *App) GetLegoSetService() lego.LegoSetUseCase {
-	return lego.NewLegoSetUseCase(a.GetLegoSetRepo())
+func (a *App) GetLegoSetService() lego.LegoSetService {
+	return lego.NewLegoSetService(a.GetLegoSetRepo())
 }
 
 func (a *App) GetLocationService() marketplace.LocationUseCase {

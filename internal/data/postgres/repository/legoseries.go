@@ -4,6 +4,8 @@ import (
 	"context"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/domain/lego"
 	models "legocy-go/internal/domain/lego/models"
 )
 
@@ -15,28 +17,40 @@ func NewLegoSeriesPostgresRepository(conn d.DataBaseConnection) LegoSeriesPostgr
 	return LegoSeriesPostgresRepository{conn: conn}
 }
 
-func (r LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeriesValueObject) error {
+func (r LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *models.LegoSeriesValueObject) *errors.AppError {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
+	var err *errors.AppError
+
 	entity := entities.FromLegoSeriesValueObject(s)
-	result := db.Create(&entity)
-	return result.Error
+	_err := db.Create(&entity).Error
+
+	if _err != nil {
+		*err = errors.NewAppError(errors.ConflictError, _err.Error())
+	}
+
+	return err
 }
 
-func (r LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, error) {
+func (r LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, *errors.AppError) {
 
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entitiesList []*entities.LegoSeriesPostgres
-	db.Find(&entitiesList)
+
+	_err := db.Find(&entitiesList).Error
+	if _err != nil {
+		err := errors.NewAppError(errors.NotFoundError, _err.Error())
+		return nil, &err
+	}
 
 	series := make([]*models.LegoSeries, 0, len(entitiesList))
 	for _, entity := range entitiesList {
@@ -46,46 +60,65 @@ func (r LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*m
 }
 
 func (r LegoSeriesPostgresRepository) GetLegoSeries(
-	c context.Context, id int) (*models.LegoSeries, error) {
+	c context.Context, id int) (*models.LegoSeries, *errors.AppError) {
 
 	var entity *entities.LegoSeriesPostgres
 	var series *models.LegoSeries
+	var err *errors.AppError
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return series, d.ErrConnectionLost
+		return series, &d.ErrConnectionLost
 	}
 
-	db.First(&entity, id)
+	query := db.First(&entity, id)
+	if query.Error != nil {
+		*err = errors.NewAppError(errors.NotFoundError, query.Error.Error())
+		return nil, err
+	}
+
+	if query.RowsAffected == 0 {
+		return nil, &lego.ErrLegoSeriesNotFound
+	}
+
 	series = entity.ToLegoSeries()
 	return series, nil
 }
 
 func (r LegoSeriesPostgresRepository) GetLegoSeriesByName(
-	c context.Context, name string) (*models.LegoSeries, error) {
+	c context.Context, name string) (*models.LegoSeries, *errors.AppError) {
 
 	db := r.conn.GetDB()
 
+	var err *errors.AppError
+
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	var entity *entities.LegoSeriesPostgres
-	err := db.Where(entities.LegoSeriesPostgres{Name: name}).First(&entity).Error
-	if err != nil {
+	_err := db.Where(entities.LegoSeriesPostgres{Name: name}).First(&entity).Error
+	if _err != nil {
+		*err = errors.NewAppError(errors.NotFoundError, _err.Error())
 		return nil, err
 	}
 
 	return entity.ToLegoSeries(), nil
 }
 
-func (r LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) error {
+func (r LegoSeriesPostgresRepository) DeleteLegoSeries(c context.Context, id int) *errors.AppError {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return d.ErrConnectionLost
+		return &d.ErrConnectionLost
 	}
 
-	result := db.Delete(&entities.LegoSeriesPostgres{}, id)
-	return result.Error
+	var err *errors.AppError
+
+	_err := db.Delete(&entities.LegoSeriesPostgres{}, id).Error
+	if _err != nil {
+		*err = errors.NewAppError(errors.ConflictError, _err.Error())
+	}
+
+	return err
 }

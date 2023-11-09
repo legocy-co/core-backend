@@ -1,12 +1,11 @@
 package errors
 
-import "errors"
+import "legocy-go/internal/domain/errors"
 
 var (
-	ErrMarketItemsNotFound       = errors.New("marketItems not found")
-	ErrUserReviewsNotFound       = errors.New("userReviews not found")
-	ErrUsersNotFound             = errors.New("users not found")
-	ErrMarketItemInvalidSellerID = errors.New("invalid SellerID")
-	ErrMarketItemInvalidStatus   = errors.New("invalid status value")
-	ErrMarketItemInvalidSetState = errors.New("invalid set state")
+	ErrMarketItemsNotFound       = errors.NewAppError(errors.NotFoundError, "marketItems not found")
+	ErrUserReviewsNotFound       = errors.NewAppError(errors.NotFoundError, "userReviews not found")
+	ErrMarketItemInvalidSellerID = errors.NewAppError(errors.PermissionError, "invalid SellerID")
+	ErrMarketItemInvalidStatus   = errors.NewAppError(errors.ValidationError, "invalid status value")
+	ErrMarketItemInvalidSetState = errors.NewAppError(errors.ValidationError, "invalid set state")
 )

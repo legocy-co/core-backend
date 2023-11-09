@@ -2,6 +2,7 @@ package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"net/http"
 	"strconv"
 )
@@ -27,9 +28,10 @@ func (h Handler) DeleteMarketItemById(c *gin.Context) {
 		return
 	}
 
-	err = h.service.DeleteMarketItemById(c, itemID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
+	appErr := h.service.DeleteMarketItemById(c, itemID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

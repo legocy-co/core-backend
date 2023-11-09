@@ -1,15 +1,14 @@
-package marketplace
+package users
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/internal/delievery/http/errors"
 	"legocy-go/internal/delievery/http/middleware"
 	resources "legocy-go/internal/delievery/http/resources"
-	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/pagination"
-	"legocy-go/internal/domain/marketplace/errors"
+	"legocy-go/internal/delievery/http/resources/users"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
-	"legocy-go/internal/domain/users/middleware"
 	"net/http"
 	"strconv"
 )
@@ -34,7 +33,7 @@ func NewUserReviewHandler(
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/ [get]
+//	@Router		/users/reviews/ [get]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
@@ -44,20 +43,14 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 	var userReviews []*models.UserReview
 	userReviews, err := h.service.ListUserReviews(ctx)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest,
-			gin.H{"error": err.Error()})
-	}
-
-	if len(userReviews) == 0 {
-		c.AbortWithStatusJSON(
-			http.StatusNotFound,
-			gin.H{"error": errors.ErrUserReviewsNotFound.Error()})
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	userReviewResponse := make([]marketplace.UserReviewResponse, 0, len(userReviews))
+	userReviewResponse := make([]users.UserReviewResponse, 0, len(userReviews))
 	for _, m := range userReviews {
-		userReviewResponse = append(userReviewResponse, marketplace.GetUserReviewResponse(m))
+		userReviewResponse = append(userReviewResponse, users.GetUserReviewResponse(m))
 	}
 
 	response := resources.DataMetaResponse{
@@ -75,9 +68,9 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 //	@ID			detail_user_review
 //	@Param		reviewID	path	int	true	"review ID"
 //	@Produce	json
-//	@Success	200	{object}	marketplace.UserReviewResponse
+//	@Success	200	{object}	users.UserReviewResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/{reviewID} [get]
+//	@Router		/users/reviews/{reviewID} [get]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
@@ -87,13 +80,14 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 		return
 	}
 
-	userReview, err := h.service.UserReviewDetail(c, reviewID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	userReview, appErr := h.service.UserReviewDetail(c, reviewID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	userReviewResponse := marketplace.GetUserReviewResponse(userReview)
+	userReviewResponse := users.GetUserReviewResponse(userReview)
 	c.JSON(http.StatusOK, userReviewResponse)
 }
 
@@ -102,24 +96,24 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 //	@Summary	Create User Review
 //	@Tags		user_reviews
 //	@ID			create_user_review
-//	@Param		data	body	marketplace.UserReviewRequest	true	"data"
+//	@Param		data	body	users.UserReviewRequest	true	"data"
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/ [post]
+//	@Router		/users/reviews/ [post]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := auth.ParseTokenClaims(tokenString)
+	userPayload, ok := middleware.ParseTokenClaims(tokenString)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
 			gin.H{"error": "invalid token credentials"})
 		return
 	}
 
-	var reviewRequest *marketplace.UserReviewRequest
+	var reviewRequest *users.UserReviewRequest
 	if err := c.ShouldBindJSON(&reviewRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -132,9 +126,10 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateUserReview(c, userReviewValueObject)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	appErr := h.service.CreateUserReview(c, userReviewValueObject)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -154,7 +149,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 //	@Produce	json
 //	@Success	200	{object}	map[string]bool
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/user-reviews/{reviewId} [delete]
+//	@Router		/users/reviews/{reviewId} [delete]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {
@@ -164,10 +159,11 @@ func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {
 		return
 	}
 
-	err = h.service.DeleteUserReview(c, reviewID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError,
-			"Error deleting UserReview object")
+	appErr := h.service.DeleteUserReview(c, reviewID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]bool{"status": true})
