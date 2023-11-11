@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"legocy-go/internal/domain/collections/models"
+	"legocy-go/internal/domain/calculator/models"
 	"legocy-go/internal/domain/errors"
 )
 
