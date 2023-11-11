@@ -1,4 +1,4 @@
-package postgres
+package admin
 
 import (
 	"golang.org/x/net/context"

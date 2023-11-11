@@ -37,7 +37,8 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 	}
 
 	legoSetsDomain := make([]models.CollectionLegoSet, 0, len(userLegoSetsDB))
-	var user *auth.User
+	var user *auth.User = nil
+
 	for _, legoSetDB := range userLegoSetsDB {
 		legoSetsDomain = append(legoSetsDomain, legoSetDB.ToCollectionLegoSet())
 
