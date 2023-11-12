@@ -1,6 +1,8 @@
 package lego
 
-import "legocy-go/internal/domain/errors"
+import (
+	"legocy-go/internal/app/errors"
+)
 
 var (
 	ErrLegoSetsNotFound   = errors.NewAppError(errors.NotFoundError, "LEGO Set(s) Not Found")

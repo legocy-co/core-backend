@@ -2,23 +2,24 @@ package service
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
 	calculator "legocy-go/internal/domain/calculator/models"
+	repository2 "legocy-go/internal/domain/calculator/repository"
 	"legocy-go/internal/domain/collections/models"
 	"legocy-go/internal/domain/collections/repository"
-	"legocy-go/internal/domain/errors"
 	auth "legocy-go/internal/domain/users/models"
 	users "legocy-go/internal/domain/users/repository"
 )
 
 type UserCollectionService struct {
 	collectionRepository repository.UserCollectionRepository
-	valuationRepository  repository.LegoSetValuationRepository
+	valuationRepository  repository2.LegoSetValuationRepository
 	usersRepository      users.UserRepository
 }
 
 func NewUserCollectionService(
 	collectionRepo repository.UserCollectionRepository,
-	valuationRepo repository.LegoSetValuationRepository,
+	valuationRepo repository2.LegoSetValuationRepository,
 	usersRepo users.UserRepository) UserCollectionService {
 	return UserCollectionService{
 		collectionRepository: collectionRepo,

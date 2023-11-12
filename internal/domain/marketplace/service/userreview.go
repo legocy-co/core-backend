@@ -2,7 +2,7 @@ package service
 
 import (
 	"golang.org/x/net/context"
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/app/errors"
 	e "legocy-go/internal/domain/marketplace/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 	r "legocy-go/internal/domain/marketplace/repository"

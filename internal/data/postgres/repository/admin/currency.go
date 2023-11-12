@@ -2,9 +2,9 @@ package admin
 
 import (
 	"golang.org/x/net/context"
+	"legocy-go/internal/app/errors"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/errors"
 	models "legocy-go/internal/domain/marketplace/models"
 )
 

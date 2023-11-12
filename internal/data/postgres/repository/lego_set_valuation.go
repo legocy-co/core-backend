@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
 	"legocy-go/internal/domain/calculator"
 	"legocy-go/internal/domain/calculator/models"
-	"legocy-go/internal/domain/errors"
 )
 
 type LegoSetValuationPostgresRepository struct {

@@ -3,6 +3,7 @@ package app
 import (
 	postgres "legocy-go/internal/data/postgres/repository"
 	"legocy-go/internal/data/postgres/repository/admin"
+	repository2 "legocy-go/internal/domain/calculator/repository"
 	collections "legocy-go/internal/domain/collections/repository"
 	lego "legocy-go/internal/domain/lego/repository"
 	marketplace "legocy-go/internal/domain/marketplace/repository"
@@ -53,6 +54,6 @@ func (a *App) GetUserLegoSetsRepository() collections.UserCollectionRepository {
 	return postgres.NewCollectionPostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetLegoSetsValuationRepository() collections.LegoSetValuationRepository {
+func (a *App) GetLegoSetsValuationRepository() repository2.LegoSetValuationRepository {
 	return postgres.NewLegoSetValuationPostgresRepository(a.GetDatabase())
 }

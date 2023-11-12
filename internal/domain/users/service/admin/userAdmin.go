@@ -2,7 +2,7 @@ package admin
 
 import (
 	"context"
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/app/errors"
 	models "legocy-go/internal/domain/users/models"
 	r "legocy-go/internal/domain/users/repository"
 )

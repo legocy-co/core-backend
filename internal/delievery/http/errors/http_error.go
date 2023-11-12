@@ -3,7 +3,7 @@ package errors
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/app/errors"
 	"net/http"
 )
 
