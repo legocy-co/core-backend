@@ -3,7 +3,7 @@ package valuation
 import (
 	"legocy-go/internal/delievery/http/resources/lego"
 	"legocy-go/internal/delievery/http/resources/marketplace"
-	"legocy-go/internal/domain/collections/models"
+	"legocy-go/internal/domain/calculator/models"
 )
 
 type LegoSetValuationResponse struct {
