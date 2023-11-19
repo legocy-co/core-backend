@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"legocy-go/internal/domain/collections/models"
+	"legocy-go/internal/domain/calculator/models"
 )
 
 type LegoSetValuation struct {
