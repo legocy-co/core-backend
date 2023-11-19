@@ -4,7 +4,7 @@ import (
 	"legocy-go/internal/delievery/http/resources/marketplace"
 	"legocy-go/internal/delievery/http/resources/users"
 	"legocy-go/internal/delievery/http/resources/valuation"
-	"legocy-go/internal/domain/collections/models"
+	"legocy-go/internal/domain/calculator/models"
 	auth "legocy-go/internal/domain/users/models"
 )
 
