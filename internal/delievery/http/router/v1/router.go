@@ -21,6 +21,7 @@ func (r V1router) Run(port string) error {
 //	@description	LEGOcy is a marketplace for LEGO lovers.
 //	@termsOfService	http://swagger.io/terms/
 
+// GetV1Router
 // @contact.name				API Support
 // @contact.url				http://www.swagger.io/support
 // @contact.email				support@swagger.io

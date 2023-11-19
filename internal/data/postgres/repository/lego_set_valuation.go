@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/collections"
-	"legocy-go/internal/domain/collections/models"
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/domain/calculator"
+	"legocy-go/internal/domain/calculator/models"
 )
 
 type LegoSetValuationPostgresRepository struct {
@@ -25,11 +25,11 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.C
 
 	var setValuations []entities.LegoSetValuation
 
-	res := db.Model(
+	query := db.Model(
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").Find(
 		&setValuations, "lego_set_id = ?", legoSetID)
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+	if query.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
 		return nil, &appErr
 	}
 
@@ -48,17 +48,16 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationByID(c context.Co
 	}
 
 	var entity *entities.LegoSetValuation
-	res := db.Model(
+	query := db.Model(
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(&entity, id)
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+	if query.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
 		return nil, &appErr
 	}
 
 	if entity == nil {
-		return nil, &collections.ErrValuationNotFound
+		return nil, &calculator.ErrLegoSetValuationNotFound
 	}
-
 	return entity.ToLegoSetValuation(), nil
 }
 
@@ -69,16 +68,16 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrenc
 	}
 
 	var entity *entities.LegoSetValuation
-	res := db.Model(
+	query := db.Model(
 		&entities.LegoSetValuation{}).Preload("LegoSet").Preload("Currency").First(
 		&entity, "lego_set_id = ?", setID, "state = ?", setState, "currency_id = ?", currencyID)
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+	if query.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
 		return nil, &appErr
 	}
 
 	if entity == nil {
-		return nil, &collections.ErrValuationNotFound
+		return nil, &calculator.ErrLegoSetValuationNotFound
 	}
 
 	return entity.ToLegoSetValuation(), nil

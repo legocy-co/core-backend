@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/app/errors"
 )
 
 var ErrUserNotFound = errors.NewAppError(errors.NotFoundError, "user not found")

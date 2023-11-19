@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
 	res "legocy-go/internal/delievery/http/resources/users"
-	"legocy-go/internal/domain/errors"
 	models "legocy-go/internal/domain/users/models"
 	r "legocy-go/internal/domain/users/repository"
 )

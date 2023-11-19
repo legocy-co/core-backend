@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/app/errors"
 )
 
 var ErrHashError = errors.NewAppError(errors.InternalError, "could not hash string")

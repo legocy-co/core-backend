@@ -7,7 +7,7 @@ import (
 	s "legocy-go/internal/domain/marketplace/service"
 )
 
-func (r V1router) addCurrencies(rg *gin.RouterGroup, service s.CurrencyUseCase) {
+func (r V1router) addCurrencies(rg *gin.RouterGroup, service s.CurrencyService) {
 	handler := marketplace.NewCurrencyHandler(service)
 
 	currencies := rg.Group("/currencies").Use(m.Auth())

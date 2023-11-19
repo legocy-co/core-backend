@@ -2,10 +2,10 @@ package postgres
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
 	"legocy-go/internal/domain/collections/models"
-	"legocy-go/internal/domain/errors"
 	auth "legocy-go/internal/domain/users/models"
 )
 
@@ -37,7 +37,8 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 	}
 
 	legoSetsDomain := make([]models.CollectionLegoSet, 0, len(userLegoSetsDB))
-	var user *auth.User
+	var user *auth.User = nil
+
 	for _, legoSetDB := range userLegoSetsDB {
 		legoSetsDomain = append(legoSetsDomain, legoSetDB.ToCollectionLegoSet())
 

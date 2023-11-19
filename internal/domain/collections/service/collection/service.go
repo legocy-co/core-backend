@@ -2,23 +2,25 @@ package service
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
+	calculator "legocy-go/internal/domain/calculator/models"
+	c "legocy-go/internal/domain/calculator/repository"
 	"legocy-go/internal/domain/collections/models"
 	"legocy-go/internal/domain/collections/repository"
-	"legocy-go/internal/domain/errors"
-	auth "legocy-go/internal/domain/users/models"
-	users "legocy-go/internal/domain/users/repository"
+	users "legocy-go/internal/domain/users/models"
+	u "legocy-go/internal/domain/users/repository"
 )
 
 type UserCollectionService struct {
 	collectionRepository repository.UserCollectionRepository
-	valuationRepository  repository.LegoSetValuationRepository
-	usersRepository      users.UserRepository
+	valuationRepository  c.LegoSetValuationRepository
+	usersRepository      u.UserRepository
 }
 
 func NewUserCollectionService(
 	collectionRepo repository.UserCollectionRepository,
-	valuationRepo repository.LegoSetValuationRepository,
-	usersRepo users.UserRepository) UserCollectionService {
+	valuationRepo c.LegoSetValuationRepository,
+	usersRepo u.UserRepository) UserCollectionService {
 	return UserCollectionService{
 		collectionRepository: collectionRepo,
 		valuationRepository:  valuationRepo,
@@ -42,13 +44,13 @@ func (s UserCollectionService) UpdateUserCollectionSet(c context.Context, userID
 	return s.collectionRepository.UpdateUserCollectionSetByID(c, userID, collectionSetID, vo)
 }
 
-func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]models.LegoSetValuation, *auth.User, *errors.AppError) {
+func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]calculator.LegoSetValuation, *users.User, *errors.AppError) {
 	userCollection, err := s.GetUserCollection(c, userID)
 	if err != nil {
-		return []models.LegoSetValuation{}, nil, err
+		return []calculator.LegoSetValuation{}, nil, err
 	}
 
-	var setValuations []models.LegoSetValuation
+	var setValuations []calculator.LegoSetValuation
 
 	for _, userLegoSet := range userCollection.Sets {
 		setValuation, err := s.valuationRepository.GetLegoSetValuationBySetStateCurrency(
@@ -56,7 +58,7 @@ func (s UserCollectionService) GetUserCollectionValuation(c context.Context, use
 		)
 
 		if err != nil {
-			return []models.LegoSetValuation{}, nil, err
+			return []calculator.LegoSetValuation{}, nil, err
 		}
 
 		setValuations = append(setValuations, *setValuation)

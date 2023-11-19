@@ -17,5 +17,5 @@ type LegoSetValuationValueObject struct {
 	LegoSetID        int
 	State            string
 	CompanyValuation float32
-	CurrencyID       marketplace.Currency
+	CurrencyID       int
 }

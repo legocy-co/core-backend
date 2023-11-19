@@ -2,9 +2,9 @@ package admin
 
 import (
 	"context"
+	"legocy-go/internal/app/errors"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/errors"
 	e "legocy-go/internal/domain/users/errors"
 	models "legocy-go/internal/domain/users/models"
 	h "legocy-go/pkg/helpers"
@@ -15,13 +15,11 @@ type UserAdminPostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
-func NewUserAdminPostgresRepository(
-	conn d.DataBaseConnection) UserAdminPostgresRepository {
+func NewUserAdminPostgresRepository(conn d.DataBaseConnection) UserAdminPostgresRepository {
 	return UserAdminPostgresRepository{conn: conn}
 }
 
-func (r UserAdminPostgresRepository) GetUsers(
-	c context.Context) ([]*models.UserAdmin, *errors.AppError) {
+func (r UserAdminPostgresRepository) GetUsers(c context.Context) ([]*models.UserAdmin, *errors.AppError) {
 	var usersAdminDb []*entities.UserPostgres
 
 	db := r.conn.GetDB()
@@ -64,8 +62,7 @@ func (r UserAdminPostgresRepository) GetUserByID(
 	return userAdmin, nil
 }
 
-func (r UserAdminPostgresRepository) CreateAdmin(
-	c context.Context, ua *models.UserAdmin, password string) *errors.AppError {
+func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.UserAdmin, password string) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
 		return &d.ErrConnectionLost

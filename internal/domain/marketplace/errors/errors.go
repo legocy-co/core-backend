@@ -1,6 +1,8 @@
 package errors
 
-import "legocy-go/internal/domain/errors"
+import (
+	"legocy-go/internal/app/errors"
+)
 
 var (
 	ErrMarketItemsNotFound       = errors.NewAppError(errors.NotFoundError, "marketItems not found")

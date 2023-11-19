@@ -3,9 +3,9 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"legocy-go/internal/app/errors"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/errors"
 	e "legocy-go/internal/domain/users/errors"
 	models "legocy-go/internal/domain/users/models"
 	h "legocy-go/pkg/helpers"

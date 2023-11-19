@@ -1,7 +1,7 @@
 package collections
 
 import (
-	"legocy-go/internal/domain/errors"
+	"legocy-go/internal/app/errors"
 )
 
 var (
