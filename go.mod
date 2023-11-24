@@ -52,9 +52,9 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/segmentio/kafka-go v0.4.42 // indirect
-	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/ugorji/go/codec v1.2.8 // indirect
-	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/tools v0.6.0 // indirect
 	google.golang.org/genproto v0.0.0-20230323212658-478b75c54725 // indirect
