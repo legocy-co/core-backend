@@ -6,6 +6,8 @@ import (
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 	_ "legocy-go/docs"
 	"legocy-go/internal/app"
+	"legocy-go/pkg/logging"
+	"legocy-go/pkg/logging/util"
 )
 
 type V1router struct {
@@ -38,7 +40,13 @@ func (r V1router) Run(port string) error {
 // @externalDocs.url			https://swagger.io/resources/open-api/
 func GetV1Router(app *app.App) V1router {
 
+	gin.SetMode(gin.ReleaseMode)
+	util.UseJSONLogFormat()
+
 	r := gin.Default()
+
+	r.Use(logging.JSONLogMiddleware())
+
 	router := V1router{router: r}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
