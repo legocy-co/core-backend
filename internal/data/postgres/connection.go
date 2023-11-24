@@ -5,11 +5,11 @@ import (
 	"legocy-go/config"
 	d "legocy-go/internal/data"
 	entities "legocy-go/internal/data/postgres/entity"
+	"legocy-go/pkg/logging"
 	"log"
 
 	postgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (d.DataBaseConnection, error) {
@@ -39,7 +39,7 @@ func (psql *PostgresConnection) getConnectionString() string {
 func (psql *PostgresConnection) Init() {
 	dsn := psql.getConnectionString()
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logging.NewGORMLogger(),
 	})
 	if err != nil {
 		fmt.Printf("Error connecting to database! %v", err.Error())
