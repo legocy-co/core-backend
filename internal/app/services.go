@@ -37,14 +37,6 @@ func (a *App) GetLegoSetService() lego.LegoSetService {
 	return lego.NewLegoSetService(a.GetLegoSetRepo())
 }
 
-func (a *App) GetLocationService() marketplace.LocationUseCase {
-	return marketplace.NewLocationUseCase(a.GetLocationRepo())
-}
-
-func (a *App) GetCurrencyService() marketplace.CurrencyService {
-	return marketplace.NewCurrencyService(a.GetCurrencyRepo())
-}
-
 func (a *App) GetMarketItemService() marketplace.MarketItemService {
 	return marketplace.NewMarketItemService(a.GetMarketItemRepo())
 }

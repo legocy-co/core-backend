@@ -20,10 +20,6 @@ func (a *App) GetUserAdminRepository() users.UserAdminRepository {
 	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase())
 }
 
-func (a *App) GetCurrencyRepo() marketplace.CurrencyRepository {
-	return postgresAdmin.NewCurrencyPostgresRepository(a.GetDatabase())
-}
-
 // End Admin
 
 func (a *App) GetUserRepo() users.UserRepository {
@@ -40,10 +36,6 @@ func (a *App) GetLegoSeriesRepo() lego.LegoSeriesRepository {
 
 func (a *App) GetLegoSetRepo() lego.LegoSetRepository {
 	return postgres.NewLegoSetPostgresRepository(a.GetDatabase())
-}
-
-func (a *App) GetLocationRepo() marketplace.LocationRepository {
-	return postgres.NewLocationPostgresRepository(a.GetDatabase())
 }
 
 func (a *App) GetMarketItemRepo() marketplace.MarketItemRepository {
