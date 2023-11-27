@@ -10,6 +10,10 @@ type UserPostgresImage struct {
 	FilepathURL string
 }
 
+func (ui UserPostgresImage) TableName() string {
+	return "user_images"
+}
+
 func (ui *UserPostgresImage) ToUserImage() *models.UserImage {
 	return &models.UserImage{
 		UserID:      int(ui.UserID),

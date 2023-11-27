@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"legocy-go/internal/app"
-	r "legocy-go/internal/delievery/http/router/v1"
+	r "legocy-go/internal/delivery/http/router/v1"
 )
 
 func main() {

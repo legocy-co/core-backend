@@ -6,14 +6,12 @@ import (
 
 type UserLegoSetPostgres struct {
 	Model
-	UserID     int              `gorm:"index;not null"`
-	User       UserPostgres     `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
-	LegoSetID  int              `gorm:"index; not null"`
-	LegoSet    LegoSetPostgres  `gorm:"foreignKey:LegoSetID;constraint:OnDelete:CASCADE"`
-	State      string           `gorm:"not null;"`
-	BuyPrice   float32          `gorm:"not null;type:decimal(25,2);"`
-	CurrencyID int              `gorm:"index;not null"`
-	Currency   CurrencyPostgres `gorm:"foreignKey:CurrencyID;constraint:OnDelete: SET NULL"`
+	UserID    int             `gorm:"index;not null"`
+	User      UserPostgres    `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
+	LegoSetID int             `gorm:"index; not null"`
+	LegoSet   LegoSetPostgres `gorm:"foreignKey:LegoSetID;constraint:OnDelete:CASCADE"`
+	State     string          `gorm:"not null;"`
+	BuyPrice  float32         `gorm:"not null;type:decimal(25,2);"`
 }
 
 func (UserLegoSetPostgres) TableName() string {
@@ -26,14 +24,12 @@ func (lsp UserLegoSetPostgres) ToCollectionLegoSet() models.CollectionLegoSet {
 		LegoSet:      *lsp.LegoSet.ToLegoSet(),
 		CurrentState: lsp.State,
 		BuyPrice:     lsp.BuyPrice,
-		Currency:     *lsp.Currency.ToCurrency(),
 	}
 }
 
 func GetUpdatedUserLegoSet(vo *models.CollectionLegoSetValueObject, entity *UserLegoSetPostgres, userID int) *UserLegoSetPostgres {
 	entity.LegoSetID = vo.LegoSetID
 	entity.UserID = userID
-	entity.CurrencyID = vo.CurrencyID
 	entity.State = vo.CurrentState
 	entity.BuyPrice = vo.BuyPrice
 
@@ -42,10 +38,9 @@ func GetUpdatedUserLegoSet(vo *models.CollectionLegoSetValueObject, entity *User
 
 func GetCreatedUserLegoSet(vo *models.CollectionLegoSetValueObject, userID int) *UserLegoSetPostgres {
 	return &UserLegoSetPostgres{
-		UserID:     userID,
-		LegoSetID:  vo.LegoSetID,
-		State:      vo.CurrentState,
-		BuyPrice:   vo.BuyPrice,
-		CurrencyID: vo.CurrencyID,
+		UserID:    userID,
+		LegoSetID: vo.LegoSetID,
+		State:     vo.CurrentState,
+		BuyPrice:  vo.BuyPrice,
 	}
 }

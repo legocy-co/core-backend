@@ -12,6 +12,10 @@ type UserPostgres struct {
 	Password string
 }
 
+func (up UserPostgres) TableName() string {
+	return "users"
+}
+
 func FromUser(u *models.User, password string) *UserPostgres {
 	return &UserPostgres{
 		Username: u.Username,

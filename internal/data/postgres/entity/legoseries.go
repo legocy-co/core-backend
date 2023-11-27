@@ -9,6 +9,10 @@ type LegoSeriesPostgres struct {
 	Name string `gorm:"unique"`
 }
 
+func (lsp LegoSeriesPostgres) TableName() string {
+	return "lego_series"
+}
+
 func FromLegoSeriesValueObject(s *models.LegoSeriesValueObject) *LegoSeriesPostgres {
 	return &LegoSeriesPostgres{
 		Name: s.Name,

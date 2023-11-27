@@ -10,8 +10,7 @@ type MarketItem struct {
 	LegoSet     lego.LegoSet
 	Seller      auth.User
 	Price       float32
-	Currency    Currency
-	Location    Location
+	Location    string
 	SetState    string // lego.SetStateBrandNew / etc.
 	Status      string // lego.ListingStatusCheckRequired / lego.ListingStatusActive / etc.
 	Description string
@@ -22,7 +21,7 @@ type MarketItemValueObject struct {
 	SellerID    int
 	Price       float32
 	CurrencyID  int
-	LocationID  int
+	Location    string
 	Status      string
 	SetState    string // SetStateBrandNew / etc.
 	Description string

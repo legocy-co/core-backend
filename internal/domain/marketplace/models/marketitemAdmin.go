@@ -9,8 +9,7 @@ type MarketItemAdminValueObject struct {
 	LegoSetID   int
 	SellerID    int
 	Price       float32
-	CurrencyID  int
-	LocationID  int
+	Location    string
 	Status      string
 	SetState    string
 	Description string
@@ -21,8 +20,7 @@ type MarketItemAdmin struct {
 	LegoSet     lego.LegoSet
 	Seller      auth.User
 	Price       float32
-	Currency    Currency
-	Location    Location
+	Location    string
 	Status      string
 	SetState    string
 	Description string

@@ -25,138 +25,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/currencies/": {
-            "post": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "currencies_admin"
-                ],
-                "summary": "Get currency by symbol",
-                "operationId": "currency_create",
-                "parameters": [
-                    {
-                        "description": "currency symbol",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/locations/": {
-            "post": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "locations_admin"
-                ],
-                "summary": "Create Location",
-                "operationId": "locations_create",
-                "parameters": [
-                    {
-                        "description": "location data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/locations/{locID}": {
-            "delete": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "locations_admin"
-                ],
-                "summary": "Get locations by country",
-                "operationId": "locations_delete",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "location ID",
-                        "name": "locID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/admin/market-items/": {
             "post": {
                 "security": [
@@ -907,161 +775,6 @@ const docTemplate = `{
                             "type": "object",
                             "additionalProperties": {
                                 "type": "boolean"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/currencies/": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "currencies"
-                ],
-                "summary": "Get all currencies",
-                "operationId": "list_currencies",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/currencies/{currencySymbol}": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "currencies"
-                ],
-                "summary": "Get currency by symbol",
-                "operationId": "currency_detail",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "currency symbol",
-                        "name": "currencySymbol",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/locations/": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "locations"
-                ],
-                "summary": "Get locations",
-                "operationId": "locations_list",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/locations/{country}": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "locations"
-                ],
-                "summary": "Get locations by country",
-                "operationId": "locations_country",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "country",
-                        "name": "country",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse"
                             }
                         }
                     },
@@ -1866,9 +1579,6 @@ const docTemplate = `{
                 "buy_price": {
                     "type": "number"
                 },
-                "currency_id": {
-                    "type": "integer"
-                },
                 "lego_set_id": {
                     "type": "integer"
                 },
@@ -1882,9 +1592,6 @@ const docTemplate = `{
             "properties": {
                 "buy_price": {
                     "type": "number"
-                },
-                "currency": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
                 },
                 "id": {
                     "type": "integer"
@@ -1903,9 +1610,6 @@ const docTemplate = `{
                 "buy_price": {
                     "type": "number"
                 },
-                "currency_id": {
-                    "type": "integer"
-                },
                 "lego_set_id": {
                     "type": "integer"
                 },
@@ -1917,9 +1621,6 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse": {
             "type": "object",
             "properties": {
-                "currency": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
-                },
                 "total": {
                     "type": "number"
                 },
@@ -2004,70 +1705,17 @@ const docTemplate = `{
                 }
             }
         },
-        "legocy-go_internal_delievery_http_resources_marketplace.CurrencyRequest": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "symbol": {
-                    "type": "string"
-                }
-            }
-        },
-        "legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "symbol": {
-                    "type": "string"
-                }
-            }
-        },
-        "legocy-go_internal_delievery_http_resources_marketplace.LocationRequest": {
-            "type": "object",
-            "properties": {
-                "city": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "string"
-                }
-            }
-        },
-        "legocy-go_internal_delievery_http_resources_marketplace.LocationResponse": {
-            "type": "object",
-            "properties": {
-                "city": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
         "legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest": {
             "type": "object",
             "properties": {
-                "currency_id": {
-                    "type": "integer"
-                },
                 "description": {
                     "type": "string"
                 },
                 "lego_set_id": {
                     "type": "integer"
                 },
-                "location_id": {
-                    "type": "integer"
+                "location": {
+                    "type": "string"
                 },
                 "price": {
                     "type": "number"
@@ -2080,9 +1728,6 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse": {
             "type": "object",
             "properties": {
-                "currency": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
-                },
                 "description": {
                     "type": "string"
                 },
@@ -2093,7 +1738,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse"
                 },
                 "location": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse"
+                    "type": "string"
                 },
                 "price": {
                     "type": "number"
@@ -2112,17 +1757,14 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest": {
             "type": "object",
             "properties": {
-                "currency_id": {
-                    "type": "integer"
-                },
                 "description": {
                     "type": "string"
                 },
                 "lego_set_id": {
                     "type": "integer"
                 },
-                "location_id": {
-                    "type": "integer"
+                "location": {
+                    "type": "string"
                 },
                 "price": {
                     "type": "number"
@@ -2141,9 +1783,6 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse": {
             "type": "object",
             "properties": {
-                "currency": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
-                },
                 "description": {
                     "type": "string"
                 },
@@ -2154,7 +1793,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse"
                 },
                 "location": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.LocationResponse"
+                    "type": "string"
                 },
                 "price": {
                     "type": "number"
@@ -2173,17 +1812,14 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest": {
             "type": "object",
             "properties": {
-                "currency_id": {
-                    "type": "integer"
-                },
                 "description": {
                     "type": "string"
                 },
                 "lego_set_id": {
                     "type": "integer"
                 },
-                "location_id": {
-                    "type": "integer"
+                "location": {
+                    "type": "string"
                 },
                 "price": {
                     "type": "number"
@@ -2425,9 +2061,6 @@ const docTemplate = `{
         "legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse": {
             "type": "object",
             "properties": {
-                "currency": {
-                    "$ref": "#/definitions/legocy-go_internal_delievery_http_resources_marketplace.CurrencyResponse"
-                },
                 "id": {
                     "type": "integer"
                 },

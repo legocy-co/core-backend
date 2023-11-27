@@ -6,18 +6,19 @@ import (
 
 type MarketItemPostgres struct {
 	Model
-	Price              float32
-	CurrencyPostgresID uint             `filter:"param:currencyId;searchable,filterable"`
-	Currency           CurrencyPostgres `gorm:"ForeignKey:CurrencyPostgresID;"`
-	LegoSetPostgresID  uint             `filter:"param:setId;searchable,filterable"`
-	LegoSet            LegoSetPostgres  `gorm:"ForeignKey:LegoSetPostgresID;"`
-	UserPostgresID     uint             `filter:"param:sellerId;searchable,filterable"`
-	Seller             UserPostgres     `gorm:"ForeignKey:UserPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	LocationPostgresID uint             `filter:"param:locationId;searchable,filterable"`
-	Location           LocationPostgres `gorm:"ForeignKey:LocationPostgresID;"`
-	Status             string
-	SetState           string
-	Description        string
+	Price             float32
+	LegoSetPostgresID uint            `filter:"param:setId;searchable,filterable"`
+	LegoSet           LegoSetPostgres `gorm:"ForeignKey:LegoSetPostgresID;"`
+	UserPostgresID    uint            `filter:"param:sellerId;searchable,filterable"`
+	Seller            UserPostgres    `gorm:"ForeignKey:UserPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Location          string          `gorm:"not null"`
+	Status            string          `gorm:"not null"`
+	SetState          string          `gorm:"not null"`
+	Description       string          `gorm:"not null"`
+}
+
+func (mp MarketItemPostgres) TableName() string {
+	return "market_items"
 }
 
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
@@ -26,8 +27,7 @@ func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 		LegoSet:     *mp.LegoSet.ToLegoSet(),
 		Seller:      *mp.Seller.ToUser(),
 		Price:       mp.Price,
-		Currency:    *mp.Currency.ToCurrency(),
-		Location:    *mp.Location.ToLocation(),
+		Location:    mp.Location,
 		Status:      mp.Status,
 		SetState:    mp.SetState,
 		Description: mp.Description,
@@ -36,23 +36,21 @@ func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 
 func FromMarketItemValueObject(mi *models.MarketItemValueObject) *MarketItemPostgres {
 	return &MarketItemPostgres{
-		Price:              mi.Price,
-		CurrencyPostgresID: uint(mi.CurrencyID),
-		LegoSetPostgresID:  uint(mi.LegoSetID),
-		UserPostgresID:     uint(mi.SellerID),
-		LocationPostgresID: uint(mi.LocationID),
-		Status:             mi.Status,
-		SetState:           mi.SetState,
-		Description:        mi.Description,
+		Price:             mi.Price,
+		LegoSetPostgresID: uint(mi.LegoSetID),
+		UserPostgresID:    uint(mi.SellerID),
+		Location:          mi.Location,
+		Status:            mi.Status,
+		SetState:          mi.SetState,
+		Description:       mi.Description,
 	}
 }
 
 func (mp *MarketItemPostgres) GetUpdatedMarketItem(
 	vo models.MarketItemValueObject) *MarketItemPostgres {
-	mp.CurrencyPostgresID = uint(vo.CurrencyID)
 	mp.LegoSetPostgresID = uint(vo.LegoSetID)
-	mp.LocationPostgresID = uint(vo.LocationID)
 	mp.Price = vo.Price
+	mp.Location = vo.Location
 	mp.UserPostgresID = uint(vo.SellerID)
 	mp.Status = vo.Status
 	mp.SetState = vo.SetState
@@ -63,9 +61,8 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItem(
 
 func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
 	vo models.MarketItemAdminValueObject) *MarketItemPostgres {
-	mp.CurrencyPostgresID = uint(vo.CurrencyID)
 	mp.LegoSetPostgresID = uint(vo.LegoSetID)
-	mp.LocationPostgresID = uint(vo.LocationID)
+	mp.Location = vo.Location
 	mp.Price = vo.Price
 	mp.UserPostgresID = uint(vo.SellerID)
 	mp.Status = models.ListingStatusActive
@@ -77,14 +74,13 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
 
 func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *MarketItemPostgres {
 	return &MarketItemPostgres{
-		Price:              vo.Price,
-		CurrencyPostgresID: uint(vo.CurrencyID),
-		LegoSetPostgresID:  uint(vo.LegoSetID),
-		UserPostgresID:     uint(vo.SellerID),
-		LocationPostgresID: uint(vo.LocationID),
-		Status:             vo.Status,
-		SetState:           vo.SetState,
-		Description:        vo.Description,
+		Price:             vo.Price,
+		LegoSetPostgresID: uint(vo.LegoSetID),
+		UserPostgresID:    uint(vo.SellerID),
+		Location:          vo.Location,
+		Status:            vo.Status,
+		SetState:          vo.SetState,
+		Description:       vo.Description,
 	}
 }
 
@@ -94,8 +90,7 @@ func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
 		LegoSet:     *mp.LegoSet.ToLegoSet(),
 		Seller:      *mp.Seller.ToUser(),
 		Price:       mp.Price,
-		Currency:    *mp.Currency.ToCurrency(),
-		Location:    *mp.Location.ToLocation(),
+		Location:    mp.Location,
 		Status:      mp.Status,
 		SetState:    mp.SetState,
 		Description: mp.Description,
