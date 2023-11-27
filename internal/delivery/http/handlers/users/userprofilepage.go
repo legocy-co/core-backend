@@ -2,6 +2,7 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
+	appErrors "legocy-go/internal/app/errors"
 	"legocy-go/internal/delivery/http/errors"
 	"legocy-go/internal/delivery/http/resources/marketplace"
 	"legocy-go/internal/delivery/http/resources/users"
@@ -69,7 +70,7 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 	userResponse := users.GetUserDetailResponse(user)
 
 	userReviews, appErr := h.userReviewService.UserReviewsBySellerID(c, userID)
-	if appErr != nil {
+	if appErr != nil && appErr.GetErrorType() != appErrors.NotFoundError {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return

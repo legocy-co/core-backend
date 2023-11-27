@@ -7,6 +7,7 @@ import (
 	"legocy-go/internal/delivery/http/resources/marketplace/admin"
 	"legocy-go/internal/delivery/http/resources/pagination"
 	"legocy-go/internal/domain/marketplace/models"
+	"net/http"
 )
 
 // GetMarketItemsAdmin
@@ -42,6 +43,6 @@ func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 			resources.MsgSuccess,
 			c),
 	}
-	resources.Respond(c.Writer, dataMetaResponse)
 
+	c.JSON(http.StatusOK, dataMetaResponse)
 }

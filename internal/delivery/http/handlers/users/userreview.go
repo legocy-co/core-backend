@@ -58,7 +58,7 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 		Meta: pagination.GetPaginatedMetaResponse(
 			c.Request.URL.Path, resources.MsgSuccess, ctx),
 	}
-	resources.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, response)
 }
 
 // UserReviewDetail
@@ -137,7 +137,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 		Data: reviewRequest,
 		Meta: resources.SuccessMetaResponse,
 	}
-	resources.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, response)
 }
 
 // DeleteUserReview

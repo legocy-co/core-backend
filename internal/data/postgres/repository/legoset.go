@@ -53,7 +53,8 @@ func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.Leg
 		Preload("LegoSeries").Find(&entitiesList).Error
 
 	if _err != nil {
-		*err = errors.NewAppError(errors.InternalError, _err.Error())
+		appErr := errors.NewAppError(errors.InternalError, _err.Error())
+		err = &appErr
 	}
 
 	legoSets := make([]*models.LegoSet, 0, len(entitiesList))

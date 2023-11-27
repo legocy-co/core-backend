@@ -17,6 +17,10 @@ type MarketItemPostgres struct {
 	Description       string          `gorm:"not null"`
 }
 
+func (mp MarketItemPostgres) TableName() string {
+	return "market_items"
+}
+
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 	return &models.MarketItem{
 		ID:          int(mp.ID),

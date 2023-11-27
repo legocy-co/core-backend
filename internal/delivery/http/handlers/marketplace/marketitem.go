@@ -58,7 +58,7 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 		Meta: pagination.GetPaginatedMetaResponse(
 			c.Request.URL.Path, resources.MsgSuccess, ctx),
 	}
-	resources.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, response)
 }
 
 // ListMarketItemsAuthorized
@@ -91,6 +91,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
 	}
 
 	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
@@ -103,7 +104,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 		Meta: pagination.GetPaginatedMetaResponse(
 			c.Request.URL.Path, resources.MsgSuccess, ctx),
 	}
-	resources.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, response)
 }
 
 // MarketItemDetail
@@ -172,9 +173,10 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateMarketItem(c, vo)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	appErr := h.service.CreateMarketItem(c, vo)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
@@ -182,7 +184,7 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		Data: itemRequest,
 		Meta: resources.SuccessMetaResponse,
 	}
-	resources.Respond(c.Writer, response)
+	c.JSON(http.StatusOK, response)
 }
 
 // DeleteMarketItem

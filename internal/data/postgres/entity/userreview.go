@@ -15,6 +15,10 @@ type UserReviewPostgres struct {
 	Date               string
 }
 
+func (urp UserReviewPostgres) TableName() string {
+	return "user_reviews"
+}
+
 func (urp *UserReviewPostgres) ToUserReview() (*models.UserReview, error) {
 	return models.NewUserReview(
 		int(urp.ID),

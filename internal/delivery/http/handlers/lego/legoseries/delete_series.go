@@ -3,7 +3,6 @@ package legoseries
 import (
 	"github.com/gin-gonic/gin"
 	_ "legocy-go/docs"
-	v1 "legocy-go/internal/delivery/http/resources"
 	"net/http"
 	"strconv"
 )
@@ -35,8 +34,5 @@ func (lsh *LegoSeriesHandler) DeleteSeries(c *gin.Context) {
 		return
 	}
 
-	v1.Respond(c.Writer, v1.DataMetaResponse{
-		Data: seriesID,
-		Meta: v1.SuccessMetaResponse,
-	})
+	c.JSON(http.StatusOK, gin.H{"id": seriesID})
 }

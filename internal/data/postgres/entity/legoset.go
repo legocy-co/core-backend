@@ -6,11 +6,15 @@ import (
 
 type LegoSetPostgres struct {
 	Model
-	Number               int    `gorm:"unique"`
-	Name                 string `gorm:"unique"`
-	NPieces              int
-	LegoSeriesPostgresID uint
-	LegoSeries           LegoSeriesPostgres `gorm:"ForeignKey:LegoSeriesPostgresID"`
+	Number       int    `gorm:"unique"`
+	Name         string `gorm:"unique"`
+	NPieces      int
+	LegoSeriesID uint               `gorm:"index:idx_lego_set_lego_series"`
+	LegoSeries   LegoSeriesPostgres `gorm:"ForeignKey:LegoSeriesID"`
+}
+
+func (lsp LegoSetPostgres) TableName() string {
+	return "lego_sets"
 }
 
 func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {
@@ -25,18 +29,18 @@ func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {
 
 func FromLegoSet(s *models.LegoSet) *LegoSetPostgres {
 	return &LegoSetPostgres{
-		Number:               s.Number,
-		Name:                 s.Name,
-		NPieces:              s.NPieces,
-		LegoSeriesPostgresID: uint(s.Series.ID),
+		Number:       s.Number,
+		Name:         s.Name,
+		NPieces:      s.NPieces,
+		LegoSeriesID: uint(s.Series.ID),
 	}
 }
 
 func FromLegoSetValueObject(s *models.LegoSetValueObject) *LegoSetPostgres {
 	return &LegoSetPostgres{
-		Number:               s.Number,
-		Name:                 s.Name,
-		NPieces:              s.NPieces,
-		LegoSeriesPostgresID: uint(s.SeriesID),
+		Number:       s.Number,
+		Name:         s.Name,
+		NPieces:      s.NPieces,
+		LegoSeriesID: uint(s.SeriesID),
 	}
 }
