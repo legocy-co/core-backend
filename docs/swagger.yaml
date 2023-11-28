@@ -1,11 +1,11 @@
 basePath: /api/v1
 definitions:
-  legocy-go_internal_delievery_http_resources.DataMetaResponse:
+  legocy-go_internal_delivery_http_resources.DataMetaResponse:
     properties:
       data: {}
       meta: {}
     type: object
-  legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetAddRequest:
+  legocy-go_internal_delivery_http_resources_collections.CollectionLegoSetAddRequest:
     properties:
       buy_price:
         type: number
@@ -14,18 +14,18 @@ definitions:
       state:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetResponse:
+  legocy-go_internal_delivery_http_resources_collections.CollectionLegoSetResponse:
     properties:
       buy_price:
         type: number
       id:
         type: integer
       lego_set:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetResponse'
       state:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetUpdateRequest:
+  legocy-go_internal_delivery_http_resources_collections.CollectionLegoSetUpdateRequest:
     properties:
       buy_price:
         type: number
@@ -34,39 +34,39 @@ definitions:
       state:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse:
+  legocy-go_internal_delivery_http_resources_collections.UserCollectionValuationResponse:
     properties:
       total:
         type: number
       user:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
       valuations:
         items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_valuation.LegoSetValuationResponse'
         type: array
     type: object
-  legocy-go_internal_delievery_http_resources_collections.UserLegoSetCollectionResponse:
+  legocy-go_internal_delivery_http_resources_collections.UserLegoSetCollectionResponse:
     properties:
       collection_sets:
         items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetResponse'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_collections.CollectionLegoSetResponse'
         type: array
       user:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
     type: object
-  legocy-go_internal_delievery_http_resources_lego.LegoSeriesRequest:
+  legocy-go_internal_delivery_http_resources_lego.LegoSeriesRequest:
     properties:
       name:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_lego.LegoSeriesResponse:
+  legocy-go_internal_delivery_http_resources_lego.LegoSeriesResponse:
     properties:
       id:
         type: integer
       name:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_lego.LegoSetRequest:
+  legocy-go_internal_delivery_http_resources_lego.LegoSetRequest:
     properties:
       n_pieces:
         type: integer
@@ -77,7 +77,7 @@ definitions:
       series_id:
         type: integer
     type: object
-  legocy-go_internal_delievery_http_resources_lego.LegoSetResponse:
+  legocy-go_internal_delivery_http_resources_lego.LegoSetResponse:
     properties:
       id:
         type: integer
@@ -88,9 +88,9 @@ definitions:
       number:
         type: integer
       series:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSeriesResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSeriesResponse'
     type: object
-  legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest:
+  legocy-go_internal_delivery_http_resources_marketplace.MarketItemRequest:
     properties:
       description:
         type: string
@@ -103,26 +103,26 @@ definitions:
       set_state:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse:
+  legocy-go_internal_delivery_http_resources_marketplace.MarketItemResponse:
     properties:
       description:
         type: string
       id:
         type: integer
       lego_set:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetResponse'
       location:
         type: string
       price:
         type: number
       seller:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
       set_state:
         type: string
       status:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest:
+  legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminCreateRequest:
     properties:
       description:
         type: string
@@ -139,26 +139,26 @@ definitions:
       status:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse:
+  legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminResponse:
     properties:
       description:
         type: string
       id:
         type: integer
       lego_set:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetResponse'
       location:
         type: string
       price:
         type: number
       seller:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
       set_state:
         type: string
       status:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest:
+  legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest:
     properties:
       description:
         type: string
@@ -175,19 +175,19 @@ definitions:
       status:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users.JWTRequest:
+  legocy-go_internal_delivery_http_resources_users.JWTRequest:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users.JWTResponse:
+  legocy-go_internal_delivery_http_resources_users.JWTResponse:
     properties:
       access:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserDetailResponse:
+  legocy-go_internal_delivery_http_resources_users.UserDetailResponse:
     properties:
       email:
         type: string
@@ -198,7 +198,7 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse:
+  legocy-go_internal_delivery_http_resources_users.UserImageInfoResponse:
     properties:
       downloadURL:
         type: string
@@ -207,21 +207,21 @@ definitions:
       userID:
         type: integer
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserImageUploadResponse:
+  legocy-go_internal_delivery_http_resources_users.UserImageUploadResponse:
     properties:
       imageURL:
         type: string
       ok:
         type: boolean
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserImagesListResponse:
+  legocy-go_internal_delivery_http_resources_users.UserImagesListResponse:
     properties:
       images:
         items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserImageInfoResponse'
         type: array
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest:
+  legocy-go_internal_delivery_http_resources_users.UserRegistrationRequest:
     properties:
       email:
         type: string
@@ -230,7 +230,7 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse:
+  legocy-go_internal_delivery_http_resources_users.UserRegistrationResponse:
     properties:
       email:
         type: string
@@ -239,7 +239,7 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserReviewRequest:
+  legocy-go_internal_delivery_http_resources_users.UserReviewRequest:
     properties:
       message:
         type: string
@@ -248,7 +248,7 @@ definitions:
       seller_id:
         type: integer
     type: object
-  legocy-go_internal_delievery_http_resources_users.UserReviewResponse:
+  legocy-go_internal_delivery_http_resources_users.UserReviewResponse:
     properties:
       date:
         type: string
@@ -259,11 +259,11 @@ definitions:
       rating:
         type: integer
       reviewer:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
       seller:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
     type: object
-  legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest:
+  legocy-go_internal_delivery_http_resources_users_admin.AdminRegistrationRequest:
     properties:
       email:
         type: string
@@ -272,7 +272,7 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationResponse:
+  legocy-go_internal_delivery_http_resources_users_admin.AdminRegistrationResponse:
     properties:
       email:
         type: string
@@ -281,7 +281,7 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse:
+  legocy-go_internal_delivery_http_resources_users_admin.UserAdminDetailResponse:
     properties:
       email:
         type: string
@@ -292,7 +292,7 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users_admin.UserAdminUpdateRequest:
+  legocy-go_internal_delivery_http_resources_users_admin.UserAdminUpdateRequest:
     properties:
       email:
         type: string
@@ -302,35 +302,34 @@ definitions:
       username:
         type: string
     type: object
-  legocy-go_internal_delievery_http_resources_users_profile.UserProfilePageResponse:
+  legocy-go_internal_delivery_http_resources_users_profile.UserProfilePageResponse:
     properties:
       marketItems:
         items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace.MarketItemResponse'
         type: array
       user:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserDetailResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserDetailResponse'
       userImages:
         items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageInfoResponse'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserImageInfoResponse'
         type: array
       userReviews:
         items:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewResponse'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserReviewResponse'
         type: array
     type: object
-  legocy-go_internal_delievery_http_resources_valuation.LegoSetValuationResponse:
+  legocy-go_internal_delivery_http_resources_valuation.LegoSetValuationResponse:
     properties:
       id:
         type: integer
       lego_set:
-        $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+        $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetResponse'
       state:
         type: string
       valuation:
         type: number
     type: object
-host: localhost:8080
 info:
   contact:
     email: support@swagger.io
@@ -353,14 +352,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminCreateRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminCreateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminResponse'
         "409":
           description: Conflict
           schema:
@@ -391,7 +390,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminResponse'
         "400":
           description: Bad Request
           schema:
@@ -420,14 +419,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminUpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace_admin.MarketItemAdminResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace_admin.MarketItemAdminResponse'
         "400":
           description: Bad Request
           schema:
@@ -447,7 +446,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSeriesRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSeriesRequest'
       produces:
       - application/json
       responses:
@@ -502,7 +501,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetRequest'
       produces:
       - application/json
       responses:
@@ -558,7 +557,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse'
+              $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_admin.UserAdminDetailResponse'
             type: array
         "400":
           description: Bad Request
@@ -617,7 +616,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_admin.UserAdminDetailResponse'
         "400":
           description: Bad Request
           schema:
@@ -646,7 +645,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminUpdateRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_admin.UserAdminUpdateRequest'
       - description: Authorization
         in: header
         name: Authorization
@@ -658,7 +657,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.UserAdminDetailResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_admin.UserAdminDetailResponse'
         "400":
           description: Bad Request
           schema:
@@ -678,7 +677,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_admin.AdminRegistrationRequest'
       - description: Authorization
         in: header
         name: Authorization
@@ -690,7 +689,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_admin.AdminRegistrationResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_admin.AdminRegistrationResponse'
         "400":
           description: Bad Request
           schema:
@@ -710,7 +709,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.UserLegoSetCollectionResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_collections.UserLegoSetCollectionResponse'
         "400":
           description: Bad Request
           schema:
@@ -729,7 +728,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetAddRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_collections.CollectionLegoSetAddRequest'
       produces:
       - application/json
       responses:
@@ -789,7 +788,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.CollectionLegoSetUpdateRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_collections.CollectionLegoSetUpdateRequest'
       produces:
       - application/json
       responses:
@@ -823,7 +822,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_collections.UserCollectionValuationResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_collections.UserCollectionValuationResponse'
         "400":
           description: Bad Request
           schema:
@@ -863,7 +862,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace.MarketItemRequest'
       produces:
       - application/json
       responses:
@@ -897,7 +896,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace.MarketItemResponse'
         "400":
           description: Bad Request
           schema:
@@ -921,14 +920,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace.MarketItemRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_marketplace.MarketItemResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_marketplace.MarketItemResponse'
         "400":
           description: Bad Request
           schema:
@@ -998,7 +997,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSeriesResponse'
+              $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSeriesResponse'
             type: array
         "400":
           description: Bad Request
@@ -1025,7 +1024,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSeriesResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSeriesResponse'
         "400":
           description: Bad Request
           schema:
@@ -1046,7 +1045,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+              $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetResponse'
             type: array
         "400":
           description: Bad Request
@@ -1073,7 +1072,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_lego.LegoSetResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_lego.LegoSetResponse'
         "400":
           description: Bad Request
           schema:
@@ -1093,14 +1092,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserRegistrationRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserRegistrationResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserRegistrationResponse'
         "400":
           description: Bad Request
           schema:
@@ -1118,14 +1117,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.JWTRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.JWTRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.JWTResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.JWTResponse'
         "400":
           description: Bad Request
           schema:
@@ -1149,7 +1148,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImagesListResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserImagesListResponse'
         "400":
           description: Bad Request
           schema:
@@ -1174,7 +1173,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserImageUploadResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserImageUploadResponse'
         "400":
           description: Bad Request
           schema:
@@ -1220,7 +1219,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users_profile.UserProfilePageResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users_profile.UserProfilePageResponse'
         "400":
           description: Bad Request
           schema:
@@ -1260,7 +1259,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserReviewRequest'
       produces:
       - application/json
       responses:
@@ -1294,7 +1293,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/legocy-go_internal_delievery_http_resources_users.UserReviewResponse'
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.UserReviewResponse'
         "400":
           description: Bad Request
           schema:

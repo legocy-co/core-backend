@@ -29,7 +29,6 @@ func (r V1router) Run(port string) error {
 // @contact.email				support@swagger.io
 // @license.name				Apache 2.0
 // @license.url				http://www.apache.org/licenses/LICENSE-2.0.html
-// @host						localhost:8080
 // @BasePath					/api/v1
 //
 // @securityDefinitions.apiKey	JWT
@@ -62,7 +61,7 @@ func GetV1Router(app *app.App) V1router {
 
 	//legoset.go
 	router.addLegoSets(v1, app.GetLegoSetService())
-	
+
 	//marketitem.go
 	router.addMarketItems(v1, app)
 
