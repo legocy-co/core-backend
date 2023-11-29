@@ -2,10 +2,11 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/config"
 	_ "legocy-go/docs"
 	"legocy-go/internal/delivery/http/errors"
-	jwt "legocy-go/internal/delivery/http/middleware"
 	resources "legocy-go/internal/delivery/http/resources/users"
+	"legocy-go/pkg/auth/jwt"
 	"net/http"
 )
 
@@ -28,7 +29,7 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 		return
 	}
 
-	appErr := th.service.ValidateUser(c.Request.Context(), jwtRequest)
+	appErr := th.service.ValidateUserCredentials(c.Request.Context(), jwtRequest)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
@@ -42,14 +43,33 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 		return
 	}
 
-	token, err := jwt.GenerateJWT(user.Email, user.ID, user.Role)
+	accessToken, err := jwt.GenerateAccessToken(
+		user.Email,
+		user.ID,
+		user.Role,
+		config.GetAppConfig().JwtConf.SecretKey,
+		config.GetAppConfig().JwtConf.AccessTokenLifeTime,
+	)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	refreshToken, err := jwt.GenerateRefreshToken(
+		user.Email,
+		user.ID,
+		user.Role,
+		config.GetAppConfig().JwtConf.SecretKey,
+		config.GetAppConfig().JwtConf.RefreshTokenLifeTime,
+	)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, resources.JWTResponse{
-		AccessToken: token,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	})
 
 }

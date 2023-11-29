@@ -3,8 +3,11 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"legocy-go/config"
 	r "legocy-go/internal/domain/marketplace/repository"
 	models "legocy-go/internal/domain/users/models"
+	"legocy-go/pkg/auth/jwt"
+	"legocy-go/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -15,7 +18,7 @@ func ItemOwnerOrAdmin(
 
 	return func(ctx *gin.Context) {
 		// Get Token Header
-		tokenPayload, err := GetUserPayload(ctx)
+		tokenPayload, err := middleware.GetUserPayload(ctx)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -57,7 +60,7 @@ func IsMarketItemOwner(
 
 	return func(ctx *gin.Context) {
 		// Get Token Header
-		tokenPayload, err := GetUserPayload(ctx)
+		tokenPayload, err := middleware.GetUserPayload(ctx)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -99,14 +102,14 @@ func HasFreeMarketItemsSlot(
 	maxAmount int, repo r.MarketItemRepository) gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
-		tokenString := GetAuthTokenHeader(ctx)
+		tokenString := middleware.GetAuthTokenHeader(ctx)
 		if tokenString == "" {
 			ctx.JSON(401, gin.H{"error": "Token Header not found"})
 			ctx.Abort()
 			return
 		}
 
-		tokenPayload, ok := ParseTokenClaims(tokenString)
+		tokenPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 		if !ok {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{" error": "Error parsing Token Claims"})

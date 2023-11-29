@@ -3,8 +3,8 @@ package user_collection
 import (
 	"github.com/gin-gonic/gin"
 	"legocy-go/internal/delivery/http/errors"
-	v1 "legocy-go/internal/delivery/http/middleware"
 	"legocy-go/internal/delivery/http/resources/collections"
+	v1 "legocy-go/pkg/auth/jwt/middleware"
 	"net/http"
 )
 

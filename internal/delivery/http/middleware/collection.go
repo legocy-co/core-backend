@@ -5,6 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 	r "legocy-go/internal/domain/collections/repository"
 	models "legocy-go/internal/domain/users/models"
+	"legocy-go/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -13,7 +14,7 @@ func CollectionSetOwnerOrAdmin(
 	lookUpParam string, repo r.UserCollectionRepository) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		tokenPayload, err := GetUserPayload(ctx)
+		tokenPayload, err := middleware.GetUserPayload(ctx)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": err.Error()})

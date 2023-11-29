@@ -1,15 +1,35 @@
 package middleware
 
 import (
+	"legocy-go/config"
 	"legocy-go/internal/delivery/http/errors"
 	models "legocy-go/internal/domain/users/models"
+	"legocy-go/pkg/auth/jwt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Auth() gin.HandlerFunc {
+func GetAuthTokenHeader(ctx *gin.Context) string {
+	return ctx.GetHeader("Authorization")
+}
+
+func GetUserPayload(ctx *gin.Context) (*jwt.JWTClaim, error) {
+	tokenString := GetAuthTokenHeader(ctx)
+	if tokenString == "" {
+		return nil, errors.ErrTokenHeaderNotFound
+	}
+
+	tokenPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
+	if !ok {
+		return nil, errors.ErrParsingClaims
+	}
+
+	return tokenPayload, nil
+}
+
+func IsAuthenticated() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		tokenString := GetAuthTokenHeader(ctx)
@@ -19,7 +39,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
-		err := ValidateToken(tokenString)
+		err := jwt.ValidateAccessToken(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 		if err != nil {
 			ctx.JSON(401, gin.H{"error": err.Error()})
 			ctx.Abort()
@@ -30,19 +50,17 @@ func Auth() gin.HandlerFunc {
 	}
 }
 
-func AdminUserOnly() gin.HandlerFunc {
+func IsAdmin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenString := GetAuthTokenHeader(ctx)
 		if tokenString == "" {
-			ctx.JSON(401, gin.H{"error": "Token Header not found"})
-			ctx.Abort()
+			ctx.AbortWithStatusJSON(401, gin.H{"error": "Token Header not found"})
 			return
 		}
 
-		err := ValidateAdminToken(tokenString)
+		err := jwt.ValidateAdminAccessToken(tokenString, models.ADMIN, config.GetAppConfig().JwtConf.SecretKey)
 		if err != nil {
-			ctx.JSON(401, gin.H{"error": err.Error()})
-			ctx.Abort()
+			ctx.AbortWithStatusJSON(401, gin.H{"error": err.Error()})
 			return
 		}
 
@@ -50,7 +68,7 @@ func AdminUserOnly() gin.HandlerFunc {
 	}
 }
 
-func UserIdOrAdmin(lookUpParam string) gin.HandlerFunc {
+func IsOwnerOrAdmin(lookUpParam string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		tokenPayload, err := GetUserPayload(ctx)

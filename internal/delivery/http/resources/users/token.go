@@ -6,5 +6,6 @@ type JWTRequest struct {
 }
 
 type JWTResponse struct {
-	AccessToken string `json:"access"`
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }

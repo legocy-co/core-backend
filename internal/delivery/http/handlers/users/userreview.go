@@ -2,13 +2,15 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/config"
 	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/middleware"
 	resources "legocy-go/internal/delivery/http/resources"
 	"legocy-go/internal/delivery/http/resources/pagination"
 	"legocy-go/internal/delivery/http/resources/users"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
+	"legocy-go/pkg/auth/jwt"
+	"legocy-go/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -106,7 +108,7 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := middleware.ParseTokenClaims(tokenString)
+	userPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
 			gin.H{"error": "invalid token credentials"})

@@ -5,6 +5,7 @@ import (
 	a "legocy-go/internal/app"
 	"legocy-go/internal/delivery/http/handlers/marketplace"
 	"legocy-go/internal/delivery/http/middleware"
+	middleware2 "legocy-go/pkg/auth/jwt/middleware"
 )
 
 func (r V1router) addMarketItems(
@@ -14,7 +15,7 @@ func (r V1router) addMarketItems(
 	handler := marketplace.NewMarketItemHandler(
 		app.GetMarketItemService())
 
-	items := rg.Group("/market-items").Use(middleware.Auth())
+	items := rg.Group("/market-items").Use(middleware2.IsAuthenticated())
 	{
 		items.GET("/", handler.ListMarketItems)
 		items.GET("/authorized/", handler.ListMarketItemsAuthorized)
