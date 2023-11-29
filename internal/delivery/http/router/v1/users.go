@@ -8,7 +8,7 @@ import (
 	"legocy-go/internal/delivery/http/handlers/users/auth"
 	"legocy-go/internal/delivery/http/handlers/users/userImage"
 	"legocy-go/internal/delivery/http/middleware"
-	middleware2 "legocy-go/pkg/auth/jwt/middleware"
+	jwt "legocy-go/pkg/auth/jwt/middleware"
 )
 
 func (r V1router) addUsers(rg *gin.RouterGroup, app *app.App) {
@@ -29,7 +29,7 @@ func (r V1router) addUsers(rg *gin.RouterGroup, app *app.App) {
 	profileHandler := users.NewUserProfilePageHandler(
 		app.GetMarketItemService(), app.GetUserService(), app.GetUserReviewService(), app.GetUserImagesService())
 
-	profileRoutes := rg.Group("/users/profile").Use(middleware2.IsAuthenticated())
+	profileRoutes := rg.Group("/users/profile").Use(jwt.IsAuthenticated())
 	{
 		profileRoutes.GET("/:userID", profileHandler.UserProfilePageDetail)
 	}
@@ -37,7 +37,7 @@ func (r V1router) addUsers(rg *gin.RouterGroup, app *app.App) {
 	// User Reviews
 
 	reviewsHandler := users.NewUserReviewHandler(app.GetUserReviewService())
-	reviewsRoutes := rg.Group("/users/reviews").Use(middleware2.IsAuthenticated())
+	reviewsRoutes := rg.Group("/users/reviews").Use(jwt.IsAuthenticated())
 	{
 		reviewsRoutes.GET("/", reviewsHandler.ListUserReviews)
 		reviewsRoutes.GET("/:reviewID", reviewsHandler.UserReviewDetail)
@@ -60,7 +60,7 @@ func (r V1router) addUsers(rg *gin.RouterGroup, app *app.App) {
 	userImages := rg.Group("/users/images")
 	{
 		userImages.GET("/download", userImagesHandler.DownloadImage)
-		userImages.Use(middleware2.IsOwnerOrAdmin("userID"))
+		userImages.Use(jwt.IsOwnerOrAdmin("userID"))
 		{
 			userImages.GET("/:userID", userImagesHandler.ListImages)
 			userImages.POST("/:userID", userImagesHandler.UploadUserImage)
