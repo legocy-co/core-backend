@@ -3,6 +3,7 @@ package jwt
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -63,6 +64,7 @@ func ParseTokenClaims(signedToken string, secretKey string) (*JWTClaim, bool) {
 	)
 
 	if err != nil {
+		log.Error(err.Error())
 		return nil, false
 	}
 

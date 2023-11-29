@@ -98,7 +98,8 @@ func SetupFromEnv() error {
 
 	jwtSecretKey := os.Getenv("JWT_SECRET_KEY")
 	jwtAccessTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_ACCESS_TOKEN_LIFETIME"))
-	jwtRefreshTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_REFRESH_TOKEN_LIFETIME_HOURS"))
+	jwtRefreshTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_REFRESH_TOKEN_LIFETIME"))
+	logrus.Printf("REFRESH_TOKEN = %v", jwtRefreshTokenLifetimeHours)
 
 	jwtConfig := JWTConfig{
 		SecretKey:            jwtSecretKey,
