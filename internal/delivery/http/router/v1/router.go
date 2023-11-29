@@ -53,7 +53,7 @@ func GetV1Router(app *app.App) V1router {
 	v1 := r.Group("/api/v1")
 	v1Admin := r.Group("/api/v1/admin")
 
-	//users.go
+	//gin.go
 	router.addUsers(v1, app)
 
 	//legoseries.go

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	r "legocy-go/internal/domain/marketplace/repository"
 	models "legocy-go/internal/domain/users/models"
+	"legocy-go/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -14,7 +15,7 @@ func ReviewOwnerOrAdmin(
 
 	return func(ctx *gin.Context) {
 		// Get Token Header
-		tokenPayload, err := GetUserPayload(ctx)
+		tokenPayload, err := middleware.GetUserPayload(ctx)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
 				http.StatusBadRequest, gin.H{"error": err.Error()})

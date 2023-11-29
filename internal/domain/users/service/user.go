@@ -16,7 +16,7 @@ func NewUserService(repo r.UserRepository) UserService {
 	return UserService{repo: repo}
 }
 
-func (s *UserService) ValidateUser(c context.Context, req res.JWTRequest) *errors.AppError {
+func (s *UserService) ValidateUserCredentials(c context.Context, req res.SignInRequest) *errors.AppError {
 	return s.repo.ValidateUser(c, req.Email, req.Password)
 }
 

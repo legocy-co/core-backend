@@ -2,13 +2,15 @@ package marketplace
 
 import (
 	"github.com/gin-gonic/gin"
+	"legocy-go/config"
 	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/middleware"
 	resources "legocy-go/internal/delivery/http/resources"
 	"legocy-go/internal/delivery/http/resources/marketplace"
 	"legocy-go/internal/delivery/http/resources/pagination"
 	models "legocy-go/internal/domain/marketplace/models"
 	s "legocy-go/internal/domain/marketplace/service"
+	"legocy-go/pkg/auth/jwt"
+	"legocy-go/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -152,7 +154,7 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := middleware.ParseTokenClaims(tokenString)
+	userPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 	if !ok {
 		c.AbortWithStatusJSON(
 			http.StatusUnauthorized, gin.H{"error": "invalid token credentials"},
@@ -238,7 +240,7 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 	}
 
 	tokenString := middleware.GetAuthTokenHeader(c)
-	userPayload, ok := middleware.ParseTokenClaims(tokenString)
+	userPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,
 			gin.H{"error": "invalid token credentials"})
