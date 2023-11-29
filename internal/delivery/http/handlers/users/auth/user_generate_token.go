@@ -16,13 +16,13 @@ import (
 //	@Tags		authentication
 //	@ID			create-jwt
 //	@Produce	json
-//	@Param		data	body		resources.JWTRequest	true	"jwt request"
+//	@Param		data	body		resources.SignInRequest	true	"jwt request"
 //	@Success	200		{object}	resources.JWTResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/users/auth/token [post]
+//	@Router		/users/auth/sign-in [post]
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
-	var jwtRequest resources.JWTRequest
+	var jwtRequest resources.SignInRequest
 	if err := c.ShouldBindJSON(&jwtRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()

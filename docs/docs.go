@@ -1181,6 +1181,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/auth/refresh": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "refresh jwt tokens",
+                "operationId": "refresh-jwt",
+                "parameters": [
+                    {
+                        "description": "jwt request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delivery_http_resources_users.RefreshTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/legocy-go_internal_delivery_http_resources_users.AccessTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/users/auth/register": {
             "post": {
                 "produces": [
@@ -1219,7 +1257,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/auth/token": {
+        "/users/auth/sign-in": {
             "post": {
                 "produces": [
                     "application/json"
@@ -1236,7 +1274,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/legocy-go_internal_delivery_http_resources_users.JWTRequest"
+                            "$ref": "#/definitions/legocy-go_internal_delivery_http_resources_users.SignInRequest"
                         }
                     }
                 ],
@@ -1835,13 +1873,10 @@ const docTemplate = `{
                 }
             }
         },
-        "legocy-go_internal_delivery_http_resources_users.JWTRequest": {
+        "legocy-go_internal_delivery_http_resources_users.AccessTokenResponse": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
+                "access_token": {
                     "type": "string"
                 }
             }
@@ -1849,7 +1884,29 @@ const docTemplate = `{
         "legocy-go_internal_delivery_http_resources_users.JWTResponse": {
             "type": "object",
             "properties": {
-                "access": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delivery_http_resources_users.RefreshTokenRequest": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "legocy-go_internal_delivery_http_resources_users.SignInRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }

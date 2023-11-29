@@ -175,16 +175,28 @@ definitions:
       status:
         type: string
     type: object
-  legocy-go_internal_delivery_http_resources_users.JWTRequest:
+  legocy-go_internal_delivery_http_resources_users.AccessTokenResponse:
     properties:
-      email:
-        type: string
-      password:
+      access_token:
         type: string
     type: object
   legocy-go_internal_delivery_http_resources_users.JWTResponse:
     properties:
-      access:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  legocy-go_internal_delivery_http_resources_users.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  legocy-go_internal_delivery_http_resources_users.SignInRequest:
+    properties:
+      email:
+        type: string
+      password:
         type: string
     type: object
   legocy-go_internal_delivery_http_resources_users.UserDetailResponse:
@@ -1083,6 +1095,31 @@ paths:
       summary: Get LegoSet by ID
       tags:
       - lego_sets
+  /users/auth/refresh:
+    post:
+      operationId: refresh-jwt
+      parameters:
+      - description: jwt request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.AccessTokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: refresh jwt tokens
+      tags:
+      - authentication
   /users/auth/register:
     post:
       operationId: user-register
@@ -1108,7 +1145,7 @@ paths:
       summary: register new user
       tags:
       - authentication
-  /users/auth/token:
+  /users/auth/sign-in:
     post:
       operationId: create-jwt
       parameters:
@@ -1117,7 +1154,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.JWTRequest'
+          $ref: '#/definitions/legocy-go_internal_delivery_http_resources_users.SignInRequest'
       produces:
       - application/json
       responses:

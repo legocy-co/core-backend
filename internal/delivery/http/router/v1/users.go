@@ -19,7 +19,8 @@ func (r V1router) addUsers(rg *gin.RouterGroup, app *app.App) {
 
 	authRouter := rg.Group("/users/auth")
 	{
-		authRouter.POST("/token", authHandler.GenerateToken)
+		authRouter.POST("/sign-in", authHandler.GenerateToken)
+		authRouter.POST("/refresh", authHandler.RefreshToken)
 		authRouter.POST("/register", authHandler.UserRegister)
 	}
 
