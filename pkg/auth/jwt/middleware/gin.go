@@ -7,18 +7,39 @@ import (
 	"legocy-go/pkg/auth/jwt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetAuthTokenHeader(ctx *gin.Context) string {
-	return ctx.GetHeader("Authorization")
+
+	// Bearer <token> -> <token>
+	// If Invalid -> ""
+
+	value := ctx.GetHeader("Authorization")
+	value = strings.TrimLeft(value, " ")
+
+	if value == "" {
+		return value
+	}
+
+	if len(value) < 7 {
+		return ""
+	}
+
+	if value[:7] != "Bearer " {
+		return ""
+	}
+
+	return strings.TrimLeft(value[7:], " ")
+
 }
 
 func GetUserPayload(ctx *gin.Context) (*jwt.JWTClaim, error) {
 	tokenString := GetAuthTokenHeader(ctx)
 	if tokenString == "" {
-		return nil, errors.ErrTokenHeaderNotFound
+		return nil, errors.ErrInvaldTokenHeader
 	}
 
 	tokenPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
