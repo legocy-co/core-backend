@@ -4,5 +4,5 @@ import (
 	"net/http"
 )
 
-var ErrTokenHeaderNotFound = NewHttpResponseError(http.StatusBadRequest, "token header not found")
+var ErrInvaldTokenHeader = NewHttpResponseError(http.StatusBadRequest, "invalid token header value")
 var ErrParsingClaims = NewHttpResponseError(http.StatusBadRequest, "error parsing token claims")
