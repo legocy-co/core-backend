@@ -4,6 +4,7 @@ import (
 	postgres "legocy-go/internal/data/postgres/repository"
 	postgresAdmin "legocy-go/internal/data/postgres/repository/admin"
 	calculator "legocy-go/internal/domain/calculator/repository"
+	calculatorAdmin "legocy-go/internal/domain/calculator/repository/admin"
 	collections "legocy-go/internal/domain/collections/repository"
 	lego "legocy-go/internal/domain/lego/repository"
 	marketplace "legocy-go/internal/domain/marketplace/repository"
@@ -18,6 +19,10 @@ func (a *App) GetMarketItemAdminRepository() marketplace.MarketItemAdminReposito
 
 func (a *App) GetUserAdminRepository() users.UserAdminRepository {
 	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase())
+}
+
+func (a *App) GetLegoSetsValuationAdminRepository() calculatorAdmin.LegoSetValuationAdminRepository {
+	return postgresAdmin.NewLegoSetValuationPostgresAdminRepository(a.GetDatabase())
 }
 
 // End Admin
