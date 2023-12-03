@@ -16,7 +16,7 @@ import (
 //	@Tags		market_items_admin
 //	@ID			list_market_items_admin
 //	@Produce	json
-//	@Success	200	{object}	schemas.DataMetaResponse
+//	@Success	200	{object}	utils.DataMetaResponse
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/authorized/ [get]
 //

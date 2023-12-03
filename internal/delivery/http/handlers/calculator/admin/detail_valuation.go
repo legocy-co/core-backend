@@ -8,6 +8,19 @@ import (
 	"strconv"
 )
 
+// GetValuationByID
+//
+//	@Summary	Get LegoSetValuations (Admin)
+//	@Tags		calculator_admin
+//	@ID			detail_lego_set_valuation_admin
+//	@Param valuationID path int true "id"
+//	@Produce	json
+//	@Success	200	{object}	calculator.LegoSetValuationResponse
+//	@Failure	409	{object}	map[string]interface{}
+//	@Failure	422	{object}	map[string]interface{}
+//	@Router		/admin/sets-valuations/{valuationID} [get]
+//
+//	@Security	JWT
 func (h Handler) GetValuationByID(ctx *gin.Context) {
 
 	valuationId, e := strconv.Atoi(ctx.Param("valuationID"))

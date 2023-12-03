@@ -3,7 +3,7 @@ package admin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
-	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users/admin"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users/admin"
 	"net/http"
 )
 
@@ -13,8 +13,8 @@ import (
 //	@Tags		users_admin
 //	@ID			create-admin
 //	@Produce	json
-//	@Param		data	body		schemas.AdminRegistrationRequest	true	"reg request"
-//	@Success	200		{object}	schemas.AdminRegistrationResponse
+//	@Param		data	body		admin.AdminRegistrationRequest	true	"reg request"
+//	@Success	200		{object}	admin.AdminRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/admin/users/register [post]
 //
@@ -22,7 +22,7 @@ import (
 //	@param		Authorization	header	string	true	"Authorization"
 func (h *UserAdminHandler) AdminRegister(c *gin.Context) {
 
-	var registerReq resources.AdminRegistrationRequest
+	var registerReq admin.AdminRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -36,5 +36,5 @@ func (h *UserAdminHandler) AdminRegister(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, resources.GetAdminResponse(userAdmin))
+	c.JSON(http.StatusOK, admin.GetAdminResponse(userAdmin))
 }

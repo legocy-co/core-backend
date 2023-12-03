@@ -7,6 +7,19 @@ import (
 	"strconv"
 )
 
+// DeleteValuation
+//
+//	@Summary	Delete LegoSetValuations (Admin)
+//	@Tags		calculator_admin
+//	@ID			delete_lego_set_valuation_admin
+//	@Param valuationID path int true "id"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	409	{object}	map[string]interface{}
+//	@Failure	422	{object}	map[string]interface{}
+//	@Router		/admin/sets-valuations/{valuationID} [delete]
+//
+//	@Security	JWT
 func (h Handler) DeleteValuation(ctx *gin.Context) {
 	valuationID, e := strconv.Atoi(ctx.Param("valuationID"))
 	if e != nil {

@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+// GetLegoSetValuations
+//
+//	@Summary	Get LegoSetValuations (Admin)
+//	@Tags		calculator_admin
+//	@ID			list_lego_set_valuation_admin
+//	@Produce	json
+//	@Success	200	{object}	[]calculator.LegoSetValuationResponse
+//	@Failure	409	{object}	map[string]interface{}
+//	@Failure	422	{object}	map[string]interface{}
+//	@Router		/admin/sets-valuations/ [get]
+//
+//	@Security	JWT
 func (h Handler) GetLegoSetValuations(ctx *gin.Context) {
 
 	valuations, err := h.service.GetLegoSetValuations(ctx)

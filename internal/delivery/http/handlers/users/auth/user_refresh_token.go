@@ -5,7 +5,7 @@ import (
 	"github.com/legocy-co/legocy/config"
 	_ "github.com/legocy-co/legocy/docs"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
-	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"net/http"
 )
@@ -22,7 +22,7 @@ import (
 //	@Router		/users/auth/refresh [post]
 func (th *TokenHandler) RefreshToken(c *gin.Context) {
 
-	var jwtRequest resources.RefreshTokenRequest
+	var jwtRequest schemas.RefreshTokenRequest
 	if err := c.ShouldBindJSON(&jwtRequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -64,7 +64,7 @@ func (th *TokenHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, resources.AccessTokenResponse{
+	c.JSON(http.StatusOK, schemas.AccessTokenResponse{
 		AccessToken: accessToken,
 	},
 	)

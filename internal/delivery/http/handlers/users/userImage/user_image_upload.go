@@ -3,7 +3,7 @@ package userImage
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	userModels "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/pkg/storage"
 	"github.com/legocy-co/legocy/pkg/storage/models"
@@ -56,6 +56,6 @@ func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
 	}
 
-	response := resources.GetUserImageUploadResponse(imgUrl)
+	response := schemas.GetUserImageUploadResponse(imgUrl)
 	c.JSON(http.StatusOK, response)
 }

@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/legocy-co/legocy/docs"
-	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"net/http"
 )
 
@@ -19,7 +19,7 @@ import (
 //	@Router		/users/auth/register [post]
 func (th *TokenHandler) UserRegister(c *gin.Context) {
 
-	var registerReq resources.UserRegistrationRequest
+	var registerReq schemas.UserRegistrationRequest
 
 	if err := c.ShouldBindJSON(&registerReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -34,5 +34,5 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, resources.GetUserResponse(user))
+	c.JSON(http.StatusOK, schemas.GetUserResponse(user))
 }

@@ -7,6 +7,19 @@ import (
 	"net/http"
 )
 
+// CreateValuation
+//
+//	@Summary	Create LegoSetValuation (Admin)
+//	@Tags		calculator_admin
+//	@ID			create_lego_set_valuation_admin
+//	@Param		data	body	calculator.LegoSetValuationCreateRequest	true	"data"
+//	@Produce	json
+//	@Success	200	{object}	map[string]interface{}
+//	@Failure	409	{object}	map[string]interface{}
+//	@Failure	422	{object}	map[string]interface{}
+//	@Router		/admin/sets-valuations/ [post]
+//
+//	@Security	JWT
 func (h Handler) CreateValuation(ctx *gin.Context) {
 
 	var createRequest *calculator.LegoSetValuationCreateRequest
