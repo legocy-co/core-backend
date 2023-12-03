@@ -1,22 +1,27 @@
 package app
 
 import (
-	collection "legocy-go/internal/domain/collections/service/collection"
-	lego "legocy-go/internal/domain/lego/service"
-	marketplace "legocy-go/internal/domain/marketplace/service"
-	marketplaceAdmin "legocy-go/internal/domain/marketplace/service/admin"
-	users "legocy-go/internal/domain/users/service"
-	useradmin "legocy-go/internal/domain/users/service/admin"
+	calculatorAdmin "github.com/legocy-co/legocy/internal/domain/calculator/service/admin"
+	collection "github.com/legocy-co/legocy/internal/domain/collections/service/collection"
+	lego "github.com/legocy-co/legocy/internal/domain/lego/service"
+	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/service"
+	marketplaceAdmin "github.com/legocy-co/legocy/internal/domain/marketplace/service/admin"
+	users "github.com/legocy-co/legocy/internal/domain/users/service"
+	usersAdmin "github.com/legocy-co/legocy/internal/domain/users/service/admin"
 )
 
 // Start Admin
 
-func (a *App) GetUserAdminService() useradmin.UserAdminService {
-	return useradmin.NewUserAdminService(a.GetUserAdminRepository())
+func (a *App) GetUserAdminService() usersAdmin.UserAdminService {
+	return usersAdmin.NewUserAdminService(a.GetUserAdminRepository())
 }
 
 func (a *App) GetMarketItemAdminService() marketplaceAdmin.MarketItemAdminService {
 	return marketplaceAdmin.NewMarketItemAdminService(a.GetMarketItemAdminRepository())
+}
+
+func (a *App) GetLegoSetValuationAdminService() calculatorAdmin.LegoSetValuationAdminService {
+	return calculatorAdmin.NewService(a.GetLegoSetsValuationAdminRepository())
 }
 
 // End Admin

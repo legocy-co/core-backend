@@ -1,7 +1,7 @@
 package admin
 
 import (
-	service "legocy-go/internal/domain/users/service/admin"
+	service "github.com/legocy-co/legocy/internal/domain/users/service/admin"
 )
 
 type UserAdminHandler struct {

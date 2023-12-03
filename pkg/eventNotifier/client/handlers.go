@@ -2,9 +2,9 @@ package client
 
 import (
 	"context"
-	"legocy-go/pkg/eventNotifier/models"
-	"legocy-go/pkg/eventNotifier/proto"
-	"legocy-go/pkg/eventNotifier/proto/mapper"
+	"github.com/legocy-co/legocy/pkg/eventNotifier/models"
+	"github.com/legocy-co/legocy/pkg/eventNotifier/proto"
+	"github.com/legocy-co/legocy/pkg/eventNotifier/proto/mapper"
 )
 
 func (client EventNotifierClient) NotifyEvent(eventData models.NotifyEventData) error {

@@ -2,7 +2,7 @@ package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"net/http"
 	"strconv"
 )

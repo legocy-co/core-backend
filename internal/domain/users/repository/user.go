@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	models "legocy-go/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
 type UserRepository interface {

@@ -2,8 +2,8 @@ package logging
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/legocy-co/legocy/pkg/logging/util"
 	log "github.com/sirupsen/logrus"
-	"legocy-go/pkg/logging/util"
 	"time"
 )
 

@@ -1,10 +1,10 @@
 package service
 
 import (
+	"github.com/legocy-co/legocy/internal/app/errors"
+	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	r "github.com/legocy-co/legocy/internal/domain/lego/repository"
 	"golang.org/x/net/context"
-	"legocy-go/internal/app/errors"
-	models "legocy-go/internal/domain/lego/models"
-	r "legocy-go/internal/domain/lego/repository"
 )
 
 type LegoSeriesService struct {

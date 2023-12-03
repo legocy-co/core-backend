@@ -1,7 +1,7 @@
 package calculator
 
 import (
-	"legocy-go/internal/app/errors"
+	"github.com/legocy-co/legocy/internal/app/errors"
 )
 
 var (

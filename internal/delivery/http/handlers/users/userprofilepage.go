@@ -2,13 +2,13 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
-	appErrors "legocy-go/internal/app/errors"
-	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/resources/marketplace"
-	"legocy-go/internal/delivery/http/resources/users"
-	"legocy-go/internal/delivery/http/resources/users/profile"
-	s "legocy-go/internal/domain/marketplace/service"
-	ser "legocy-go/internal/domain/users/service"
+	appErrors "github.com/legocy-co/legocy/internal/app/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users/profile"
+	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
+	ser "github.com/legocy-co/legocy/internal/domain/users/service"
 	"net/http"
 	"strconv"
 )

@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"legocy-go/pkg/eventNotifier/models"
-	"legocy-go/pkg/eventNotifier/proto"
+	"github.com/legocy-co/legocy/pkg/eventNotifier/models"
+	"github.com/legocy-co/legocy/pkg/eventNotifier/proto"
 	"strconv"
 )
 

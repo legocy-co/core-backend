@@ -2,13 +2,13 @@ package postgres
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	d "legocy-go/internal/data"
-	entities "legocy-go/internal/data/postgres/entity"
-	e "legocy-go/internal/domain/marketplace/errors"
-	models "legocy-go/internal/domain/marketplace/models"
-	"legocy-go/pkg/filter"
-	"legocy-go/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	d "github.com/legocy-co/legocy/internal/data"
+	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
+	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/pkg/filter"
+	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type MarketItemPostgresRepository struct {

@@ -2,10 +2,10 @@ package client
 
 import (
 	"context"
-	"legocy-go/pkg/storage"
-	"legocy-go/pkg/storage/models"
-	"legocy-go/pkg/storage/proto"
-	"legocy-go/pkg/storage/proto/mapper"
+	"github.com/legocy-co/legocy/pkg/storage"
+	"github.com/legocy-co/legocy/pkg/storage/models"
+	"github.com/legocy-co/legocy/pkg/storage/proto"
+	"github.com/legocy-co/legocy/pkg/storage/proto/mapper"
 	"log"
 )
 

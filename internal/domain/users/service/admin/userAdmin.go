@@ -2,9 +2,9 @@ package admin
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	models "legocy-go/internal/domain/users/models"
-	r "legocy-go/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	r "github.com/legocy-co/legocy/internal/domain/users/repository"
 )
 
 type UserAdminService struct {

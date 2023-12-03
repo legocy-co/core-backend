@@ -1,7 +1,7 @@
 package marketItem
 
 import (
-	s "legocy-go/internal/domain/marketplace/service/admin"
+	s "github.com/legocy-co/legocy/internal/domain/marketplace/service/admin"
 )
 
 type Handler struct {

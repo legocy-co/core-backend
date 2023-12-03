@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	"legocy-go/internal/domain/calculator/models"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	"github.com/legocy-co/legocy/internal/domain/calculator/models"
 )
 
 type LegoSetValuationRepository interface {

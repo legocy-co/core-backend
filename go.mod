@@ -1,4 +1,4 @@
-module legocy-go
+module github.com/legocy-co/legocy
 
 go 1.19
 

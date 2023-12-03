@@ -2,10 +2,10 @@ package legoset
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "legocy-go/docs"
-	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/resources/lego"
-	"legocy-go/internal/delivery/http/resources/pagination"
+	_ "github.com/legocy-co/legocy/docs"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	"net/http"
 )
 
