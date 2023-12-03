@@ -2,7 +2,7 @@ package userImage
 
 import (
 	"github.com/gin-gonic/gin"
-	resources "legocy-go/internal/delivery/http/resources/users"
+	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"net/http"
 	"strconv"
 )
@@ -14,7 +14,7 @@ import (
 //	@ID			get_user_images
 //	@Produce	json
 //	@Param		userID	path int	true	"user ID"
-//	@Success	200		{object}	resources.UserImagesListResponse
+//	@Success	200		{object}	schemas.UserImagesListResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/images/:userID [get]
 func (h UserImageHandler) ListImages(c *gin.Context) {

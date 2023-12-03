@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	res "legocy-go/internal/delivery/http/resources/users"
-	models "legocy-go/internal/domain/users/models"
-	r "legocy-go/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	res "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	r "github.com/legocy-co/legocy/internal/domain/users/repository"
 )
 
 type UserService struct {

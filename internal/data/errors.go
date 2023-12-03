@@ -1,7 +1,7 @@
 package data
 
 import (
-	"legocy-go/internal/app/errors"
+	"github.com/legocy-co/legocy/internal/app/errors"
 )
 
 var ErrConnectionLost = errors.NewAppError(errors.InternalError, "connection lost")

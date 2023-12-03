@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	models "legocy-go/internal/domain/users/models"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
 type UserImageRepository interface {

@@ -2,8 +2,8 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delivery/http/errors"
-	resources "legocy-go/internal/delivery/http/resources/users/admin"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users/admin"
 	"net/http"
 )
 
@@ -13,8 +13,8 @@ import (
 //	@Tags		users_admin
 //	@ID			create-admin
 //	@Produce	json
-//	@Param		data	body		resources.AdminRegistrationRequest	true	"reg request"
-//	@Success	200		{object}	resources.AdminRegistrationResponse
+//	@Param		data	body		schemas.AdminRegistrationRequest	true	"reg request"
+//	@Success	200		{object}	schemas.AdminRegistrationResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/admin/users/register [post]
 //

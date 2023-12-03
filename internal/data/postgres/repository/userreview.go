@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	d "legocy-go/internal/data"
-	entities "legocy-go/internal/data/postgres/entity"
-	models "legocy-go/internal/domain/marketplace/models"
-	"legocy-go/pkg/filter"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	d "github.com/legocy-co/legocy/internal/data"
+	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/pkg/filter"
 )
 
 type UserReviewPostgresRepository struct {

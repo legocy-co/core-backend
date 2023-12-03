@@ -2,7 +2,7 @@ package userImage
 
 import (
 	"github.com/gin-gonic/gin"
-	resources "legocy-go/internal/delivery/http/resources/users"
+	resources "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"log"
 	"net/http"
 )

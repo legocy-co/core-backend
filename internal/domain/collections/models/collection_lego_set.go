@@ -1,7 +1,7 @@
 package models
 
 import (
-	lego "legocy-go/internal/domain/lego/models"
+	lego "github.com/legocy-co/legocy/internal/domain/lego/models"
 )
 
 type CollectionLegoSet struct {

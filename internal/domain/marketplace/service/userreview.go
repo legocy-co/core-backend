@@ -1,11 +1,11 @@
 package service
 
 import (
+	"github.com/legocy-co/legocy/internal/app/errors"
+	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
+	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	"golang.org/x/net/context"
-	"legocy-go/internal/app/errors"
-	e "legocy-go/internal/domain/marketplace/errors"
-	models "legocy-go/internal/domain/marketplace/models"
-	r "legocy-go/internal/domain/marketplace/repository"
 )
 
 type UserReviewService struct {

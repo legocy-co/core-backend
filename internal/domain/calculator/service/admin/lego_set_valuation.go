@@ -2,13 +2,17 @@ package admin
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	"legocy-go/internal/domain/calculator/models"
-	repository "legocy-go/internal/domain/calculator/repository/admin"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	"github.com/legocy-co/legocy/internal/domain/calculator/models"
+	repository "github.com/legocy-co/legocy/internal/domain/calculator/repository/admin"
 )
 
 type LegoSetValuationAdminService struct {
 	r repository.LegoSetValuationAdminRepository
+}
+
+func NewService(r repository.LegoSetValuationAdminRepository) LegoSetValuationAdminService {
+	return LegoSetValuationAdminService{r: r}
 }
 
 func (s LegoSetValuationAdminService) GetLegoSetValuations(

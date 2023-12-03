@@ -2,8 +2,8 @@ package legoset
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/resources/lego"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	"net/http"
 	"strconv"
 )

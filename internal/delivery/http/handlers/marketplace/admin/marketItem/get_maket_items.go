@@ -2,11 +2,11 @@ package marketItem
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delivery/http/errors"
-	resources "legocy-go/internal/delivery/http/resources"
-	"legocy-go/internal/delivery/http/resources/marketplace/admin"
-	"legocy-go/internal/delivery/http/resources/pagination"
-	"legocy-go/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace/admin"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
+	"github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ import (
 //	@Tags		market_items_admin
 //	@ID			list_market_items_admin
 //	@Produce	json
-//	@Success	200	{object}	resources.DataMetaResponse
+//	@Success	200	{object}	schemas.DataMetaResponse
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/authorized/ [get]
 //
@@ -36,11 +36,11 @@ func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 		response = append(response, admin.GetMarketItemAdminResponse(marketItem))
 	}
 
-	dataMetaResponse := resources.DataMetaResponse{
+	dataMetaResponse := utils.DataMetaResponse{
 		Data: response,
 		Meta: pagination.GetPaginatedMetaResponse(
 			c.Request.URL.Path,
-			resources.MsgSuccess,
+			utils.MsgSuccess,
 			c),
 	}
 

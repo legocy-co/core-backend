@@ -1,8 +1,8 @@
 package marketplace
 
 import (
-	"legocy-go/internal/domain/lego/models"
-	"legocy-go/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
 type MarketItem struct {

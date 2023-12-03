@@ -3,11 +3,11 @@ package app
 import (
 	"context"
 	"fmt"
+	"github.com/legocy-co/legocy/config"
+	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/fixtures"
+	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/sirupsen/logrus"
-	"legocy-go/config"
-	d "legocy-go/internal/data"
-	"legocy-go/internal/fixtures"
-	"legocy-go/pkg/kafka"
 	"log"
 	"time"
 )

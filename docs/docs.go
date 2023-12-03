@@ -654,7 +654,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/collections/valuation/{currencyID}": {
+        "/collections/calculator/{currencyID}": {
             "get": {
                 "security": [
                     {
@@ -2127,7 +2127,7 @@ const docTemplate = `{
                 "state": {
                     "type": "string"
                 },
-                "valuation": {
+                "calculator": {
                     "type": "number"
                 }
             }

@@ -2,8 +2,8 @@ package legoseries
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "legocy-go/docs"
-	"legocy-go/internal/delivery/http/resources/lego"
+	_ "github.com/legocy-co/legocy/docs"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	"net/http"
 	"strconv"
 )

@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"legocy-go/config"
-	"legocy-go/internal/delivery/http/errors"
-	models "legocy-go/internal/domain/users/models"
-	"legocy-go/pkg/auth/jwt"
+	"github.com/legocy-co/legocy/config"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"net/http"
 	"strconv"
 	"strings"

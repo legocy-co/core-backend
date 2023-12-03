@@ -3,10 +3,10 @@ package fixtures
 import (
 	"context"
 	"encoding/json"
+	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	repository2 "github.com/legocy-co/legocy/internal/domain/lego/repository"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	models "legocy-go/internal/domain/lego/models"
-	repository2 "legocy-go/internal/domain/lego/repository"
 	"os"
 	"strconv"
 )

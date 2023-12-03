@@ -2,12 +2,12 @@ package admin
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	d "legocy-go/internal/data"
-	entities "legocy-go/internal/data/postgres/entity"
-	"legocy-go/internal/domain/calculator"
-	"legocy-go/internal/domain/calculator/models"
-	"legocy-go/internal/domain/collections"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	d "github.com/legocy-co/legocy/internal/data"
+	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/domain/calculator"
+	"github.com/legocy-co/legocy/internal/domain/calculator/models"
+	"github.com/legocy-co/legocy/internal/domain/collections"
 )
 
 type LegoSetValuationAdminPostgresRepository struct {
@@ -58,30 +58,6 @@ func (r LegoSetValuationAdminPostgresRepository) GetLegoSetValuationByID(
 	var entity *entities.LegoSetValuationPostgres
 	res := db.Model(
 		&entities.LegoSetValuationPostgres{}).Preload("LegoSet").First(&entity, id)
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
-		return nil, &appErr
-	}
-
-	if entity == nil {
-		return nil, &collections.ErrValuationNotFound
-	}
-
-	return entity.ToLegoSetValuation(), nil
-}
-
-func (r LegoSetValuationAdminPostgresRepository) GetLegoSetValuationBySetStateCurrency(
-	c context.Context, setID int, setState string, currencyID int) (*models.LegoSetValuation, *errors.AppError) {
-
-	db := r.conn.GetDB()
-	if db == nil {
-		return nil, &d.ErrConnectionLost
-	}
-
-	var entity *entities.LegoSetValuationPostgres
-	res := db.Model(
-		&entities.LegoSetValuationPostgres{}).Preload("LegoSet").First(
-		&entity, "lego_set_id = ?", setID, "state = ?", setState, "currency_id = ?", currencyID)
 	if res.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
 		return nil, &appErr

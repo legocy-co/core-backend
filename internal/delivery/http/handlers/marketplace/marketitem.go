@@ -2,15 +2,15 @@ package marketplace
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/config"
-	"legocy-go/internal/delivery/http/errors"
-	resources "legocy-go/internal/delivery/http/resources"
-	"legocy-go/internal/delivery/http/resources/marketplace"
-	"legocy-go/internal/delivery/http/resources/pagination"
-	models "legocy-go/internal/domain/marketplace/models"
-	s "legocy-go/internal/domain/marketplace/service"
-	"legocy-go/pkg/auth/jwt"
-	"legocy-go/pkg/auth/jwt/middleware"
+	"github.com/legocy-co/legocy/config"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
+	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
+	"github.com/legocy-co/legocy/pkg/auth/jwt"
+	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -55,10 +55,10 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	response := resources.DataMetaResponse{
+	response := utils.DataMetaResponse{
 		Data: marketItemResponse,
 		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, resources.MsgSuccess, ctx),
+			c.Request.URL.Path, utils.MsgSuccess, ctx),
 	}
 	c.JSON(http.StatusOK, response)
 }
@@ -101,10 +101,10 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	response := resources.DataMetaResponse{
+	response := utils.DataMetaResponse{
 		Data: marketItemResponse,
 		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, resources.MsgSuccess, ctx),
+			c.Request.URL.Path, utils.MsgSuccess, ctx),
 	}
 	c.JSON(http.StatusOK, response)
 }
@@ -182,9 +182,9 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		return
 	}
 
-	response := resources.DataMetaResponse{
+	response := utils.DataMetaResponse{
 		Data: itemRequest,
-		Meta: resources.SuccessMetaResponse,
+		Meta: utils.SuccessMetaResponse,
 	}
 	c.JSON(http.StatusOK, response)
 }
