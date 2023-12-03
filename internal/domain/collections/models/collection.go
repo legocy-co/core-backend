@@ -1,6 +1,6 @@
 package models
 
-import auth "legocy-go/internal/domain/users/models"
+import auth "github.com/legocy-co/legocy/internal/domain/users/models"
 
 type LegoCollection struct {
 	User auth.User

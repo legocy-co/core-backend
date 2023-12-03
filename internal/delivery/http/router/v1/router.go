@@ -2,12 +2,14 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/legocy-co/legocy/docs"
+	"github.com/legocy-co/legocy/internal/app"
+	"github.com/legocy-co/legocy/internal/delivery/http/router/v1/admin"
+	"github.com/legocy-co/legocy/internal/delivery/http/router/v1/site"
+	"github.com/legocy-co/legocy/pkg/logging"
+	"github.com/legocy-co/legocy/pkg/logging/util"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
-	_ "legocy-go/docs"
-	"legocy-go/internal/app"
-	"legocy-go/pkg/logging"
-	"legocy-go/pkg/logging/util"
 )
 
 type V1router struct {
@@ -53,26 +55,17 @@ func GetV1Router(app *app.App) V1router {
 	v1 := r.Group("/api/v1")
 	v1Admin := r.Group("/api/v1/admin")
 
-	//gin.go
-	router.addUsers(v1, app)
+	// Admin Routers
+	admin.AddUserAdmin(v1Admin, app.GetUserAdminService())
+	admin.AddAdminMarketItems(v1Admin, app.GetMarketItemAdminService())
+	admin.AddAdminLegoSetValuations(v1Admin, app.GetLegoSetValuationAdminService())
 
-	//legoseries.go
-	router.addLegoSeries(v1, app.GetLegoSeriesService())
-
-	//legoset.go
-	router.addLegoSets(v1, app.GetLegoSetService())
-
-	//marketitem.go
-	router.addMarketItems(v1, app)
-
-	//admin_market_item.go
-	router.addAdminMarketItems(v1Admin, app.GetMarketItemAdminService())
-
-	// admin_user.go
-	router.addUserAdmin(v1Admin, app.GetUserAdminService())
-
-	// collection.go
-	router.addUserCollections(v1, app)
+	// Site Routers
+	site.AddUsers(v1, app)
+	site.AddUserCollections(v1, app)
+	site.AddLegoSeries(v1, app.GetLegoSeriesService())
+	site.AddLegoSets(v1, app.GetLegoSetService())
+	site.AddMarketItems(v1, app)
 
 	// healthcheck.go
 	router.addHealthCheck(v1)

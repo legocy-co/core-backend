@@ -2,13 +2,13 @@ package admin
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	d "legocy-go/internal/data"
-	entities "legocy-go/internal/data/postgres/entity"
-	e "legocy-go/internal/domain/users/errors"
-	models "legocy-go/internal/domain/users/models"
-	h "legocy-go/pkg/helpers"
-	"legocy-go/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	d "github.com/legocy-co/legocy/internal/data"
+	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	e "github.com/legocy-co/legocy/internal/domain/users/errors"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	h "github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type UserAdminPostgresRepository struct {

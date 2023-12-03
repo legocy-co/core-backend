@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	r "legocy-go/internal/domain/marketplace/repository"
-	models "legocy-go/internal/domain/users/models"
-	"legocy-go/pkg/auth/jwt/middleware"
+	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )

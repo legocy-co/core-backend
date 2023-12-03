@@ -1,9 +1,9 @@
 package mapper
 
 import (
-	"legocy-go/pkg/helpers"
-	"legocy-go/pkg/storage/models"
-	"legocy-go/pkg/storage/proto"
+	"github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/pkg/storage/models"
+	"github.com/legocy-co/legocy/pkg/storage/proto"
 )
 
 func GetImageUploadRequest(image *models.ImageUnit, bucketName string) *proto.UploadImageRequest {

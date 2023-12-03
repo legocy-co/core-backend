@@ -2,7 +2,7 @@ package userImage
 
 import (
 	"github.com/gin-gonic/gin"
-	resources "legocy-go/internal/delivery/http/resources/users"
+	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"net/http"
 	"strconv"
 )
@@ -14,7 +14,7 @@ import (
 //	@ID			get_user_images
 //	@Produce	json
 //	@Param		userID	path int	true	"user ID"
-//	@Success	200		{object}	resources.UserImagesListResponse
+//	@Success	200		{object}	schemas.UserImagesListResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/images/:userID [get]
 func (h UserImageHandler) ListImages(c *gin.Context) {
@@ -29,14 +29,14 @@ func (h UserImageHandler) ListImages(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 
-	imageResponseList := make([]resources.UserImageInfoResponse, len(imagesList))
+	imageResponseList := make([]schemas.UserImageInfoResponse, len(imagesList))
 	for _, image := range imagesList {
 		imageResponseList = append(
 			imageResponseList,
-			resources.GetUserInfoResponse(image),
+			schemas.GetUserInfoResponse(image),
 		)
 	}
 
-	response := resources.GetUserImagesListResponse(imageResponseList)
+	response := schemas.GetUserImagesListResponse(imageResponseList)
 	c.JSON(http.StatusOK, response)
 }

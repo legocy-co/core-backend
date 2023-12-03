@@ -2,11 +2,11 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/config"
-	_ "legocy-go/docs"
-	"legocy-go/internal/delivery/http/errors"
-	resources "legocy-go/internal/delivery/http/resources/users"
-	"legocy-go/pkg/auth/jwt"
+	"github.com/legocy-co/legocy/config"
+	_ "github.com/legocy-co/legocy/docs"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"net/http"
 )
 
@@ -16,13 +16,13 @@ import (
 //	@Tags		authentication
 //	@ID			create-jwt
 //	@Produce	json
-//	@Param		data	body		resources.SignInRequest	true	"jwt request"
-//	@Success	200		{object}	resources.JWTResponse
+//	@Param		data	body		schemas.SignInRequest	true	"jwt request"
+//	@Success	200		{object}	schemas.JWTResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/auth/sign-in [post]
 func (th *TokenHandler) GenerateToken(c *gin.Context) {
 
-	var jwtRequest resources.SignInRequest
+	var jwtRequest schemas.SignInRequest
 	if err := c.ShouldBindJSON(&jwtRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()
@@ -67,7 +67,7 @@ func (th *TokenHandler) GenerateToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, resources.JWTResponse{
+	c.JSON(http.StatusOK, schemas.JWTResponse{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	})

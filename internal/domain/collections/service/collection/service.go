@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	calculator "legocy-go/internal/domain/calculator/models"
-	c "legocy-go/internal/domain/calculator/repository"
-	"legocy-go/internal/domain/collections/models"
-	"legocy-go/internal/domain/collections/repository"
-	users "legocy-go/internal/domain/users/models"
-	u "legocy-go/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	calculator "github.com/legocy-co/legocy/internal/domain/calculator/models"
+	c "github.com/legocy-co/legocy/internal/domain/calculator/repository"
+	"github.com/legocy-co/legocy/internal/domain/collections/models"
+	"github.com/legocy-co/legocy/internal/domain/collections/repository"
+	users "github.com/legocy-co/legocy/internal/domain/users/models"
+	u "github.com/legocy-co/legocy/internal/domain/users/repository"
 )
 
 type UserCollectionService struct {

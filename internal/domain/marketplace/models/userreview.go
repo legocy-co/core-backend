@@ -2,7 +2,7 @@ package marketplace
 
 import (
 	"errors"
-	"legocy-go/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
 type UserReview struct {

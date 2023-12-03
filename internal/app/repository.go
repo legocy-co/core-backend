@@ -1,13 +1,14 @@
 package app
 
 import (
-	postgres "legocy-go/internal/data/postgres/repository"
-	postgresAdmin "legocy-go/internal/data/postgres/repository/admin"
-	calculator "legocy-go/internal/domain/calculator/repository"
-	collections "legocy-go/internal/domain/collections/repository"
-	lego "legocy-go/internal/domain/lego/repository"
-	marketplace "legocy-go/internal/domain/marketplace/repository"
-	users "legocy-go/internal/domain/users/repository"
+	postgres "github.com/legocy-co/legocy/internal/data/postgres/repository"
+	postgresAdmin "github.com/legocy-co/legocy/internal/data/postgres/repository/admin"
+	calculator "github.com/legocy-co/legocy/internal/domain/calculator/repository"
+	calculatorAdmin "github.com/legocy-co/legocy/internal/domain/calculator/repository/admin"
+	collections "github.com/legocy-co/legocy/internal/domain/collections/repository"
+	lego "github.com/legocy-co/legocy/internal/domain/lego/repository"
+	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	users "github.com/legocy-co/legocy/internal/domain/users/repository"
 )
 
 // Start Admin
@@ -18,6 +19,10 @@ func (a *App) GetMarketItemAdminRepository() marketplace.MarketItemAdminReposito
 
 func (a *App) GetUserAdminRepository() users.UserAdminRepository {
 	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase())
+}
+
+func (a *App) GetLegoSetsValuationAdminRepository() calculatorAdmin.LegoSetValuationAdminRepository {
+	return postgresAdmin.NewLegoSetValuationPostgresAdminRepository(a.GetDatabase())
 }
 
 // End Admin

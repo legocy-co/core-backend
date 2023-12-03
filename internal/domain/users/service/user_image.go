@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	models "legocy-go/internal/domain/users/models"
-	repo "legocy-go/internal/domain/users/repository"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	repo "github.com/legocy-co/legocy/internal/domain/users/repository"
 )
 
 type UserImageUseCase struct {

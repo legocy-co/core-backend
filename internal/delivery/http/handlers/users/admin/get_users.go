@@ -2,9 +2,9 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/resources/users/admin"
-	models "legocy-go/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users/admin"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"net/http"
 )
 

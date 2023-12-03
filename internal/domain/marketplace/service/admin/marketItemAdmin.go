@@ -2,9 +2,9 @@ package admin
 
 import (
 	"context"
-	"legocy-go/internal/app/errors"
-	models "legocy-go/internal/domain/marketplace/models"
-	marketplace "legocy-go/internal/domain/marketplace/repository"
+	"github.com/legocy-co/legocy/internal/app/errors"
+	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 )
 
 type MarketItemAdminService struct {

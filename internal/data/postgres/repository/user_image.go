@@ -2,10 +2,10 @@ package postgres
 
 import (
 	"context"
-	d "legocy-go/internal/data"
-	entities "legocy-go/internal/data/postgres/entity"
-	models "legocy-go/internal/domain/users/models"
-	"legocy-go/internal/domain/users/repository"
+	d "github.com/legocy-co/legocy/internal/data"
+	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/domain/users/repository"
 )
 
 type UserImagePostgresRepository struct {

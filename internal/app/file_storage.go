@@ -1,8 +1,8 @@
 package app
 
 import (
-	"legocy-go/config"
-	storage "legocy-go/pkg/storage/client"
+	"github.com/legocy-co/legocy/config"
+	storage "github.com/legocy-co/legocy/pkg/storage/client"
 )
 
 func (a *App) GetImageStorageClient() storage.ImageStorage {

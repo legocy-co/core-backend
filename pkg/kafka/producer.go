@@ -3,9 +3,9 @@ package kafka
 import (
 	"context"
 	"encoding/json"
+	"github.com/legocy-co/legocy/config"
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
-	"legocy-go/config"
 	"time"
 )
 

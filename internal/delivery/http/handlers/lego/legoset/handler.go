@@ -1,7 +1,7 @@
 package legoset
 
 import (
-	s "legocy-go/internal/domain/lego/service"
+	s "github.com/legocy-co/legocy/internal/domain/lego/service"
 )
 
 type LegoSetHandler struct {

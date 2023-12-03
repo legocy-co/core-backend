@@ -1,8 +1,8 @@
 package userImage
 
 import (
-	"legocy-go/internal/domain/users/service"
-	"legocy-go/pkg/storage/client"
+	"github.com/legocy-co/legocy/internal/domain/users/service"
+	"github.com/legocy-co/legocy/pkg/storage/client"
 )
 
 type UserImageHandler struct {

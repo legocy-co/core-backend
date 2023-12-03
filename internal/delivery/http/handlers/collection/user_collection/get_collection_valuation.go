@@ -2,9 +2,9 @@ package user_collection
 
 import (
 	"github.com/gin-gonic/gin"
-	"legocy-go/internal/delivery/http/errors"
-	"legocy-go/internal/delivery/http/resources/collections"
-	v1 "legocy-go/pkg/auth/jwt/middleware"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/collections"
+	v1 "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"
 	"strconv"
 )
@@ -18,7 +18,7 @@ import (
 //	@Success	200	{object} 	collections.UserCollectionValuationResponse
 //	@Failure	400	{object}	map[string]interface{}
 //	@Param		currencyID	path	int	true	"currency ID"
-//	@Router		/collections/valuation/{currencyID} [get]
+//	@Router		/collections/calculator/{currencyID} [get]
 //
 //	@Security	JWT
 func (h UserLegoCollectionHandler) GetUserCollectionValuation(c *gin.Context) {
