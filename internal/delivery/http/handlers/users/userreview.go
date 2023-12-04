@@ -6,7 +6,6 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
@@ -33,17 +32,15 @@ func NewUserReviewHandler(
 //	@Tags		user_reviews
 //	@ID			list_user_reviews
 //	@Produce	json
-//	@Success	200	{object}	map[string]interface{}
+//	@Success	200	{object}	[]users.UserReviewResponse
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/users/reviews/ [get]
 //
 //	@Security	JWT
 func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 
-	ctx := pagination.GetPaginationContext(c)
-
 	var userReviews []*models.UserReview
-	userReviews, err := h.service.ListUserReviews(ctx)
+	userReviews, err := h.service.ListUserReviews(c)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
@@ -55,12 +52,7 @@ func (h *UserReviewHandler) ListUserReviews(c *gin.Context) {
 		userReviewResponse = append(userReviewResponse, users.GetUserReviewResponse(m))
 	}
 
-	response := utils.DataMetaResponse{
-		Data: userReviewResponse,
-		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, utils.MsgSuccess, ctx),
-	}
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, userReviewResponse)
 }
 
 // UserReviewDetail
