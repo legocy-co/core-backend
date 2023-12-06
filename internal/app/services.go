@@ -1,6 +1,7 @@
 package app
 
 import (
+	calculator "github.com/legocy-co/legocy/internal/domain/calculator/service"
 	calculatorAdmin "github.com/legocy-co/legocy/internal/domain/calculator/service/admin"
 	collection "github.com/legocy-co/legocy/internal/domain/collections/service/collection"
 	lego "github.com/legocy-co/legocy/internal/domain/lego/service"
@@ -56,4 +57,8 @@ func (a *App) GetUserCollectionService() collection.UserCollectionService {
 		a.GetLegoSetsValuationRepository(),
 		a.GetUserRepo(),
 	)
+}
+
+func (a *App) GetLegoSetValuationService() calculator.LegoSetValuationService {
+	return calculator.NewLegoSetValuationService(a.GetLegoSetsValuationRepository())
 }

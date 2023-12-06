@@ -1223,6 +1223,34 @@ paths:
       summary: LEGO Series by id
       tags:
       - lego_series
+  /sets-valuations/{legoSetID}:
+    get:
+      consumes:
+      - application/json
+      description: Get valuations by lego set id
+      parameters:
+      - description: Lego Set ID
+        in: path
+        name: legoSetID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get valuations by lego set id
+      tags:
+      - calculator
   /sets/:
     get:
       operationId: list_sets
@@ -1452,8 +1480,9 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            items:
+              $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse'
+            type: array
         "400":
           description: Bad Request
           schema:
