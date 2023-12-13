@@ -1528,7 +1528,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserRegistrationResponse"
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
                         }
                     },
                     "400": {
@@ -2296,20 +2296,6 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserRegistrationResponse": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
                 },
                 "username": {
                     "type": "string"

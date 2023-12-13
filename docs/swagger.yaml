@@ -266,15 +266,6 @@ definitions:
       username:
         type: string
     type: object
-  github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserRegistrationResponse:
-    properties:
-      email:
-        type: string
-      role:
-        type: integer
-      username:
-        type: string
-    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewRequest:
     properties:
       message:
@@ -1340,7 +1331,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserRegistrationResponse'
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse'
         "400":
           description: Bad Request
           schema:
