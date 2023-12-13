@@ -28,7 +28,6 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 	res := db.Model(&entities.UserLegoSetPostgres{}).
 		Preload("User").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Preload("Currency").
 		Find(&userLegoSetsDB, "user_id = ?", userID)
 
 	if res.Error != nil {
