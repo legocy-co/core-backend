@@ -38,6 +38,11 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 	legoSetsDomain := make([]models.CollectionLegoSet, 0, len(userLegoSetsDB))
 	var user *auth.User = nil
 
+	if len(legoSetsDomain) == 0 {
+		_error := errors.NewAppError(errors.NotFoundError, "No sets found for user")
+		return nil, &_error
+	}
+
 	for _, legoSetDB := range userLegoSetsDB {
 		legoSetsDomain = append(legoSetsDomain, legoSetDB.ToCollectionLegoSet())
 
