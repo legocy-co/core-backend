@@ -26,7 +26,8 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationsList(c context.C
 	var setValuations []entities.LegoSetValuationPostgres
 
 	query := db.Model(
-		&entities.LegoSetValuationPostgres{}).Preload("LegoSet").Find(
+		&entities.LegoSetValuationPostgres{}).
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Find(
 		&setValuations, "lego_set_id = ?", legoSetID)
 	if query.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
