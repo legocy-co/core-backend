@@ -57,3 +57,7 @@ func (a *App) GetUserCollectionService() collection.UserCollectionService {
 		a.GetUserRepo(),
 	)
 }
+
+func (a *App) GetMarketItemImageService() marketplace.MarketItemImageService {
+	return marketplace.NewMarketItemImageService(a.GetMarketItemImageRepository())
+}

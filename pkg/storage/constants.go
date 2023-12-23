@@ -1,5 +1,6 @@
 package storage
 
 const (
-	UserBucketName = "users"
+	UserBucketName        = "users"
+	MarketItemsBucketName = "market_items"
 )

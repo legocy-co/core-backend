@@ -9,8 +9,8 @@ type MarketItemImageService struct {
 	repo r.MarketItemImageRepository
 }
 
-func NewMarketItemImageService(repo r.MarketItemImageRepository) *MarketItemImageService {
-	return &MarketItemImageService{
+func NewMarketItemImageService(repo r.MarketItemImageRepository) MarketItemImageService {
+	return MarketItemImageService{
 		repo: repo,
 	}
 }
