@@ -1,4 +1,4 @@
-package market_item_image
+package image
 
 import (
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"

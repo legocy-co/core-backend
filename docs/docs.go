@@ -1138,6 +1138,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/market-items/images/:marketItemID": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_item_images"
+                ],
+                "summary": "Upload Image",
+                "operationId": "upload_market_item_image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "filepath",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/market-items/{itemID}": {
             "get": {
                 "security": [
@@ -1610,39 +1649,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/images/download": {
-            "get": {
-                "tags": [
-                    "users_images"
-                ],
-                "summary": "Download User Image",
-                "operationId": "download_user_image",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "filepath",
-                        "name": "fp",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "file"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/users/profile/{userID}": {
             "get": {
                 "security": [
@@ -2020,6 +2026,20 @@ const docTemplate = `{
                 },
                 "series": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "imageURL": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
                 }
             }
         },
