@@ -13,6 +13,7 @@ type ImageUnit struct {
 	Payload     io.Reader
 	PayloadName string
 	PayloadSize int64
+	PayloadType string
 }
 
 func ImageUnitFromFile(file multipart.File, id int, name string, size int64) *ImageUnit {
@@ -21,6 +22,7 @@ func ImageUnitFromFile(file multipart.File, id int, name string, size int64) *Im
 		Payload:     file,
 		PayloadName: name,
 		PayloadSize: size,
+		PayloadType: "image/png",
 	}
 }
 

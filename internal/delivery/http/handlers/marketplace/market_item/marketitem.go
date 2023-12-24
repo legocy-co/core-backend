@@ -1,4 +1,4 @@
-package marketplace
+package market_item
 
 import (
 	"github.com/gin-gonic/gin"
