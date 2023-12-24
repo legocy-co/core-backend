@@ -61,6 +61,7 @@ func (a *App) GetUserCollectionService() collection.UserCollectionService {
 
 func (a *App) GetMarketItemImageService() marketplace.MarketItemImageService {
 	return marketplace.NewMarketItemImageService(a.GetMarketItemImageRepository())
+}
 
 func (a *App) GetLegoSetValuationService() calculator.LegoSetValuationService {
 	return calculator.NewLegoSetValuationService(a.GetLegoSetsValuationRepository())
