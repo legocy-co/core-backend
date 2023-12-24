@@ -1138,7 +1138,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/market-items/images/:marketItemID": {
+        "/market-items/images/{marketItemID}": {
             "post": {
                 "consumes": [
                     "multipart/form-data"
@@ -1618,7 +1618,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/images/:userID": {
+        "/users/images/{userID}": {
             "get": {
                 "produces": [
                     "application/json"

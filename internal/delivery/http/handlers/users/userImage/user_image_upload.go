@@ -21,7 +21,7 @@ import (
 //	@Param		file	formData  file	true	"filepath"
 //	@Success	200		{object}	schemas.UserImageUploadResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/users/images/:userID [post]
+//	@Router		/users/images/{userID} [post]
 func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 
 	uploadHandler := image.NewUploadHandler(

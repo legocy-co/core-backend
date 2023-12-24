@@ -21,7 +21,7 @@ import (
 //	@Param		file	formData  file	true	"filepath"
 //	@Success	200		{object}	marketplace.ImageUploadResponse
 //	@Failure	400		{object}	map[string]interface{}
-//	@Router		/market-items/images/:marketItemID [post]
+//	@Router		/market-items/images/{marketItemID} [post]
 func (h Handler) UploadImage(ctx *gin.Context) {
 
 	// Call generic upload handler
