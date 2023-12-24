@@ -7,7 +7,6 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/pkg/filter"
 	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
@@ -23,7 +22,6 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 	c context.Context) ([]*models.MarketItem, *errors.AppError) {
 
 	var itemsDB []*entities.MarketItemPostgres
-	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -31,7 +29,6 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 	}
 
 	res := db.Model(&entities.MarketItemPostgres{}).
-		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Find(&itemsDB, "status = 'ACTIVE'")
@@ -52,7 +49,6 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	c context.Context, userID int) ([]*models.MarketItem, *errors.AppError) {
 
 	var itemsDB []*entities.MarketItemPostgres
-	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -60,7 +56,6 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	}
 
 	res := db.Model(&entities.MarketItemPostgres{}).
-		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Find(&itemsDB, "user_postgres_id <> ? and status = 'ACTIVE'", userID)

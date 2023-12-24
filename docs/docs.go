@@ -1386,6 +1386,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/sets-valuations/{legoSetID}": {
+            "get": {
+                "description": "Get valuations by lego set id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "calculator"
+                ],
+                "summary": "Get valuations by lego set id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Lego Set ID",
+                        "name": "legoSetID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/sets/": {
             "get": {
                 "security": [
@@ -1525,7 +1567,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserRegistrationResponse"
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
                         }
                     },
                     "400": {
@@ -1709,8 +1751,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse"
+                            }
                         }
                     },
                     "400": {
@@ -2272,20 +2316,6 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserRegistrationResponse": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
                 },
                 "username": {
                     "type": "string"

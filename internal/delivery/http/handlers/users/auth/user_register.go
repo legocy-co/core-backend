@@ -2,8 +2,10 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/legocy-co/legocy/config"
 	_ "github.com/legocy-co/legocy/docs"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
+	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"net/http"
 )
 
@@ -14,7 +16,7 @@ import (
 //	@ID			user-register
 //	@Produce	json
 //	@Param		data	body		schemas.UserRegistrationRequest	true	"user data"
-//	@Success	200		{object}	schemas.UserRegistrationResponse
+//	@Success	200		{object}	schemas.JWTResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/auth/register [post]
 func (th *TokenHandler) UserRegister(c *gin.Context) {
@@ -29,10 +31,36 @@ func (th *TokenHandler) UserRegister(c *gin.Context) {
 
 	user := registerReq.ToUser()
 	if err := th.service.CreateUser(c, user, registerReq.Password); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, schemas.GetUserResponse(user))
+	accessToken, err := jwt.GenerateAccessToken(
+		user.Email,
+		user.ID,
+		user.Role,
+		config.GetAppConfig().JwtConf.SecretKey,
+		config.GetAppConfig().JwtConf.AccessTokenLifeTime,
+	)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	refreshToken, err := jwt.GenerateRefreshToken(
+		user.Email,
+		user.ID,
+		user.Role,
+		config.GetAppConfig().JwtConf.SecretKey,
+		config.GetAppConfig().JwtConf.RefreshTokenLifeTime,
+	)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, schemas.JWTResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	})
 }

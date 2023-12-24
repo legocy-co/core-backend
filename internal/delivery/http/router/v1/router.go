@@ -67,6 +67,7 @@ func GetV1Router(app *app.App) V1router {
 	site.AddLegoSeries(v1, app.GetLegoSeriesService())
 	site.AddLegoSets(v1, app.GetLegoSetService())
 	site.AddMarketItems(v1, app)
+	site.AddCallcuatorRoutes(v1, app)
 
 	// healthcheck.go
 	router.addHealthCheck(v1)

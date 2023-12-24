@@ -28,7 +28,6 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 	res := db.Model(&entities.UserLegoSetPostgres{}).
 		Preload("User").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Preload("Currency").
 		Find(&userLegoSetsDB, "user_id = ?", userID)
 
 	if res.Error != nil {
@@ -38,6 +37,11 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 
 	legoSetsDomain := make([]models.CollectionLegoSet, 0, len(userLegoSetsDB))
 	var user *auth.User = nil
+
+	if len(legoSetsDomain) == 0 {
+		_error := errors.NewAppError(errors.NotFoundError, "No sets found for user")
+		return nil, &_error
+	}
 
 	for _, legoSetDB := range userLegoSetsDB {
 		legoSetsDomain = append(legoSetsDomain, legoSetDB.ToCollectionLegoSet())
