@@ -3,7 +3,8 @@ package site
 import (
 	"github.com/gin-gonic/gin"
 	a "github.com/legocy-co/legocy/internal/app"
-	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/image"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/market_item"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
 	jwt "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
@@ -12,7 +13,7 @@ func AddMarketItems(
 	rg *gin.RouterGroup,
 	app *a.App) {
 
-	handler := marketplace.NewMarketItemHandler(
+	handler := market_item.NewMarketItemHandler(
 		app.GetMarketItemService())
 
 	items := rg.Group("/market-items").Use(jwt.IsAuthenticated())
@@ -35,4 +36,15 @@ func AddMarketItems(
 			items.PUT("/:itemID", handler.UpdateMarketItemByID)
 		}
 	}
+
+	itemImages := rg.Group("/market-items/images")
+	{
+		handler := image.NewHandler(app.GetMarketItemImageService(), app.GetImageStorageClient())
+
+		itemImages.Use(middleware.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
+		{
+			itemImages.POST("/:itemID", handler.UploadImage)
+		}
+	}
+
 }

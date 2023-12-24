@@ -59,7 +59,6 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 
 	userImages := rg.Group("/users/images")
 	{
-		userImages.GET("/download", userImagesHandler.DownloadImage)
 		userImages.Use(jwt.IsOwnerOrAdmin("userID"))
 		{
 			userImages.GET("/:userID", userImagesHandler.ListImages)

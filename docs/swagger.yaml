@@ -114,6 +114,15 @@ definitions:
       series:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse'
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse:
+    properties:
+      id:
+        type: integer
+      imageURL:
+        type: string
+      ok:
+        type: boolean
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemRequest:
     properties:
       description:
@@ -1166,6 +1175,32 @@ paths:
       summary: Get Market Items Authorized
       tags:
       - market_items
+  /market-items/images/:marketItemID:
+    post:
+      consumes:
+      - multipart/form-data
+      operationId: upload_market_item_image
+      parameters:
+      - description: filepath
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Upload Image
+      tags:
+      - market_item_images
   /series/:
     get:
       operationId: list_lego_series
@@ -1406,28 +1441,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserImageUploadResponse'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Download User Image
-      tags:
-      - users_images
-  /users/images/download:
-    get:
-      operationId: download_user_image
-      parameters:
-      - description: filepath
-        in: query
-        name: fp
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: file
         "400":
           description: Bad Request
           schema:
