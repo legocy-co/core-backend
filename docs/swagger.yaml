@@ -1175,7 +1175,7 @@ paths:
       summary: Get Market Items Authorized
       tags:
       - market_items
-  /market-items/images/:marketItemID:
+  /market-items/images/{marketItemID}:
     post:
       consumes:
       - multipart/form-data
@@ -1400,7 +1400,7 @@ paths:
       summary: generate jwt token
       tags:
       - authentication
-  /users/images/:userID:
+  /users/images/{userID}:
     get:
       operationId: get_user_images
       parameters:
