@@ -13,15 +13,16 @@ import (
 
 // UploadImage
 //
-//	@Summary	Upload Image
-//	@Tags		market_item_images
-//	@ID			upload_market_item_image
-//	@Accept		multipart/form-data
-//	@Produce	json
-//	@Param		file	formData  file	true	"filepath"
-//	@Success	200		{object}	marketplace.ImageUploadResponse
-//	@Failure	400		{object}	map[string]interface{}
-//	@Router		/market-items/images/{marketItemID} [post]
+//		@Summary	Upload Image
+//		@Tags		market_item_images
+//		@ID			upload_market_item_image
+//		@Accept		multipart/form-data
+//		@Produce	json
+//		@Param		file	formData  file	true	"filepath"
+//	 	@Param		marketItemID path int true "market item id"
+//		@Success	200		{object}	marketplace.ImageUploadResponse
+//		@Failure	400		{object}	map[string]interface{}
+//		@Router		/market-items/images/{marketItemID} [post]
 func (h Handler) UploadImage(ctx *gin.Context) {
 
 	// Call generic upload handler
