@@ -2,7 +2,7 @@ package storage
 
 const (
 	UserBucketName        = "users"
-	MarketItemsBucketName = "market_items"
+	MarketItemsBucketName = "marketitems"
 )
 
 var BucketNames = []string{
