@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/config"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
@@ -67,11 +68,11 @@ func IsMarketItemOwner(
 			return
 		}
 
-		if tokenPayload.Role == models.ADMIN {
-			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": "user method"})
-			return
-		}
+		//if tokenPayload.Role == models.ADMIN {
+		//	ctx.AbortWithStatusJSON(
+		//		http.StatusBadRequest, gin.H{"error": "user method"})
+		//	return
+		//}
 
 		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
@@ -80,10 +81,12 @@ func IsMarketItemOwner(
 			return
 		}
 
-		sellerID, err := repo.GetMarketItemSellerID(ctx, itemID)
-		if err != nil {
+		sellerID, e := repo.GetMarketItemSellerID(ctx, itemID)
+		if e != nil {
+			httpErr := errors.FromAppError(*e)
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": err.Error()})
+				httpErr.Status, httpErr.Message,
+			)
 			return
 		}
 

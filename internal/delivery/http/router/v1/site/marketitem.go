@@ -41,9 +41,9 @@ func AddMarketItems(
 	{
 		handler := image.NewHandler(app.GetMarketItemImageService(), app.GetImageStorageClient())
 
-		itemImages.Use(middleware.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
+		itemImages.Use(middleware.IsMarketItemOwner("marketItemID", app.GetMarketItemRepo()))
 		{
-			itemImages.POST("/:itemID", handler.UploadImage)
+			itemImages.POST("/:marketItemID", handler.UploadImage)
 		}
 	}
 
