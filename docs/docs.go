@@ -1158,6 +1158,13 @@ const docTemplate = `{
                         "name": "file",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "market item id",
+                        "name": "marketItemID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
