@@ -68,15 +68,16 @@ func IsMarketItemOwner(
 			return
 		}
 
-		if tokenPayload.Role == models.ADMIN {
-			ctx.Next()
-			return
-		}
+		//if tokenPayload.Role == models.ADMIN {
+		//	ctx.AbortWithStatusJSON(
+		//		http.StatusBadRequest, gin.H{"error": "user method"})
+		//	return
+		//}
 
 		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": "invalid ID query param"})
+				http.StatusBadRequest, gin.H{"error": "Invalid ID path param value"})
 			return
 		}
 
