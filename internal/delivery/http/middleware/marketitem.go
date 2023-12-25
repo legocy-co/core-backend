@@ -68,16 +68,15 @@ func IsMarketItemOwner(
 			return
 		}
 
-		//if tokenPayload.Role == models.ADMIN {
-		//	ctx.AbortWithStatusJSON(
-		//		http.StatusBadRequest, gin.H{"error": "user method"})
-		//	return
-		//}
+		if tokenPayload.Role == models.ADMIN {
+			ctx.Next()
+			return
+		}
 
 		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": err.Error()})
+				http.StatusBadRequest, gin.H{"error": "invalid ID query param"})
 			return
 		}
 
@@ -119,7 +118,6 @@ func HasFreeMarketItemsSlot(
 			return
 		}
 
-		logrus.Info("Getting seller market item amount")
 		userItemsCount, err := repo.GetSellerMarketItemsAmount(ctx, tokenPayload.ID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
