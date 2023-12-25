@@ -77,7 +77,7 @@ func IsMarketItemOwner(
 		itemID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": err.Error()})
+				http.StatusBadRequest, gin.H{"error": "Invalid ID path param value"})
 			return
 		}
 
@@ -119,7 +119,6 @@ func HasFreeMarketItemsSlot(
 			return
 		}
 
-		logrus.Info("Getting seller market item amount")
 		userItemsCount, err := repo.GetSellerMarketItemsAmount(ctx, tokenPayload.ID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
