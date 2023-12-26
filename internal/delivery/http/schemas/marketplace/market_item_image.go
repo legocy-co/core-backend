@@ -1,6 +1,7 @@
 package marketplace
 
 import (
+	"github.com/legocy-co/legocy/config"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/internal/domain/users/errors"
 	"github.com/legocy-co/legocy/pkg/storage"
@@ -17,7 +18,7 @@ func NewImageUploadResponse(imageURL string, img *models.MarketItemImage) *Image
 	return &ImageUploadResponse{
 		OK:       imageURL != "",
 		ID:       img.ID,
-		ImageURL: imageURL,
+		ImageURL: config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + imageURL,
 	}
 }
 
