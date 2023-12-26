@@ -69,9 +69,11 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrenc
 	}
 
 	var entity *entities.LegoSetValuationPostgres
+
 	query := db.Model(
-		&entities.LegoSetValuationPostgres{}).Preload("LegoSet").First(
-		&entity, "lego_set_id = ?", setID, "state = ?", setState)
+		&entities.LegoSetValuationPostgres{}).Preload("LegoSet").Where(
+		"lego_set_id = ?", setID).Where("state = ?", setState).First(&entity)
+
 	if query.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
 		return nil, &appErr
