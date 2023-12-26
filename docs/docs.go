@@ -2085,6 +2085,17 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "imageURL": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse": {
             "type": "object",
             "properties": {
@@ -2127,6 +2138,12 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse"
+                    }
                 },
                 "lego_set": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"

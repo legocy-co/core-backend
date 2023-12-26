@@ -7,14 +7,15 @@ import (
 type MarketItemPostgres struct {
 	Model
 	Price             float32
-	LegoSetPostgresID uint            `filter:"param:setId;searchable,filterable"`
-	LegoSet           LegoSetPostgres `gorm:"ForeignKey:LegoSetPostgresID;"`
-	UserPostgresID    uint            `filter:"param:sellerId;searchable,filterable"`
-	Seller            UserPostgres    `gorm:"ForeignKey:UserPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Location          string          `gorm:"not null"`
-	Status            string          `gorm:"not null"`
-	SetState          string          `gorm:"not null"`
-	Description       string          `gorm:"not null"`
+	LegoSetPostgresID uint                      `filter:"param:setId;searchable,filterable"`
+	LegoSet           LegoSetPostgres           `gorm:"ForeignKey:LegoSetPostgresID;"`
+	UserPostgresID    uint                      `filter:"param:sellerId;searchable,filterable"`
+	Seller            UserPostgres              `gorm:"ForeignKey:UserPostgresID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Location          string                    `gorm:"not null"`
+	Status            string                    `gorm:"not null"`
+	SetState          string                    `gorm:"not null"`
+	Description       string                    `gorm:"not null"`
+	Images            []MarketItemImagePostgres `gorm:"foreignKey:MarketItemID"`
 }
 
 func (mp MarketItemPostgres) TableName() string {
@@ -22,6 +23,12 @@ func (mp MarketItemPostgres) TableName() string {
 }
 
 func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
+
+	images := make([]*models.MarketItemImage, 0, len(mp.Images))
+	for _, img := range mp.Images {
+		images = append(images, img.ToMarketItemImage())
+	}
+
 	return &models.MarketItem{
 		ID:          int(mp.ID),
 		LegoSet:     *mp.LegoSet.ToLegoSet(),
@@ -31,6 +38,7 @@ func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
 		Status:      mp.Status,
 		SetState:    mp.SetState,
 		Description: mp.Description,
+		Images:      images,
 	}
 }
 

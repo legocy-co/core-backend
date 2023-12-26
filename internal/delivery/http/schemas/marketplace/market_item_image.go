@@ -55,3 +55,23 @@ func (r ImageDownloadRequest) ToBucketNameImageName() (bucketName string, imageN
 
 	return fp[:idx], fp[idx+1:], nil
 }
+
+type ImageResponse struct {
+	ID       int    `json:"id"`
+	ImageURL string `json:"imageURL"`
+}
+
+func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {
+	var images []ImageResponse
+	for _, img := range imgs {
+		images = append(images, GetImageResponse(img))
+	}
+	return images
+}
+
+func GetImageResponse(img *models.MarketItemImage) ImageResponse {
+	return ImageResponse{
+		ID:       img.ID,
+		ImageURL: config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + img.ImageURL,
+	}
+}

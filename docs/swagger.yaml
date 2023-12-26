@@ -114,6 +114,13 @@ definitions:
       series:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse'
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse:
+    properties:
+      id:
+        type: integer
+      imageURL:
+        type: string
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse:
     properties:
       id:
@@ -142,6 +149,10 @@ definitions:
         type: string
       id:
         type: integer
+      images:
+        items:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse'
+        type: array
       lego_set:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
       location:

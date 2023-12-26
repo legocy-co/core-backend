@@ -41,6 +41,7 @@ type MarketItemResponse struct {
 	Status      string                        `json:"status"`
 	SetState    string                        `json:"set_state"`
 	Description string                        `json:"description"`
+	Images      []ImageResponse               `json:"images"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
@@ -53,5 +54,6 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		Status:      m.Status,
 		SetState:    m.SetState,
 		Description: m.Description,
+		Images:      GetImagesResponse(m.Images),
 	}
 }

@@ -14,6 +14,7 @@ type MarketItem struct {
 	SetState    string // lego.SetStateBrandNew / etc.
 	Status      string // lego.ListingStatusCheckRequired / lego.ListingStatusActive / etc.
 	Description string
+	Images      []*MarketItemImage
 }
 
 type MarketItemValueObject struct {

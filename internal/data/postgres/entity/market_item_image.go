@@ -10,6 +10,10 @@ type MarketItemImagePostgres struct {
 	IsMain       bool               `gorm:"default=false"`
 }
 
+func (m *MarketItemImagePostgres) TableName() string {
+	return "market_item_images"
+}
+
 func FromMarketItemImageValueObject(vo models.MarketItemImageValueObject) *MarketItemImagePostgres {
 	return &MarketItemImagePostgres{
 		MarketItemID: uint(vo.MarketItemID),
