@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
@@ -64,7 +65,9 @@ func IsMarketItemOwner(
 		tokenPayload, err := middleware.GetUserPayload(ctx)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": err.Error()})
+				http.StatusBadRequest, gin.H{
+					"error": fmt.Sprintf("Token Payload: %v", err.Error())},
+			)
 			return
 		}
 
@@ -85,7 +88,7 @@ func IsMarketItemOwner(
 		if e != nil {
 			httpErr := errors.FromAppError(*e)
 			ctx.AbortWithStatusJSON(
-				httpErr.Status, httpErr.Message,
+				httpErr.Status, fmt.Sprintf("sellerID: %v", httpErr.Message),
 			)
 			return
 		}
