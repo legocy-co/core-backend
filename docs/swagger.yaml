@@ -1203,6 +1203,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: Upload Image
       tags:
       - market_item_images

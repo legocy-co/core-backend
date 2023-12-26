@@ -1140,6 +1140,11 @@ const docTemplate = `{
         },
         "/market-items/images/{marketItemID}": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "consumes": [
                     "multipart/form-data"
                 ],
