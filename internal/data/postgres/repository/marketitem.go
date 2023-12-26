@@ -30,7 +30,7 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 
 	res := db.Model(&entities.MarketItemPostgres{}).
 		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
 		Find(&itemsDB, "status = 'ACTIVE'")
 	if res.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
@@ -57,7 +57,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 
 	res := db.Model(&entities.MarketItemPostgres{}).
 		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
 		Find(&itemsDB, "user_postgres_id <> ? and status = 'ACTIVE'", userID)
 	if res.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
@@ -82,7 +82,7 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 
 	var entity *entities.MarketItemPostgres
 	query := db.Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
 		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
 	if query.RowsAffected == 0 {
@@ -103,7 +103,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 
 	result := db.Model(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
 		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
 		Find(&itemsDB, "user_postgres_id = ? and status = 'ACTIVE'", sellerID)
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
