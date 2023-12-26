@@ -29,6 +29,7 @@ func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) (*models.Marke
 		Location:    r.Location,
 		Status:      models.ListingStatusCheckRequired,
 		Description: r.Description,
+		SetState:    r.SetState,
 	}, nil
 }
 
