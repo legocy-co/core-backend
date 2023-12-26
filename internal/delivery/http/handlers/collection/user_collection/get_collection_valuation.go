@@ -6,7 +6,6 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/collections"
 	v1 "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"
-	"strconv"
 )
 
 // GetUserCollectionValuation
@@ -29,15 +28,9 @@ func (h UserLegoCollectionHandler) GetUserCollectionValuation(c *gin.Context) {
 		return
 	}
 
-	currencyId, err := strconv.Atoi(c.Param("currencyID"))
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid Currency ID"})
-		return
-	}
-
 	userID := tokenPayload.ID
 
-	setsValuations, user, appErr := h.s.GetUserCollectionValuation(c, userID, currencyId)
+	setsValuations, user, appErr := h.s.GetUserCollectionValuation(c, userID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

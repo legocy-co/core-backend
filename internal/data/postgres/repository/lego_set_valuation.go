@@ -62,7 +62,7 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationByID(c context.Co
 	return entity.ToLegoSetValuation(), nil
 }
 
-func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string, currencyID int) (*models.LegoSetValuation, *errors.AppError) {
+func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string) (*models.LegoSetValuation, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
 		return nil, &d.ErrConnectionLost
@@ -71,7 +71,7 @@ func (r LegoSetValuationPostgresRepository) GetLegoSetValuationBySetStateCurrenc
 	var entity *entities.LegoSetValuationPostgres
 	query := db.Model(
 		&entities.LegoSetValuationPostgres{}).Preload("LegoSet").First(
-		&entity, "lego_set_id = ?", setID, "state = ?", setState, "currency_id = ?", currencyID)
+		&entity, "lego_set_id = ?", setID, "state = ?", setState)
 	if query.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
 		return nil, &appErr

@@ -9,5 +9,5 @@ import (
 type LegoSetValuationRepository interface {
 	GetLegoSetValuationsList(c context.Context, legoSetID int) ([]models.LegoSetValuation, *errors.AppError)
 	GetLegoSetValuationByID(c context.Context, id int) (*models.LegoSetValuation, *errors.AppError)
-	GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string, currencyID int) (*models.LegoSetValuation, *errors.AppError)
+	GetLegoSetValuationBySetStateCurrency(c context.Context, setID int, setState string) (*models.LegoSetValuation, *errors.AppError)
 }

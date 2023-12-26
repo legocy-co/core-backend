@@ -44,7 +44,7 @@ func (s UserCollectionService) UpdateUserCollectionSet(c context.Context, userID
 	return s.collectionRepository.UpdateUserCollectionSetByID(c, userID, collectionSetID, vo)
 }
 
-func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int, currencyID int) ([]calculator.LegoSetValuation, *users.User, *errors.AppError) {
+func (s UserCollectionService) GetUserCollectionValuation(c context.Context, userID int) ([]calculator.LegoSetValuation, *users.User, *errors.AppError) {
 	userCollection, err := s.GetUserCollection(c, userID)
 	if err != nil {
 		return []calculator.LegoSetValuation{}, nil, err
@@ -54,7 +54,7 @@ func (s UserCollectionService) GetUserCollectionValuation(c context.Context, use
 
 	for _, userLegoSet := range userCollection.Sets {
 		setValuation, err := s.valuationRepository.GetLegoSetValuationBySetStateCurrency(
-			c, userLegoSet.LegoSet.ID, userLegoSet.CurrentState, currencyID,
+			c, userLegoSet.LegoSet.ID, userLegoSet.CurrentState,
 		)
 
 		if err != nil {
