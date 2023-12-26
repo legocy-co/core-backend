@@ -118,8 +118,10 @@ definitions:
     properties:
       id:
         type: integer
-      imageURL:
+      image_url:
         type: string
+      is_main:
+        type: boolean
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse:
     properties:

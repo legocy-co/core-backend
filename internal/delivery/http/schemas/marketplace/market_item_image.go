@@ -58,7 +58,8 @@ func (r ImageDownloadRequest) ToBucketNameImageName() (bucketName string, imageN
 
 type ImageResponse struct {
 	ID       int    `json:"id"`
-	ImageURL string `json:"imageURL"`
+	ImageURL string `json:"image_url"`
+	IsMain   bool   `json:"is_main"`
 }
 
 func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {
@@ -73,5 +74,6 @@ func GetImageResponse(img *models.MarketItemImage) ImageResponse {
 	return ImageResponse{
 		ID:       img.ID,
 		ImageURL: config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + img.ImageURL,
+		IsMain:   img.IsMain,
 	}
 }

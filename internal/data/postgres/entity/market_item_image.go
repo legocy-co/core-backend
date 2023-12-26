@@ -24,6 +24,7 @@ func FromMarketItemImageValueObject(vo models.MarketItemImageValueObject) *Marke
 
 func (m *MarketItemImagePostgres) ToMarketItemImage() *models.MarketItemImage {
 	return &models.MarketItemImage{
+		ID:           int(m.ID),
 		MarketItemID: int(m.MarketItemID),
 		ImageURL:     m.ImageURL,
 		IsMain:       m.IsMain,

@@ -2091,8 +2091,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "imageURL": {
+                "image_url": {
                     "type": "string"
+                },
+                "is_main": {
+                    "type": "boolean"
                 }
             }
         },
