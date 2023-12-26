@@ -48,12 +48,13 @@ func (h Handler) UploadImage(ctx *gin.Context) {
 
 	isMain := ctx.Param("isMain") == "true"
 
-	vo, err := models.NewMarketItemImageValueObject(
+	vo, e := models.NewMarketItemImageValueObject(
 		marketItemId, imgUrl, isMain,
 	)
-	if err != nil {
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
 		ctx.AbortWithStatusJSON(
-			http.StatusInternalServerError, gin.H{"error": err.Error()},
+			httpErr.Status, httpErr.Message,
 		)
 		return
 	}
