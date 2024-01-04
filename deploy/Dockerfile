@@ -1,18 +1,12 @@
-FROM golang:1.20 AS builder
+FROM golang:1.20-bookworm AS builder
 
-WORKDIR /src/app/
+WORKDIR /src/app
 
-COPY go.* ./
+COPY . .
 RUN go mod download
-
-COPY . /src/app
+RUN go mod verify
 RUN go build -o ./.bin/app ./cmd/legocy/main.go
 
-FROM alpine:latest
 
-WORKDIR /root/
-
-COPY --from=0 /src/app/.bin/app .
-COPY --from=0 /src/app/config ./config
-
-CMD ["./app"]
+EXPOSE 8080
+CMD ["./.bin/app"]
