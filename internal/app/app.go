@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/config"
 	d "github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/fixtures"
-	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/pkg/events"
 	"github.com/sirupsen/logrus"
 	"log"
 	"time"
@@ -29,7 +29,7 @@ func (a *App) isReady() bool {
 	ctx, cf := context.WithTimeout(context.Background(), time.Second*3)
 	defer cf()
 
-	kafkaReady := kafka.IsKafkaConnected(ctx)
+	kafkaReady := events.IsKafkaConnected(ctx)
 	if !kafkaReady {
 		logrus.Error("Kafka Connection Failed...")
 		return false
