@@ -1,23 +1,32 @@
 package kafka
 
 import (
-	"context"
 	"encoding/json"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/legocy-co/legocy/config"
-	"github.com/segmentio/kafka-go"
-	"github.com/sirupsen/logrus"
-	"time"
+	log "github.com/sirupsen/logrus"
 )
 
-func NewKafkaProducer(topicName string) (*kafka.Conn, error) {
-	_, cf := context.WithTimeout(context.Background(), time.Second*3)
-	defer cf()
-	return newKafkaProducer(topicName, config.GetAppConfig().KafkaConf.URI)
-}
+func NewKafkaProducer() (*kafka.Producer, error) {
+	producer, err := kafka.NewProducer(&kafka.ConfigMap{
+		"bootstrap.servers": config.GetAppConfig().KafkaConf.URI,
+	})
 
-func newKafkaProducer(topicName, uri string) (*kafka.Conn, error) {
-	return kafka.DialLeader(
-		context.Background(), "tcp", uri, topicName, 0)
+	go func() {
+		for e := range producer.Events() {
+			switch ev := e.(type) {
+			case *kafka.Message:
+				if ev.TopicPartition.Error != nil {
+					log.Printf("Failed to deliver message: %v\n", ev.TopicPartition)
+				} else {
+					log.Printf("Produced event to topic %s: key = %-10s value = %-100s\n",
+						*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
+				}
+			}
+		}
+	}()
+
+	return producer, err
 }
 
 func ProduceJSONEvent(topicName string, data any) error {
@@ -26,14 +35,23 @@ func ProduceJSONEvent(topicName string, data any) error {
 		return ErrUnjsonableData
 	}
 
-	kafkaProducer, err := NewKafkaProducer(topicName)
+	kafkaProducer, err := NewKafkaProducer()
 	if err != nil {
 		return err
 	}
 
-	logrus.Info("Sending Kafka Message...")
+	err = kafkaProducer.Produce(
+		&kafka.Message{
+			TopicPartition: kafka.TopicPartition{
+				Topic:     &topicName,
+				Partition: kafka.PartitionAny,
+			},
+			Value: dataJson,
+		},
+		nil,
+	)
 
-	_, err = kafkaProducer.WriteMessages(
-		kafka.Message{Value: dataJson})
+	kafkaProducer.Flush(1000)
+	kafkaProducer.Close()
 	return err
 }

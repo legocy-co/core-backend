@@ -63,7 +63,7 @@ type ImageResponse struct {
 }
 
 func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {
-	var images []ImageResponse
+	images := make([]ImageResponse, 0, len(imgs))
 	for _, img := range imgs {
 		images = append(images, GetImageResponse(img))
 	}

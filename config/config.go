@@ -48,7 +48,8 @@ type JWTConfig struct {
 }
 
 type KafkaConfig struct {
-	URI string `json:"uri"`
+	URI             string `json:"uri"`
+	ConsumerGroupId string `json:"consumer_group_id"`
 }
 
 func GetDBConfig() *DatabaseConfig {
@@ -58,15 +59,6 @@ func GetDBConfig() *DatabaseConfig {
 	}
 
 	return &cfg.DbConf
-}
-
-func GetJWTConfig() *JWTConfig {
-	cfg := GetAppConfig()
-	if cfg == nil {
-		return DefaultJWTConfig
-	}
-
-	return &cfg.JwtConf
 }
 
 func SetupFromEnv() error {
@@ -109,8 +101,10 @@ func SetupFromEnv() error {
 
 	kafkaUri := os.Getenv("KAFKA_URI")
 	logrus.Printf("KAFKA_URL = %v", kafkaUri)
+	kafkaConsumerGroupId := os.Getenv("KAFKA_CONSUMER_GROUP_ID")
+	logrus.Printf("KAFKA_CONSUMER_GROUP_ID = %v", kafkaConsumerGroupId)
 
-	kafkaConfig := KafkaConfig{kafkaUri}
+	kafkaConfig := KafkaConfig{kafkaUri, kafkaConsumerGroupId}
 
 	s3Host := os.Getenv("S3_HOST")
 	s3Port := os.Getenv("S3_PORT")
