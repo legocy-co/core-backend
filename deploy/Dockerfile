@@ -1,12 +1,12 @@
-FROM golang:1.20-alpine AS builder
+FROM golang:1.20 AS builder
 
-RUN go version
-
-COPY . /src/app
 WORKDIR /src/app/
 
+COPY go.* ./
 RUN go mod download
-RUN GOOS=linux go build -o ./.bin/app ./cmd/legocy/main.go
+
+COPY . /src/app
+RUN go build -o ./.bin/app ./cmd/legocy/main.go
 
 FROM alpine:latest
 

@@ -7,7 +7,7 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/pkg/events"
+	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type MarketItemAdminPostgresRepository struct {
@@ -91,8 +91,8 @@ func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, v
 
 	tx.Commit()
 
-	err := events.ProduceJSONEvent(
-		events.MARKET_ITEM_UPDATES_TOPIC,
+	err := kafka.ProduceJSONEvent(
+		kafka.MARKET_ITEM_UPDATES_TOPIC,
 		map[string]interface{}{
 			"itemID": int(entity.ID),
 		},

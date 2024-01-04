@@ -1,8 +1,8 @@
-package events
+package kafka
 
 import (
 	"context"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/sirupsen/logrus"
 )
 

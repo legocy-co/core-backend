@@ -13,7 +13,7 @@ type AppConfig struct {
 
 	DbConf    DatabaseConfig `yaml:"database" json:"database"`
 	JwtConf   JWTConfig      `yaml:"jwt" json:"jwt"`
-	KafkaConf KafkaConfig    `yaml:"events" json:"events"`
+	KafkaConf KafkaConfig    `yaml:"kafka" json:"kafka"`
 
 	S3Host string `json:"s3_host"`
 	S3Port string `json:"s3_port"`

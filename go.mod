@@ -3,7 +3,7 @@ module github.com/legocy-co/legocy
 go 1.19
 
 require (
-	github.com/confluentinc/confluent-kafka-go v1.9.2
+	github.com/confluentinc/confluent-kafka-go/v2 v2.3.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.8.2
 	github.com/joho/godotenv v1.5.1
@@ -49,7 +49,7 @@ require (
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/tools v0.6.0 // indirect
-	google.golang.org/genproto v0.0.0-20230323212658-478b75c54725 // indirect
+	google.golang.org/genproto v0.0.0-20230331144136-dcfb400f0633 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

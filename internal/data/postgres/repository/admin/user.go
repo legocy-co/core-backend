@@ -7,8 +7,8 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/pkg/events"
 	h "github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type UserAdminPostgresRepository struct {
@@ -86,7 +86,7 @@ func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.U
 
 	tx.Commit()
 
-	kafkaErr := events.ProduceJSONEvent(events.USER_UPDATES_TOPIC, map[string]interface{}{
+	kafkaErr := kafka.ProduceJSONEvent(kafka.USER_UPDATES_TOPIC, map[string]interface{}{
 		"userID": int(entity.ID),
 	})
 	if kafkaErr != nil {
