@@ -32,26 +32,26 @@ func (ur *UserRegistrationRequest) ToAdmin() *models.User {
 	}
 }
 
-func GetUserResponse(u *models.User) *UserRegistrationResponse {
-	return &UserRegistrationResponse{
-		Email:    u.Email,
-		Role:     u.Role,
-		Username: u.Username,
-	}
-}
-
 type UserDetailResponse struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Role     int    `json:"role"`
+	ID       int                     `json:"id"`
+	Username string                  `json:"username"`
+	Email    string                  `json:"email"`
+	Role     int                     `json:"role"`
+	Images   []UserImageInfoResponse `json:"images"`
 }
 
 func GetUserDetailResponse(u *models.User) UserDetailResponse {
+
+	images := make([]UserImageInfoResponse, 0, len(u.Images))
+	for _, img := range u.Images {
+		images = append(images, GetUserImageResponse(img))
+	}
+
 	return UserDetailResponse{
 		ID:       u.ID,
 		Username: u.Username,
 		Email:    u.Email,
 		Role:     u.Role,
+		Images:   images,
 	}
 }

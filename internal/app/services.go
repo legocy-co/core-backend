@@ -31,7 +31,7 @@ func (a *App) GetUserService() users.UserService {
 	return users.NewUserService(a.GetUserRepo())
 }
 
-func (a *App) GetUserImagesService() users.UserImageUseCase {
+func (a *App) GetUserImagesService() users.UserImageService {
 	return users.NewUserImageUseCase(a.GetUserImagesRepo())
 }
 

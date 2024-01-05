@@ -6,12 +6,12 @@ import (
 )
 
 type UserImageHandler struct {
-	service service.UserImageUseCase
+	service service.UserImageService
 	storage client.ImageStorage
 }
 
 func NewUserImageHandler(
-	service service.UserImageUseCase,
+	service service.UserImageService,
 	storage client.ImageStorage) UserImageHandler {
 
 	return UserImageHandler{

@@ -33,7 +33,7 @@ func NewUserReview(ID int, Seller auth.User, Reviewer auth.User, Rating int, Mes
 		return nil, err
 	}
 
-	if Seller == Reviewer {
+	if Seller.ID == Reviewer.ID {
 		err := errors.New("wrong Seller (not Reviewer)")
 		return nil, err
 	}

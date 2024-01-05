@@ -69,7 +69,7 @@ type UserImageInfoResponse struct {
 	DownloadURL string `json:"downloadURL"`
 }
 
-func GetUserInfoResponse(image *models.UserImage) UserImageInfoResponse {
+func GetUserImageResponse(image *models.UserImage) UserImageInfoResponse {
 	return UserImageInfoResponse{
 		UserID:      image.UserID,
 		Filepath:    image.FilepathURL,

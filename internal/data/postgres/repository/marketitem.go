@@ -81,7 +81,7 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	}
 
 	var entity *entities.MarketItemPostgres
-	query := db.Preload("Seller").
+	query := db.Preload("Seller").Preload("Seller.Images").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
 		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 

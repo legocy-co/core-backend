@@ -74,7 +74,7 @@ func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, *er
 		return nil, &d.ErrConnectionLost
 	}
 
-	db.Find(usersDb)
+	db.Preload("Images").Find(usersDb)
 
 	users := make([]*models.User, 0, len(usersDb))
 	for _, userDb := range usersDb {
@@ -117,7 +117,7 @@ func (r UserPostgresRepository) GetUserByID(c context.Context, id int) (*models.
 		return user, &d.ErrConnectionLost
 	}
 
-	db.First(&entity, id)
+	db.Preload("Images").First(&entity, id)
 	if entity == nil {
 		return user, &e.ErrUserNotFound
 	}

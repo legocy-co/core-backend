@@ -34,9 +34,9 @@ func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int
 		return nil, d.ErrConnectionLost
 	}
 
-	var userImagesDB []*entities.UserPostgresImage
-	db.Model(&entities.UserPostgresImage{}).Find(
-		&userImagesDB, entities.UserPostgresImage{UserID: uint(userID)})
+	var userImagesDB []*entities.UserImagePostgres
+	db.Model(&entities.UserImagePostgres{}).Find(
+		&userImagesDB, entities.UserImagePostgres{UserID: uint(userID)})
 
 	if len(userImagesDB) == 0 {
 		return nil, d.ErrItemNotFound

@@ -9,6 +9,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
+	users "github.com/legocy-co/legocy/internal/domain/users/service"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"
@@ -16,12 +17,11 @@ import (
 )
 
 type MarketItemHandler struct {
-	service s.MarketItemService
+	service          s.MarketItemService
+	userImageService users.UserImageService
 }
 
-func NewMarketItemHandler(
-	service s.MarketItemService) MarketItemHandler {
-
+func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
 	return MarketItemHandler{
 		service: service,
 	}

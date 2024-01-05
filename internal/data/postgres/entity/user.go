@@ -10,6 +10,7 @@ type UserPostgres struct {
 	Email    string `gorm:"unique;not null"`
 	Role     int
 	Password string
+	Images   []UserImagePostgres `gorm:"foreignKey:UserPostgresID"`
 }
 
 func (up UserPostgres) TableName() string {
@@ -26,12 +27,29 @@ func FromUser(u *models.User, password string) *UserPostgres {
 }
 
 func (up *UserPostgres) ToUser() *models.User {
-	return &models.User{
-		ID:       int(up.ID),
-		Username: up.Username,
-		Email:    up.Email,
-		Role:     up.Role,
+
+	if up.Images == nil {
+		return models.NewUser(
+			int(up.ID),
+			up.Username,
+			up.Email,
+			up.Role,
+			[]*models.UserImage{},
+		)
 	}
+
+	images := make([]*models.UserImage, 0, len(up.Images))
+	for _, img := range up.Images {
+		images = append(images, img.ToUserImage())
+	}
+
+	return models.NewUser(
+		int(up.ID),
+		up.Username,
+		up.Email,
+		up.Role,
+		images,
+	)
 }
 
 func (up *UserPostgres) GetUpdatedUserAdmin(

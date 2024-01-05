@@ -50,7 +50,7 @@ func (psql *PostgresConnection) Init() {
 
 	err = psql.db.Debug().AutoMigrate(
 		entities.UserPostgres{},
-		entities.UserPostgresImage{},
+		entities.UserImagePostgres{},
 
 		entities.LegoSeriesPostgres{},
 		entities.LegoSetPostgres{},
@@ -59,7 +59,7 @@ func (psql *PostgresConnection) Init() {
 		entities.MarketItemPostgres{},
 		entities.MarketItemImagePostgres{},
 
-		entities.UserPostgresImage{},
+		entities.UserImagePostgres{},
 
 		entities.UserReviewPostgres{},
 		entities.UserLegoSetPostgres{},

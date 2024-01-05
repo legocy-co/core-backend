@@ -33,7 +33,7 @@ func (h UserImageHandler) ListImages(c *gin.Context) {
 	for _, image := range imagesList {
 		imageResponseList = append(
 			imageResponseList,
-			schemas.GetUserInfoResponse(image),
+			schemas.GetUserImageResponse(image),
 		)
 	}
 

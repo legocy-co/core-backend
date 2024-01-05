@@ -1,14 +1,14 @@
 package marketplace
 
 import (
-	"github.com/legocy-co/legocy/internal/domain/lego/models"
-	"github.com/legocy-co/legocy/internal/domain/users/models"
+	lego "github.com/legocy-co/legocy/internal/domain/lego/models"
+	users "github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
 type MarketItem struct {
 	ID          int
 	LegoSet     lego.LegoSet
-	Seller      auth.User
+	Seller      users.User
 	Price       float32
 	Location    string
 	SetState    string // lego.SetStateBrandNew / etc.
