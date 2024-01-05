@@ -33,7 +33,7 @@ func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 	imgUrl, err := uploadHandler(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
-			http.StatusBadRequest,
+			http.StatusInternalServerError,
 			gin.H{"error": err.Error()},
 		)
 		return
