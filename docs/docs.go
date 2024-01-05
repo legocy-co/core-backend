@@ -1668,6 +1668,11 @@ const docTemplate = `{
         },
         "/users/images/{userID}/avatar": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "consumes": [
                     "multipart/form-data"
                 ],
