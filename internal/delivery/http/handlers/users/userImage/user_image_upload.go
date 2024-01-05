@@ -19,6 +19,9 @@ import (
 //	@Accept		multipart/form-data
 //	@Produce	json
 //	@Param		file	formData  file	true	"filepath"
+//
+// @Param		userID	path	int	true	"user id"
+//
 //	@Success	200		{object}	schemas.UserImageUploadResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/images/{userID}/avatar [post]

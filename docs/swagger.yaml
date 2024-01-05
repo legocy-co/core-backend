@@ -1459,6 +1459,11 @@ paths:
         name: file
         required: true
         type: file
+      - description: user id
+        in: path
+        name: userID
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
