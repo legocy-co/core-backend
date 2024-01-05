@@ -1664,7 +1664,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/users/images/{userID}/avatar": {
             "post": {
                 "consumes": [
                     "multipart/form-data"

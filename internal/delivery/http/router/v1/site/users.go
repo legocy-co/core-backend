@@ -62,7 +62,7 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 		userImages.Use(jwt.IsOwnerOrAdmin("userID"))
 		{
 			userImages.GET("/:userID", userImagesHandler.ListImages)
-			userImages.POST("/:userID", userImagesHandler.UploadUserImage)
+			userImages.POST("/:userID/avatar", userImagesHandler.UploadUserImage)
 		}
 	}
 }

@@ -22,9 +22,20 @@ func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *mode
 		return d.ErrConnectionLost
 	}
 
+	tx := db.Begin()
+
+	tx.Delete(&entities.UserImagePostgres{}, entities.UserImagePostgres{UserID: uint(image.UserID)})
+
 	entity := entities.FromUserImage(image)
-	result := db.Create(&entity)
-	return result.Error
+	result := tx.Create(&entity)
+
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+
+	tx.Commit()
+	return nil
 }
 
 func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int) ([]*models.UserImage, error) {

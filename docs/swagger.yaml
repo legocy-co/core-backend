@@ -1448,6 +1448,7 @@ paths:
       summary: Get User Images List
       tags:
       - users_images
+  /users/images/{userID}/avatar:
     post:
       consumes:
       - multipart/form-data
