@@ -2296,6 +2296,12 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserImageInfoResponse"
+                    }
+                },
                 "role": {
                     "type": "integer"
                 },

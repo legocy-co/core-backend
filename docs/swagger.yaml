@@ -251,6 +251,10 @@ definitions:
         type: string
       id:
         type: integer
+      images:
+        items:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserImageInfoResponse'
+        type: array
       role:
         type: integer
       username:
