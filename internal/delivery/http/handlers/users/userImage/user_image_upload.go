@@ -25,6 +25,8 @@ import (
 //	@Success	200		{object}	schemas.UserImageUploadResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/images/{userID}/avatar [post]
+//
+// @Security JWT
 func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 
 	uploadHandler := image.NewUploadHandler(
