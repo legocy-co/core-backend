@@ -57,12 +57,9 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 		app.GetUserImagesService(),
 		app.GetImageStorageClient())
 
-	userImages := rg.Group("/users/images")
+	userImages := rg.Group("/users/images").Use(jwt.IsOwnerOrAdmin("userID"))
 	{
-		userImages.Use(jwt.IsOwnerOrAdmin("userID"))
-		{
-			userImages.GET("/:userID", userImagesHandler.ListImages)
-			userImages.POST("/:userID/avatar", userImagesHandler.UploadUserImage)
-		}
+		userImages.GET("/:userID", userImagesHandler.ListImages)
+		userImages.POST("/:userID/avatar", userImagesHandler.UploadUserImage)
 	}
 }
