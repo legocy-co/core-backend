@@ -10,7 +10,7 @@ type UserPostgres struct {
 	Email    string `gorm:"unique;not null"`
 	Role     int
 	Password string
-	Images   []UserImagePostgres `gorm:"foreignKey:UserPostgresID"`
+	Images   []UserImagePostgres `gorm:"foreignKey:UserID"`
 }
 
 func (up UserPostgres) TableName() string {

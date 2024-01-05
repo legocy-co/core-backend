@@ -6,7 +6,8 @@ import (
 
 type UserImagePostgres struct {
 	Model
-	UserID      uint
+	UserID      uint         `gorm:"not null"`
+	User        UserPostgres `gorm:"foreignKey:UserID"`
 	FilepathURL string
 }
 
