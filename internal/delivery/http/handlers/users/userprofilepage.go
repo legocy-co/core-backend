@@ -17,20 +17,17 @@ type UserProfilePageHandler struct {
 	marketItemService s.MarketItemService
 	userService       ser.UserService
 	userReviewService s.UserReviewService
-	userImageService  ser.UserImageService
 }
 
 func NewUserProfilePageHandler(
 	marketItemService s.MarketItemService,
 	userService ser.UserService,
-	userReviewService s.UserReviewService,
-	userImageService ser.UserImageService) UserProfilePageHandler {
+	userReviewService s.UserReviewService) UserProfilePageHandler {
 
 	return UserProfilePageHandler{
 		marketItemService: marketItemService,
 		userService:       userService,
 		userReviewService: userReviewService,
-		userImageService:  userImageService,
 	}
 }
 
@@ -81,14 +78,7 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		userReviewsResponse = append(userReviewsResponse, users.GetUserReviewResponse(ur))
 	}
 
-	userImages, err := h.userImageService.GetUserImages(c, userID)
-
-	userImagesResponse := make([]users.UserImageInfoResponse, 0, len(userImages))
-	for _, ui := range userImages {
-		userImagesResponse = append(userImagesResponse, users.GetUserImageResponse(ui))
-	}
-
 	userProfilePageResponse := profile.GetUserProfilePageResponse(
-		marketItemsResponse, userResponse, userReviewsResponse, userImagesResponse)
+		marketItemsResponse, userResponse, userReviewsResponse)
 	c.JSON(http.StatusOK, userProfilePageResponse)
 }

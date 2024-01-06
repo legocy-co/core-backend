@@ -357,17 +357,13 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse:
     properties:
-      marketItems:
+      market_items:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse'
         type: array
       user:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
-      userImages:
-        items:
-          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserImageInfoResponse'
-        type: array
-      userReviews:
+      user_reviews:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse'
         type: array

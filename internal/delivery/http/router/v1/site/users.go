@@ -27,7 +27,7 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 	// User Profile
 
 	profileHandler := users.NewUserProfilePageHandler(
-		app.GetMarketItemService(), app.GetUserService(), app.GetUserReviewService(), app.GetUserImagesService())
+		app.GetMarketItemService(), app.GetUserService(), app.GetUserReviewService())
 
 	profileRoutes := rg.Group("/users/profile").Use(jwt.IsAuthenticated())
 	{

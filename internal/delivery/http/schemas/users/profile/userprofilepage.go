@@ -6,19 +6,19 @@ import (
 )
 
 type UserProfilePageResponse struct {
-	MarketItems []marketplace.MarketItemResponse `json:"marketItems"`
 	User        users.UserDetailResponse         `json:"user"`
-	UserReviews []users.UserReviewResponse       `json:"userReviews"`
-	UserImages  []users.UserImageInfoResponse    `json:"userImages"`
+	UserReviews []users.UserReviewResponse       `json:"user_reviews"`
+	MarketItems []marketplace.MarketItemResponse `json:"market_items"`
 }
 
 func GetUserProfilePageResponse(
-	marketItems []marketplace.MarketItemResponse, user users.UserDetailResponse,
-	userReviews []users.UserReviewResponse, userImages []users.UserImageInfoResponse) UserProfilePageResponse {
+	marketItems []marketplace.MarketItemResponse,
+	user users.UserDetailResponse,
+	userReviews []users.UserReviewResponse,
+) UserProfilePageResponse {
 	return UserProfilePageResponse{
 		MarketItems: marketItems,
 		User:        user,
 		UserReviews: userReviews,
-		UserImages:  userImages,
 	}
 }
