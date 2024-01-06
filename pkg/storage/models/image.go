@@ -37,7 +37,8 @@ func (i *ImageUnit) GenerateObjectName() string {
 		"%s/%s.%s",
 		strconv.Itoa(i.ID),
 		formatted,
-		"png")
+		i.PayloadType,
+	)
 }
 
 func (i *ImageUnit) GetObjectURL(baseUrl, bucketName, filepath string) string {
