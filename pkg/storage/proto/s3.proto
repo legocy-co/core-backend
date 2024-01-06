@@ -20,6 +20,7 @@ message UploadImageRequest {
 message ImageInfo {
   int32 id = 1;
   string bucketName = 2;
+  string fileFormat = 3;
 }
 
 message UploadImageResponse {

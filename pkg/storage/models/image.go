@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -22,7 +24,7 @@ func ImageUnitFromFile(file multipart.File, id int, name string, size int64) *Im
 		Payload:     file,
 		PayloadName: name,
 		PayloadSize: size,
-		PayloadType: "image/png",
+		PayloadType: strings.TrimLeft(filepath.Ext(name), "."),
 	}
 }
 

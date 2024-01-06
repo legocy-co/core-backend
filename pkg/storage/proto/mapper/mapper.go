@@ -11,6 +11,7 @@ func GetImageUploadRequest(image *models.ImageUnit, bucketName string) *proto.Up
 		Meta: &proto.ImageInfo{
 			Id:         int32(image.ID),
 			BucketName: bucketName,
+			FileFormat: image.PayloadType,
 		},
 		Data: helpers.StreamToByte(image.Payload),
 	}
