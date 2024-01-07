@@ -8,4 +8,5 @@ import (
 type UserImageRepository interface {
 	AddUserImage(c context.Context, image *models.UserImage) error
 	GetUserImages(c context.Context, userID int) ([]*models.UserImage, error)
+	DeleteImagesByUserID(c context.Context, userID int) error
 }
