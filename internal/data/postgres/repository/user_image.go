@@ -6,6 +6,8 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/pkg/kafka/schemas/user_image"
 )
 
 type UserImagePostgresRepository struct {
@@ -24,7 +26,11 @@ func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *mode
 
 	tx := db.Begin()
 
-	tx.Delete(&entities.UserImagePostgres{}, entities.UserImagePostgres{UserID: uint(image.UserID)})
+	err := r.DeleteImagesByUserID(c, image.UserID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
 	entity := entities.FromUserImage(image)
 	result := tx.Create(&entity)
@@ -32,6 +38,42 @@ func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *mode
 	if result.Error != nil {
 		tx.Rollback()
 		return result.Error
+	}
+
+	tx.Commit()
+	return nil
+}
+
+func (r UserImagePostgresRepository) DeleteImagesByUserID(c context.Context, userID int) error {
+	db := r.conn.GetDB()
+	if db == nil {
+		return d.ErrConnectionLost
+	}
+
+	tx := db.Begin()
+
+	var userImagesDB []*entities.UserImagePostgres
+	db.Model(
+		&entities.UserImagePostgres{},
+	).Find(&userImagesDB, entities.UserImagePostgres{UserID: uint(userID)})
+
+	for _, userImage := range userImagesDB {
+		err := tx.Delete(&entities.UserImagePostgres{}, userImage.ID).Error
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		err = kafka.ProduceJSONEvent(
+			kafka.USER_IMAGES_DELETED_TOPIC,
+			user_image.UserImageDeletedData{
+				ImageFilepath: userImage.FilepathURL,
+			},
+		)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
 	tx.Commit()
