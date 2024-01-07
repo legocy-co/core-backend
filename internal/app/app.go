@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/legocy-co/legocy/config"
 	d "github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/fixtures"
@@ -39,6 +40,8 @@ func (a *App) isReady() bool {
 }
 
 func New() *App {
+
+	godotenv.Load()
 
 	app := App{}
 
