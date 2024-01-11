@@ -36,8 +36,6 @@ func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/ [get]
-//
-//	@Security	JWT
 func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)

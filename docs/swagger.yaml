@@ -1050,8 +1050,6 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      security:
-      - JWT: []
       summary: Get Market Items
       tags:
       - market_items
