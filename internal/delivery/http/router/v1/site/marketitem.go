@@ -16,24 +16,27 @@ func AddMarketItems(
 	handler := market_item.NewMarketItemHandler(
 		app.GetMarketItemService())
 
-	items := rg.Group("/market-items").Use(jwt.IsAuthenticated())
+	items := rg.Group("/market-items")
 	{
 		items.GET("/", handler.ListMarketItems)
-		items.GET("/authorized/", handler.ListMarketItemsAuthorized)
-		items.GET("/:itemID", handler.MarketItemDetail)
 
-		items.Use(
-			middleware.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
+		items.Use(jwt.IsAuthenticated())
 		{
-			items.POST("/", handler.CreateMarketItem)
-		}
-		items.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
-		{
-			items.DELETE("/:itemId", handler.DeleteMarketItem)
-		}
-		items.Use(middleware.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
-		{
-			items.PUT("/:itemID", handler.UpdateMarketItemByID)
+			items.GET("/authorized/", handler.ListMarketItemsAuthorized)
+			items.GET("/:itemID", handler.MarketItemDetail)
+			items.Use(
+				middleware.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
+			{
+				items.POST("/", handler.CreateMarketItem)
+			}
+			items.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
+			{
+				items.DELETE("/:itemId", handler.DeleteMarketItem)
+			}
+			items.Use(middleware.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
+			{
+				items.PUT("/:itemID", handler.UpdateMarketItemByID)
+			}
 		}
 	}
 

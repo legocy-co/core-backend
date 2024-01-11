@@ -1032,11 +1032,6 @@ const docTemplate = `{
         },
         "/market-items/": {
             "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
