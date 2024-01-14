@@ -17,7 +17,7 @@ func NewMarketItemService(repo r.MarketItemRepository) MarketItemService {
 }
 
 func (ms *MarketItemService) CreateMarketItem(
-	c context.Context, item *models.MarketItemValueObject) *errors.AppError {
+	c context.Context, item *models.MarketItemValueObject) (*models.MarketItem, *errors.AppError) {
 	return ms.repo.CreateMarketItem(c, item)
 }
 

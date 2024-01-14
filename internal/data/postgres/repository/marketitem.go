@@ -159,18 +159,18 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 }
 
 func (r MarketItemPostgresRepository) CreateMarketItem(
-	c context.Context, item *models.MarketItemValueObject) *errors.AppError {
+	c context.Context, item *models.MarketItemValueObject) (*models.MarketItem, *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	tx := db.Begin()
 
 	entity := entities.FromMarketItemValueObject(item)
 	if entity == nil {
-		return &d.ErrItemNotFound
+		return nil, &d.ErrItemNotFound
 	}
 
 	result := tx.Create(&entity)
@@ -178,11 +178,11 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
 		tx.Rollback()
-		return &appErr
+		return nil, &appErr
 	}
 
 	tx.Commit()
-	return nil
+	return r.GetMarketItemByID(c, int(entity.ID))
 }
 
 func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int) *errors.AppError {

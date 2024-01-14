@@ -173,18 +173,15 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 		return
 	}
 
-	appErr := h.service.CreateMarketItem(c, vo)
+	marketItem, appErr := h.service.CreateMarketItem(c, vo)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	response := utils.DataMetaResponse{
-		Data: itemRequest,
-		Meta: utils.SuccessMetaResponse,
-	}
-	c.JSON(http.StatusOK, response)
+	marketItemResponse := marketplace.GetMarketItemResponse(marketItem)
+	c.JSON(http.StatusOK, marketItemResponse)
 }
 
 // DeleteMarketItem
