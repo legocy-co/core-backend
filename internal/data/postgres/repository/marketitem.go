@@ -91,6 +91,25 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	return entity.ToMarketItem(), nil
 }
 
+func (r MarketItemPostgresRepository) GetPendingMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError) {
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, &d.ErrConnectionLost
+	}
+
+	var entity *entities.MarketItemPostgres
+	query := db.Preload("Seller").Preload("Seller.Images").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
+		Find(&entity, "id = ?", id)
+
+	if query.RowsAffected == 0 {
+		return nil, &e.ErrMarketItemsNotFound
+	}
+
+	return entity.ToMarketItem(), nil
+}
+
 func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 	c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
 
@@ -182,7 +201,7 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 	}
 
 	tx.Commit()
-	return r.GetMarketItemByID(c, int(entity.ID))
+	return r.GetPendingMarketItemByID(c, int(entity.ID))
 }
 
 func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int) *errors.AppError {
