@@ -5,6 +5,8 @@ import (
 	"github.com/legocy-co/legocy/internal/data"
 	e "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/pkg/kafka/schemas"
 )
 
 type MarketItemImagePostgresRepository struct {
@@ -80,10 +82,34 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 
 	tx := db.Begin()
 
+	var currentImage *e.MarketItemImagePostgres
+	if err := tx.First(&currentImage, id).Error; err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.NotFoundError, err.Error())
+		return &appErr
+	}
+
+	if currentImage == nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.NotFoundError, "image not found")
+		return &appErr
+	}
+
 	if err := tx.Delete(&e.MarketItemImagePostgres{}, id).Error; err != nil {
 		tx.Rollback()
 		appErr := errors.NewAppError(errors.ConflictError, err.Error())
 		return &appErr
+	}
+
+	err := kafka.ProduceJSONEvent(
+		kafka.MARKET_ITEM_IMAGES_DELETED_TOPIC,
+		schemas.ImageDeletedEventData{
+			ImageFilepath: currentImage.ImageURL,
+		},
+	)
+	if err != nil {
+		tx.Rollback()
+		return err
 	}
 
 	tx.Commit()

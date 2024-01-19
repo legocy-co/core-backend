@@ -8,5 +8,5 @@ import (
 type LegoSetImageRepository interface {
 	Get(legoSetID int) ([]*models.LegoSetImage, *errors.AppError)
 	Store(vo models.LegoSetImageValueObject) (*models.LegoSetImage, *errors.AppError)
-	Delete(id int) error
+	Delete(id int) *errors.AppError
 }

@@ -9,8 +9,9 @@ type LegoSetPostgres struct {
 	Number       int    `gorm:"unique"`
 	Name         string `gorm:"unique"`
 	NPieces      int
-	LegoSeriesID uint               `gorm:"index:idx_lego_set_lego_series"`
-	LegoSeries   LegoSeriesPostgres `gorm:"ForeignKey:LegoSeriesID"`
+	LegoSeriesID uint                    `gorm:"index:idx_lego_set_lego_series"`
+	LegoSeries   LegoSeriesPostgres      `gorm:"ForeignKey:LegoSeriesID"`
+	Images       []*LegoSetImagePostgres `gorm:"foreignKey:LegoSetID;constraint:OnDelete:CASCADE;"`
 }
 
 func (lsp LegoSetPostgres) TableName() string {
@@ -18,12 +19,19 @@ func (lsp LegoSetPostgres) TableName() string {
 }
 
 func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {
+
+	images := make([]*models.LegoSetImage, 0, len(lsp.Images))
+	for _, image := range lsp.Images {
+		images = append(images, image.ToLegoSetImage())
+	}
+
 	return &models.LegoSet{
 		ID:      int(lsp.ID),
 		Number:  lsp.Number,
 		Name:    lsp.Name,
 		NPieces: lsp.NPieces,
 		Series:  *lsp.LegoSeries.ToLegoSeries(),
+		Images:  images,
 	}
 }
 

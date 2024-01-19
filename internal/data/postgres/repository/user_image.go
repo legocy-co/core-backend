@@ -7,7 +7,7 @@ import (
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/domain/users/repository"
 	"github.com/legocy-co/legocy/pkg/kafka"
-	"github.com/legocy-co/legocy/pkg/kafka/schemas/user_image"
+	"github.com/legocy-co/legocy/pkg/kafka/schemas"
 )
 
 type UserImagePostgresRepository struct {
@@ -66,7 +66,7 @@ func (r UserImagePostgresRepository) DeleteImagesByUserID(c context.Context, use
 
 		err = kafka.ProduceJSONEvent(
 			kafka.USER_IMAGES_DELETED_TOPIC,
-			user_image.UserImageDeletedData{
+			schemas.ImageDeletedEventData{
 				ImageFilepath: userImage.FilepathURL,
 			},
 		)

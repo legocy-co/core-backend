@@ -21,11 +21,12 @@ func (l *LegoSetRequest) ToLegoSeriesValueObject() *models.LegoSetValueObject {
 }
 
 type LegoSetResponse struct {
-	ID      int                `json:"id"`
-	Name    string             `json:"name"`
-	Number  int                `json:"number"`
-	NPieces int                `json:"n_pieces"`
-	Series  LegoSeriesResponse `json:"series"`
+	ID      int                    `json:"id"`
+	Name    string                 `json:"name"`
+	Number  int                    `json:"number"`
+	NPieces int                    `json:"n_pieces"`
+	Series  LegoSeriesResponse     `json:"series"`
+	Images  []LegoSetImageResponse `json:"images"`
 }
 
 func GetLegoSetResponse(m *models.LegoSet) LegoSetResponse {
@@ -35,5 +36,6 @@ func GetLegoSetResponse(m *models.LegoSet) LegoSetResponse {
 		Number:  m.Number,
 		NPieces: m.NPieces,
 		Series:  GetLegoSeriesResponse(&m.Series),
+		Images:  GetLegoSetImagesResponse(m.Images),
 	}
 }
