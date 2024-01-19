@@ -24,18 +24,20 @@ func AddMarketItems(
 		{
 			items.GET("/authorized/", handler.ListMarketItemsAuthorized)
 			items.GET("/:itemID", handler.MarketItemDetail)
-			items.Use(
+
+			privateRoutes := items.Use(
+				middleware.ItemOwnerOrAdmin(
+					"itemId", app.GetMarketItemRepo(),
+				),
+			)
+			{
+				privateRoutes.DELETE("/:itemId", handler.DeleteMarketItem)
+				privateRoutes.PUT("/:itemID", handler.UpdateMarketItemByID)
+			}
+			checkSlotsRoutes := items.Use(
 				middleware.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
 			{
-				items.POST("/", handler.CreateMarketItem)
-			}
-			items.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
-			{
-				items.DELETE("/:itemId", handler.DeleteMarketItem)
-			}
-			items.Use(middleware.IsMarketItemOwner("itemID", app.GetMarketItemRepo()))
-			{
-				items.PUT("/:itemID", handler.UpdateMarketItemByID)
+				checkSlotsRoutes.POST("/", handler.CreateMarketItem)
 			}
 		}
 	}
@@ -47,6 +49,7 @@ func AddMarketItems(
 		itemImages.Use(middleware.IsMarketItemOwner("marketItemID", app.GetMarketItemRepo()))
 		{
 			itemImages.POST("/:marketItemID", handler.UploadImage)
+			itemImages.DELETE("/:imageId", handler.Delete)
 		}
 	}
 

@@ -65,7 +65,7 @@ func GetV1Router(app *app.App) V1router {
 	site.AddUsers(v1, app)
 	site.AddUserCollections(v1, app)
 	site.AddLegoSeries(v1, app.GetLegoSeriesService())
-	site.AddLegoSets(v1, app.GetLegoSetService())
+	site.AddLegoSets(v1, app)
 	site.AddMarketItems(v1, app)
 	site.AddCallcuatorRoutes(v1, app)
 

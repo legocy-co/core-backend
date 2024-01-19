@@ -90,6 +90,17 @@ definitions:
       name:
         type: string
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse:
+    properties:
+      id:
+        type: integer
+      image_filepath:
+        type: string
+      is_main:
+        type: boolean
+      lego_set_id:
+        type: integer
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetRequest:
     properties:
       n_pieces:
@@ -105,6 +116,10 @@ definitions:
     properties:
       id:
         type: integer
+      images:
+        items:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse'
+        type: array
       n_pieces:
         type: integer
       name:
@@ -748,6 +763,66 @@ paths:
       summary: Delete Lego Set object
       tags:
       - lego_sets_admin
+  /admin/sets/images/{imageId}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete_lego_set_image_by_id
+      parameters:
+      - description: image id
+        in: path
+        name: imageId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete Image By Id
+      tags:
+      - lego_set_images
+  /admin/sets/images/{marketItemID}:
+    post:
+      consumes:
+      - multipart/form-data
+      operationId: upload_lego_set_image
+      parameters:
+      - description: filepath
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: lego set id
+        in: path
+        name: legoSetID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Upload Image
+      tags:
+      - lego_set_images
   /admin/users/:
     get:
       operationId: list_users_admin
@@ -1186,6 +1261,35 @@ paths:
       summary: Get Market Items Authorized
       tags:
       - market_items
+  /market-items/images/{imageId}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete_market_item_image
+      parameters:
+      - description: image id
+        in: path
+        name: imageId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete Image
+      tags:
+      - market_item_images
   /market-items/images/{marketItemID}:
     post:
       consumes:

@@ -543,6 +543,97 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/sets/images/{imageId}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lego_set_images"
+                ],
+                "summary": "Delete Image By Id",
+                "operationId": "delete_lego_set_image_by_id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "image id",
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/sets/images/{marketItemID}": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lego_set_images"
+                ],
+                "summary": "Upload Image",
+                "operationId": "upload_lego_set_image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "filepath",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "lego set id",
+                        "name": "legoSetID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/admin/sets/{setID}": {
             "delete": {
                 "security": [
@@ -1115,6 +1206,51 @@ const docTemplate = `{
                 ],
                 "summary": "Get Market Items Authorized",
                 "operationId": "list_market_items_authorized",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/market-items/images/{imageId}": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_item_images"
+                ],
+                "summary": "Delete Image",
+                "operationId": "delete_market_item_image",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "image id",
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2057,6 +2193,23 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "image_filepath": {
+                    "type": "string"
+                },
+                "is_main": {
+                    "type": "boolean"
+                },
+                "lego_set_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetRequest": {
             "type": "object",
             "properties": {
@@ -2079,6 +2232,12 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "integer"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse"
+                    }
                 },
                 "n_pieces": {
                     "type": "integer"

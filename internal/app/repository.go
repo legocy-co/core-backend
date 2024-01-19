@@ -62,3 +62,7 @@ func (a *App) GetLegoSetsValuationRepository() calculator.LegoSetValuationReposi
 func (a *App) GetMarketItemImageRepository() marketplace.MarketItemImageRepository {
 	return postgres.NewMarketItemImagePostgresRepository(a.GetDatabase())
 }
+
+func (a *App) GetLegoSetImageRepository() lego.LegoSetImageRepository {
+	return postgres.NewLegoSetImagePostgresRepository(a.GetDatabase())
+}

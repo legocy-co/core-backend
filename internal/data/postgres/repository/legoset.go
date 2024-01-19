@@ -50,7 +50,7 @@ func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.Leg
 	var entitiesList []*entities.LegoSetPostgres
 	_err := db.Model(entities.LegoSetPostgres{}).
 		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
-		Preload("LegoSeries").Find(&entitiesList).Error
+		Preload("LegoSeries").Preload("Images").Find(&entitiesList).Error
 
 	if _err != nil {
 		appErr := errors.NewAppError(errors.InternalError, _err.Error())
@@ -76,7 +76,7 @@ func (r LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*m
 	}
 
 	var entity *entities.LegoSetPostgres
-	query := db.Preload("LegoSeries").First(&entity, id)
+	query := db.Preload("LegoSeries").Preload("Images").First(&entity, id)
 
 	if query.Error != nil {
 		*err = errors.NewAppError(errors.NotFoundError, query.Error.Error())
