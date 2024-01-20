@@ -583,7 +583,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/sets/images/{marketItemID}": {
+        "/admin/sets/images/{legoSetId}": {
             "post": {
                 "security": [
                     {
