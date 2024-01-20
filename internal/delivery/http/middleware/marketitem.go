@@ -118,10 +118,11 @@ func HasFreeMarketItemsSlot(
 		tokenPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 		if !ok {
 			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{" error": "Error parsing Token Claims"})
+				http.StatusBadRequest, gin.H{"error": "Error parsing Token Claims"})
 			return
 		}
 
+		logrus.Info("Checking if user has free slots to create market item")
 		userItemsCount, err := repo.GetSellerMarketItemsAmount(ctx, tokenPayload.ID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
