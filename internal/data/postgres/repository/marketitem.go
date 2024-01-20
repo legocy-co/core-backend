@@ -167,7 +167,10 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 	}
 
 	res := db.Model(
-		entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).Count(&count)
+		entities.MarketItemPostgres{},
+	).Where(
+		"user_postgres_id = ?", sellerID,
+	).Count(&count)
 
 	if res.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
