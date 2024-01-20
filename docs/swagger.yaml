@@ -790,7 +790,7 @@ paths:
       summary: Delete Image By Id
       tags:
       - lego_set_images
-  /admin/sets/images/{legoSetId}:
+  /admin/sets/images/{legoSetID}:
     post:
       consumes:
       - multipart/form-data
