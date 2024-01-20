@@ -1,20 +1,23 @@
 package lego
 
-import models "github.com/legocy-co/legocy/internal/domain/lego/models"
+import (
+	"github.com/legocy-co/legocy/config"
+	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+)
 
 type LegoSetImageResponse struct {
-	ID            int    `json:"id"`
-	LegoSetID     int    `json:"lego_set_id"`
-	IsMain        bool   `json:"is_main"`
-	ImageFilepath string `json:"image_filepath"`
+	ID        int    `json:"id"`
+	LegoSetID int    `json:"lego_set_id"`
+	IsMain    bool   `json:"is_main"`
+	ImageURL  string `json:"image_url"`
 }
 
 func GetLegoSetImageResponse(m *models.LegoSetImage) LegoSetImageResponse {
 	return LegoSetImageResponse{
-		ID:            m.ID,
-		IsMain:        m.IsMain,
-		LegoSetID:     m.LegoSetID,
-		ImageFilepath: m.ImageURL,
+		ID:        m.ID,
+		IsMain:    m.IsMain,
+		LegoSetID: m.LegoSetID,
+		ImageURL:  config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + m.ImageURL,
 	}
 }
 
