@@ -22,7 +22,7 @@ import (
 //	 	@Param		legoSetID path int true "lego set id"
 //		@Success	200		{object}	schemas.LegoSetImageResponse
 //		@Failure	400		{object}	map[string]interface{}
-//		@Router		/admin/sets/images/{legoSetId} [post]
+//		@Router		/admin/sets/images/{legoSetID} [post]
 //
 //		@Security JWT
 func (h LegoSetImageHandler) Upload(ctx *gin.Context) {
