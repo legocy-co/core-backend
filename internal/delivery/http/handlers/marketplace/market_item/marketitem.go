@@ -162,7 +162,10 @@ func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 
 	var itemRequest *marketplace.MarketItemRequest
 	if err := c.ShouldBindJSON(&itemRequest); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(
+			http.StatusUnprocessableEntity,
+			gin.H{"error": "Error binding MarketItemRequest " + err.Error()},
+		)
 		return
 	}
 
