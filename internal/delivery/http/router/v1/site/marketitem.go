@@ -25,16 +25,15 @@ func AddMarketItems(
 			items.GET("/authorized/", handler.ListMarketItemsAuthorized)
 			items.GET("/:itemID", handler.MarketItemDetail)
 
-			privateRoutes := items.Use(
-				middleware.ItemOwnerOrAdmin(
-					"itemId", app.GetMarketItemRepo(),
-				),
-			)
+			privateRoutes := items.Group("")
+			privateRoutes.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
 			{
 				privateRoutes.DELETE("/:itemId", handler.DeleteMarketItem)
 				privateRoutes.PUT("/:itemID", handler.UpdateMarketItemByID)
 			}
-			checkSlotsRoutes := items.Use(
+
+			checkSlotsRoutes := items.Group("")
+			checkSlotsRoutes.Use(
 				middleware.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
 			{
 				checkSlotsRoutes.POST("/", handler.CreateMarketItem)
