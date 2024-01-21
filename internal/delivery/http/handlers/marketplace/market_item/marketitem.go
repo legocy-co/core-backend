@@ -207,10 +207,11 @@ func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 		return
 	}
 
-	err = h.service.DeleteMarketItem(c, itemID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError,
-			"Error deleting MarketItem object")
+	e := h.service.DeleteMarketItem(c, itemID)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]bool{"status": true})
