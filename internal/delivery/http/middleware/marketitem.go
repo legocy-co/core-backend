@@ -39,10 +39,10 @@ func ItemOwnerOrAdmin(
 			return
 		}
 
-		sellerID, err := repo.GetMarketItemSellerID(ctx, itemID)
-		if err != nil {
-			ctx.AbortWithStatusJSON(
-				http.StatusBadRequest, gin.H{"error": err.Error()})
+		sellerID, e := repo.GetMarketItemSellerID(ctx, itemID)
+		if e != nil {
+			httpErr := errors.FromAppError(*e)
+			ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 			return
 		}
 
