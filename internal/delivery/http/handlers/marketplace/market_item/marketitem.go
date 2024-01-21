@@ -5,9 +5,7 @@ import (
 	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
-	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	users "github.com/legocy-co/legocy/internal/domain/users/service"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
@@ -40,25 +38,22 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
-	var marketItems []*models.MarketItem
-	marketItems, err := h.service.ListMarketItems(ctx)
+	marketItemsPage, err := h.service.ListMarketItems(ctx)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
+	marketItems := marketItemsPage.GetObjects()
+
 	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
 	for _, m := range marketItems {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	response := utils.DataMetaResponse{
-		Data: marketItemResponse,
-		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, utils.MsgSuccess, ctx),
-	}
-	c.JSON(http.StatusOK, response)
+	// TODO: add pagination
+	c.JSON(http.StatusOK, marketItemResponse)
 }
 
 // ListMarketItemsAuthorized
@@ -76,8 +71,6 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
-	var marketItems []*models.MarketItem
-
 	tokenPayload, err := middleware.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -87,24 +80,22 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	userID := tokenPayload.ID
 
-	marketItems, appErr := h.service.ListMarketItemsAuthorized(ctx, userID)
+	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, userID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
+	marketItems := marketItemsPage.GetObjects()
+
 	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
 	for _, m := range marketItems {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	response := utils.DataMetaResponse{
-		Data: marketItemResponse,
-		Meta: pagination.GetPaginatedMetaResponse(
-			c.Request.URL.Path, utils.MsgSuccess, ctx),
-	}
-	c.JSON(http.StatusOK, response)
+	// TODO: add pagination
+	c.JSON(http.StatusOK, marketItemResponse)
 }
 
 // MarketItemDetail

@@ -1,79 +1,34 @@
 package pagination
 
 import (
-	"context"
-	"fmt"
-	"github.com/gin-gonic/gin"
-	r "github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
-	"github.com/legocy-co/legocy/pkg/filter"
-	"log"
-	"strconv"
+	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
-type PaginatedMetaResponse struct {
-	Message  string         `json:"message"`
-	Page     int            `json:"page"`
-	PageSize int            `json:"page_size"`
-	Links    paginationUrls `json:"links"`
+type PageResponse[T any] struct {
+	Data []T              `json:"data"`
+	Meta PageMetaResponse `json:"meta"`
 }
 
-func GetPaginationContext(c *gin.Context) context.Context {
-	params, err := filter.GetQueryParams(c)
-	if err != nil {
-		log.Println(err.Error())
-		return c
-	}
-	return context.WithValue(context.Background(), "pagination", params)
+type PageMetaResponse struct {
+	Total  int `json:"total"`
+	Limit  int `json:"limit"`
+	Offset int `json:"offset"`
 }
 
-func GetPaginatedMetaResponse(
-	url string, message string, ctx context.Context) PaginatedMetaResponse {
+// GetPageResponse
+// TODO: domain Page[T] -> PageResponse[T] without making a new Page[T] object for response structs inside handler
+func GetPageResponse[T any](page pagination.Page[T]) PageResponse[T] {
 
-	params := ctx.Value("pagination").(*filter.QueryParams)
-	if params == nil {
-		return PaginatedMetaResponse{
-			Message:  r.MsgError,
-			Page:     1,
-			PageSize: 10,
-			Links:    generateMetaUrls(url, 1),
-		}
-	}
-
-	return PaginatedMetaResponse{
-		Message:  message,
-		Page:     params.Page,
-		PageSize: params.PageSize,
-		Links:    generateMetaUrls(url, params.Page),
-	}
-
-}
-
-type paginationUrls struct {
-	Prev string `json:"previous"`
-	Curr string `json:"current"`
-	Next string `json:"next"`
-}
-
-func generateMetaUrls(url string, page int) paginationUrls {
-	return paginationUrls{
-		Prev: getPrevPageUrl(url, page),
-		Curr: url,
-		Next: getNextPageUrl(url, page),
+	return PageResponse[T]{
+		Data: page.GetObjects(),
+		Meta: GetPageMetaResponse(page),
 	}
 }
 
-func getPrevPageUrl(url string, page int) string {
-	prevPage := page - 1
-
-	if prevPage <= 0 {
-		return url
+func GetPageMetaResponse[T any](page pagination.Page[T]) PageMetaResponse {
+	return PageMetaResponse{
+		Total:  page.GetTotal(),
+		Limit:  page.GetLimit(),
+		Offset: page.GetOffset(),
 	}
-
-	pageSymbol := strconv.Itoa(prevPage)
-	return url + fmt.Sprintf("?page=%v", pageSymbol)
-
-}
-
-func getNextPageUrl(url string, page int) string {
-	return url + fmt.Sprintf("?page=%v", strconv.Itoa(page+1))
 }

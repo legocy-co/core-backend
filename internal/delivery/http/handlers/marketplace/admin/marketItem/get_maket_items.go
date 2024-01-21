@@ -38,7 +38,7 @@ func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 
 	dataMetaResponse := utils.DataMetaResponse{
 		Data: response,
-		Meta: pagination.GetPaginatedMetaResponse(
+		Meta: pagination.GetPageResponse(
 			c.Request.URL.Path,
 			utils.MsgSuccess,
 			c),
