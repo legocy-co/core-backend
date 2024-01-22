@@ -4,8 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace/admin"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	"github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"net/http"
 )
@@ -36,13 +34,6 @@ func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
 		response = append(response, admin.GetMarketItemAdminResponse(marketItem))
 	}
 
-	dataMetaResponse := utils.DataMetaResponse{
-		Data: response,
-		Meta: pagination.GetPageResponse(
-			c.Request.URL.Path,
-			utils.MsgSuccess,
-			c),
-	}
-
-	c.JSON(http.StatusOK, dataMetaResponse)
+	// TODO: add pagination
+	c.JSON(http.StatusOK, response)
 }

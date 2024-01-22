@@ -62,7 +62,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	query := db.Model(
 		&entities.MarketItemPostgres{},
 	).Preload("Seller").Preload("Images").Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID)
+		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).Order("created_at DESC")
 
 	query = utils.AddPaginationQuery(query, ctx)
 

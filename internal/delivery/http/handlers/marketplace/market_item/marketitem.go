@@ -52,8 +52,13 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	// TODO: add pagination
-	c.JSON(http.StatusOK, marketItemResponse)
+	responsePage := pagination.GetPageResponse[marketplace.MarketItemResponse](
+		marketItemResponse,
+		marketItemsPage.GetTotal(),
+		marketItemsPage.GetLimit(),
+		marketItemsPage.GetOffset(),
+	)
+	c.JSON(http.StatusOK, responsePage)
 }
 
 // ListMarketItemsAuthorized
@@ -94,8 +99,13 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
 	}
 
-	// TODO: add pagination
-	c.JSON(http.StatusOK, marketItemResponse)
+	responsePage := pagination.GetPageResponse[marketplace.MarketItemResponse](
+		marketItemResponse,
+		marketItemsPage.GetTotal(),
+		marketItemsPage.GetLimit(),
+		marketItemsPage.GetOffset(),
+	)
+	c.JSON(http.StatusOK, responsePage)
 }
 
 // MarketItemDetail

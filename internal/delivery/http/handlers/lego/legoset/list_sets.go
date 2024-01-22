@@ -5,7 +5,6 @@ import (
 	_ "github.com/legocy-co/legocy/docs"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	"net/http"
 )
 
@@ -22,9 +21,7 @@ import (
 //	@Security	JWT
 func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
 
-	ctx := pagination.GetPaginationContext(c)
-
-	setsList, err := lsh.service.ListLegoSets(ctx)
+	setsList, err := lsh.service.ListLegoSets(c)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
