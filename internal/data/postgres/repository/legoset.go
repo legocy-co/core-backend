@@ -7,7 +7,6 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/domain/lego"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
-	"github.com/legocy-co/legocy/pkg/filter"
 )
 
 type LegoSetPostgresRepository struct {
@@ -45,12 +44,12 @@ func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.Leg
 	if db == nil {
 		return nil, &d.ErrConnectionLost
 	}
-	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	var entitiesList []*entities.LegoSetPostgres
-	_err := db.Model(entities.LegoSetPostgres{}).
-		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
-		Preload("LegoSeries").Preload("Images").Find(&entitiesList).Error
+	_err := db.Model(
+		entities.LegoSetPostgres{},
+	).Preload("LegoSeries").Preload("Images").
+		Find(&entitiesList).Error
 
 	if _err != nil {
 		appErr := errors.NewAppError(errors.InternalError, _err.Error())
