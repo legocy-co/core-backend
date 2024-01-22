@@ -1131,12 +1131,25 @@ const docTemplate = `{
                 ],
                 "summary": "Get Market Items",
                 "operationId": "list_market_items",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse"
                         }
                     },
                     "400": {
@@ -1206,12 +1219,25 @@ const docTemplate = `{
                 ],
                 "summary": "Get Market Items Authorized",
                 "operationId": "list_market_items_authorized",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse"
                         }
                     },
                     "400": {
@@ -2199,7 +2225,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "image_filepath": {
+                "image_url": {
                     "type": "string"
                 },
                 "is_main": {
@@ -2645,11 +2671,32 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_legocy-co_legocy_internal_delivery_http_schemas_utils.DataMetaResponse": {
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse": {
             "type": "object",
             "properties": {
-                "data": {},
-                "meta": {}
+                "limit": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse"
+                }
             }
         }
     },

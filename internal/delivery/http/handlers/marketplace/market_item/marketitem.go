@@ -31,7 +31,9 @@ func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
 //	@Tags		market_items
 //	@ID			list_market_items
 //	@Produce	json
-//	@Success	200	{object}	map[string]interface{}
+//	@Param		limit	query	int	false	"limit" 10
+//	@Param		offset	query	int	false	"offset" 0
+//	@Success	200	{object}	pagination.PageResponse[marketplace.MarketItemResponse]
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/ [get]
 func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
@@ -67,7 +69,9 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 //	@Tags		market_items
 //	@ID			list_market_items_authorized
 //	@Produce	json
-//	@Success	200	{object}	map[string]interface{}
+//	@Param		limit	query	int	false	"limit" 10
+//	@Param		offset	query	int	false	"offset" 0
+//	@Success	200	{object}	pagination.PageResponse[marketplace.MarketItemResponse]
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/authorized/ [get]
 //
