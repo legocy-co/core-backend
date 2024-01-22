@@ -5,8 +5,10 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
 type MarketItemPostgresRepository struct {
@@ -17,23 +19,25 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 	return MarketItemPostgresRepository{conn: conn}
 }
 
-func (r MarketItemPostgresRepository) GetMarketItems(
-	c context.Context) ([]*models.MarketItem, *errors.AppError) {
-
-	var itemsDB []*entities.MarketItemPostgres
+func (r MarketItemPostgresRepository) GetMarketItems(ctx pagination.PaginationContext) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return pagination.NewEmptyPage[*models.MarketItem](), &d.ErrConnectionLost
 	}
 
-	res := db.Model(&entities.MarketItemPostgres{}).
-		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
-		Find(&itemsDB, "status = 'ACTIVE'")
+	query := db.Model(
+		&entities.MarketItemPostgres{},
+	).Preload("Seller").Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images")
+
+	query = utils.AddPaginationQuery(query, ctx)
+
+	var itemsDB []*entities.MarketItemPostgres
+	res := query.Find(&itemsDB, "status = 'ACTIVE'")
+
 	if res.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
-		return nil, &appErr
+		return pagination.NewEmptyPage[*models.MarketItem](), &appErr
 	}
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
@@ -41,26 +45,33 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		marketItems = append(marketItems, entity.ToMarketItem())
 	}
 
-	return marketItems, nil
+	var total int64
+	db.Model(&entities.MarketItemPostgres{}).Where("status = 'ACTIVE'").Count(&total)
+
+	return pagination.NewPage[*models.MarketItem](marketItems, int(total), ctx.GetLimit(), ctx.GetOffset()), nil
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
-	c context.Context, userID int) ([]*models.MarketItem, *errors.AppError) {
-
-	var itemsDB []*entities.MarketItemPostgres
+	ctx pagination.PaginationContext, userID int) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return pagination.NewEmptyPage[*models.MarketItem](), &d.ErrConnectionLost
 	}
 
-	res := db.Model(&entities.MarketItemPostgres{}).
-		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
-		Find(&itemsDB, "user_postgres_id <> ? and status = 'ACTIVE'", userID)
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
-		return nil, &appErr
+	query := db.Model(
+		&entities.MarketItemPostgres{},
+	).Preload("Seller").Preload("Images").Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).Order("created_at DESC")
+
+	query = utils.AddPaginationQuery(query, ctx)
+
+	var itemsDB []*entities.MarketItemPostgres
+	queryResult := query.Find(&itemsDB)
+
+	if queryResult.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, queryResult.Error.Error())
+		return pagination.NewEmptyPage[*models.MarketItem](), &appErr
 	}
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
@@ -68,7 +79,10 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 		marketItems = append(marketItems, entity.ToMarketItem())
 	}
 
-	return marketItems, nil
+	var total int64
+	db.Model(&entities.MarketItemPostgres{}).Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).Count(&total)
+
+	return pagination.NewPage[*models.MarketItem](marketItems, int(total), ctx.GetLimit(), ctx.GetOffset()), nil
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemByID(

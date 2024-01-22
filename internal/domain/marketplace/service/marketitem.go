@@ -5,6 +5,7 @@ import (
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	"github.com/legocy-co/legocy/pkg/pagination"
 	"golang.org/x/net/context"
 )
 
@@ -22,14 +23,14 @@ func (ms *MarketItemService) CreateMarketItem(
 }
 
 func (ms *MarketItemService) ListMarketItems(
-	c context.Context) ([]*models.MarketItem, *errors.AppError) {
+	c pagination.PaginationContext) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
 	marketItems, err := ms.repo.GetMarketItems(c)
 	if err != nil {
 		return marketItems, err
 	}
 
-	if len(marketItems) == 0 {
+	if len(marketItems.GetObjects()) == 0 {
 		return marketItems, &e.ErrMarketItemsNotFound
 	}
 
@@ -37,13 +38,14 @@ func (ms *MarketItemService) ListMarketItems(
 }
 
 func (ms *MarketItemService) ListMarketItemsAuthorized(
-	c context.Context, userID int) ([]*models.MarketItem, *errors.AppError) {
+	c pagination.PaginationContext, userID int) (pagination.Page[*models.MarketItem], *errors.AppError) {
+
 	marketItems, err := ms.repo.GetMarketItemsAuthorized(c, userID)
 	if err != nil {
 		return marketItems, err
 	}
 
-	if len(marketItems) == 0 {
+	if len(marketItems.GetObjects()) == 0 {
 		return marketItems, &e.ErrMarketItemsNotFound
 	}
 

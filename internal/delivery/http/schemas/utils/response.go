@@ -1,6 +1,6 @@
 package utils
 
-type DataMetaResponse struct {
+type DataMetaResponse []struct {
 	Data interface{} `json:"data"`
 	Meta interface{} `json:"meta"`
 }

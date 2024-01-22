@@ -94,7 +94,7 @@ definitions:
     properties:
       id:
         type: integer
-      image_filepath:
+      image_url:
         type: string
       is_main:
         type: boolean
@@ -383,10 +383,23 @@ definitions:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse'
         type: array
     type: object
-  github_com_legocy-co_legocy_internal_delivery_http_schemas_utils.DataMetaResponse:
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse:
     properties:
-      data: {}
-      meta: {}
+      limit:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+    type: object
+  ? github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse
+  : properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse'
+        type: array
+      meta:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse'
     type: object
 info:
   contact:
@@ -1112,14 +1125,22 @@ paths:
   /market-items/:
     get:
       operationId: list_market_items
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse'
         "400":
           description: Bad Request
           schema:
@@ -1243,14 +1264,22 @@ paths:
   /market-items/authorized/:
     get:
       operationId: list_market_items_authorized
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse'
         "400":
           description: Bad Request
           schema:

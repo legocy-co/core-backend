@@ -5,7 +5,6 @@ import (
 	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
@@ -127,11 +126,7 @@ func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 		return
 	}
 
-	response := utils.DataMetaResponse{
-		Data: reviewRequest,
-		Meta: utils.SuccessMetaResponse,
-	}
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 
 // DeleteUserReview
@@ -160,5 +155,5 @@ func (h *UserReviewHandler) DeleteUserReview(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]bool{"status": true})
+	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
