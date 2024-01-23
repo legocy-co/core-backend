@@ -5,6 +5,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -92,6 +93,7 @@ func IsAdmin() gin.HandlerFunc {
 func IsOwnerOrAdmin(lookUpParam string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
+		log.Println("Checking user payload")
 		tokenPayload, err := GetUserPayload(ctx)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
@@ -100,6 +102,7 @@ func IsOwnerOrAdmin(lookUpParam string) gin.HandlerFunc {
 		}
 
 		// Get UserID param
+		log.Println("Checking user id from url")
 		userID, err := strconv.Atoi(ctx.Param(lookUpParam))
 		if err != nil {
 			ctx.AbortWithStatusJSON(
@@ -109,11 +112,11 @@ func IsOwnerOrAdmin(lookUpParam string) gin.HandlerFunc {
 
 		// check if User itself or admin
 		if tokenPayload.ID != userID && tokenPayload.Role != models.ADMIN {
-			ctx.JSON(http.StatusForbidden, gin.H{"error": "User does not have permission"})
-			ctx.Abort()
+			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "User does not have permission"})
 			return
 		}
 
+		log.Println("User is owner or admin. Access granted.")
 		ctx.Next()
 	}
 }
