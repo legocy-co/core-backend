@@ -20,13 +20,13 @@ import (
 func (h UserImageHandler) ListImages(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error1": err.Error()})
 		return
 	}
 
 	imagesList, err := h.service.GetUserImages(c, userID)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error2": err.Error()})
 	}
 
 	imageResponseList := make([]schemas.UserImageInfoResponse, len(imagesList))
