@@ -108,7 +108,7 @@ func IsOwnerOrAdmin(lookUpParam string) gin.HandlerFunc {
 		}
 
 		// check if User itself or admin
-		if tokenPayload.ID != userID || tokenPayload.Role != models.ADMIN {
+		if tokenPayload.ID != userID && tokenPayload.Role != models.ADMIN {
 			ctx.JSON(http.StatusForbidden, gin.H{"error": "User does not have permission"})
 			ctx.Abort()
 			return
