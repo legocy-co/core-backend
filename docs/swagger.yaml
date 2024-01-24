@@ -1572,6 +1572,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: Get User Images List
       tags:
       - users_images

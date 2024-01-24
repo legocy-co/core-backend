@@ -1789,6 +1789,11 @@ const docTemplate = `{
         },
         "/users/images/{userID}": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
