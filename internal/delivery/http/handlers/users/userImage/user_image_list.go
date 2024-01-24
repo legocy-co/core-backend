@@ -17,6 +17,8 @@ import (
 //	@Success	200		{object}	schemas.UserImagesListResponse
 //	@Failure	400		{object}	map[string]interface{}
 //	@Router		/users/images/{userID} [get]
+//
+// @Security JWT
 func (h UserImageHandler) ListImages(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
