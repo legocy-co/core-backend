@@ -37,13 +37,13 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
-  app:
-    build:
-      context: ../
-      dockerfile: /Users/wjojf/Documents/dev/GolandProjects/legocy/deploy/Dockerfile
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
-    restart:
-      unless-stopped
+#  app:
+#    build:
+#      context: ../
+#      dockerfile: /Users/wjojf/Documents/dev/GolandProjects/legocy/deploy/Dockerfile
+#    ports:
+#      - "8080:8080"
+#    env_file:
+#      - .env
+#    restart:
+#      unless-stopped

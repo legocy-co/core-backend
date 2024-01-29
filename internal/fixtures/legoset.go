@@ -67,6 +67,9 @@ func LoadLegoSets(
 	}
 
 	for _, set := range setsList {
+
+		logrus.Infof("Creating LegoSet object %v", set.SetNumber)
+
 		setCreate := set.toLegoSetValueObject(seriesRepo)
 		if setCreate == nil {
 			continue

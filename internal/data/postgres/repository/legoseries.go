@@ -24,16 +24,15 @@ func (r LegoSeriesPostgresRepository) CreateLegoSeries(c context.Context, s *mod
 		return &d.ErrConnectionLost
 	}
 
-	var err *errors.AppError
-
 	entity := entities.FromLegoSeriesValueObject(s)
 	_err := db.Create(&entity).Error
 
 	if _err != nil {
-		*err = errors.NewAppError(errors.ConflictError, _err.Error())
+		appErr := errors.NewAppError(errors.ConflictError, _err.Error())
+		return &appErr
 	}
 
-	return err
+	return nil
 }
 
 func (r LegoSeriesPostgresRepository) GetLegoSeriesList(c context.Context) ([]*models.LegoSeries, *errors.AppError) {
@@ -90,8 +89,6 @@ func (r LegoSeriesPostgresRepository) GetLegoSeriesByName(
 
 	db := r.conn.GetDB()
 
-	var err *errors.AppError
-
 	if db == nil {
 		return nil, &d.ErrConnectionLost
 	}
@@ -99,8 +96,8 @@ func (r LegoSeriesPostgresRepository) GetLegoSeriesByName(
 	var entity *entities.LegoSeriesPostgres
 	_err := db.Where(entities.LegoSeriesPostgres{Name: name}).First(&entity).Error
 	if _err != nil {
-		*err = errors.NewAppError(errors.NotFoundError, _err.Error())
-		return nil, err
+		appErr := errors.NewAppError(errors.NotFoundError, _err.Error())
+		return nil, &appErr
 	}
 
 	return entity.ToLegoSeries(), nil
