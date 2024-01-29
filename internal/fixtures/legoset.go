@@ -72,8 +72,8 @@ func LoadLegoSets(
 			continue
 		}
 
-		if err = setsRepo.CreateLegoSet(context.Background(), setCreate); err != nil {
-			logrus.Errorf("Error creating LegoSet %v", err)
+		if e := setsRepo.CreateLegoSet(context.Background(), setCreate); e != nil {
+			logrus.Errorf("Error creating LegoSet %v", e.Error())
 			continue
 		}
 		logrus.Infof("Successfully created LegoSet %v", setCreate.Number)

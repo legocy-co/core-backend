@@ -46,8 +46,8 @@ func LoadLegoSeries(r repository.LegoSeriesRepository) {
 	}
 
 	for _, series := range seriesList {
-		err = r.CreateLegoSeries(context.Background(), series.toLegoSeriesValueObject())
-		if err != nil {
+		e := r.CreateLegoSeries(context.Background(), series.toLegoSeriesValueObject())
+		if e != nil {
 			logrus.Errorf("Error creating LegoSeries %v", err)
 			continue
 		}
