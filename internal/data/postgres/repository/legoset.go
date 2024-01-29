@@ -20,8 +20,6 @@ func NewLegoSetPostgresRepository(conn d.DataBaseConnection) LegoSetPostgresRepo
 func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetValueObject) *errors.AppError {
 	db := r.conn.GetDB()
 
-	var err *errors.AppError
-
 	if db == nil {
 		return &d.ErrConnectionLost
 	}
@@ -30,10 +28,11 @@ func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.Le
 	result := db.Create(entity)
 
 	if result.Error != nil {
-		*err = errors.NewAppError(errors.ConflictError, result.Error.Error())
+		_e := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &_e
 	}
 
-	return err
+	return nil
 }
 
 func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, *errors.AppError) {
@@ -93,15 +92,14 @@ func (r LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*m
 func (r LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) *errors.AppError {
 	db := r.conn.GetDB()
 
-	var err *errors.AppError
-
 	if db == nil {
 		return &d.ErrConnectionLost
 	}
 
 	_err := db.Delete(&entities.LegoSetPostgres{}, id).Error
 	if _err != nil {
-		*err = errors.NewAppError(errors.ConflictError, _err.Error())
+		_e := errors.NewAppError(errors.ConflictError, _err.Error())
+		return &_e
 	}
 
 	return nil
