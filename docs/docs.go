@@ -1599,6 +1599,11 @@ const docTemplate = `{
         },
         "/sets/": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],

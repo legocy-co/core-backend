@@ -18,6 +18,8 @@ import (
 //	@Success	200	{object}	pagination.PageResponse[lego.LegoSetResponse]
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/sets/ [get]
+//
+// @Security JWT
 func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
 	ctx := pagination.GetPaginationContext(c)
 
