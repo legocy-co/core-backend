@@ -392,6 +392,15 @@ definitions:
       total:
         type: integer
     type: object
+  ? github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_lego_LegoSetResponse
+  : properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
+        type: array
+      meta:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse'
+    type: object
   ? github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse
   : properties:
       data:
@@ -1430,24 +1439,29 @@ paths:
       - calculator
   /sets/:
     get:
-      operationId: list_sets
+      operationId: list_lego_sets_paginated
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
-            type: array
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_lego_LegoSetResponse'
         "400":
           description: Bad Request
           schema:
             additionalProperties: true
             type: object
-      security:
-      - JWT: []
-      summary: List of LegoSet objects
+      summary: Get Lego Sets
       tags:
       - lego_sets
   /sets/{setID}:
@@ -1474,6 +1488,28 @@ paths:
       security:
       - JWT: []
       summary: Get LegoSet by ID
+      tags:
+      - lego_sets
+  /sets/all:
+    get:
+      operationId: list_sets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: List of LegoSet objects
       tags:
       - lego_sets
   /users/auth/refresh:

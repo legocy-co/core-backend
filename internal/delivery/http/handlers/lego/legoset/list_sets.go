@@ -16,12 +16,12 @@ import (
 //	@Produce	json
 //	@Success	200	{object}	[]lego.LegoSetResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/sets/ [get]
+//	@Router		/sets/all [get]
 //
 //	@Security	JWT
-func (lsh *LegoSetHandler) ListSets(c *gin.Context) {
+func (h *LegoSetHandler) ListSets(c *gin.Context) {
 
-	setsList, err := lsh.service.ListLegoSets(c)
+	setsList, err := h.service.ListLegoSets(c)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

@@ -5,8 +5,10 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	"github.com/legocy-co/legocy/internal/domain/lego"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
 type LegoSetPostgresRepository struct {
@@ -47,8 +49,7 @@ func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.Leg
 	var entitiesList []*entities.LegoSetPostgres
 	_err := db.Model(
 		entities.LegoSetPostgres{},
-	).Preload("LegoSeries").Preload("Images").
-		Find(&entitiesList).Error
+	).Preload("LegoSeries").Find(&entitiesList).Error
 
 	if _err != nil {
 		appErr := errors.NewAppError(errors.InternalError, _err.Error())
@@ -103,4 +104,40 @@ func (r LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) *err
 	}
 
 	return nil
+}
+
+func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext) (pagination.Page[models.LegoSet], *errors.AppError) {
+	var err *errors.AppError
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return pagination.Page[models.LegoSet]{}, &d.ErrConnectionLost
+	}
+
+	var total int64
+	db.Model(&entities.LegoSetPostgres{}).Count(&total)
+
+	var entitiesList []*entities.LegoSetPostgres
+
+	query := db.Model(
+		entities.LegoSetPostgres{},
+	).Preload("LegoSeries").Preload("Images")
+
+	query = utils.AddPaginationQuery(query, ctx)
+
+	_err := query.Find(&entitiesList).Error
+	if _err != nil {
+		appErr := errors.NewAppError(errors.InternalError, _err.Error())
+		return pagination.NewEmptyPage[models.LegoSet](), &appErr
+	}
+
+	legoSets := make([]models.LegoSet, 0, len(entitiesList))
+	for _, entity := range entitiesList {
+		legoSets = append(legoSets, *entity.ToLegoSet())
+	}
+
+	page := pagination.NewPage[models.LegoSet](
+		legoSets, int(total), ctx.GetLimit(), ctx.GetOffset())
+
+	return page, err
 }

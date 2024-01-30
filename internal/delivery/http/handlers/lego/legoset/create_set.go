@@ -19,7 +19,7 @@ import (
 //	@Router		/admin/sets/ [post]
 //
 //	@Security	JWT
-func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
+func (h *LegoSetHandler) SetCreate(c *gin.Context) {
 	var setRequest lego.LegoSetRequest
 	if _err := c.ShouldBindJSON(&setRequest); _err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": _err.Error()})
@@ -27,7 +27,7 @@ func (lsh *LegoSetHandler) SetCreate(c *gin.Context) {
 	}
 
 	legoSetValueObject := setRequest.ToLegoSeriesValueObject()
-	err := lsh.service.LegoSetCreate(c.Request.Context(), legoSetValueObject)
+	err := h.service.LegoSetCreate(c.Request.Context(), legoSetValueObject)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

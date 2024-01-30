@@ -6,6 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/lego"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
 	r "github.com/legocy-co/legocy/internal/domain/lego/repository"
+	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
 type LegoSetService struct {
@@ -28,6 +29,10 @@ func (u *LegoSetService) ListLegoSets(c context.Context) ([]*models.LegoSet, *er
 	}
 
 	return legoSets, nil
+}
+
+func (u *LegoSetService) GetSetsPage(ctx pagination.PaginationContext) (pagination.Page[models.LegoSet], *errors.AppError) {
+	return u.repo.GetSetsPage(ctx)
 }
 
 func (u *LegoSetService) LegoSetDetail(c context.Context, id int) (*models.LegoSet, *errors.AppError) {

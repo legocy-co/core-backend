@@ -1599,6 +1599,47 @@ const docTemplate = `{
         },
         "/sets/": {
             "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lego_sets"
+                ],
+                "summary": "Get Lego Sets",
+                "operationId": "list_lego_sets_paginated",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_lego_LegoSetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/sets/all": {
+            "get": {
                 "security": [
                     {
                         "JWT": []
@@ -2687,6 +2728,20 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_lego_LegoSetResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse"
                 }
             }
         },

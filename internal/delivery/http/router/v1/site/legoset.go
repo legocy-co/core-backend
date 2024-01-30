@@ -18,6 +18,7 @@ func AddLegoSets(rg *gin.RouterGroup, app *app.App) {
 	sets := rg.Group("/sets").Use(m.IsAuthenticated())
 	{
 		sets.GET("/", handler.ListSets)
+		sets.GET("/all", handler.ListSets)
 		sets.GET("/:setID", handler.SetDetail)
 	}
 	setsAdmin := rg.Group("/admin/sets").Use(m.IsAdmin())

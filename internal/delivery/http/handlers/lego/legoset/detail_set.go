@@ -20,14 +20,14 @@ import (
 //	@Router		/sets/{setID} [get]
 //
 //	@Security	JWT
-func (lsh *LegoSetHandler) SetDetail(c *gin.Context) {
+func (h *LegoSetHandler) SetDetail(c *gin.Context) {
 	setID, _err := strconv.Atoi(c.Param("setID"))
 	if _err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
-	legoSet, err := lsh.service.LegoSetDetail(c.Request.Context(), setID)
+	legoSet, err := h.service.LegoSetDetail(c.Request.Context(), setID)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
