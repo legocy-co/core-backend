@@ -7,6 +7,7 @@ import (
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/kafka/schemas"
+	log "github.com/sirupsen/logrus"
 )
 
 type MarketItemImagePostgresRepository struct {
@@ -110,6 +111,33 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 	if err != nil {
 		tx.Rollback()
 		return err
+	}
+
+	tx.Commit()
+	return nil
+}
+
+func (r MarketItemImagePostgresRepository) DeleteByMarketItemId(marketItemId int) *errors.AppError {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return &data.ErrConnectionLost
+	}
+
+	tx := db.Begin()
+
+	var currentImages []*e.MarketItemImagePostgres
+	if err := tx.Find(&currentImages, e.MarketItemImagePostgres{MarketItemID: uint(marketItemId)}).Error; err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.NotFoundError, err.Error())
+		return &appErr
+	}
+
+	for _, image := range currentImages {
+		err := r.Delete(int(image.ID))
+		if err != nil {
+			log.Printf("Error deleting image: %v", err.Error())
+		}
 	}
 
 	tx.Commit()

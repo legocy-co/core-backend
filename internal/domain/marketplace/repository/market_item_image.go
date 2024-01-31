@@ -9,4 +9,5 @@ type MarketItemImageRepository interface {
 	Get(marketItemID int) ([]*models.MarketItemImage, *errors.AppError)
 	Store(vo models.MarketItemImageValueObject) (*models.MarketItemImage, *errors.AppError)
 	Delete(id int) error
+	DeleteByMarketItemId(marketItemId int) *errors.AppError
 }

@@ -6,15 +6,17 @@ import (
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	"github.com/legocy-co/legocy/pkg/pagination"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
 
 type MarketItemService struct {
-	repo r.MarketItemRepository
+	imageRepo r.MarketItemImageRepository
+	repo      r.MarketItemRepository
 }
 
-func NewMarketItemService(repo r.MarketItemRepository) MarketItemService {
-	return MarketItemService{repo: repo}
+func NewMarketItemService(repo r.MarketItemRepository, imageRepo r.MarketItemImageRepository) MarketItemService {
+	return MarketItemService{repo: repo, imageRepo: imageRepo}
 }
 
 func (ms *MarketItemService) CreateMarketItem(
@@ -63,6 +65,11 @@ func (ms *MarketItemService) MarketItemDetail(
 }
 
 func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) *errors.AppError {
+	err := ms.imageRepo.DeleteByMarketItemId(id)
+	if err != nil {
+		log.Printf("Error deleting market item images: %v", err)
+	}
+
 	return ms.repo.DeleteMarketItem(c, id)
 }
 
