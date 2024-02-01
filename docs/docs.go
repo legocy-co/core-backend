@@ -1557,6 +1557,11 @@ const docTemplate = `{
         },
         "/sets-valuations/{legoSetID}": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Get valuations by lego set id",
                 "consumes": [
                     "application/json"

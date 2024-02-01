@@ -1434,6 +1434,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: Get valuations by lego set id
       tags:
       - calculator

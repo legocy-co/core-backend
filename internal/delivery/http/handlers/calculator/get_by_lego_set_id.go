@@ -18,6 +18,7 @@ import (
 // @Success 200 {object} []schemas.LegoSetValuationResponse
 // @Failure 400 {object} map[string]interface{}
 // @Router /sets-valuations/{legoSetID} [get]
+// @Security JWT
 func (h LegoSetValuationHandler) GetValuationsByLegoSetID(ctx *gin.Context) {
 	legoSetId, e := strconv.Atoi(ctx.Param("legoSetID"))
 	if e != nil {
