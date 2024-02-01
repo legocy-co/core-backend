@@ -6,9 +6,9 @@ import (
 
 type LegoSetValuationPostgres struct {
 	Model
-	LegoSetID int             `gorm:"uniqueIndex:lego_set_currency_unique_idx; not null"`
+	LegoSetID int             `gorm:"uniqueIndex:lego_set_state_unique_idx;not null"`
 	LegoSet   LegoSetPostgres `gorm:"foreignKey:LegoSetID;constraint:OnDelete:CASCADE"`
-	State     string          `gorm:"not null;"`
+	State     string          `gorm:"uniqueIndex:lego_set_state_unique_idx;not null"`
 	Valuation float32         `gorm:"not null"`
 }
 
