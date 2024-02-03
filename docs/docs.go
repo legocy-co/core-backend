@@ -2152,9 +2152,6 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse": {
             "type": "object",
             "properties": {
-                "calculator": {
-                    "type": "number"
-                },
                 "id": {
                     "type": "integer"
                 },
@@ -2163,6 +2160,9 @@ const docTemplate = `{
                 },
                 "state": {
                     "type": "string"
+                },
+                "valuation": {
+                    "type": "number"
                 }
             }
         },

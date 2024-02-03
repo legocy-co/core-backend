@@ -11,14 +11,14 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse:
     properties:
-      calculator:
-        type: number
       id:
         type: integer
       lego_set:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
       state:
         type: string
+      valuation:
+        type: number
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationUpdateRequest:
     properties:
