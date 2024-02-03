@@ -1105,15 +1105,9 @@ paths:
       summary: Update Collection Set Info
       tags:
       - user_collections
-  /collections/calculator/{currencyID}:
+  /collections/calculator/:
     get:
       operationId: get_user_collection_valuation
-      parameters:
-      - description: currency ID
-        in: path
-        name: currencyID
-        required: true
-        type: integer
       produces:
       - application/json
       responses:

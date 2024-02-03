@@ -987,7 +987,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/collections/calculator/{currencyID}": {
+        "/collections/calculator/": {
             "get": {
                 "security": [
                     {
@@ -1002,15 +1002,6 @@ const docTemplate = `{
                 ],
                 "summary": "Get User Collection Valuation",
                 "operationId": "get_user_collection_valuation",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "currency ID",
-                        "name": "currencyID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",

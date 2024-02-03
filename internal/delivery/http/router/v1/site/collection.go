@@ -14,7 +14,7 @@ func AddUserCollections(rg *gin.RouterGroup, app *a.App) {
 	{
 		userCollection.GET("/", handler.GetUserCollection)
 		userCollection.POST("/", handler.AddLegoSetToUserCollection)
-		userCollection.GET("/calculator/:currencyID", handler.GetUserCollectionValuation)
+		userCollection.GET("/calculator/", handler.GetUserCollectionValuation)
 		userCollection.Use(
 			middleware.CollectionSetOwnerOrAdmin("setID", app.GetUserLegoSetsRepository()))
 		{

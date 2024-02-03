@@ -16,8 +16,7 @@ import (
 //	@Produce	json
 //	@Success	200	{object} 	collections.UserCollectionValuationResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Param		currencyID	path	int	true	"currency ID"
-//	@Router		/collections/calculator/{currencyID} [get]
+//	@Router		/collections/calculator/ [get]
 //
 //	@Security	JWT
 func (h UserLegoCollectionHandler) GetUserCollectionValuation(c *gin.Context) {
