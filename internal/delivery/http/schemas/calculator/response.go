@@ -9,7 +9,7 @@ type LegoSetValuationResponse struct {
 	ID        int                  `json:"id"`
 	LegoSet   lego.LegoSetResponse `json:"lego_set"`
 	State     string               `json:"state"`
-	Valuation float32              `json:"calculator"`
+	Valuation float32              `json:"valuation"`
 }
 
 func FromLegoSetValuation(v models.LegoSetValuation) LegoSetValuationResponse {
