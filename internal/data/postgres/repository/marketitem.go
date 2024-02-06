@@ -28,7 +28,12 @@ func (r MarketItemPostgresRepository) GetMarketItems(ctx pagination.PaginationCo
 
 	query := db.Model(
 		&entities.MarketItemPostgres{},
-	).Preload("Seller").Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images")
+	).
+		Preload("Seller").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Preload("Images").
+		Order("created_at DESC")
 
 	query = utils.AddPaginationQuery(query, ctx)
 
@@ -61,8 +66,13 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 
 	query := db.Model(
 		&entities.MarketItemPostgres{},
-	).Preload("Seller").Preload("Images").Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).Order("created_at DESC")
+	).
+		Preload("Seller").
+		Preload("Images").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).
+		Order("created_at DESC")
 
 	query = utils.AddPaginationQuery(query, ctx)
 
