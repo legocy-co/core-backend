@@ -73,6 +73,6 @@ func GetUserImageResponse(image *models.UserImage) UserImageInfoResponse {
 	return UserImageInfoResponse{
 		UserID:      image.UserID,
 		Filepath:    image.FilepathURL,
-		DownloadURL: config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + helpers.EncodeURLString(image.FilepathURL),
+		DownloadURL: config.GetAppConfig().CDNBaseURL + helpers.EncodeURLString(image.FilepathURL),
 	}
 }
