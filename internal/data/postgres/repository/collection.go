@@ -30,6 +30,11 @@ func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userI
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").
 		Find(&userLegoSetsDB, "user_id = ?", userID)
 
+	if res.RowsAffected == 0 {
+		_error := errors.NewAppError(errors.NotFoundError, "No sets found for user")
+		return nil, &_error
+	}
+
 	if res.Error != nil {
 		_error := errors.NewAppError(errors.ConflictError, res.Error.Error())
 		return nil, &_error
