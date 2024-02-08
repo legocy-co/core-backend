@@ -58,7 +58,7 @@ func (s UserCollectionService) GetUserCollectionValuation(c context.Context, use
 		)
 
 		if err != nil {
-			return []calculator.LegoSetValuation{}, nil, err
+			continue
 		}
 
 		setValuations = append(setValuations, *setValuation)
