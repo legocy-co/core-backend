@@ -21,7 +21,8 @@ func GetCollectionLegoSetResponse(collectionSet models.CollectionLegoSet, valuat
 
 	var valuationResponse *calculator.LegoSetValuationResponse
 	if valuation != nil {
-		*valuationResponse = calculator.FromLegoSetValuation(*valuation)
+		valuationResponseValue := calculator.FromLegoSetValuation(*valuation)
+		valuationResponse = &valuationResponseValue
 	}
 
 	return CollectionLegoSetResponse{

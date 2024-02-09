@@ -21,7 +21,7 @@ func GetUserLegoCollectionResponse(
 
 	for _, set := range collection.Sets {
 
-		var setValuation *calculatorModels.LegoSetValuation
+		var setValuation *calculatorModels.LegoSetValuation = nil
 		for _, valuation := range valuations {
 			if valuation.LegoSet.ID == set.LegoSet.ID && valuation.State == set.CurrentState {
 				setValuation = &valuation
