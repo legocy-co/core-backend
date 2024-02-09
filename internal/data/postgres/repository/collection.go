@@ -93,10 +93,13 @@ func (r CollectionPostgresRepository) RemoveSetFromUserCollection(
 	tx := db.Begin()
 
 	res := tx.Delete(&entities.UserLegoSetPostgres{UserID: userID}, collectionSetID)
-	if res != nil {
+	if res.Error != nil {
 		tx.Rollback()
-		_error := errors.NewAppError(errors.ConflictError, res.Error.Error())
-		return &_error
+		appErr := errors.NewAppError(
+			errors.ConflictError,
+			res.Error.Error(),
+		)
+		return &appErr
 	}
 
 	tx.Commit()
