@@ -2199,6 +2199,9 @@ const docTemplate = `{
                 },
                 "state": {
                     "type": "string"
+                },
+                "valuation": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse"
                 }
             }
         },
@@ -2233,6 +2236,20 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals": {
+            "type": "object",
+            "properties": {
+                "sets_valuated": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "number"
+                },
+                "total_sets": {
+                    "type": "integer"
+                }
+            }
+        },
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetCollectionResponse": {
             "type": "object",
             "properties": {
@@ -2241,6 +2258,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetResponse"
                     }
+                },
+                "totals": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals"
                 },
                 "user": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"

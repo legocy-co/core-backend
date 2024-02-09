@@ -36,6 +36,14 @@ func (h UserLegoCollectionHandler) GetUserCollection(c *gin.Context) {
 		return
 	}
 
-	userCollectionResponse := collections.GetUserLegoCollectionResponse(*userCollection)
+	collectionValuations, _, appErr := h.s.GetUserCollectionValuation(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
+	userCollectionResponse := collections.GetUserLegoCollectionResponse(*userCollection, collectionValuations)
+
 	c.JSON(http.StatusOK, userCollectionResponse)
 }

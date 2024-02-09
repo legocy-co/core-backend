@@ -48,6 +48,8 @@ definitions:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
       state:
         type: string
+      valuation:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse'
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetUpdateRequest:
     properties:
@@ -69,12 +71,23 @@ definitions:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationResponse'
         type: array
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals:
+    properties:
+      sets_valuated:
+        type: integer
+      total:
+        type: number
+      total_sets:
+        type: integer
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetCollectionResponse:
     properties:
       collection_sets:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetResponse'
         type: array
+      totals:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals'
       user:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
     type: object
