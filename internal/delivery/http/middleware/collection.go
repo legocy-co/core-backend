@@ -33,8 +33,8 @@ func CollectionSetOwnerOrAdmin(
 			return
 		}
 
-		setOwnerID, err := repo.GetCollectionSetOwner(ctx, setID)
-		if err != nil {
+		setOwnerID, e := repo.GetCollectionSetOwner(ctx, setID)
+		if e != nil {
 			ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 			return
 		}
