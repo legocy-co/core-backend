@@ -2,6 +2,7 @@ package users
 
 import (
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	log "github.com/sirupsen/logrus"
 )
 
 type UserRegistrationResponse struct {
@@ -43,6 +44,7 @@ type UserDetailResponse struct {
 func GetUserDetailResponse(u *models.User) UserDetailResponse {
 
 	images := make([]UserImageInfoResponse, 0, len(u.Images))
+	log.Debugf("User images length: %d", len(u.Images))
 	for _, img := range u.Images {
 		images = append(images, GetUserImageResponse(img))
 	}
