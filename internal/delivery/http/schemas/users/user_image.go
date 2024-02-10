@@ -5,7 +5,6 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/constants"
 	"github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/pkg/helpers"
 	"strings"
 )
 
@@ -73,6 +72,6 @@ func GetUserImageResponse(image *models.UserImage) UserImageInfoResponse {
 	return UserImageInfoResponse{
 		UserID:      image.UserID,
 		Filepath:    image.FilepathURL,
-		DownloadURL: config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + helpers.EncodeURLString(image.FilepathURL),
+		DownloadURL: config.GetAppConfig().CDNBaseURL + image.FilepathURL,
 	}
 }
