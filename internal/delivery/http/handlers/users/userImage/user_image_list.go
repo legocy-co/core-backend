@@ -32,7 +32,7 @@ func (h UserImageHandler) ListImages(c *gin.Context) {
 		return
 	}
 
-	imageResponseList := make([]schemas.UserImageInfoResponse, len(imagesList))
+	imageResponseList := make([]schemas.UserImageInfoResponse, 0, len(imagesList))
 	for _, image := range imagesList {
 		imageResponseList = append(
 			imageResponseList,
