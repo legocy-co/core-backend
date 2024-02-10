@@ -132,8 +132,15 @@ func (r UserPostgresRepository) DeleteUser(c context.Context, id int) *errors.Ap
 		return &d.ErrConnectionLost
 	}
 
-	db.Delete(&entities.UserPostgres{}, id)
-	db.Commit()
-	return nil
+	tx := db.Begin()
 
+	err := tx.Delete(&entities.UserPostgres{}, id).Error
+	if err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return &appErr
+	}
+
+	tx.Commit()
+	return nil
 }
