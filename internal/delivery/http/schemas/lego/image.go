@@ -17,7 +17,7 @@ func GetLegoSetImageResponse(m *models.LegoSetImage) LegoSetImageResponse {
 		ID:        m.ID,
 		IsMain:    m.IsMain,
 		LegoSetID: m.LegoSetID,
-		ImageURL:  config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + m.ImageURL,
+		ImageURL:  config.GetAppConfig().CDNBaseURL + m.ImageURL,
 	}
 }
 
