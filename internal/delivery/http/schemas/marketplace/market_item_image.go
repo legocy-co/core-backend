@@ -73,7 +73,7 @@ func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {
 func GetImageResponse(img *models.MarketItemImage) ImageResponse {
 	return ImageResponse{
 		ID:       img.ID,
-		ImageURL: config.GetAppConfig().BaseURL + "/api/v1/images/download?fp=" + img.ImageURL,
+		ImageURL: config.GetAppConfig().CDNBaseURL + img.ImageURL,
 		IsMain:   img.IsMain,
 	}
 }
