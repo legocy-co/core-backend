@@ -29,7 +29,7 @@ func AddMarketItems(
 			privateRoutes.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
 			{
 				privateRoutes.DELETE("/:itemId", handler.DeleteMarketItem)
-				privateRoutes.PUT("/:itemID", handler.UpdateMarketItemByID)
+				privateRoutes.PUT("/:itemId", handler.UpdateMarketItemByID)
 			}
 
 			checkSlotsRoutes := items.Group("")
