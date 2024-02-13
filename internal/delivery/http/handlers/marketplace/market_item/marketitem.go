@@ -263,9 +263,10 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 		return
 	}
 
-	marketItem, err := h.service.UpdateMarketItemByID(c, userPayload.ID, itemID, vo)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": err.Error()})
+	marketItem, appErr := h.service.UpdateMarketItemByID(c, userPayload.ID, itemID, vo)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
