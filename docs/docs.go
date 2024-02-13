@@ -1376,7 +1376,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/market-items/{itemId}": {
             "put": {
                 "security": [
                     {
@@ -1395,7 +1397,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "item ID",
-                        "name": "itemID",
+                        "name": "itemId",
                         "in": "path",
                         "required": true
                     },
@@ -1424,9 +1426,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/market-items/{itemId}": {
+            },
             "delete": {
                 "security": [
                     {

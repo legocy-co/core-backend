@@ -227,16 +227,16 @@ func (h *MarketItemHandler) DeleteMarketItem(c *gin.Context) {
 //	@Summary	Update Market Item
 //	@Tags		market_items
 //	@ID			update_market_item
-//	@Param		itemID	path	int	true	"item ID"
+//	@Param		itemId	path	int	true	"item ID"
 //	@Param		data	body	marketplace.MarketItemRequest	true	"data"
 //	@Produce	json
 //	@Success	200	{object}	marketplace.MarketItemResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/market-items/{itemID} [put]
+//	@Router		/market-items/{itemId} [put]
 //
 //	@Security	JWT
 func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
-	itemID, err := strconv.Atoi(c.Param("itemID"))
+	itemID, err := strconv.Atoi(c.Param("itemId"))
 	if err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})

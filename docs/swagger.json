@@ -1368,7 +1368,9 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/market-items/{itemId}": {
             "put": {
                 "security": [
                     {
@@ -1387,7 +1389,7 @@
                     {
                         "type": "integer",
                         "description": "item ID",
-                        "name": "itemID",
+                        "name": "itemId",
                         "in": "path",
                         "required": true
                     },
@@ -1416,9 +1418,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/market-items/{itemId}": {
+            },
             "delete": {
                 "security": [
                     {
