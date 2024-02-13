@@ -8,6 +8,7 @@ import (
 
 type UserRepository interface {
 	CreateUser(c context.Context, u *models.User, password string) *errors.AppError
+	UpdateUser(id int, vo models.UserValueObject) *errors.AppError
 	ValidateUser(c context.Context, email, password string) *errors.AppError
 	GetUsers(c context.Context) ([]*models.User, *errors.AppError)
 	GetUserByEmail(c context.Context, email string) (*models.User, *errors.AppError)

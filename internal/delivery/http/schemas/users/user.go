@@ -57,3 +57,15 @@ func GetUserDetailResponse(u *models.User) UserDetailResponse {
 		Images:   images,
 	}
 }
+
+type UserUpdateRequest struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+}
+
+func (r *UserUpdateRequest) ToUserValueObject() *models.UserValueObject {
+	return &models.UserValueObject{
+		Email:    r.Email,
+		Username: r.Username,
+	}
+}

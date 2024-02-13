@@ -22,3 +22,8 @@ func NewUser(ID int, username string, email string, role int, images []*UserImag
 		Images:   images,
 	}
 }
+
+type UserValueObject struct {
+	Username string
+	Email    string
+}

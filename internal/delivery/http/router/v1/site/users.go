@@ -6,6 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/app"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/profile"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/userImage"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
 	jwt "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
@@ -26,12 +27,18 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 
 	// User Profile
 
-	profileHandler := users.NewUserProfilePageHandler(
+	profileHandler := profile.NewUserProfilePageHandler(
 		app.GetMarketItemService(), app.GetUserService(), app.GetUserReviewService())
 
 	profileRoutes := rg.Group("/users/profile").Use(jwt.IsAuthenticated())
 	{
 		profileRoutes.GET("/:userID", profileHandler.UserProfilePageDetail)
+
+		privateProfileRoutes := profileRoutes.Use(middleware.IsOwnerOrAdmin("userID"))
+		{
+			privateProfileRoutes.PUT("/:userID", profileHandler.UpdateUserProfile)
+		}
+
 	}
 
 	// User Reviews

@@ -42,6 +42,31 @@ func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, pa
 	return nil
 }
 
+func (r UserPostgresRepository) UpdateUser(id int, vo models.UserValueObject) *errors.AppError {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return &d.ErrConnectionLost
+	}
+
+	var entity *entities.UserPostgres
+	db.First(&entity, id)
+
+	if entity == nil {
+		return &e.ErrUserNotFound
+	}
+
+	entity = entities.GetUpdatedUserEntity(vo, entity)
+	err := db.Save(&entity).Error
+
+	if err != nil {
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return &appErr
+	}
+
+	return nil
+}
+
 func (r UserPostgresRepository) ValidateUser(c context.Context, email, password string) *errors.AppError {
 
 	db := r.conn.GetDB()

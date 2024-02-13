@@ -1960,6 +1960,55 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_profile_pages"
+                ],
+                "summary": "Update User Profile Page",
+                "operationId": "update_user_profile",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User Update Request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
             }
         },
         "/users/reviews/": {
@@ -2655,6 +2704,17 @@ const docTemplate = `{
                 },
                 "seller": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },

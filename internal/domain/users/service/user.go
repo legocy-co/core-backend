@@ -31,3 +31,7 @@ func (s *UserService) GetUserByEmail(c context.Context, email string) (*models.U
 func (s *UserService) GetUserByID(c context.Context, id int) (*models.User, *errors.AppError) {
 	return s.repo.GetUserByID(c, id)
 }
+
+func (s *UserService) UpdateUser(id int, vo models.UserValueObject) *errors.AppError {
+	return s.repo.UpdateUser(id, vo)
+}

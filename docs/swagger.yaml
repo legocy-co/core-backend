@@ -344,6 +344,13 @@ definitions:
       seller:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserUpdateRequest:
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users_admin.AdminRegistrationRequest:
     properties:
       email:
@@ -1681,6 +1688,38 @@ paths:
       security:
       - JWT: []
       summary: Get User Profile Page
+      tags:
+      - user_profile_pages
+    put:
+      operationId: update_user_profile
+      parameters:
+      - description: user ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      - description: User Update Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update User Profile Page
       tags:
       - user_profile_pages
   /users/reviews/:

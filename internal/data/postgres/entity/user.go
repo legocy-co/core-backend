@@ -85,3 +85,9 @@ func (up *UserPostgres) ToUserAdmin() *models.UserAdmin {
 		Role:     up.Role,
 	}
 }
+
+func GetUpdatedUserEntity(vo models.UserValueObject, up *UserPostgres) *UserPostgres {
+	up.Username = vo.Username
+	up.Email = vo.Email
+	return up
+}
