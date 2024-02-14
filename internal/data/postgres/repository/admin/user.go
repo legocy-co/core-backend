@@ -161,7 +161,7 @@ func (r UserAdminPostgresRepository) ValidateUser(c context.Context, email, pass
 
 	var user *entities.UserPostgres
 
-	ok := db.Where("email = ? AND role = ?;", email, models.ADMIN).First(&user).RowsAffected > 0
+	ok := db.Where("email = ? AND role = ?", email, models.ADMIN).First(&user).RowsAffected > 0
 	if !ok {
 		return &e.ErrUserNotFound
 	}
