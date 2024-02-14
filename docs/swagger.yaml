@@ -986,6 +986,31 @@ paths:
       summary: Update User
       tags:
       - users_admin
+  /admin/users/auth/sign-in:
+    post:
+      operationId: create-jwt-admin
+      parameters:
+      - description: jwt request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: generate jwt token admin
+      tags:
+      - authentication_admin
   /admin/users/register:
     post:
       operationId: create-admin

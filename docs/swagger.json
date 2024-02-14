@@ -703,6 +703,44 @@
                 }
             }
         },
+        "/admin/users/auth/sign-in": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication_admin"
+                ],
+                "summary": "generate jwt token admin",
+                "operationId": "create-jwt-admin",
+                "parameters": [
+                    {
+                        "description": "jwt request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.SignInRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/admin/users/register": {
             "post": {
                 "security": [

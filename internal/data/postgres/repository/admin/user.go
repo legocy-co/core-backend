@@ -62,6 +62,26 @@ func (r UserAdminPostgresRepository) GetUserByID(
 	return userAdmin, nil
 }
 
+func (r UserAdminPostgresRepository) GetUserByEmail(
+	c context.Context, email string) (*models.UserAdmin, *errors.AppError) {
+
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, &d.ErrConnectionLost
+	}
+
+	var userAdmin *models.UserAdmin
+
+	var entity *entities.UserPostgres
+	ok := db.Where("email = ?", email).First(&entity).RowsAffected > 0
+	if !ok {
+		return userAdmin, &e.ErrUserNotFound
+	}
+
+	userAdmin = entity.ToUserAdmin()
+	return userAdmin, nil
+}
+
 func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.UserAdmin, password string) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
@@ -128,6 +148,26 @@ func (r UserAdminPostgresRepository) DeleteUser(c context.Context, userId int) *
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
 		return &appErr
+	}
+
+	return nil
+}
+
+func (r UserAdminPostgresRepository) ValidateUser(c context.Context, email, password string) *errors.AppError {
+	db := r.conn.GetDB()
+	if db == nil {
+		return &d.ErrConnectionLost
+	}
+
+	var user *entities.UserPostgres
+
+	db.Where("email = ? AND role = ?;", email, models.ADMIN).First(&user)
+	if user == nil {
+		return &e.ErrUserNotFound
+	}
+
+	if !h.CheckPasswordHash(password, user.Password) {
+		return &e.ErrInvalidPassword
 	}
 
 	return nil
