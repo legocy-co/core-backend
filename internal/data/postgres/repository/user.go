@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"context"
-	"fmt"
 	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
@@ -71,7 +70,6 @@ func (r UserPostgresRepository) ValidateUser(c context.Context, email, password 
 
 	db := r.conn.GetDB()
 	if db == nil {
-		fmt.Println("Error Connecting to database!")
 		return &d.ErrConnectionLost
 	}
 
@@ -79,7 +77,6 @@ func (r UserPostgresRepository) ValidateUser(c context.Context, email, password 
 	db.Model(entities.UserPostgres{}).First(&entity, entities.UserPostgres{Email: email})
 
 	if entity == nil {
-		fmt.Printf("User with email = %v not found", email)
 		return &e.ErrUserNotFound
 	}
 
