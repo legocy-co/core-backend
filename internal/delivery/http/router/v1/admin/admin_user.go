@@ -10,6 +10,11 @@ import (
 func AddUserAdmin(rg *gin.RouterGroup, service s.UserAdminService) {
 	handler := h.NewUserAdminHandler(service)
 
+	authAdmin := rg.Group("/users/auth")
+	{
+		authAdmin.POST("/sign-in", handler.LoginAdmin)
+	}
+
 	usersAdmin := rg.Group("/users").Use(m.IsAdmin())
 	{
 		usersAdmin.GET("/", handler.GetUsersAdmin)
