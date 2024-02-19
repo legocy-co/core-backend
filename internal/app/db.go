@@ -5,8 +5,8 @@ import (
 	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/data/postgres"
+	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
-	"log"
 )
 
 func (a *App) GetDatabase() data.DataBaseConnection {
