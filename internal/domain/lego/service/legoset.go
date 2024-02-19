@@ -46,3 +46,7 @@ func (u *LegoSetService) LegoSetCreate(c context.Context, legoSet *models.LegoSe
 func (u *LegoSetService) LegoSetDelete(c context.Context, id int) *errors.AppError {
 	return u.repo.DeleteLegoSet(c, id)
 }
+
+func (u *LegoSetService) LegoSetUpdate(legoSetID int, vo *models.LegoSetValueObject) *errors.AppError {
+	return u.repo.UpdateLegoSetByID(legoSetID, vo)
+}

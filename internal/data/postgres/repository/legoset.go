@@ -141,3 +141,31 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext)
 
 	return page, err
 }
+
+func (r LegoSetPostgresRepository) UpdateLegoSetByID(legoSetID int, vo *models.LegoSetValueObject) *errors.AppError {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return &d.ErrConnectionLost
+	}
+
+	var currentEntity *entities.LegoSetPostgres
+	if db.Find(&currentEntity, legoSetID).RowsAffected <= 0 {
+		e := errors.NewAppError(errors.NotFoundError, "LegoSet not found")
+		return &e
+	}
+
+	currentEntity = entities.GetUpdatedLegoSetPostgres(currentEntity, vo)
+
+	tx := db.Begin()
+
+	if err := tx.Save(currentEntity).Error; err != nil {
+		tx.Rollback()
+		e := errors.NewAppError(errors.ConflictError, err.Error())
+		return &e
+	}
+
+	tx.Commit()
+	return nil
+
+}

@@ -25,6 +25,7 @@ func AddLegoSets(rg *gin.RouterGroup, app *app.App) {
 	{
 		setsAdmin.POST("/", handler.SetCreate)
 		setsAdmin.DELETE("/:setID", handler.SetDelete)
+		setsAdmin.PUT("/:setID", handler.SetUpdate)
 	}
 
 	// Images
