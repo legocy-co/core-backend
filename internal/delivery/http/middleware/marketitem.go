@@ -9,7 +9,7 @@ import (
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 )
@@ -122,7 +122,7 @@ func HasFreeMarketItemsSlot(
 			return
 		}
 
-		logrus.Info("Checking if user has free slots to create market item")
+		log.Info("Checking if user has free slots to create market item")
 		userItemsCount, err := repo.GetSellerMarketItemsAmount(ctx, tokenPayload.ID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
@@ -137,7 +137,7 @@ func HasFreeMarketItemsSlot(
 					"error": "User has exceeded limit of publishing items"})
 			return
 		}
-		logrus.Info("User has free slots to create market item")
+		log.Info("User has free slots to create market item")
 		ctx.Next()
 	}
 }
