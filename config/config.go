@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"strconv"
 )
@@ -70,13 +70,13 @@ func SetupFromEnv() error {
 	}
 
 	dbHost := os.Getenv("DB_HOST")
-	logrus.Printf("DB_HOST = %v", dbHost)
+	log.Printf("DB_HOST = %v", dbHost)
 	dbPort, _ := strconv.Atoi(os.Getenv("DB_PORT"))
-	logrus.Printf("DB_PORT = %v", dbPort)
+	log.Printf("DB_PORT = %v", dbPort)
 	dbUser := os.Getenv("DB_USER")
-	logrus.Printf("DB_USER = %v", dbUser)
+	log.Printf("DB_USER = %v", dbUser)
 	dbPassword := os.Getenv("DB_PASSWORD")
-	logrus.Printf("DB_PASSWORD = %v", dbPassword)
+	log.Printf("DB_PASSWORD = %v", dbPassword)
 	dbDatabaseName := os.Getenv("DB_DATABASE_NAME")
 	loadFixtures := os.Getenv("DB_LOAD_FIXTURES") == "true"
 
@@ -92,7 +92,7 @@ func SetupFromEnv() error {
 	jwtSecretKey := os.Getenv("JWT_SECRET_KEY")
 	jwtAccessTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_ACCESS_TOKEN_LIFETIME"))
 	jwtRefreshTokenLifetimeHours, _ := strconv.Atoi(os.Getenv("JWT_REFRESH_TOKEN_LIFETIME"))
-	logrus.Printf("REFRESH_TOKEN = %v", jwtRefreshTokenLifetimeHours)
+	log.Printf("REFRESH_TOKEN = %v", jwtRefreshTokenLifetimeHours)
 
 	jwtConfig := JWTConfig{
 		SecretKey:            jwtSecretKey,
@@ -101,9 +101,9 @@ func SetupFromEnv() error {
 	}
 
 	kafkaUri := os.Getenv("KAFKA_URI")
-	logrus.Printf("KAFKA_URL = %v", kafkaUri)
+	log.Printf("KAFKA_URL = %v", kafkaUri)
 	kafkaConsumerGroupId := os.Getenv("KAFKA_CONSUMER_GROUP_ID")
-	logrus.Printf("KAFKA_CONSUMER_GROUP_ID = %v", kafkaConsumerGroupId)
+	log.Printf("KAFKA_CONSUMER_GROUP_ID = %v", kafkaConsumerGroupId)
 
 	kafkaConfig := KafkaConfig{kafkaUri, kafkaConsumerGroupId}
 

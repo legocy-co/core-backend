@@ -5,7 +5,7 @@ import (
 	r "github.com/legocy-co/legocy/internal/domain/collections/repository"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 )
@@ -22,7 +22,8 @@ func CollectionSetOwnerOrAdmin(
 		}
 
 		if tokenPayload.Role == models.ADMIN {
-			logrus.Printf("Current User is Admin. Access Allowed")
+
+			log.Printf("Current User is Admin. Access Allowed")
 			ctx.Next()
 			return
 		}
