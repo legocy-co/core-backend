@@ -5,7 +5,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 	"strings"

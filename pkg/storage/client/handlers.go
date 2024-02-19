@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/pkg/storage/models"
 	"github.com/legocy-co/legocy/pkg/storage/proto"
 	"github.com/legocy-co/legocy/pkg/storage/proto/mapper"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 func (s ImageStorage) UploadImage(
