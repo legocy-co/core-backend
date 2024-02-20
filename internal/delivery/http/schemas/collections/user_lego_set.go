@@ -10,11 +10,17 @@ import (
 )
 
 type CollectionLegoSetResponse struct {
-	ID        int                                  `json:"id"`
-	LegoSet   legoResources.LegoSetResponse        `json:"lego_set"`
-	Valuation *calculator.LegoSetValuationResponse `json:"valuation"`
-	State     string                               `json:"state"`
-	BuyPrice  float32                              `json:"buy_price"`
+	ID         int                                  `json:"id"`
+	LegoSet    legoResources.LegoSetResponse        `json:"lego_set"`
+	Valuation  *calculator.LegoSetValuationResponse `json:"valuation"`
+	SetProfits *UserLegoSetProfitsResponse          `json:"set_profits"`
+	State      string                               `json:"state"`
+	BuyPrice   float32                              `json:"buy_price"`
+}
+
+type UserLegoSetProfitsResponse struct {
+	TotalReturnUSD        float32 `json:"total_return_usd"`
+	TotalReturnPercentage float32 `json:"total_return_percentage"`
 }
 
 func GetCollectionLegoSetResponse(collectionSet models.CollectionLegoSet, valuation *calculatorModels.LegoSetValuation) CollectionLegoSetResponse {
@@ -26,11 +32,19 @@ func GetCollectionLegoSetResponse(collectionSet models.CollectionLegoSet, valuat
 	}
 
 	return CollectionLegoSetResponse{
-		ID:        collectionSet.ID,
-		LegoSet:   legoResources.GetLegoSetResponse(&collectionSet.LegoSet),
-		Valuation: valuationResponse,
-		State:     collectionSet.CurrentState,
-		BuyPrice:  collectionSet.BuyPrice,
+		ID:         collectionSet.ID,
+		LegoSet:    legoResources.GetLegoSetResponse(&collectionSet.LegoSet),
+		Valuation:  valuationResponse,
+		SetProfits: nil,
+		State:      collectionSet.CurrentState,
+		BuyPrice:   collectionSet.BuyPrice,
+	}
+}
+
+func GetUserLegoSetProfitsResponse(profits models.CollectionLegoSetProfits) UserLegoSetProfitsResponse {
+	return UserLegoSetProfitsResponse{
+		TotalReturnUSD:        profits.ReturnUSD,
+		TotalReturnPercentage: profits.ReturnPercentage,
 	}
 }
 

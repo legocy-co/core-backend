@@ -15,9 +15,15 @@ type UserCollectionValuationResponse struct {
 }
 
 type UserCollectionValuationTotals struct {
-	Total        float32 `json:"total"`
-	TotalSets    int     `json:"total_sets"`
-	SetsValuated int     `json:"sets_valuated"`
+	Total        float32                `json:"total"`
+	TotalSets    int                    `json:"total_sets"`
+	SetsValuated int                    `json:"sets_valuated"`
+	TotalProfits CollectionTotalProfits `json:"total_profits"`
+}
+
+type CollectionTotalProfits struct {
+	TotalReturnUSD        float32 `json:"total_return_usd"`
+	TotalReturnPercentage float32 `json:"total_return_percentage"`
 }
 
 func FromUserCollectionValuation(
@@ -54,5 +60,12 @@ func GetCollectionValuationTotals(
 		Total:        total,
 		TotalSets:    len(collectionSets),
 		SetsValuated: len(valuations),
+	}
+}
+
+func GetCollectionTotalProfitsResponse(totals collection.CollectionProfits) CollectionTotalProfits {
+	return CollectionTotalProfits{
+		TotalReturnUSD:        totals.TotalReturnUSD,
+		TotalReturnPercentage: totals.TotalReturnPercentage,
 	}
 }
