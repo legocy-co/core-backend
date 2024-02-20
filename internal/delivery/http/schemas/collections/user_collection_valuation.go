@@ -54,7 +54,7 @@ func GetCollectionValuationTotals(collectionSets []pl.SetWithValuation) UserColl
 	var setsValuated int
 
 	for _, s := range collectionSets {
-		if s.SetValuation == nil {
+		if s.SetValuation != nil {
 			total += s.SetValuation.CompanyValuation
 			setsValuated++
 		}
