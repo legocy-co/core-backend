@@ -23,7 +23,7 @@ func (h UserLegoCollectionHandler) GetUserCollection(c *gin.Context) {
 	tokenPayload, err := v1.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
-			http.StatusBadRequest, gin.H{"error": err.Error()})
+			http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
