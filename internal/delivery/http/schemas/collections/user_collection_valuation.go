@@ -4,7 +4,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/calculator"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/domain/calculator/models"
-	collection "github.com/legocy-co/legocy/internal/domain/collections/models"
+	"github.com/legocy-co/legocy/internal/domain/collections/service/collection/pl"
 	auth "github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
@@ -15,9 +15,15 @@ type UserCollectionValuationResponse struct {
 }
 
 type UserCollectionValuationTotals struct {
-	Total        float32 `json:"total"`
-	TotalSets    int     `json:"total_sets"`
-	SetsValuated int     `json:"sets_valuated"`
+	Total        float32                        `json:"total"`
+	TotalSets    int                            `json:"total_sets"`
+	SetsValuated int                            `json:"sets_valuated"`
+	TotalProfits CollectionTotalProfitsResponse `json:"total_profits"`
+}
+
+type CollectionTotalProfitsResponse struct {
+	TotalReturnUSD        float32 `json:"total_return_usd"`
+	TotalReturnPercentage float32 `json:"total_return_percentage"`
 }
 
 func FromUserCollectionValuation(
@@ -42,17 +48,30 @@ func FromUserCollectionValuation(
 
 }
 
-func GetCollectionValuationTotals(
-	collectionSets []collection.CollectionLegoSet, valuations []models.LegoSetValuation) UserCollectionValuationTotals {
+func GetCollectionValuationTotals(collectionSets []pl.SetWithValuation) UserCollectionValuationTotals {
 
 	var total float32
-	for _, valuation := range valuations {
-		total += valuation.CompanyValuation
+	var setsValuated int
+
+	for _, s := range collectionSets {
+		if s.SetValuation == nil {
+			total += s.SetValuation.CompanyValuation
+			setsValuated++
+		}
 	}
 
 	return UserCollectionValuationTotals{
 		Total:        total,
 		TotalSets:    len(collectionSets),
-		SetsValuated: len(valuations),
+		SetsValuated: setsValuated,
+		TotalProfits: GetTotalProfitsResponse(collectionSets),
+	}
+}
+
+func GetTotalProfitsResponse(collectionSets []pl.SetWithValuation) CollectionTotalProfitsResponse {
+	profits := pl.GetCollectionProfits(collectionSets)
+	return CollectionTotalProfitsResponse{
+		TotalReturnUSD:        profits.TotalReturnUSD,
+		TotalReturnPercentage: profits.TotalReturnPercentage,
 	}
 }

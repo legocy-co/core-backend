@@ -4,6 +4,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	calculatorModels "github.com/legocy-co/legocy/internal/domain/calculator/models"
 	"github.com/legocy-co/legocy/internal/domain/collections/models"
+	"github.com/legocy-co/legocy/internal/domain/collections/service/collection/pl"
 )
 
 type UserLegoSetCollectionResponse struct {
@@ -18,6 +19,7 @@ func GetUserLegoCollectionResponse(
 ) UserLegoSetCollectionResponse {
 
 	setsResponses := make([]CollectionLegoSetResponse, 0, len(collection.Sets))
+	var setsWithValuation []pl.SetWithValuation
 
 	for _, set := range collection.Sets {
 
@@ -30,9 +32,10 @@ func GetUserLegoCollectionResponse(
 		}
 
 		setsResponses = append(setsResponses, GetCollectionLegoSetResponse(set, setValuation))
+		setsWithValuation = append(setsWithValuation, pl.NewSetWithValuation(set, setValuation))
 	}
 
-	collectionTotals := GetCollectionValuationTotals(collection.Sets, valuations)
+	collectionTotals := GetCollectionValuationTotals(setsWithValuation)
 
 	return UserLegoSetCollectionResponse{
 		User:   users.GetUserDetailResponse(&collection.User),
