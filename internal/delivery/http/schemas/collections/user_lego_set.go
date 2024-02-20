@@ -5,6 +5,7 @@ import (
 	legoResources "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	calculatorModels "github.com/legocy-co/legocy/internal/domain/calculator/models"
 	"github.com/legocy-co/legocy/internal/domain/collections/models"
+	"github.com/legocy-co/legocy/internal/domain/collections/service/collection/pl"
 	lego "github.com/legocy-co/legocy/internal/domain/lego/models"
 	"github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 )
@@ -35,14 +36,21 @@ func GetCollectionLegoSetResponse(collectionSet models.CollectionLegoSet, valuat
 		ID:         collectionSet.ID,
 		LegoSet:    legoResources.GetLegoSetResponse(&collectionSet.LegoSet),
 		Valuation:  valuationResponse,
-		SetProfits: nil,
+		SetProfits: GetUserLegoSetProfitsResponse(collectionSet, valuation),
 		State:      collectionSet.CurrentState,
 		BuyPrice:   collectionSet.BuyPrice,
 	}
 }
 
-func GetUserLegoSetProfitsResponse(profits models.CollectionLegoSetProfits) UserLegoSetProfitsResponse {
-	return UserLegoSetProfitsResponse{
+func GetUserLegoSetProfitsResponse(
+	collectionSet models.CollectionLegoSet,
+	valuation *calculatorModels.LegoSetValuation) *UserLegoSetProfitsResponse {
+
+	profits := pl.GetCollectionSetProfits(
+		pl.NewSetWithValuation(collectionSet, valuation),
+	)
+
+	return &UserLegoSetProfitsResponse{
 		TotalReturnUSD:        profits.ReturnUSD,
 		TotalReturnPercentage: profits.ReturnPercentage,
 	}
