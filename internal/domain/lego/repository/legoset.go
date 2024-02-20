@@ -13,4 +13,5 @@ type LegoSetRepository interface {
 	GetSetsPage(ctx pagination.PaginationContext) (pagination.Page[models.LegoSet], *errors.AppError)
 	GetLegoSetByID(c context.Context, id int) (*models.LegoSet, *errors.AppError)
 	DeleteLegoSet(c context.Context, id int) *errors.AppError
+	UpdateLegoSetByID(legoSetID int, vo *models.LegoSetValueObject) *errors.AppError
 }

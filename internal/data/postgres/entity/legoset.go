@@ -52,3 +52,12 @@ func FromLegoSetValueObject(s *models.LegoSetValueObject) *LegoSetPostgres {
 		LegoSeriesID: uint(s.SeriesID),
 	}
 }
+
+func GetUpdatedLegoSetPostgres(entity *LegoSetPostgres, vo *models.LegoSetValueObject) *LegoSetPostgres {
+	entity.Number = vo.Number
+	entity.Name = vo.Name
+	entity.NPieces = vo.NPieces
+	entity.LegoSeriesID = uint(vo.SeriesID)
+
+	return entity
+}
