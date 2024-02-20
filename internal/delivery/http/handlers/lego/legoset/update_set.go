@@ -19,7 +19,7 @@ import (
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/admin/sets/{setID} [put]
-
+//
 // @Security	JWT
 func (h *LegoSetHandler) SetUpdate(c *gin.Context) {
 	var setRequest lego.LegoSetRequest

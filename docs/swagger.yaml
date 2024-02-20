@@ -823,6 +823,38 @@ paths:
       summary: Delete Lego Set object
       tags:
       - lego_sets_admin
+    put:
+      operationId: set_update
+      parameters:
+      - description: create data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetRequest'
+      - description: Lego Set ID
+        in: path
+        name: setID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update Lego Set object
+      tags:
+      - lego_sets_admin
   /admin/sets/images/{imageId}:
     delete:
       consumes:

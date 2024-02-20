@@ -635,6 +635,55 @@ const docTemplate = `{
             }
         },
         "/admin/sets/{setID}": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lego_sets_admin"
+                ],
+                "summary": "Update Lego Set object",
+                "operationId": "set_update",
+                "parameters": [
+                    {
+                        "description": "create data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Lego Set ID",
+                        "name": "setID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
