@@ -46,6 +46,8 @@ definitions:
         type: integer
       lego_set:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
+      set_profits:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse'
       state:
         type: string
       valuation:
@@ -59,6 +61,13 @@ definitions:
         type: integer
       state:
         type: string
+    type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse:
+    properties:
+      total_return_percentage:
+        type: number
+      total_return_usd:
+        type: number
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationResponse:
     properties:
@@ -77,6 +86,8 @@ definitions:
         type: integer
       total:
         type: number
+      total_profits:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse'
       total_sets:
         type: integer
     type: object
@@ -90,6 +101,13 @@ definitions:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals'
       user:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
+    type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse:
+    properties:
+      total_return_percentage:
+        type: number
+      total_return_usd:
+        type: number
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesRequest:
     properties:

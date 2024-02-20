@@ -2284,6 +2284,9 @@ const docTemplate = `{
                 "lego_set": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
                 },
+                "set_profits": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse"
+                },
                 "state": {
                     "type": "string"
                 },
@@ -2303,6 +2306,17 @@ const docTemplate = `{
                 },
                 "state": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse": {
+            "type": "object",
+            "properties": {
+                "total_return_percentage": {
+                    "type": "number"
+                },
+                "total_return_usd": {
+                    "type": "number"
                 }
             }
         },
@@ -2332,6 +2346,9 @@ const docTemplate = `{
                 "total": {
                     "type": "number"
                 },
+                "total_profits": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse"
+                },
                 "total_sets": {
                     "type": "integer"
                 }
@@ -2351,6 +2368,17 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse": {
+            "type": "object",
+            "properties": {
+                "total_return_percentage": {
+                    "type": "number"
+                },
+                "total_return_usd": {
+                    "type": "number"
                 }
             }
         },
