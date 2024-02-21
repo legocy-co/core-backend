@@ -14,7 +14,8 @@ import (
 //	@Summary	Update LegoSeries object
 //	@Tags		lego_series_admin
 //	@ID			put_series
-//	@Param		seriesID	path	int	true	"series ID"
+//	@Param		data	body	lego.LegoSeriesRequest	true	"create data"
+//	@Param		seriesID	path	int	true	"Lego Series ID"
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
 //	@Failure	400	{object}	map[string]interface{}
@@ -28,14 +29,14 @@ func (lsh *LegoSeriesHandler) UpdateSeries(c *gin.Context) {
 		return
 	}
 
-	setID, _err := strconv.Atoi(c.Param("seriesID"))
+	seriesID, _err := strconv.Atoi(c.Param("seriesID"))
 	if _err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
 		return
 	}
 
 	legoSeriesValueObject := seriesRequest.ToLegoSeriesValueObject()
-	err := lsh.service.UpdateSeries(setID, legoSeriesValueObject)
+	err := lsh.service.UpdateSeries(seriesID, legoSeriesValueObject)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
