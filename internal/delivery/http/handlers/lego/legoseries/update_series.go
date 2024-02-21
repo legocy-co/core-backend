@@ -14,7 +14,7 @@ import (
 //	@Summary	Update LegoSeries object
 //	@Tags		lego_series_admin
 //	@ID			put_series
-//	@Param		data	body	lego.LegoSeriesRequest	true	"create data"
+//	@Param		data	body	lego.LegoSeriesRequest	true	"update data"
 //	@Param		seriesID	path	int	true	"Lego Series ID"
 //	@Produce	json
 //	@Success	200	{object}	map[string]interface{}
