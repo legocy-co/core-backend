@@ -61,3 +61,9 @@ func GetUpdatedLegoSetPostgres(entity *LegoSetPostgres, vo *models.LegoSetValueO
 
 	return entity
 }
+
+func GetUpdatedLegoSeriesPostgres(entity *LegoSeriesPostgres, vo *models.LegoSeriesValueObject) *LegoSeriesPostgres {
+	entity.Name = vo.Name
+
+	return entity
+}

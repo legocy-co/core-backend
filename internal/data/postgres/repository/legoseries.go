@@ -13,6 +13,33 @@ type LegoSeriesPostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
+func (r LegoSeriesPostgresRepository) UpdateLegoSeries(legoSeriesID int, vo *models.LegoSeriesValueObject) *errors.AppError {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return &d.ErrConnectionLost
+	}
+
+	var currentEntity *entities.LegoSeriesPostgres
+	if db.Find(&currentEntity, legoSeriesID).RowsAffected <= 0 {
+		e := errors.NewAppError(errors.NotFoundError, "LegoSeries not found")
+		return &e
+	}
+
+	currentEntity = entities.GetUpdatedLegoSeriesPostgres(currentEntity, vo)
+
+	tx := db.Begin()
+
+	if err := tx.Save(currentEntity).Error; err != nil {
+		tx.Rollback()
+		e := errors.NewAppError(errors.ConflictError, err.Error())
+		return &e
+	}
+
+	tx.Commit()
+	return nil
+}
+
 func NewLegoSeriesPostgresRepository(conn d.DataBaseConnection) LegoSeriesPostgresRepository {
 	return LegoSeriesPostgresRepository{conn: conn}
 }
