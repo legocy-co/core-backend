@@ -30,3 +30,7 @@ func (s *LegoSeriesService) CreateLegoSeries(ctx context.Context, m *models.Lego
 func (s *LegoSeriesService) DeleteSeries(ctx context.Context, id int) *errors.AppError {
 	return s.repo.DeleteLegoSeries(ctx, id)
 }
+
+func (s *LegoSeriesService) UpdateSeries(legoSeriesID int, vo *models.LegoSeriesValueObject) *errors.AppError {
+	return s.repo.UpdateLegoSeries(legoSeriesID, vo)
+}
