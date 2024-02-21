@@ -34,8 +34,8 @@ func (lsh *LegoSeriesHandler) UpdateSeries(c *gin.Context) {
 		return
 	}
 
-	legoSetValueObject := seriesRequest.ToLegoSeriesValueObject()
-	err := lsh.service.UpdateSeries(setID, legoSetValueObject)
+	legoSeriesValueObject := seriesRequest.ToLegoSeriesValueObject()
+	err := lsh.service.UpdateSeries(setID, legoSeriesValueObject)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
