@@ -47,7 +47,7 @@ func GetUserLegoSetProfitsResponse(
 	valuation *calculatorModels.LegoSetValuation) *UserLegoSetProfitsResponse {
 
 	profits := pl.GetCollectionSetProfits(
-		pl.NewSetWithValuation(collectionSet, valuation),
+		models.NewSetWithValuation(collectionSet, valuation),
 	)
 
 	return &UserLegoSetProfitsResponse{

@@ -4,6 +4,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/calculator"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/domain/calculator/models"
+	collections "github.com/legocy-co/legocy/internal/domain/collections/models"
 	"github.com/legocy-co/legocy/internal/domain/collections/service/collection/pl"
 	auth "github.com/legocy-co/legocy/internal/domain/users/models"
 )
@@ -48,7 +49,7 @@ func FromUserCollectionValuation(
 
 }
 
-func GetCollectionValuationTotals(collectionSets []pl.SetWithValuation) UserCollectionValuationTotals {
+func GetCollectionValuationTotals(collectionSets []collections.SetWithValuation) UserCollectionValuationTotals {
 
 	var total float32
 	var setsValuated int
@@ -68,7 +69,7 @@ func GetCollectionValuationTotals(collectionSets []pl.SetWithValuation) UserColl
 	}
 }
 
-func GetTotalProfitsResponse(collectionSets []pl.SetWithValuation) CollectionTotalProfitsResponse {
+func GetTotalProfitsResponse(collectionSets []collections.SetWithValuation) CollectionTotalProfitsResponse {
 	profits := pl.GetCollectionProfits(collectionSets)
 	return CollectionTotalProfitsResponse{
 		TotalReturnUSD:        profits.TotalReturnUSD,

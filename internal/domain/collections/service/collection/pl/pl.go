@@ -1,23 +1,10 @@
 package pl
 
 import (
-	calculator "github.com/legocy-co/legocy/internal/domain/calculator/models"
 	"github.com/legocy-co/legocy/internal/domain/collections/models"
 )
 
-type SetWithValuation struct {
-	CollectionSet models.CollectionLegoSet
-	SetValuation  *calculator.LegoSetValuation
-}
-
-func NewSetWithValuation(set models.CollectionLegoSet, valuation *calculator.LegoSetValuation) SetWithValuation {
-	return SetWithValuation{
-		CollectionSet: set,
-		SetValuation:  valuation,
-	}
-}
-
-func GetCollectionSetProfits(collectionSet SetWithValuation) *models.CollectionLegoSetProfits {
+func GetCollectionSetProfits(collectionSet models.SetWithValuation) *models.CollectionLegoSetProfits {
 
 	if collectionSet.SetValuation == nil {
 		return &models.CollectionLegoSetProfits{
@@ -38,7 +25,7 @@ func GetCollectionSetProfits(collectionSet SetWithValuation) *models.CollectionL
 	}
 }
 
-func GetCollectionProfits(collectionSets []SetWithValuation) *models.CollectionProfits {
+func GetCollectionProfits(collectionSets []models.SetWithValuation) *models.CollectionProfits {
 
 	var totalBuyPrice float32
 	var totalCurrentValuation float32
