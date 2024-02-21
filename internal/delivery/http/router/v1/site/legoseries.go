@@ -19,5 +19,6 @@ func AddLegoSeries(rg *gin.RouterGroup, service s.LegoSeriesService) {
 	{
 		seriesPrivate.POST("/", handler.SeriesCreate)
 		seriesPrivate.DELETE("/:seriesID", handler.DeleteSeries)
+		seriesPrivate.PUT("/:seriesID", handler.UpdateSeries)
 	}
 }

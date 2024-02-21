@@ -12,4 +12,5 @@ type LegoSeriesRepository interface {
 	GetLegoSeries(c context.Context, id int) (*models.LegoSeries, *errors.AppError)
 	GetLegoSeriesByName(c context.Context, name string) (*models.LegoSeries, *errors.AppError)
 	DeleteLegoSeries(c context.Context, id int) *errors.AppError
+	UpdateLegoSeries(id int, s *models.LegoSeriesValueObject) *errors.AppError
 }
