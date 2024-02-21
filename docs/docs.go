@@ -231,8 +231,17 @@ const docTemplate = `{
                 "operationId": "put_series",
                 "parameters": [
                     {
+                        "description": "update data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesRequest"
+                        }
+                    },
+                    {
                         "type": "integer",
-                        "description": "series ID",
+                        "description": "Lego Series ID",
                         "name": "seriesID",
                         "in": "path",
                         "required": true

@@ -613,7 +613,13 @@ paths:
     put:
       operationId: put_series
       parameters:
-      - description: series ID
+      - description: update data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesRequest'
+      - description: Lego Series ID
         in: path
         name: seriesID
         required: true
