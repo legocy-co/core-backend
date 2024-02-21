@@ -610,6 +610,32 @@ paths:
       summary: Delete LegoSeries object
       tags:
       - lego_series_admin
+    put:
+      operationId: put_series
+      parameters:
+      - description: series ID
+        in: path
+        name: seriesID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update LegoSeries object
+      tags:
+      - lego_series_admin
   /admin/sets-valuations/:
     get:
       operationId: list_lego_set_valuation_admin

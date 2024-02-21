@@ -208,6 +208,46 @@
             }
         },
         "/admin/series/{seriesID}": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lego_series_admin"
+                ],
+                "summary": "Update LegoSeries object",
+                "operationId": "put_series",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "series ID",
+                        "name": "seriesID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
