@@ -3,6 +3,7 @@ package legoset
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	"net/http"
 )
@@ -22,6 +23,12 @@ import (
 // @Security JWT
 func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
 	ctx := pagination.GetPaginationContext(c)
+
+	var filterDTO *filters.LegoSetFilterDTO
+	if err := c.ShouldBindQuery(&filterDTO); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
 
 	setsPage, err := h.service.GetSetsPage(ctx)
 	if err != nil {
