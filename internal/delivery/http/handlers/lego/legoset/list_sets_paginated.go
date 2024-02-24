@@ -29,11 +29,12 @@ import (
 func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
 	ctx := pagination.GetPaginationContext(c)
 
-	var filterDTO *filters.LegoSetFilterDTO
-	_ = c.BindQuery(filterDTO)
-
+	var filterDTO filters.LegoSetFilterDTO
 	var filterCriteria *domain.LegoSetFilterCriteria
-	if filterDTO != nil {
+
+	if err := c.BindQuery(&filterDTO); err != nil {
+		filterCriteria = nil
+	} else {
 		filterCriteria = filterDTO.ToCriteria()
 	}
 
