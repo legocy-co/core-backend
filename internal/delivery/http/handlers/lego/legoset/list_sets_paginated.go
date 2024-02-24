@@ -6,6 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
+	domain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	"net/http"
 )
 
@@ -30,11 +31,19 @@ func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
 
 	var filterDTO *filters.LegoSetFilterDTO
 	if err := c.ShouldBindQuery(&filterDTO); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(
+			http.StatusUnprocessableEntity,
+			gin.H{"error": err.Error()},
+		)
 		return
 	}
 
-	setsPage, appErr := h.service.GetSetsPage(ctx, filterDTO.ToCriteria())
+	var filterCriteria *domain.LegoSetFilterCriteria
+	if filterDTO != nil {
+		filterCriteria = filterDTO.ToCriteria()
+	}
+
+	setsPage, appErr := h.service.GetSetsPage(ctx, filterCriteria)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
