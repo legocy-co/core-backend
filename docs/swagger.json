@@ -1748,6 +1748,37 @@
                         "description": "offset",
                         "name": "offset",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name__ilike",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "npieces_gte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "npieces_lte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "name": "series_id__in",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "name": "set_number__in",
+                        "in": "query"
                     }
                 ],
                 "responses": {

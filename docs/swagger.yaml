@@ -1572,6 +1572,25 @@ paths:
         in: query
         name: offset
         type: integer
+      - in: query
+        name: name__ilike
+        type: string
+      - in: query
+        name: npieces_gte
+        type: integer
+      - in: query
+        name: npieces_lte
+        type: integer
+      - in: query
+        items:
+          type: integer
+        name: series_id__in
+        type: array
+      - in: query
+        items:
+          type: string
+        name: set_number__in
+        type: array
       produces:
       - application/json
       responses:

@@ -6,7 +6,9 @@ import (
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
+	pgFilter "github.com/legocy-co/legocy/internal/data/postgres/utils/filters"
 	"github.com/legocy-co/legocy/internal/domain/lego"
+	"github.com/legocy-co/legocy/internal/domain/lego/filters"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )
@@ -106,7 +108,7 @@ func (r LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) *err
 	return nil
 }
 
-func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext) (pagination.Page[models.LegoSet], *errors.AppError) {
+func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext, filter *filters.LegoSetFilterCriteria) (pagination.Page[models.LegoSet], *errors.AppError) {
 	var err *errors.AppError
 	db := r.conn.GetDB()
 
@@ -115,7 +117,8 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext)
 	}
 
 	var total int64
-	db.Model(&entities.LegoSetPostgres{}).Count(&total)
+	totalQuery := pgFilter.AddLegoSetFilters(db.Model(&entities.LegoSetPostgres{}), filter, false)
+	totalQuery.Count(&total)
 
 	var entitiesList []*entities.LegoSetPostgres
 
@@ -123,6 +126,7 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext)
 		entities.LegoSetPostgres{},
 	).Preload("LegoSeries").Preload("Images")
 
+	query = pgFilter.AddLegoSetFilters(query, filter, false)
 	query = utils.AddPaginationQuery(query, ctx)
 
 	_err := query.Find(&entitiesList).Error
