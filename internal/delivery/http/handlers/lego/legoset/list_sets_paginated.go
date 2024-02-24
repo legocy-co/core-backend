@@ -30,13 +30,7 @@ func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
 	ctx := pagination.GetPaginationContext(c)
 
 	var filterDTO *filters.LegoSetFilterDTO
-	if err := c.ShouldBindQuery(&filterDTO); err != nil {
-		c.AbortWithStatusJSON(
-			http.StatusUnprocessableEntity,
-			gin.H{"error": err.Error()},
-		)
-		return
-	}
+	_ = c.BindQuery(filterDTO)
 
 	var filterCriteria *domain.LegoSetFilterCriteria
 	if filterDTO != nil {
