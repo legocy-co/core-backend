@@ -124,7 +124,7 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext,
 
 	query := db.Model(
 		entities.LegoSetPostgres{},
-	).Preload("LegoSeries").Preload("Images").Order("id")
+	).Preload("LegoSeries").Preload("Images").Order("id desc")
 
 	query = pgFilter.AddLegoSetFilters(query, filter, false)
 	query = utils.AddPaginationQuery(query, ctx)
