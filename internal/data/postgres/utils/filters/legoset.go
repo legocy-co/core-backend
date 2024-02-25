@@ -52,7 +52,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
 		} else {
-			db = db.Where("lego_sets.name LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
+			db = db.Where("LOWER(lego_sets.name) LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
 		}
 	}
 
