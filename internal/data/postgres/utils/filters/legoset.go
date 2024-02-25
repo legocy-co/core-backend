@@ -3,6 +3,7 @@ package filters
 import (
 	domain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	"gorm.io/gorm"
+	"strings"
 )
 
 func AddLegoSetFilters(
@@ -49,9 +50,9 @@ func AddLegoSetFilters(
 
 	if criteria.Name != nil {
 		if !isNested {
-			db = db.Where("name LIKE ?", "%"+*criteria.Name+"%")
+			db = db.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
 		} else {
-			db = db.Where("lego_sets.name LIKE ?", "%"+*criteria.Name+"%")
+			db = db.Where("lego_sets.name LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
 		}
 	}
 
