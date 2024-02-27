@@ -9,7 +9,7 @@ import (
 )
 
 type LegoSetRepository interface {
-	CreateLegoSet(c context.Context, s *models.LegoSetValueObject) *errors.AppError
+	CreateLegoSet(c context.Context, s *models.LegoSetValueObject) (*models.LegoSet, *errors.AppError)
 	GetLegoSets(c context.Context) ([]*models.LegoSet, *errors.AppError)
 	GetSetsPage(ctx pagination.PaginationContext, filter *filters.LegoSetFilterCriteria) (pagination.Page[models.LegoSet], *errors.AppError)
 	GetLegoSetByID(c context.Context, id int) (*models.LegoSet, *errors.AppError)

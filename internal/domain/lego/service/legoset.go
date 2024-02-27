@@ -40,7 +40,7 @@ func (u *LegoSetService) LegoSetDetail(c context.Context, id int) (*models.LegoS
 	return u.repo.GetLegoSetByID(c, id)
 }
 
-func (u *LegoSetService) LegoSetCreate(c context.Context, legoSet *models.LegoSetValueObject) *errors.AppError {
+func (u *LegoSetService) LegoSetCreate(c context.Context, legoSet *models.LegoSetValueObject) (*models.LegoSet, *errors.AppError) {
 	return u.repo.CreateLegoSet(c, legoSet)
 }
 

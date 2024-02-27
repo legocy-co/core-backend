@@ -14,7 +14,7 @@ import (
 //	@ID			set_create
 //	@Param		data	body	lego.LegoSetRequest	true	"create data"
 //	@Produce	json
-//	@Success	200	{object}	map[string]interface{}
+//	@Success	200	{object}	lego.LegoSetResponse
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/admin/sets/ [post]
 //
@@ -27,12 +27,13 @@ func (h *LegoSetHandler) SetCreate(c *gin.Context) {
 	}
 
 	legoSetValueObject := setRequest.ToLegoSeriesValueObject()
-	err := h.service.LegoSetCreate(c.Request.Context(), legoSetValueObject)
+	legoSet, err := h.service.LegoSetCreate(c.Request.Context(), legoSetValueObject)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+	legoSetResponse := lego.GetLegoSetResponse(legoSet)
+	c.JSON(http.StatusOK, legoSetResponse)
 }

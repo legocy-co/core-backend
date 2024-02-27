@@ -75,7 +75,7 @@ func LoadLegoSets(
 			continue
 		}
 
-		if e := setsRepo.CreateLegoSet(context.Background(), setCreate); e != nil {
+		if _, e := setsRepo.CreateLegoSet(context.Background(), setCreate); e != nil {
 			logrus.Errorf("Error creating LegoSet %v", e.Error())
 			continue
 		}

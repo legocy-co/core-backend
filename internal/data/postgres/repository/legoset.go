@@ -21,11 +21,11 @@ func NewLegoSetPostgresRepository(conn d.DataBaseConnection) LegoSetPostgresRepo
 	return LegoSetPostgresRepository{conn: conn}
 }
 
-func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetValueObject) *errors.AppError {
+func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.LegoSetValueObject) (*models.LegoSet, *errors.AppError) {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
 	entity := entities.FromLegoSetValueObject(s)
@@ -33,10 +33,10 @@ func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.Le
 
 	if result.Error != nil {
 		_e := errors.NewAppError(errors.ConflictError, result.Error.Error())
-		return &_e
+		return nil, &_e
 	}
 
-	return nil
+	return r.GetLegoSetByID(c, int(entity.ID))
 }
 
 func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.LegoSet, *errors.AppError) {
