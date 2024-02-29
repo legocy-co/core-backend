@@ -5,6 +5,7 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	calculator "github.com/legocy-co/legocy/internal/domain/calculator/models"
 	c "github.com/legocy-co/legocy/internal/domain/calculator/repository"
+	"github.com/legocy-co/legocy/internal/domain/collections"
 	"github.com/legocy-co/legocy/internal/domain/collections/models"
 	"github.com/legocy-co/legocy/internal/domain/collections/repository"
 	users "github.com/legocy-co/legocy/internal/domain/users/models"
@@ -33,6 +34,16 @@ func (s UserCollectionService) GetUserCollection(c context.Context, userID int) 
 }
 
 func (s UserCollectionService) AddSetToUserCollection(c context.Context, userID int, vo models.CollectionLegoSetValueObject) *errors.AppError {
+
+	currentSetsAmount, err := s.collectionRepository.GetUserCollectionSetsAmount(userID)
+	if err != nil {
+		return err
+	}
+
+	if currentSetsAmount >= models.MaxUserColletionSets {
+		return &collections.ErrCollectionIsFull
+	}
+
 	return s.collectionRepository.AddSetToUserCollection(c, userID, vo)
 }
 

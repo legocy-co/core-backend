@@ -152,3 +152,24 @@ func (r CollectionPostgresRepository) GetCollectionSetOwner(c context.Context, c
 	}
 	return ownerID, _error
 }
+
+func (r CollectionPostgresRepository) GetUserCollectionSetsAmount(userID int) (int, *errors.AppError) {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return 0, &d.ErrConnectionLost
+	}
+
+	var total int64
+
+	err := db.Model(
+		entities.UserLegoSetPostgres{},
+	).Where("user_id=?", userID).Count(&total).Error
+
+	if err != nil {
+		_error := errors.NewAppError(errors.NotFoundError, err.Error())
+		return 0, &_error
+	}
+
+	return int(total), nil
+}
