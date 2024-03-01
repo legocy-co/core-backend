@@ -4,7 +4,7 @@ type LegoSetFilterCriteria struct {
 	NpiecesGTE *int
 	NpiecesLTE *int
 	SeriesIDs  *[]int
-	SetNumbers *[]string
+	SetNumbers *[]int
 	Name       *string
 }
 
@@ -12,7 +12,7 @@ func NewLegoSetFilterCriteria(
 	NpiecesGTE *int,
 	NpiecesLTE *int,
 	SeriesIDs *[]int,
-	SetNumbers *[]string,
+	SetNumbers *[]int,
 	Name *string,
 ) *LegoSetFilterCriteria {
 	return &LegoSetFilterCriteria{
