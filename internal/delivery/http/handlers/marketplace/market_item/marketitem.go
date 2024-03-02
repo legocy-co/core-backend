@@ -5,6 +5,7 @@ import (
 	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace/filters"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	users "github.com/legocy-co/legocy/internal/domain/users/service"
@@ -33,6 +34,9 @@ func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
 //	@Produce	json
 //	@Param		limit	query	int	false	"limit" 10
 //	@Param		offset	query	int	false	"offset" 0
+//
+// @Param       filter  query  	filters.MarketItemFilterDTO false "filter"
+//
 //	@Success	200	{object}	pagination.PageResponse[marketplace.MarketItemResponse]
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/ [get]
@@ -40,7 +44,14 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
-	marketItemsPage, err := h.service.ListMarketItems(ctx)
+	filter, e := filters.GetMarketItemFilterCritera(c)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
+	marketItemsPage, err := h.service.ListMarketItems(ctx, filter)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
@@ -71,6 +82,9 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 //	@Produce	json
 //	@Param		limit	query	int	false	"limit" 10
 //	@Param		offset	query	int	false	"offset" 0
+//
+// @Param       filter  query  	filters.MarketItemFilterDTO false "filter"
+//
 //	@Success	200	{object}	pagination.PageResponse[marketplace.MarketItemResponse]
 //	@Failure	400	{object}	map[string]interface{}
 //	@Router		/market-items/authorized/ [get]
@@ -80,6 +94,13 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
+	filter, e := filters.GetMarketItemFilterCritera(c)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
 	tokenPayload, err := middleware.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -87,9 +108,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 		return
 	}
 
-	userID := tokenPayload.ID
-
-	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, userID)
+	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, filter, tokenPayload.ID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

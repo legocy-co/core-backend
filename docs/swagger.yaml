@@ -160,6 +160,23 @@ definitions:
       series:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse'
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_lego_filters.LegoSetFilterDTO:
+    properties:
+      name__ilike:
+        type: string
+      npieces_gte:
+        type: integer
+      npieces_lte:
+        type: integer
+      series_id__in:
+        items:
+          type: integer
+        type: array
+      set_number__in:
+        items:
+          type: integer
+        type: array
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse:
     properties:
       id:
@@ -1263,6 +1280,22 @@ paths:
         in: query
         name: offset
         type: integer
+      - in: query
+        items:
+          type: string
+        name: location__in
+        type: array
+      - in: query
+        name: price_gte
+        type: number
+      - in: query
+        name: price_lte
+        type: number
+      - in: query
+        items:
+          type: string
+        name: set_state__in
+        type: array
       produces:
       - application/json
       responses:
@@ -1402,6 +1435,22 @@ paths:
         in: query
         name: offset
         type: integer
+      - in: query
+        items:
+          type: string
+        name: location__in
+        type: array
+      - in: query
+        name: price_gte
+        type: number
+      - in: query
+        name: price_lte
+        type: number
+      - in: query
+        items:
+          type: string
+        name: set_state__in
+        type: array
       produces:
       - application/json
       responses:
@@ -1587,7 +1636,7 @@ paths:
         type: array
       - in: query
         items:
-          type: string
+          type: integer
         name: set_number__in
         type: array
       produces:

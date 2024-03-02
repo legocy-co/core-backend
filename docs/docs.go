@@ -1269,6 +1269,32 @@ const docTemplate = `{
                         "description": "offset",
                         "name": "offset",
                         "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "name": "location__in",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "name": "price_gte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "name": "price_lte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "name": "set_state__in",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1356,6 +1382,32 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "offset",
                         "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "name": "location__in",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "name": "price_gte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "name": "price_lte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "name": "set_state__in",
                         "in": "query"
                     }
                 ],
@@ -1782,7 +1834,7 @@ const docTemplate = `{
                     {
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "type": "integer"
                         },
                         "name": "set_number__in",
                         "in": "query"
@@ -2586,6 +2638,32 @@ const docTemplate = `{
                 },
                 "series": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_lego_filters.LegoSetFilterDTO": {
+            "type": "object",
+            "properties": {
+                "name__ilike": {
+                    "type": "string"
+                },
+                "npieces_gte": {
+                    "type": "integer"
+                },
+                "npieces_lte": {
+                    "type": "integer"
+                },
+                "series_id__in": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "set_number__in": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

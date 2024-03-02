@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
+	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	"github.com/legocy-co/legocy/pkg/pagination"
@@ -25,9 +26,11 @@ func (ms *MarketItemService) CreateMarketItem(
 }
 
 func (ms *MarketItemService) ListMarketItems(
-	c pagination.PaginationContext) (pagination.Page[*models.MarketItem], *errors.AppError) {
+	c pagination.PaginationContext,
+	filter *domain.MarketItemFilterCriteria,
+) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
-	marketItems, err := ms.repo.GetMarketItems(c)
+	marketItems, err := ms.repo.GetMarketItems(c, filter)
 	if err != nil {
 		return marketItems, err
 	}
@@ -40,9 +43,12 @@ func (ms *MarketItemService) ListMarketItems(
 }
 
 func (ms *MarketItemService) ListMarketItemsAuthorized(
-	c pagination.PaginationContext, userID int) (pagination.Page[*models.MarketItem], *errors.AppError) {
+	c pagination.PaginationContext,
+	filter *domain.MarketItemFilterCriteria,
+	userID int,
+) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
-	marketItems, err := ms.repo.GetMarketItemsAuthorized(c, userID)
+	marketItems, err := ms.repo.GetMarketItemsAuthorized(c, filter, userID)
 	if err != nil {
 		return marketItems, err
 	}
@@ -74,7 +80,11 @@ func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) *errors
 }
 
 func (ms *MarketItemService) UpdateMarketItemByID(
-	c context.Context, currentUserID int, id int, vo *models.MarketItemValueObject) (*models.MarketItem, *errors.AppError) {
+	c context.Context,
+	currentUserID int,
+	id int,
+	vo *models.MarketItemValueObject,
+) (*models.MarketItem, *errors.AppError) {
 
 	if currentUserID != vo.SellerID {
 		return nil, &e.ErrMarketItemInvalidSellerID

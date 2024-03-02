@@ -6,9 +6,12 @@ import (
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
+	"github.com/legocy-co/legocy/internal/data/postgres/utils/filters"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
+	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/pkg/pagination"
+	"gorm.io/gorm"
 )
 
 type MarketItemPostgresRepository struct {
@@ -19,7 +22,8 @@ func NewMarketItemPostgresRepository(conn d.DataBaseConnection) MarketItemPostgr
 	return MarketItemPostgresRepository{conn: conn}
 }
 
-func (r MarketItemPostgresRepository) GetMarketItems(ctx pagination.PaginationContext) (pagination.Page[*models.MarketItem], *errors.AppError) {
+func (r MarketItemPostgresRepository) GetMarketItems(
+	ctx pagination.PaginationContext, filter *domain.MarketItemFilterCriteria) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -30,10 +34,24 @@ func (r MarketItemPostgresRepository) GetMarketItems(ctx pagination.PaginationCo
 		&entities.MarketItemPostgres{},
 	).
 		Preload("Seller").
-		Preload("LegoSet").
+		Preload(
+			"LegoSet",
+			func(db *gorm.DB) *gorm.DB {
+
+				if filter == nil {
+					return db
+				}
+
+				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
+			},
+		).
 		Preload("LegoSet.LegoSeries").
 		Preload("Images").
 		Order("created_at DESC")
+
+	if filter != nil {
+		query = filters.AddMarketItemsFilters(query, filter, false)
+	}
 
 	query = utils.AddPaginationQuery(query, ctx)
 
@@ -57,7 +75,9 @@ func (r MarketItemPostgresRepository) GetMarketItems(ctx pagination.PaginationCo
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
-	ctx pagination.PaginationContext, userID int) (pagination.Page[*models.MarketItem], *errors.AppError) {
+	ctx pagination.PaginationContext,
+	filter *domain.MarketItemFilterCriteria,
+	userID int) (pagination.Page[*models.MarketItem], *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -69,10 +89,24 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	).
 		Preload("Seller").
 		Preload("Images").
-		Preload("LegoSet").
+		Preload(
+			"LegoSet",
+			func(db *gorm.DB) *gorm.DB {
+
+				if filter == nil {
+					return db
+				}
+
+				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
+			},
+		).
 		Preload("LegoSet.LegoSeries").
 		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).
 		Order("created_at DESC")
+
+	if filter != nil {
+		query = filters.AddMarketItemsFilters(query, filter, false)
+	}
 
 	query = utils.AddPaginationQuery(query, ctx)
 
@@ -90,9 +124,18 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	}
 
 	var total int64
-	db.Model(&entities.MarketItemPostgres{}).Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).Count(&total)
+	db.Model(
+		&entities.MarketItemPostgres{},
+	).Where(
+		"user_postgres_id <> ? and status = 'ACTIVE'", userID,
+	).Count(&total)
 
-	return pagination.NewPage[*models.MarketItem](marketItems, int(total), ctx.GetLimit(), ctx.GetOffset()), nil
+	return pagination.NewPage[*models.MarketItem](
+		marketItems,
+		int(total),
+		ctx.GetLimit(),
+		ctx.GetOffset(),
+	), nil
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemByID(
