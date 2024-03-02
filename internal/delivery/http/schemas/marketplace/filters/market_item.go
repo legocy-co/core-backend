@@ -18,11 +18,11 @@ func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCrite
 }
 
 type MarketItemFilterDTO struct {
-	PriceGTE  *float64                      `form:"price_gte" json:"price_gte" binding:"queryparam"`
-	PriceLTE  *float64                      `form:"price_lte" json:"price_lte" binding:"queryparam"`
-	SetStates []string                      `form:"set_state__in" json:"set_state__in" binding:"queryparam"`
-	Locations []string                      `form:"location__in" json:"location__in" binding:"queryparam"`
-	LegoSet   *legoFilters.LegoSetFilterDTO `form:"lego_set" json:"lego_set" binding:"queryparam"`
+	PriceGTE  *float64                      `form:"price_gte" json:"price_gte"`
+	PriceLTE  *float64                      `form:"price_lte" json:"price_lte"`
+	SetStates []string                      `form:"set_state__in" json:"set_state__in"`
+	Locations []string                      `form:"location__in" json:"location__in"`
+	LegoSet   *legoFilters.LegoSetFilterDTO `form:"lego_set" json:"lego_set"`
 }
 
 func (dto *MarketItemFilterDTO) ToCriteria() (*domain.MarketItemFilterCriteria, *errors.AppError) {
