@@ -41,15 +41,14 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
-	var filterDTO *filters.MarketItemFilterDTO = nil
-	filterDomain, err := filterDTO.ToCriteria()
-	if err != nil {
-		httpErr := errors.FromAppError(*err)
+	filter, e := filters.GetMarketItemFilterCritera(c)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	marketItemsPage, err := h.service.ListMarketItems(ctx, filterDomain)
+	marketItemsPage, err := h.service.ListMarketItems(ctx, filter)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
@@ -89,6 +88,13 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
+	filter, e := filters.GetMarketItemFilterCritera(c)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
 	tokenPayload, err := middleware.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
@@ -96,17 +102,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 		return
 	}
 
-	userID := tokenPayload.ID
-
-	var filterDTO *filters.MarketItemFilterDTO = nil
-	filterDomain, e := filterDTO.ToCriteria()
-	if e != nil {
-		httpErr := errors.FromAppError(*e)
-		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
-		return
-	}
-
-	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, filterDomain, userID)
+	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, filter, tokenPayload.ID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

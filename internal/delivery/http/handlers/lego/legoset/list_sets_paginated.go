@@ -6,7 +6,6 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
-	domain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	"net/http"
 )
 
@@ -27,16 +26,9 @@ import (
 //
 // @Security JWT
 func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
+
 	ctx := pagination.GetPaginationContext(c)
-
-	var filterDTO filters.LegoSetFilterDTO
-	var filterCriteria *domain.LegoSetFilterCriteria
-
-	if err := c.BindQuery(&filterDTO); err != nil {
-		filterCriteria = nil
-	} else {
-		filterCriteria = filterDTO.ToCriteria()
-	}
+	filterCriteria := filters.GetLegoSetFilterCritera(c)
 
 	setsPage, appErr := h.service.GetSetsPage(ctx, filterCriteria)
 	if appErr != nil {

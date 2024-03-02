@@ -1,10 +1,21 @@
 package filters
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/app/errors"
 	legoFilters "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 )
+
+func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCriteria, *errors.AppError) {
+	var filterDTO MarketItemFilterDTO
+
+	if err := ctx.BindQuery(&filterDTO); err != nil {
+		return nil, nil
+	}
+
+	return filterDTO.ToCriteria()
+}
 
 type MarketItemFilterDTO struct {
 	PriceGTE  *float64                      `form:"price_gte" json:"price_gte" binding:"queryparam"`
