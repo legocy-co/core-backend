@@ -3,13 +3,14 @@ package marketplace
 import (
 	"context"
 	"github.com/legocy-co/legocy/internal/app/errors"
+	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
 type MarketItemRepository interface {
-	GetMarketItems(ctx pagination.PaginationContext) (pagination.Page[*models.MarketItem], *errors.AppError)
-	GetMarketItemsAuthorized(ctx pagination.PaginationContext, userID int) (pagination.Page[*models.MarketItem], *errors.AppError)
+	GetMarketItems(ctx pagination.PaginationContext, filter *domain.MarketItemFilterCriteria) (pagination.Page[*models.MarketItem], *errors.AppError)
+	GetMarketItemsAuthorized(ctx pagination.PaginationContext, filter *domain.MarketItemFilterCriteria, userID int) (pagination.Page[*models.MarketItem], *errors.AppError)
 	GetMarketItemsBySellerID(c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError)
 	GetMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError)
 	GetMarketItemSellerID(c context.Context, id int) (int, *errors.AppError)

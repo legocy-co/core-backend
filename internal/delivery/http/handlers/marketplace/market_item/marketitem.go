@@ -5,6 +5,7 @@ import (
 	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace/filters"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	users "github.com/legocy-co/legocy/internal/domain/users/service"
@@ -40,7 +41,15 @@ func (h *MarketItemHandler) ListMarketItems(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
 
-	marketItemsPage, err := h.service.ListMarketItems(ctx)
+	var filterDTO *filters.MarketItemFilterDTO = nil
+	filterDomain, err := filterDTO.ToCriteria()
+	if err != nil {
+		httpErr := errors.FromAppError(*err)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
+	marketItemsPage, err := h.service.ListMarketItems(ctx, filterDomain)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
