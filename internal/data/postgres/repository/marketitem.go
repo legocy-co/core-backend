@@ -42,7 +42,7 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 					return db
 				}
 
-				return filters.AddLegoSetFilters(db, filter.LegoSet, true)
+				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
 			},
 		).
 		Preload("LegoSet.LegoSeries").
@@ -97,7 +97,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 					return db
 				}
 
-				return filters.AddLegoSetFilters(db, filter.LegoSet, true)
+				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
 			},
 		).
 		Preload("LegoSet.LegoSeries").
