@@ -19,6 +19,8 @@ func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCrite
 		return nil, nil
 	}
 
+	log.Debugf("Filter DTO LegoSet: %+v", filterDTO.LegoSet)
+
 	return filterDTO.ToCriteria()
 }
 
