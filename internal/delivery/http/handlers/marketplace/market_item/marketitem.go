@@ -98,7 +98,15 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 
 	userID := tokenPayload.ID
 
-	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, userID)
+	var filterDTO *filters.MarketItemFilterDTO = nil
+	filterDomain, e := filterDTO.ToCriteria()
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
+	marketItemsPage, appErr := h.service.ListMarketItemsAuthorized(ctx, filterDomain, userID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
