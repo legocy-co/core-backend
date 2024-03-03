@@ -54,7 +54,7 @@ func (m MarketItemAdminPostgresRepository) GetMarketItems(
 	}
 
 	var total int64
-	query.Model(&entities.MarketItemPostgres{}).Count(&total)
+	db.Model(&entities.MarketItemPostgres{}).Count(&total)
 
 	return pagination.NewPage[*models.MarketItemAdmin](
 		marketItemsAdmin,
