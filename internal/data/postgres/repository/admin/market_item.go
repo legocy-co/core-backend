@@ -29,15 +29,14 @@ func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]
 	res := db.Model(
 		&entities.MarketItemPostgres{}).
 		Preload("Seller").
+		Preload("Images").
 		Preload("LegoSet").
 		Preload("LegoSet.LegoSeries").
-		Preload("Currency").
-		Preload("Location").
 		Find(&itemsDB)
 
 	if res.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
-		return []*models.MarketItemAdmin{}, &appErr
+		return nil, &appErr
 	}
 
 	marketItemsAdmin := make([]*models.MarketItemAdmin, 0, len(itemsDB))
@@ -56,10 +55,9 @@ func (m MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, 
 	}
 
 	var entity *entities.MarketItemPostgres
-	query := db.Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").
-		Preload("Currency").Preload("Location").
-		Find(&entity, "id = ? and status = 'ACTIVE'", id)
+	query := db.Preload(
+		"Seller").Preload("Images").Preload("LegoSet").Preload("LegoSet.LegoSeries").
+		Find(&entity, "id = ?", id)
 
 	if query.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
