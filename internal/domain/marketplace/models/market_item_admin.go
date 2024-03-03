@@ -24,4 +24,5 @@ type MarketItemAdmin struct {
 	Status      string
 	SetState    string
 	Description string
+	Images      []*MarketItemImage
 }

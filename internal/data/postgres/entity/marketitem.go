@@ -93,6 +93,12 @@ func FromMarketItemAdminValueObject(vo models.MarketItemAdminValueObject) *Marke
 }
 
 func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
+
+	images := make([]*models.MarketItemImage, 0, len(mp.Images))
+	for _, img := range mp.Images {
+		images = append(images, img.ToMarketItemImage())
+	}
+
 	return &models.MarketItemAdmin{
 		ID:          int(mp.ID),
 		LegoSet:     *mp.LegoSet.ToLegoSet(),
@@ -102,5 +108,6 @@ func (mp *MarketItemPostgres) ToMarketItemAdmin() *models.MarketItemAdmin {
 		Status:      mp.Status,
 		SetState:    mp.SetState,
 		Description: mp.Description,
+		Images:      images,
 	}
 }

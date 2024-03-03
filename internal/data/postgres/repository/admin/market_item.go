@@ -5,9 +5,11 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
 type MarketItemAdminPostgresRepository struct {
@@ -18,25 +20,32 @@ func NewMarketItemAdminPostgresRepository(conn d.DataBaseConnection) MarketItemA
 	return MarketItemAdminPostgresRepository{conn: conn}
 }
 
-func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, *errors.AppError) {
+func (m MarketItemAdminPostgresRepository) GetMarketItems(
+	ctx pagination.PaginationContext,
+) (pagination.Page[*models.MarketItemAdmin], *errors.AppError) {
 
 	db := m.conn.GetDB()
+
 	if db == nil {
-		return []*models.MarketItemAdmin{}, &d.ErrConnectionLost
+		return pagination.NewEmptyPage[*models.MarketItemAdmin](), &d.ErrConnectionLost
 	}
 
 	var itemsDB []*entities.MarketItemPostgres
-	res := db.Model(
-		&entities.MarketItemPostgres{}).
+
+	query := db.Model(
+		&entities.MarketItemPostgres{},
+	).
 		Preload("Seller").
 		Preload("Images").
 		Preload("LegoSet").
-		Preload("LegoSet.LegoSeries").
-		Find(&itemsDB)
+		Preload("LegoSet.LegoSeries")
 
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
-		return nil, &appErr
+	query = utils.AddPaginationQuery(query, ctx)
+
+	err := query.Find(&itemsDB).Error
+	if err != nil {
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return pagination.NewEmptyPage[*models.MarketItemAdmin](), &appErr
 	}
 
 	marketItemsAdmin := make([]*models.MarketItemAdmin, 0, len(itemsDB))
@@ -44,7 +53,15 @@ func (m MarketItemAdminPostgresRepository) GetMarketItems(c context.Context) ([]
 		marketItemsAdmin = append(marketItemsAdmin, entity.ToMarketItemAdmin())
 	}
 
-	return marketItemsAdmin, nil
+	var total int64
+	query.Model(&entities.MarketItemPostgres{}).Count(&total)
+
+	return pagination.NewPage[*models.MarketItemAdmin](
+		marketItemsAdmin,
+		int(total),
+		ctx.GetLimit(),
+		ctx.GetOffset(),
+	), nil
 
 }
 

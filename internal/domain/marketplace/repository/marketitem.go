@@ -23,7 +23,7 @@ type MarketItemRepository interface {
 }
 
 type MarketItemAdminRepository interface {
-	GetMarketItems(c context.Context) ([]*models.MarketItemAdmin, *errors.AppError)
+	GetMarketItems(ctx pagination.PaginationContext) (pagination.Page[*models.MarketItemAdmin], *errors.AppError)
 	GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, *errors.AppError)
 	CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) *errors.AppError
 	UpdateMarketItemByID(

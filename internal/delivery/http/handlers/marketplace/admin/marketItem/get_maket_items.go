@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace/admin"
-	"github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	"net/http"
 )
 
@@ -14,26 +14,36 @@ import (
 //	@Tags		market_items_admin
 //	@ID			list_market_items_admin
 //	@Produce	json
-//	@Success	200	{object}	utils.DataMetaResponse
+//	@Param		limit	query	int	false	"limit" 10
+//	@Param		offset	query	int	false	"offset" 0
+//	@Success	200	{object}	pagination.PageResponse[admin.MarketItemAdminResponse]
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/market-items/authorized/ [get]
+//	@Router		/admin/market-items/ [get]
 //
 //	@Security	JWT
 func (h Handler) GetMarketItemsAdmin(c *gin.Context) {
-	var marketItems []*marketplace.MarketItemAdmin
 
-	marketItems, err := h.service.GetMarketItems(c)
+	ctx := pagination.GetPaginationContext(c)
+
+	marketItemsPage, err := h.service.GetMarketItems(ctx)
 	if err != nil {
 		httpErr := errors.FromAppError(*err)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
+	marketItems := marketItemsPage.GetObjects()
+
 	var response = make([]admin.MarketItemAdminResponse, 0, len(marketItems))
 	for _, marketItem := range marketItems {
 		response = append(response, admin.GetMarketItemAdminResponse(marketItem))
 	}
 
-	// TODO: add pagination
-	c.JSON(http.StatusOK, response)
+	responsePage := pagination.GetPageResponse[admin.MarketItemAdminResponse](
+		response,
+		marketItemsPage.GetTotal(),
+		marketItemsPage.GetLimit(),
+		marketItemsPage.GetOffset(),
+	)
+	c.JSON(http.StatusOK, responsePage)
 }

@@ -26,6 +26,50 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/admin/market-items/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items_admin"
+                ],
+                "summary": "Get Market Items (Admin)",
+                "operationId": "list_market_items_admin",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_admin_MarketItemAdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -3105,6 +3149,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_admin_MarketItemAdminResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_admin.MarketItemAdminResponse"
                     }
                 },
                 "meta": {

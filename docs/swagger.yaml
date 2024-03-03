@@ -465,6 +465,15 @@ definitions:
       meta:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse'
     type: object
+  ? github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_admin_MarketItemAdminResponse
+  : properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_admin.MarketItemAdminResponse'
+        type: array
+      meta:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageMetaResponse'
+    type: object
 info:
   contact:
     email: support@swagger.io
@@ -479,6 +488,34 @@ info:
   version: "1.0"
 paths:
   /admin/market-items/:
+    get:
+      operationId: list_market_items_admin
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_admin_MarketItemAdminResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Market Items (Admin)
+      tags:
+      - market_items_admin
     post:
       operationId: create_market_item_admin
       parameters:

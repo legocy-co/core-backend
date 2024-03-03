@@ -5,6 +5,7 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
 type MarketItemAdminService struct {
@@ -17,8 +18,9 @@ func NewMarketItemAdminService(
 }
 
 func (s MarketItemAdminService) GetMarketItems(
-	c context.Context) ([]*models.MarketItemAdmin, *errors.AppError) {
-	return s.repo.GetMarketItems(c)
+	ctx pagination.PaginationContext,
+) (pagination.Page[*models.MarketItemAdmin], *errors.AppError) {
+	return s.repo.GetMarketItems(ctx)
 }
 
 func (s MarketItemAdminService) GetMarketItemByID(
