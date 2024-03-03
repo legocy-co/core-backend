@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	legoDomain "github.com/legocy-co/legocy/internal/domain/lego/models"
 	"github.com/legocy-co/legocy/internal/domain/marketplace/errors"
@@ -73,18 +74,25 @@ func (r MarketItemAdminUpdateRequest) ToMarketItemAdminValueObject() (
 }
 
 type MarketItemAdminResponse struct {
-	ID          int                      `json:"id"`
-	Price       float32                  `json:"price"`
-	Location    string                   `json:"location"`
-	LegoSet     lego.LegoSetResponse     `json:"lego_set"`
-	Seller      users.UserDetailResponse `json:"seller"`
-	Status      string                   `json:"status"`
-	SetState    string                   `json:"set_state"`
-	Description string                   `json:"description"`
+	ID          int                         `json:"id"`
+	Price       float32                     `json:"price"`
+	Location    string                      `json:"location"`
+	LegoSet     lego.LegoSetResponse        `json:"lego_set"`
+	Seller      users.UserDetailResponse    `json:"seller"`
+	Status      string                      `json:"status"`
+	SetState    string                      `json:"set_state"`
+	Description string                      `json:"description"`
+	Images      []marketplace.ImageResponse `json:"images"`
 }
 
 func GetMarketItemAdminResponse(
 	mi *models.MarketItemAdmin) MarketItemAdminResponse {
+
+	images := make([]marketplace.ImageResponse, 0, len(mi.Images))
+	for _, img := range mi.Images {
+		images = append(images, marketplace.GetImageResponse(img))
+	}
+
 	return MarketItemAdminResponse{
 		ID:          mi.ID,
 		Price:       mi.Price,
@@ -94,5 +102,6 @@ func GetMarketItemAdminResponse(
 		Status:      mi.Status,
 		SetState:    mi.SetState,
 		Description: mi.Description,
+		Images:      images,
 	}
 }
