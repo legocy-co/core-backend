@@ -3,6 +3,7 @@ package legoseries
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/legocy-co/legocy/docs"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	"net/http"
 	"strconv"
@@ -27,10 +28,10 @@ func (lsh *LegoSeriesHandler) DetailSeries(c *gin.Context) {
 		return
 	}
 
-	seriesObj, err := lsh.service.DetailSeries(c.Request.Context(), seriesID)
-	if err != nil || seriesObj.ID == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Error extracting LegoSeries object with given ID"})
-		c.Abort()
+	seriesObj, e := lsh.service.DetailSeries(c.Request.Context(), seriesID)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
