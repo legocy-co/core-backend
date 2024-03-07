@@ -89,26 +89,17 @@ func (r LegoSeriesPostgresRepository) GetLegoSeries(
 	c context.Context, id int) (*models.LegoSeries, *errors.AppError) {
 
 	var entity *entities.LegoSeriesPostgres
-	var series *models.LegoSeries
-	var err *errors.AppError
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return series, &d.ErrConnectionLost
+		return nil, &d.ErrConnectionLost
 	}
 
-	query := db.First(&entity, id)
-	if query.Error != nil {
-		*err = errors.NewAppError(errors.NotFoundError, query.Error.Error())
-		return nil, err
-	}
-
-	if query.RowsAffected == 0 {
+	if ok := db.First(&entity, id).RowsAffected > 0; !ok {
 		return nil, &lego.ErrLegoSeriesNotFound
 	}
 
-	series = entity.ToLegoSeries()
-	return series, nil
+	return entity.ToLegoSeries(), nil
 }
 
 func (r LegoSeriesPostgresRepository) GetLegoSeriesByName(
