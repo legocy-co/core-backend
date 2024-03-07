@@ -9,9 +9,7 @@ import (
 	jwt "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 
-func AddMarketItems(
-	rg *gin.RouterGroup,
-	app *a.App) {
+func AddMarketItems(rg *gin.RouterGroup, app *a.App) {
 
 	handler := market_item.NewMarketItemHandler(
 		app.GetMarketItemService())

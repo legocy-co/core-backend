@@ -3,6 +3,7 @@ package legoseries
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/legocy-co/legocy/docs"
+	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"net/http"
 	"strconv"
 )
@@ -27,10 +28,10 @@ func (lsh *LegoSeriesHandler) DeleteSeries(c *gin.Context) {
 		return
 	}
 
-	err = lsh.service.DeleteSeries(c.Request.Context(), seriesID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		c.Abort()
+	e := lsh.service.DeleteSeries(c.Request.Context(), seriesID)
+	if e != nil {
+		httpErr := errors.FromAppError(*e)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
