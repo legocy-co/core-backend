@@ -57,7 +57,7 @@ func GetV1Router(app *app.App) V1router {
 
 	// Admin Routers
 	admin.AddUserAdmin(v1Admin, app.GetUserAdminService())
-	admin.AddAdminMarketItems(v1Admin, app.GetMarketItemAdminService())
+	admin.AddAdminMarketItems(v1Admin, app)
 	admin.AddAdminLegoSetValuations(v1Admin, app.GetLegoSetValuationAdminService())
 
 	// Site Routers
