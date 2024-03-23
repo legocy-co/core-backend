@@ -12,32 +12,6 @@ import (
 	"time"
 )
 
-type App struct {
-	database d.DataBaseConnection
-}
-
-func (a *App) isReady() bool {
-	dbReady := a.database.IsReady()
-
-	if !dbReady {
-		log.Error("DB Connection Failed...")
-		return false
-	}
-
-	log.Info("Checking Kafka...")
-
-	ctx, cf := context.WithTimeout(context.Background(), time.Second*3)
-	defer cf()
-
-	kafkaReady := kafka.IsKafkaConnected(ctx)
-	if !kafkaReady {
-		log.Error("Kafka Connection Failed...")
-		return false
-	}
-
-	return true
-}
-
 func New() *App {
 
 	godotenv.Load()
@@ -80,4 +54,30 @@ func New() *App {
 	}
 
 	return &app
+}
+
+type App struct {
+	database d.DataBaseConnection
+}
+
+func (a *App) isReady() bool {
+	dbReady := a.database.IsReady()
+
+	if !dbReady {
+		log.Error("DB Connection Failed...")
+		return false
+	}
+
+	log.Info("Checking Kafka...")
+
+	ctx, cf := context.WithTimeout(context.Background(), time.Second*3)
+	defer cf()
+
+	kafkaReady := kafka.IsKafkaConnected(ctx)
+	if !kafkaReady {
+		log.Error("Kafka Connection Failed...")
+		return false
+	}
+
+	return true
 }
