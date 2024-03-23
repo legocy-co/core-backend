@@ -6,7 +6,6 @@ import (
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/pkg/filter"
 )
 
 type UserReviewPostgresRepository struct {
@@ -22,7 +21,6 @@ func (r UserReviewPostgresRepository) GetUserReviews(
 	c context.Context) ([]*models.UserReview, *errors.AppError) {
 
 	var itemsDB []*entities.UserReviewPostgres
-	pagination := c.Value("pagination").(*filter.QueryParams)
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -30,7 +28,6 @@ func (r UserReviewPostgresRepository) GetUserReviews(
 	}
 
 	res := db.Model(&entities.UserReviewPostgres{}).
-		Scopes(filter.FilterDbByQueryParams(pagination, filter.PAGINATE)).
 		Preload("Reviewer").
 		Preload("Seller").
 		Find(&itemsDB)
