@@ -34,6 +34,8 @@ func GetCollectionProfits(collectionSets []models.SetWithValuation) *models.Coll
 		totalBuyPrice += collectionSet.CollectionSet.BuyPrice
 		if collectionSet.SetValuation != nil {
 			totalCurrentValuation += collectionSet.SetValuation.CompanyValuation
+		} else {
+			totalCurrentValuation += collectionSet.CollectionSet.BuyPrice
 		}
 	}
 
