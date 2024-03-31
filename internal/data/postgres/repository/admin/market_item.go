@@ -107,7 +107,7 @@ func (m MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, v
 	tx.Commit()
 
 	err := kafka.ProduceJSONEvent(
-		kafka.MARKET_ITEM_UPDATES_TOPIC,
+		kafka.MarketItemUpdatesTopic,
 		map[string]interface{}{
 			"itemID": int(entity.ID),
 		},

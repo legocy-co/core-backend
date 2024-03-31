@@ -17,7 +17,7 @@ func IsKafkaConnected(ctx context.Context) bool {
 
 	logrus.Info("Checking Kafka Connection...")
 
-	t := HEALTHCHECK_TOPIC
+	t := HealthcheckTopic
 
 	err = producer.Produce(
 		&kafka.Message{

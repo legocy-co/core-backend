@@ -103,7 +103,7 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 	}
 
 	err := kafka.ProduceJSONEvent(
-		kafka.MARKET_ITEM_IMAGES_DELETED_TOPIC,
+		kafka.MarketItemImagesDeletedTopic,
 		schemas.ImageDeletedEventData{
 			ImageFilepath: currentImage.ImageURL,
 		},

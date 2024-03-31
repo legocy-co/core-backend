@@ -5,6 +5,7 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/delivery/kafka/types/users"
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	h "github.com/legocy-co/legocy/pkg/helpers"
@@ -106,9 +107,7 @@ func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.U
 
 	tx.Commit()
 
-	kafkaErr := kafka.ProduceJSONEvent(kafka.USER_UPDATES_TOPIC, map[string]interface{}{
-		"userID": int(entity.ID),
-	})
+	kafkaErr := kafka.ProduceJSONEvent(kafka.UserCreatedTopic, users.FromDomainAdmin(ua))
 	if kafkaErr != nil {
 		tx.Rollback()
 		appErr := errors.NewAppError(errors.InternalError, kafkaErr.Error())

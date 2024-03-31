@@ -87,7 +87,7 @@ func (r LegoSetImagePostgresRepository) Delete(id int) *errors.AppError {
 	}
 
 	err := kafka.ProduceJSONEvent(
-		kafka.LEGO_SET_IMAGES_DELETED_TOPIC,
+		kafka.LegoSetImagesDeletedTopic,
 		schemas.ImageDeletedEventData{
 			ImageFilepath: image.ImageURL,
 		},

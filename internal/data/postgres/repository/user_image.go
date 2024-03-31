@@ -65,7 +65,7 @@ func (r UserImagePostgresRepository) DeleteImagesByUserID(c context.Context, use
 		}
 
 		err = kafka.ProduceJSONEvent(
-			kafka.USER_IMAGES_DELETED_TOPIC,
+			kafka.UserImagesDeletedTopic,
 			schemas.ImageDeletedEventData{
 				ImageFilepath: userImage.FilepathURL,
 			},

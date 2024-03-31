@@ -3,12 +3,13 @@ package kafka
 import "errors"
 
 const (
-	HEALTHCHECK_TOPIC                = "legocy.healthcheck"
-	USER_UPDATES_TOPIC               = "legocy.users.updates.json"
-	MARKET_ITEM_UPDATES_TOPIC        = "legocy.marketItems.updates.json"
-	USER_IMAGES_DELETED_TOPIC        = "legocy.users.images.delete.json"
-	MARKET_ITEM_IMAGES_DELETED_TOPIC = "legocy.marketItems.images.delete.json"
-	LEGO_SET_IMAGES_DELETED_TOPIC    = "legocy.legoSets.images.delete.json"
+	HealthcheckTopic             = "legocy.healthcheck"
+	MarketItemUpdatesTopic       = "legocy.marketItems.updates.json"
+	UserImagesDeletedTopic       = "legocy.users.images.delete.json"
+	MarketItemImagesDeletedTopic = "legocy.marketItems.images.delete.json"
+	LegoSetImagesDeletedTopic    = "legocy.legoSets.images.delete.json"
+	UserCreatedTopic             = "legocy.backend.user.created.json"
+	UserUpdatedTopic             = "legocy.backend.user.updated.json"
 )
 
 var ErrUnjsonableData = errors.New("cannot parse data as JSON")

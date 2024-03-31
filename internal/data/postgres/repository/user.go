@@ -5,9 +5,11 @@ import (
 	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/delivery/kafka/types/users"
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	h "github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type UserPostgresRepository struct {
@@ -35,6 +37,11 @@ func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, pa
 
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return &appErr
+	}
+
+	if err := kafka.ProduceJSONEvent(kafka.UserCreatedTopic, users.FromDomain(u)); err != nil {
+		appErr := errors.NewAppError(errors.InternalError, err.Error())
 		return &appErr
 	}
 
