@@ -70,6 +70,12 @@ func (r UserPostgresRepository) UpdateUser(id int, vo models.UserValueObject) *e
 		return &appErr
 	}
 
+	eventData := users.FromDomainVO(&vo, id)
+	if err := kafka.ProduceJSONEvent(kafka.UserUpdatedTopic, eventData); err != nil {
+		appErr := errors.NewAppError(errors.InternalError, err.Error())
+		return &appErr
+	}
+
 	return nil
 }
 

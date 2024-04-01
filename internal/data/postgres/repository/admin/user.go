@@ -131,8 +131,21 @@ func (r UserAdminPostgresRepository) UpdateUserByID(
 		return nil, &e.ErrUserNotFound
 	}
 
+	tx := db.Begin()
+
 	entityUpdated := entity.GetUpdatedUserAdmin(*vo)
-	db.Save(entityUpdated)
+	if err := tx.Save(entityUpdated).Error; err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return nil, &appErr
+	}
+
+	eventData := users.FromDomainVOAdmin(vo, userId)
+	if err := kafka.ProduceJSONEvent(kafka.UserUpdatedTopic, eventData); err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.InternalError, err.Error())
+		return nil, &appErr
+	}
 
 	return r.GetUserByID(c, userId)
 }

@@ -18,9 +18,25 @@ func FromDomain(user *models.User) *User {
 	}
 }
 
+func FromDomainVO(user *models.UserValueObject, id int) *User {
+	return &User{
+		ID:       id,
+		Username: user.Username,
+		Email:    user.Email,
+	}
+}
+
 func FromDomainAdmin(user *models.UserAdmin) *User {
 	return &User{
 		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+	}
+}
+
+func FromDomainVOAdmin(user *models.UserAdminValueObject, id int) *User {
+	return &User{
+		ID:       id,
 		Username: user.Username,
 		Email:    user.Email,
 	}
