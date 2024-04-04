@@ -1,78 +1,98 @@
 package helpers
 
 import (
-	"github.com/gin-gonic/gin"
+	"net/url"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
-type NestedQueryBinder struct{}
+// BindQueryParamsToStruct dynamically binds query params to struct fields.
+func BindQueryParamsToStruct(dst interface{}, values url.Values) {
+	v := reflect.ValueOf(dst).Elem()
 
-func (b *NestedQueryBinder) BindQuery(c *gin.Context, obj any) error {
-	// Get the query parameters directly from gin.Context.
-	values := c.Request.URL.Query()
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		typeField := v.Type().Field(i)
+		queryKey := typeField.Tag.Get("form")
 
-	// Reflect on the object passed to the function to be able to set its fields.
-	objVal := reflect.ValueOf(obj).Elem()
-
-	// Iterate over each field in the struct.
-	for i := 0; i < objVal.NumField(); i++ {
-		field := objVal.Field(i)
-		fieldType := objVal.Type().Field(i)
-
-		// Get the form tag for the current field. If not set, skip this field.
-		formTag := fieldType.Tag.Get("form")
-		if formTag == "" {
+		if queryKey == "" {
 			continue
 		}
 
-		// Check if the current field is a struct, indicating a nested structure.
-		if fieldType.Type.Kind() == reflect.Struct {
-			// For nested structs, iterate over each nested field.
-			for j := 0; j < field.NumField(); j++ {
-				nestedField := field.Field(j)
-				nestedFieldType := fieldType.Type.Field(j)
-
-				// Get the form tag for the nested field.
-				nestedFormTag := nestedFieldType.Tag.Get("form")
-
-				// Construct the query parameter key using the prefix format (e.g., "b__field1").
-				queryParam := formTag + "__" + nestedFormTag
-
-				// If the query parameter exists, bind its value to the nested field.
-				if value, exists := values[queryParam]; exists && len(value) > 0 {
-					setValue(nestedField, nestedFieldType.Type.Kind(), value[0])
-				}
+		if field.Kind() == reflect.Ptr && field.Type().Elem().Kind() == reflect.Struct {
+			// Prepare sub-values for the nested struct based on its prefix.
+			subValues := filterValuesForNestedStruct(queryKey, values)
+			if len(subValues) > 0 {
+				// Only instantiate and populate the nested struct if relevant parameters exist.
+				nestedStructPtr := reflect.New(field.Type().Elem())
+				BindQueryParamsToStruct(nestedStructPtr.Interface(), subValues)
+				field.Set(nestedStructPtr)
 			}
+		} else if field.Kind() == reflect.Slice {
+			sliceHandler(field, typeField, values)
 		} else {
-			// For non-struct fields, directly bind the query parameter to the field if it exists.
-			if value, exists := values[formTag]; exists && len(value) > 0 {
-				setValue(field, fieldType.Type.Kind(), value[0])
+			// Handle direct assignment for basic types and pointers.
+			value, exists := values[queryKey]
+			if exists && len(value) > 0 {
+				assignValueToField(field, value[0])
 			}
 		}
 	}
-	return nil
 }
 
-// setValue sets the value of a field based on its kind.
-func setValue(field reflect.Value, kind reflect.Kind, value string) {
-	switch kind {
+func filterValuesForNestedStruct(prefix string, values url.Values) url.Values {
+	subValues := make(url.Values)
+	for k, v := range values {
+		if strings.HasPrefix(k, prefix+"[") && strings.HasSuffix(k, "]") {
+			subKey := strings.TrimPrefix(k, prefix+"[")
+			subKey = strings.TrimSuffix(subKey, "]")
+			subValues[subKey] = v
+		}
+	}
+	return subValues
+}
+
+func sliceHandler(field reflect.Value, typeField reflect.StructField, values url.Values) {
+	queryKey := typeField.Tag.Get("form")
+	if sliceValues, exists := values[queryKey]; exists {
+		sliceType := field.Type().Elem()
+		slice := reflect.MakeSlice(reflect.SliceOf(sliceType), 0, len(sliceValues))
+		for _, value := range sliceValues {
+			tempValue := reflect.New(sliceType).Elem()
+			if assignValueToField(tempValue, value) {
+				slice = reflect.Append(slice, tempValue)
+			}
+		}
+		field.Set(slice)
+	}
+}
+
+func assignValueToField(field reflect.Value, value string) bool {
+	if field.Kind() == reflect.Ptr {
+		// Allocate memory for pointers
+		field.Set(reflect.New(field.Type().Elem()))
+		field = field.Elem()
+	}
+
+	switch field.Kind() {
 	case reflect.String:
 		field.SetString(value)
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+	case reflect.Int, reflect.Int64:
 		if intValue, err := strconv.ParseInt(value, 10, 64); err == nil {
 			field.SetInt(intValue)
+			return true
 		}
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		if uintValue, err := strconv.ParseUint(value, 10, 64); err == nil {
-			field.SetUint(uintValue)
+	case reflect.Float32, reflect.Float64:
+		if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
+			field.SetFloat(floatValue)
+			return true
 		}
 	case reflect.Bool:
 		if boolValue, err := strconv.ParseBool(value); err == nil {
 			field.SetBool(boolValue)
+			return true
 		}
-	// Add more types as needed
-	default:
-		// Unsupported type
 	}
+	return false // Unsupported type
 }
