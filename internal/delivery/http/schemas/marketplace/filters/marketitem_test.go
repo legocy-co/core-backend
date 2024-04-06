@@ -23,6 +23,7 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 				"price_lte":                []string{"150.75"},
 				"set_state__in":            []string{"new", "used"},
 				"location__in":             []string{"store1", "store2"},
+				"set_id__in":               []string{"1", "2", "3"},
 				"lego_set[npieces_gte]":    []string{"100"},
 				"lego_set[npieces_lte]":    []string{"500"},
 				"lego_set[series_id__in]":  []string{"1", "2", "3"},
@@ -30,6 +31,7 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 				"lego_set[name__ilike]":    []string{"Millennium Falcon"},
 			},
 			wantStruct: MarketItemFilterDTO{
+				SetIDs:    []int{1, 2, 3},
 				PriceGTE:  ptrFloat64(50.5),
 				PriceLTE:  ptrFloat64(150.75),
 				SetStates: []string{"new", "used"},
