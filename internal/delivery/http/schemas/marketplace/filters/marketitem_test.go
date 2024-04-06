@@ -37,8 +37,8 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 				LegoSet: &filters.LegoSetFilterDTO{
 					NpiecesGTE: ptrInt(100),
 					NpiecesLTE: ptrInt(500),
-					SeriesIDs:  ptrSliceInt([]int{1, 2, 3}),
-					SetNumbers: ptrSliceInt([]int{123, 456}),
+					SeriesIDs:  []int{1, 2, 3},
+					SetNumbers: []int{123, 456},
 					Name:       ptrString("Millennium Falcon"),
 				},
 			},
@@ -47,7 +47,7 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 			name: "Missing LegoSet fields",
 			query: url.Values{
 				"price_gte":     []string{"100.0"},
-				"set_state__in": []string{"available,discontinued"},
+				"set_state__in": []string{"available", "discontinued"},
 				"location__in":  []string{"online"},
 			},
 			wantStruct: MarketItemFilterDTO{
@@ -60,10 +60,11 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 		{
 			name: "Partially filled nested struct",
 			query: url.Values{
-				"price_gte":             []string{"300.0"},
-				"set_state__in":         []string{"new", "used"},
-				"location__in":          []string{"online"},
-				"lego_set[npieces_gte]": []string{"100"}, // Only npieces_gte is provided for the nested struct
+				"price_gte":                []string{"300.0"},
+				"set_state__in":            []string{"new", "used"},
+				"location__in":             []string{"online"},
+				"lego_set[npieces_gte]":    []string{"100"},
+				"lego_set[set_number__in]": []string{"123", "456"},
 			},
 			wantStruct: MarketItemFilterDTO{
 				PriceGTE:  ptrFloat64(300.0),
@@ -73,7 +74,7 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 					NpiecesGTE: ptrInt(100),
 					NpiecesLTE: nil,
 					SeriesIDs:  nil,
-					SetNumbers: nil,
+					SetNumbers: []int{123, 456},
 					Name:       nil,
 				},
 			},
@@ -83,7 +84,10 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var gotStruct MarketItemFilterDTO
-			helpers.BindQueryParamsToStruct(&gotStruct, tt.query)
+			if err := helpers.BindQueryParamsToStruct(&gotStruct, tt.query); err != nil {
+				t.Errorf("%s: BindQueryParamsToStruct() error = %v", tt.name, err)
+				return
+			}
 			if !compareMarketItemFilterDTO(gotStruct, tt.wantStruct) {
 
 				jsonGotStruct, _ := json.Marshal(gotStruct)
@@ -139,29 +143,20 @@ func compareLegoSetFilterDTO(got, want filters.LegoSetFilterDTO) bool {
 	if (got.NpiecesLTE == nil) != (want.NpiecesLTE == nil) || (got.NpiecesLTE != nil && *got.NpiecesLTE != *want.NpiecesLTE) {
 		return false
 	}
-	if !compareOptionalIntSlice(got.SeriesIDs, want.SeriesIDs) {
-		return false
-	}
-	if !compareOptionalIntSlice(got.SetNumbers, want.SetNumbers) {
-		return false
-	}
+
 	if (got.Name == nil) != (want.Name == nil) || (got.Name != nil && *got.Name != *want.Name) {
 		return false
 	}
-	return true
-}
 
-func compareOptionalIntSlice(got, want *[]int) bool {
-	if got == nil && want == nil {
-		return true
-	}
-	if (got == nil) != (want == nil) {
+	if reflect.DeepEqual(got.SeriesIDs, want.SeriesIDs) == false {
 		return false
 	}
-	if got != nil && want != nil {
-		return reflect.DeepEqual(*got, *want)
+
+	if reflect.DeepEqual(got.SetNumbers, want.SetNumbers) == false {
+		return false
 	}
-	return false // Shouldn't reach here
+
+	return true
 }
 
 func compareFloat64Pointers(got, want *float64) bool {
