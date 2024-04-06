@@ -6,20 +6,14 @@ import (
 	legoFilters "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	"github.com/legocy-co/legocy/pkg/helpers"
-	log "github.com/sirupsen/logrus"
 )
 
 func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCriteria, *errors.AppError) {
 	var filterDTO MarketItemFilterDTO
 
-	binder := helpers.NestedQueryBinder{}
-
-	if err := binder.BindQuery(ctx, &filterDTO); err != nil {
-		log.Errorf("Failed to bind query parameters to filter DTO: %s", err.Error())
-		return nil, nil
-	}
-
-	log.Debugf("Filter DTO LegoSet: %+v", filterDTO.LegoSet)
+	helpers.BindQueryParamsToStruct(
+		&filterDTO, ctx.Request.URL.Query(),
+	)
 
 	return filterDTO.ToCriteria()
 }

@@ -34,17 +34,17 @@ func AddLegoSetFilters(
 
 	if criteria.SeriesIDs != nil {
 		if !isNested {
-			db = db.Where("lego_series_id IN ?", *criteria.SeriesIDs)
+			db = db.Where("lego_series_id IN ?", criteria.SeriesIDs)
 		} else {
-			db = db.Where("lego_sets.lego_series_id IN ?", *criteria.SeriesIDs)
+			db = db.Where("lego_sets.lego_series_id IN ?", criteria.SeriesIDs)
 		}
 	}
 
 	if criteria.SetNumbers != nil {
 		if !isNested {
-			db = db.Where("number IN ?", *criteria.SetNumbers)
+			db = db.Where("number IN ?", criteria.SetNumbers)
 		} else {
-			db = db.Where("lego_sets.number IN ?", *criteria.SetNumbers)
+			db = db.Where("lego_sets.number IN ?", criteria.SetNumbers)
 		}
 	}
 

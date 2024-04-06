@@ -1,78 +1,171 @@
 package helpers
 
 import (
-	"github.com/gin-gonic/gin"
+	"errors"
+	"net/url"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
-type NestedQueryBinder struct{}
+// BindQueryParamsToStruct dynamically populates the fields of a struct based on url.Values.
+func BindQueryParamsToStruct(v interface{}, values url.Values) error {
+	if reflect.TypeOf(v).Kind() != reflect.Ptr || reflect.ValueOf(v).Elem().Kind() != reflect.Struct {
+		return errors.New("target must be a pointer to a struct")
+	}
 
-func (b *NestedQueryBinder) BindQuery(c *gin.Context, obj any) error {
-	// Get the query parameters directly from gin.Context.
-	values := c.Request.URL.Query()
+	val := reflect.ValueOf(v).Elem()
+	typ := val.Type()
 
-	// Reflect on the object passed to the function to be able to set its fields.
-	objVal := reflect.ValueOf(obj).Elem()
+	for i := 0; i < val.NumField(); i++ {
+		field := val.Field(i)
+		fieldType := field.Type()
+		fieldTag := typ.Field(i).Tag
+		formTag := fieldTag.Get("form")
 
-	// Iterate over each field in the struct.
-	for i := 0; i < objVal.NumField(); i++ {
-		field := objVal.Field(i)
-		fieldType := objVal.Type().Field(i)
-
-		// Get the form tag for the current field. If not set, skip this field.
-		formTag := fieldType.Tag.Get("form")
 		if formTag == "" {
 			continue
 		}
 
-		// Check if the current field is a struct, indicating a nested structure.
-		if fieldType.Type.Kind() == reflect.Struct {
-			// For nested structs, iterate over each nested field.
-			for j := 0; j < field.NumField(); j++ {
-				nestedField := field.Field(j)
-				nestedFieldType := fieldType.Type.Field(j)
-
-				// Get the form tag for the nested field.
-				nestedFormTag := nestedFieldType.Tag.Get("form")
-
-				// Construct the query parameter key using the prefix format (e.g., "b__field1").
-				queryParam := formTag + "__" + nestedFormTag
-
-				// If the query parameter exists, bind its value to the nested field.
-				if value, exists := values[queryParam]; exists && len(value) > 0 {
-					setValue(nestedField, nestedFieldType.Type.Kind(), value[0])
+		switch fieldType.Kind() {
+		case reflect.Ptr:
+			ptrFieldType := fieldType.Elem()
+			if ptrFieldType.Kind() == reflect.Struct {
+				// Handle pointer to nested struct
+				newFieldPtr := reflect.New(ptrFieldType)
+				if err := BindQueryParamsToStruct(newFieldPtr.Interface(), extractSubValues(values, formTag)); err != nil {
+					return err
 				}
+				if !newFieldPtr.Elem().IsZero() {
+					field.Set(newFieldPtr)
+				}
+			} else {
+				// Handle pointer to primitive type
+				handlePointerField(field, values.Get(formTag))
 			}
-		} else {
-			// For non-struct fields, directly bind the query parameter to the field if it exists.
-			if value, exists := values[formTag]; exists && len(value) > 0 {
-				setValue(field, fieldType.Type.Kind(), value[0])
+		case reflect.Struct:
+			// Handle nested struct
+			newFieldStruct := reflect.New(fieldType).Elem()
+			if err := BindQueryParamsToStruct(newFieldStruct.Addr().Interface(), extractSubValues(values, formTag)); err != nil {
+				return err
 			}
+			field.Set(newFieldStruct)
+		case reflect.Slice:
+			handleSliceField(field, values[formTag])
+		default:
+			setFieldValue(field, values.Get(formTag))
 		}
 	}
+
 	return nil
 }
 
-// setValue sets the value of a field based on its kind.
-func setValue(field reflect.Value, kind reflect.Kind, value string) {
-	switch kind {
+// Existing helper functions (handlePointerField, handleSliceField, setFieldValue) should be included here.
+
+// extractSubValues extracts sub-struct values from url.Values for nested structures.
+func extractSubValues(values url.Values, prefix string) url.Values {
+	subValues := url.Values{}
+	for key, value := range values {
+		if strings.HasPrefix(key, prefix+"[") && strings.HasSuffix(key, "]") {
+			subKey := key[len(prefix)+1 : len(key)-1] // Remove the prefix and the enclosing brackets
+			subValues[subKey] = value
+		}
+	}
+
+	return subValues
+}
+
+// handlePointerField sets the field for pointer types
+func handlePointerField(field reflect.Value, value string) {
+	if value == "" {
+		return
+	}
+
+	newField := reflect.New(field.Type().Elem())
+
+	setFieldValue(newField.Elem(), value)
+	field.Set(newField)
+}
+
+func handleSliceField(field reflect.Value, values []string) {
+	elementType := field.Type().Elem()
+
+	slice := reflect.MakeSlice(field.Type(), 0, len(values))
+
+	for _, value := range values {
+		newElement := reflect.New(elementType).Elem()
+		if trySetSliceElement(newElement, value) {
+			slice = reflect.Append(slice, newElement)
+		}
+	}
+
+	if slice.Len() == 0 {
+		slice = reflect.Zero(reflect.SliceOf(elementType))
+	}
+
+	field.Set(slice)
+}
+
+func trySetSliceElement(element reflect.Value, value string) bool {
+	switch element.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		if intValue, err := strconv.ParseInt(value, 10, element.Type().Bits()); err == nil {
+			element.SetInt(intValue)
+			return true
+		} else {
+			return false
+		}
+	case reflect.Float32, reflect.Float64:
+		if floatValue, err := strconv.ParseFloat(value, element.Type().Bits()); err == nil {
+			element.SetFloat(floatValue)
+			return true
+		} else {
+			return false
+		}
+	case reflect.Bool:
+		if boolValue, err := strconv.ParseBool(value); err == nil {
+			element.SetBool(boolValue)
+			return true
+		} else {
+			return false
+		}
+	case reflect.String:
+		element.SetString(value)
+		return true
+	}
+
+	return false
+}
+
+// Modify setFieldValue to return false if parsing fails.
+func setFieldValue(field reflect.Value, value string) bool {
+	if value == "" {
+		return false
+	}
+
+	switch field.Kind() {
 	case reflect.String:
 		field.SetString(value)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		if intValue, err := strconv.ParseInt(value, 10, 64); err == nil {
 			field.SetInt(intValue)
+		} else {
+			return false
 		}
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		if uintValue, err := strconv.ParseUint(value, 10, 64); err == nil {
-			field.SetUint(uintValue)
+	case reflect.Float32, reflect.Float64:
+		if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
+			field.SetFloat(floatValue)
+		} else {
+			return false
 		}
 	case reflect.Bool:
 		if boolValue, err := strconv.ParseBool(value); err == nil {
 			field.SetBool(boolValue)
+		} else {
+			return false
 		}
-	// Add more types as needed
 	default:
-		// Unsupported type
+		return false
 	}
+	return true
 }
