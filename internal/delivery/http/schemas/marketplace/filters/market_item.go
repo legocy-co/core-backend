@@ -11,9 +11,10 @@ import (
 func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCriteria, *errors.AppError) {
 	var filterDTO MarketItemFilterDTO
 
-	helpers.BindQueryParamsToStruct(
-		&filterDTO, ctx.Request.URL.Query(),
-	)
+	if err := helpers.BindQueryParamsToStruct(&filterDTO, ctx.Request.URL.Query()); err != nil {
+		appErr := errors.NewAppError(errors.ValidationError, err.Error())
+		return nil, &appErr
+	}
 
 	return filterDTO.ToCriteria()
 }

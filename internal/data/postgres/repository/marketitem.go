@@ -33,20 +33,19 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 	query := db.Model(
 		&entities.MarketItemPostgres{},
 	).
-		Preload("Seller").
-		Preload(
-			"LegoSet",
-			func(db *gorm.DB) *gorm.DB {
-
-				if filter == nil {
-					return db
+		Joins("Seller").
+		Joins("LegoSet", func(db *gorm.DB) *gorm.DB {
+			if filter != nil {
+				if filter.LegoSet != nil {
+					db = filters.AddLegoSetFilters(db, filter.LegoSet, true, "LegoSet")
 				}
+			}
 
-				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
-			},
-		).
-		Preload("LegoSet.LegoSeries").
-		Preload("Images").
+			return db
+		}).
+		// FIXME: this ends up in LegoSet.LegoSeries instead of LEFT JOIN ...
+		Joins("LegoSet.LegoSeries").
+		Joins("Images").
 		Order("created_at DESC")
 
 	if filter != nil {
@@ -87,20 +86,18 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	query := db.Model(
 		&entities.MarketItemPostgres{},
 	).
-		Preload("Seller").
-		Preload("Images").
-		Preload(
-			"LegoSet",
-			func(db *gorm.DB) *gorm.DB {
-
-				if filter == nil {
-					return db
+		Joins("Seller").
+		Joins("LegoSet", func(db *gorm.DB) *gorm.DB {
+			if filter != nil {
+				if filter.LegoSet != nil {
+					db = filters.AddLegoSetFilters(db, filter.LegoSet, false, "lego_sets")
 				}
+			}
 
-				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
-			},
-		).
-		Preload("LegoSet.LegoSeries").
+			return db
+		}).
+		Joins("LegoSet.LegoSeries").
+		Joins("Images").
 		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).
 		Order("created_at DESC")
 
