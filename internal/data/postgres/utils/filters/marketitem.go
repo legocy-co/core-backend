@@ -15,6 +15,14 @@ func AddMarketItemsFilters(
 		return db
 	}
 
+	if criteria.SetIds != nil {
+		if isNested {
+			db = db.Where("market_items.lego_set_postgres_id IN ?", criteria.SetIds)
+		} else {
+			db = db.Where("lego_set_postgres_id IN ?", criteria.SetIds)
+		}
+	}
+
 	if criteria.MinPrice != nil {
 		if isNested {
 			db = db.Where("market_items.price >= ?", *criteria.MinPrice)
