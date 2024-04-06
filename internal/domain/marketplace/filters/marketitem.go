@@ -8,6 +8,7 @@ import (
 )
 
 type MarketItemFilterCriteria struct {
+	SetIds    []int
 	MinPrice  *float64
 	MaxPrice  *float64
 	SetStates []string
@@ -16,6 +17,7 @@ type MarketItemFilterCriteria struct {
 }
 
 func NewMarketItemFilterCriteria(
+	setIDs []int,
 	minPrice *float64,
 	maxPrice *float64,
 	setStates []string,
@@ -30,6 +32,7 @@ func NewMarketItemFilterCriteria(
 	}
 
 	return &MarketItemFilterCriteria{
+		SetIds:    setIDs,
 		MinPrice:  minPrice,
 		MaxPrice:  maxPrice,
 		SetStates: setStates,

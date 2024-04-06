@@ -19,6 +19,7 @@ func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCrite
 }
 
 type MarketItemFilterDTO struct {
+	SetIDs    []int                         `form:"set_id__in" json:"set_id__in"`
 	PriceGTE  *float64                      `form:"price_gte" json:"price_gte"`
 	PriceLTE  *float64                      `form:"price_lte" json:"price_lte"`
 	SetStates []string                      `form:"set_state__in" json:"set_state__in"`
@@ -30,6 +31,7 @@ func (dto *MarketItemFilterDTO) ToCriteria() (*domain.MarketItemFilterCriteria, 
 
 	if dto.LegoSet == nil {
 		return domain.NewMarketItemFilterCriteria(
+			dto.SetIDs,
 			dto.PriceGTE,
 			dto.PriceLTE,
 			dto.SetStates,
@@ -39,6 +41,7 @@ func (dto *MarketItemFilterDTO) ToCriteria() (*domain.MarketItemFilterCriteria, 
 	}
 
 	return domain.NewMarketItemFilterCriteria(
+		dto.SetIDs,
 		dto.PriceGTE,
 		dto.PriceLTE,
 		dto.SetStates,
