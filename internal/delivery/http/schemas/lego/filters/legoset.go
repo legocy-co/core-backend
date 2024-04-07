@@ -5,7 +5,7 @@ import (
 	domain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 )
 
-func GetLegoSetFilterCritera(ctx *gin.Context) *domain.LegoSetFilterCriteria {
+func GetLegoSetFilterCriteria(ctx *gin.Context) *domain.LegoSetFilterCriteria {
 	var filterDTO LegoSetFilterDTO
 
 	if err := ctx.BindQuery(&filterDTO); err != nil {

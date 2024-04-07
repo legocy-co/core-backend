@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/app/errors"
 	legoFilters "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
+	legoFilterDomain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	"github.com/legocy-co/legocy/pkg/helpers"
 )
@@ -30,15 +31,9 @@ type MarketItemFilterDTO struct {
 
 func (dto *MarketItemFilterDTO) ToCriteria() (*domain.MarketItemFilterCriteria, *errors.AppError) {
 
-	if dto.LegoSet == nil {
-		return domain.NewMarketItemFilterCriteria(
-			dto.SetIDs,
-			dto.PriceGTE,
-			dto.PriceLTE,
-			dto.SetStates,
-			dto.Locations,
-			nil,
-		)
+	var legoSetFilter *legoFilterDomain.LegoSetFilterCriteria = nil
+	if dto.LegoSet != nil {
+		legoSetFilter = dto.LegoSet.ToCriteria()
 	}
 
 	return domain.NewMarketItemFilterCriteria(
@@ -47,6 +42,6 @@ func (dto *MarketItemFilterDTO) ToCriteria() (*domain.MarketItemFilterCriteria, 
 		dto.PriceLTE,
 		dto.SetStates,
 		dto.Locations,
-		dto.LegoSet.ToCriteria(),
+		legoSetFilter,
 	)
 }

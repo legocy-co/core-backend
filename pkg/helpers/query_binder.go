@@ -100,7 +100,7 @@ func handleSliceField(field reflect.Value, values []string) {
 	}
 
 	if slice.Len() == 0 {
-		slice = reflect.Zero(reflect.SliceOf(elementType))
+		slice = reflect.Zero(field.Type())
 	}
 
 	field.Set(slice)

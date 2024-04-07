@@ -62,11 +62,11 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 		{
 			name: "Partially filled nested struct",
 			query: url.Values{
-				"price_gte":                []string{"300.0"},
-				"set_state__in":            []string{"new", "used"},
-				"location__in":             []string{"online"},
-				"lego_set[npieces_gte]":    []string{"100"},
-				"lego_set[set_number__in]": []string{"123", "456"},
+				"price_gte":               []string{"300.0"},
+				"set_state__in":           []string{"new", "used"},
+				"location__in":            []string{"online"},
+				"lego_set[npieces_gte]":   []string{"100"},
+				"lego_set[series_id__in]": []string{"123", "456"},
 			},
 			wantStruct: MarketItemFilterDTO{
 				PriceGTE:  ptrFloat64(300.0),
@@ -75,8 +75,8 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 				LegoSet: &filters.LegoSetFilterDTO{
 					NpiecesGTE: ptrInt(100),
 					NpiecesLTE: nil,
-					SeriesIDs:  nil,
-					SetNumbers: []int{123, 456},
+					SeriesIDs:  []int{123, 456},
+					SetNumbers: nil,
 					Name:       nil,
 				},
 			},

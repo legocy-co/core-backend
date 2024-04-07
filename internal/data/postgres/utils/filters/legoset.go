@@ -22,7 +22,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("n_pieces >= ?", *criteria.NpiecesGTE)
 		} else {
-			db = db.Where(fmt.Sprintf("%s.n_pieces >= ?", tablePrefix), *criteria.NpiecesGTE)
+			db = db.Where(fmt.Sprintf("%sn_pieces >= ?", tablePrefix), *criteria.NpiecesGTE)
 		}
 	}
 
@@ -30,7 +30,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("n_pieces <= ?", *criteria.NpiecesLTE)
 		} else {
-			db = db.Where(fmt.Sprintf("%s.n_pieces <= ?", tablePrefix), *criteria.NpiecesLTE)
+			db = db.Where(fmt.Sprintf("%sn_pieces <= ?", tablePrefix), *criteria.NpiecesLTE)
 		}
 	}
 
@@ -38,7 +38,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("lego_series_id IN ?", criteria.SeriesIDs)
 		} else {
-			db = db.Where(fmt.Sprintf("%s.lego_series_id IN ?", tablePrefix), criteria.SeriesIDs)
+			db = db.Where(fmt.Sprintf("%slego_series_id IN ?", tablePrefix), criteria.SeriesIDs)
 		}
 	}
 
@@ -46,7 +46,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("number IN ?", criteria.SetNumbers)
 		} else {
-			db = db.Where(fmt.Sprintf("%s.number IN ?", tablePrefix), criteria.SetNumbers)
+			db = db.Where(fmt.Sprintf("%snumber IN ?", tablePrefix), criteria.SetNumbers)
 		}
 	}
 
@@ -54,7 +54,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
 		} else {
-			db = db.Where(fmt.Sprintf("LOWER(%s.name) LIKE ?", tablePrefix), "%"+strings.ToLower(*criteria.Name)+"%")
+			db = db.Where(fmt.Sprintf("LOWER(%sname) LIKE ?", tablePrefix), "%"+strings.ToLower(*criteria.Name)+"%")
 		}
 	}
 
