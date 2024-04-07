@@ -117,7 +117,9 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext,
 	}
 
 	var total int64
-	totalQuery := pgFilter.AddLegoSetFilters(db.Model(&entities.LegoSetPostgres{}), filter, false)
+	totalQuery := pgFilter.AddLegoSetFilters(
+		db.Model(&entities.LegoSetPostgres{}), filter, false, "",
+	)
 	totalQuery.Count(&total)
 
 	var entitiesList []*entities.LegoSetPostgres
@@ -126,7 +128,7 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext,
 		entities.LegoSetPostgres{},
 	).Preload("LegoSeries").Preload("Images").Order("id desc")
 
-	query = pgFilter.AddLegoSetFilters(query, filter, false)
+	query = pgFilter.AddLegoSetFilters(query, filter, false, "")
 	query = utils.AddPaginationQuery(query, ctx)
 
 	_err := query.Find(&entitiesList).Error

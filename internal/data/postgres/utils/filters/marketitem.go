@@ -15,7 +15,7 @@ func AddMarketItemsFilters(
 		return db
 	}
 
-	if criteria.SetIds != nil {
+	if criteria.SetIds != nil && len(criteria.SetIds) > 0 {
 		if isNested {
 			db = db.Where("market_items.lego_set_postgres_id IN ?", criteria.SetIds)
 		} else {
@@ -39,7 +39,7 @@ func AddMarketItemsFilters(
 		}
 	}
 
-	if len(criteria.SetStates) > 0 {
+	if criteria.SetStates != nil && len(criteria.SetStates) > 0 {
 		if isNested {
 			db = db.Where("market_items.set_state IN ?", criteria.SetStates)
 		} else {
@@ -47,7 +47,7 @@ func AddMarketItemsFilters(
 		}
 	}
 
-	if len(criteria.Locations) > 0 {
+	if criteria.Locations != nil && len(criteria.Locations) > 0 {
 		if isNested {
 			db = db.Where("market_items.location IN ?", criteria.Locations)
 		} else {

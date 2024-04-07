@@ -11,7 +11,6 @@ import (
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/pkg/pagination"
-	"gorm.io/gorm"
 )
 
 type MarketItemPostgresRepository struct {
@@ -34,32 +33,27 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		&entities.MarketItemPostgres{},
 	).
 		Preload("Seller").
-		Preload(
-			"LegoSet",
-			func(db *gorm.DB) *gorm.DB {
-
-				if filter == nil {
-					return db
-				}
-
-				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
-			},
-		).
+		Joins("LegoSet").
 		Preload("LegoSet.LegoSeries").
 		Preload("Images").
-		Order("created_at DESC")
+		Order("created_at DESC").
+		Where("status = 'ACTIVE'")
 
 	if filter != nil {
 		query = filters.AddMarketItemsFilters(query, filter, false)
+		if filter.LegoSet != nil {
+			query = filters.AddLegoSetFilters(query, filter.LegoSet, true, "")
+		}
 	}
+
+	var total int64
+	query.Count(&total)
 
 	query = utils.AddPaginationQuery(query, ctx)
 
 	var itemsDB []*entities.MarketItemPostgres
-	res := query.Find(&itemsDB, "status = 'ACTIVE'")
-
-	if res.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, res.Error.Error())
+	if err := query.Find(&itemsDB).Error; err != nil {
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
 		return pagination.NewEmptyPage[*models.MarketItem](), &appErr
 	}
 
@@ -68,10 +62,8 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		marketItems = append(marketItems, entity.ToMarketItem())
 	}
 
-	var total int64
-	db.Model(&entities.MarketItemPostgres{}).Where("status = 'ACTIVE'").Count(&total)
-
-	return pagination.NewPage[*models.MarketItem](marketItems, int(total), ctx.GetLimit(), ctx.GetOffset()), nil
+	return pagination.NewPage[*models.MarketItem](
+		marketItems, int(total), ctx.GetLimit(), ctx.GetOffset()), nil
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
@@ -88,31 +80,26 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 		&entities.MarketItemPostgres{},
 	).
 		Preload("Seller").
-		Preload("Images").
-		Preload(
-			"LegoSet",
-			func(db *gorm.DB) *gorm.DB {
-
-				if filter == nil {
-					return db
-				}
-
-				return filters.AddLegoSetFilters(db, filter.LegoSet, false)
-			},
-		).
+		Joins("LegoSet").
 		Preload("LegoSet.LegoSeries").
+		Preload("Images").
 		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).
 		Order("created_at DESC")
 
 	if filter != nil {
 		query = filters.AddMarketItemsFilters(query, filter, false)
+		if filter.LegoSet != nil {
+			query = filters.AddLegoSetFilters(query, filter.LegoSet, true, "")
+		}
 	}
+
+	var total int64
+	query.Count(&total)
 
 	query = utils.AddPaginationQuery(query, ctx)
 
 	var itemsDB []*entities.MarketItemPostgres
 	queryResult := query.Find(&itemsDB)
-
 	if queryResult.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, queryResult.Error.Error())
 		return pagination.NewEmptyPage[*models.MarketItem](), &appErr
@@ -122,13 +109,6 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	for _, entity := range itemsDB {
 		marketItems = append(marketItems, entity.ToMarketItem())
 	}
-
-	var total int64
-	db.Model(
-		&entities.MarketItemPostgres{},
-	).Where(
-		"user_postgres_id <> ? and status = 'ACTIVE'", userID,
-	).Count(&total)
 
 	return pagination.NewPage[*models.MarketItem](
 		marketItems,

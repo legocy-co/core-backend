@@ -28,7 +28,7 @@ import (
 func (h *LegoSetHandler) ListSetsPaginated(c *gin.Context) {
 
 	ctx := pagination.GetPaginationContext(c)
-	filterCriteria := filters.GetLegoSetFilterCritera(c)
+	filterCriteria := filters.GetLegoSetFilterCriteria(c)
 
 	setsPage, appErr := h.service.GetSetsPage(ctx, filterCriteria)
 	if appErr != nil {

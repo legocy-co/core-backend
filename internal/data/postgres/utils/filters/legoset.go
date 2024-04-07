@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"fmt"
 	domain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	"gorm.io/gorm"
 	"strings"
@@ -10,6 +11,7 @@ func AddLegoSetFilters(
 	db *gorm.DB,
 	criteria *domain.LegoSetFilterCriteria,
 	isNested bool,
+	tablePrefix string,
 ) *gorm.DB {
 
 	if criteria == nil {
@@ -20,7 +22,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("n_pieces >= ?", *criteria.NpiecesGTE)
 		} else {
-			db = db.Where("lego_sets.n_pieces >= ?", *criteria.NpiecesGTE)
+			db = db.Where(fmt.Sprintf("%sn_pieces >= ?", tablePrefix), *criteria.NpiecesGTE)
 		}
 	}
 
@@ -28,7 +30,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("n_pieces <= ?", *criteria.NpiecesLTE)
 		} else {
-			db = db.Where("lego_sets.n_pieces <= ?", *criteria.NpiecesLTE)
+			db = db.Where(fmt.Sprintf("%sn_pieces <= ?", tablePrefix), *criteria.NpiecesLTE)
 		}
 	}
 
@@ -36,7 +38,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("lego_series_id IN ?", criteria.SeriesIDs)
 		} else {
-			db = db.Where("lego_sets.lego_series_id IN ?", criteria.SeriesIDs)
+			db = db.Where(fmt.Sprintf("%slego_series_id IN ?", tablePrefix), criteria.SeriesIDs)
 		}
 	}
 
@@ -44,7 +46,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("number IN ?", criteria.SetNumbers)
 		} else {
-			db = db.Where("lego_sets.number IN ?", criteria.SetNumbers)
+			db = db.Where(fmt.Sprintf("%snumber IN ?", tablePrefix), criteria.SetNumbers)
 		}
 	}
 
@@ -52,7 +54,7 @@ func AddLegoSetFilters(
 		if !isNested {
 			db = db.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
 		} else {
-			db = db.Where("LOWER(lego_sets.name) LIKE ?", "%"+strings.ToLower(*criteria.Name)+"%")
+			db = db.Where(fmt.Sprintf("LOWER(%sname) LIKE ?", tablePrefix), "%"+strings.ToLower(*criteria.Name)+"%")
 		}
 	}
 
