@@ -2,10 +2,10 @@ package postgres
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type UserReviewPostgresRepository struct {

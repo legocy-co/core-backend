@@ -1,10 +1,9 @@
 package marketplace
 
 import (
-	"github.com/legocy-co/legocy/config"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/internal/domain/users/errors"
-	"github.com/legocy-co/legocy/pkg/storage"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"strings"
 )
 
@@ -24,19 +23,6 @@ func NewImageUploadResponse(imageURL string, img *models.MarketItemImage) *Image
 
 type ImageDownloadRequest struct {
 	ImagePath string `json:"imagePath"`
-}
-
-func NewImageDownloadRequest(query string) (*ImageDownloadRequest, error) {
-	if len(query) < len(storage.MarketItemsBucketName) {
-		return nil, errors.ErrInvalidImageFilepath
-	}
-
-	// Check if bucket
-	if query[:len(storage.MarketItemsBucketName)] != storage.MarketItemsBucketName {
-		return nil, errors.ErrInvalidImageFilepath
-	}
-
-	return &ImageDownloadRequest{ImagePath: query}, nil
 }
 
 func (r ImageDownloadRequest) ToBucketNameImageName() (bucketName string, imageName string, err error) {

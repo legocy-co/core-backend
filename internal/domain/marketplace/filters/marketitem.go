@@ -1,10 +1,10 @@
 package filters
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
 	legoErrors "github.com/legocy-co/legocy/internal/domain/lego"
 	legoFilters "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	lego "github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type MarketItemFilterCriteria struct {

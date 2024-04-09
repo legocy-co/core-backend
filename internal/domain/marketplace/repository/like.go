@@ -1,8 +1,8 @@
 package marketplace
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type LikeRepository interface {

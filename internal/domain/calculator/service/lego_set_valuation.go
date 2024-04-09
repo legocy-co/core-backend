@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	"github.com/legocy-co/legocy/internal/domain/calculator/models"
 	"github.com/legocy-co/legocy/internal/domain/calculator/repository"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type LegoSetValuationService struct {

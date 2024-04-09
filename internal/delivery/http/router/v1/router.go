@@ -3,9 +3,9 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/legocy-co/legocy/docs"
-	"github.com/legocy-co/legocy/internal/app"
 	"github.com/legocy-co/legocy/internal/delivery/http/router/v1/admin"
 	"github.com/legocy-co/legocy/internal/delivery/http/router/v1/site"
+	"github.com/legocy-co/legocy/internal/pkg/app"
 	"github.com/legocy-co/legocy/pkg/logging"
 	"github.com/legocy-co/legocy/pkg/logging/util"
 	swaggerFiles "github.com/swaggo/files"

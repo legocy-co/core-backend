@@ -4,9 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/joho/godotenv"
-	"github.com/legocy-co/legocy/config"
 	d "github.com/legocy-co/legocy/internal/data"
-	"github.com/legocy-co/legocy/internal/fixtures"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	log "github.com/sirupsen/logrus"
 	"time"
@@ -38,15 +37,6 @@ func New() *App {
 		log.Fatalln("empty data config")
 	}
 	app.setDatabase(dbCfg)
-
-	// Fixtures
-	go func(load bool) {
-		if !load {
-			return
-		}
-		fixtures.LoadLegoSeries(app.GetLegoSeriesRepo())
-		fixtures.LoadLegoSets(app.GetLegoSetRepo(), app.GetLegoSeriesRepo())
-	}(dbCfg.LoadFixtures)
 
 	// Check all deps
 	if !app.isReady() {

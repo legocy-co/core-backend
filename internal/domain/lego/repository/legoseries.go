@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type LegoSeriesRepository interface {

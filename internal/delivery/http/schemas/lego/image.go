@@ -1,8 +1,8 @@
 package lego
 
 import (
-	"github.com/legocy-co/legocy/config"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 )
 
 type LegoSetImageResponse struct {

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type MarketItemImageService struct {

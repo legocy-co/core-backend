@@ -2,10 +2,10 @@ package filters
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	legoFilters "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	legoFilterDomain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/helpers"
 )
 

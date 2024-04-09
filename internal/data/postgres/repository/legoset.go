@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
@@ -10,6 +9,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/lego"
 	"github.com/legocy-co/legocy/internal/domain/lego/filters"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )
 

@@ -2,9 +2,9 @@ package site
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/internal/app"
 	ih "github.com/legocy-co/legocy/internal/delivery/http/handlers/lego/image"
 	h "github.com/legocy-co/legocy/internal/delivery/http/handlers/lego/legoset"
+	"github.com/legocy-co/legocy/internal/pkg/app"
 	m "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 

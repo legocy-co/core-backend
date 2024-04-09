@@ -2,9 +2,9 @@ package postgres
 
 import (
 	"fmt"
-	"github.com/legocy-co/legocy/config"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/logging"
 	log "github.com/sirupsen/logrus"
 

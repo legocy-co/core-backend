@@ -1,10 +1,9 @@
 package users
 
 import (
-	"github.com/legocy-co/legocy/config"
-	"github.com/legocy-co/legocy/internal/delivery/http/constants"
 	"github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"strings"
 )
 
@@ -22,19 +21,6 @@ func GetUserImageUploadResponse(imgUrl string) *UserImageUploadResponse {
 
 type UserDownloadImageRequest struct {
 	ImagePath string `json:"imagePath"`
-}
-
-func NewUserDownloadImageRequest(query string) (*UserDownloadImageRequest, error) {
-	if len(query) < len(constants.UserImagesBucketName) {
-		return nil, errors.ErrInvalidImageFilepath
-	}
-
-	// Check if bucket
-	if query[:5] != constants.UserImagesBucketName {
-		return nil, errors.ErrInvalidImageFilepath
-	}
-
-	return &UserDownloadImageRequest{ImagePath: query}, nil
 }
 
 func (r UserDownloadImageRequest) ToBucketNameImageName() (bucketName string, imageName string, err error) {

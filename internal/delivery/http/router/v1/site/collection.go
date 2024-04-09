@@ -2,9 +2,9 @@ package site
 
 import (
 	"github.com/gin-gonic/gin"
-	a "github.com/legocy-co/legocy/internal/app"
 	collection "github.com/legocy-co/legocy/internal/delivery/http/handlers/collection/user_collection"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
+	a "github.com/legocy-co/legocy/internal/pkg/app"
 )
 
 func AddUserCollections(rg *gin.RouterGroup, app *a.App) {

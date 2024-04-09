@@ -2,12 +2,12 @@ package admin
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )

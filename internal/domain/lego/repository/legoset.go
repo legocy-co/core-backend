@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	"github.com/legocy-co/legocy/internal/domain/lego/filters"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )
 

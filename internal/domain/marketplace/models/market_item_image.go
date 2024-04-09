@@ -1,6 +1,8 @@
 package marketplace
 
-import "github.com/legocy-co/legocy/internal/app/errors"
+import (
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+)
 
 type MarketItemImageValueObject struct {
 	MarketItemID int    `validate:"required"`
@@ -21,13 +23,4 @@ type MarketItemImage struct {
 	MarketItemID int    `validate:"required"`
 	ImageURL     string `validate:"required"`
 	IsMain       bool   `validate:"default=false"`
-}
-
-func NewMarketItemImage(id int, marketItemID int, imageURL string, isMain bool) (*MarketItemImage, *errors.AppError) {
-	return &MarketItemImage{
-		ID:           id,
-		MarketItemID: marketItemID,
-		ImageURL:     imageURL,
-		IsMain:       isMain,
-	}, nil
 }

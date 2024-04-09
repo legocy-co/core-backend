@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
 	r "github.com/legocy-co/legocy/internal/domain/lego/repository"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"golang.org/x/net/context"
 )
 

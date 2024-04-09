@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	calculator "github.com/legocy-co/legocy/internal/domain/calculator/models"
 	c "github.com/legocy-co/legocy/internal/domain/calculator/repository"
 	"github.com/legocy-co/legocy/internal/domain/collections"
@@ -10,6 +9,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/collections/repository"
 	users "github.com/legocy-co/legocy/internal/domain/users/models"
 	u "github.com/legocy-co/legocy/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type UserCollectionService struct {
