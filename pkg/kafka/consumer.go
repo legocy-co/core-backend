@@ -2,7 +2,7 @@ package kafka
 
 import (
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
-	"github.com/legocy-co/legocy/config"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 )
 
 func NewKafkaConsumer(topicNames []string) (*kafka.Consumer, error) {

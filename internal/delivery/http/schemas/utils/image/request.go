@@ -3,7 +3,7 @@ package image
 import (
 	"github.com/legocy-co/legocy/internal/domain/users/errors"
 	"github.com/legocy-co/legocy/pkg/helpers"
-	"github.com/legocy-co/legocy/pkg/storage"
+	"github.com/legocy-co/legocy/pkg/s3"
 	"strings"
 )
 
@@ -15,7 +15,7 @@ func NewDownloadImageRequest(imagePath string) (*DownloadImageRequest, error) {
 
 	bucketName := strings.Split(imagePath, "/")[0]
 
-	if !helpers.Contains(storage.BucketNames, bucketName) {
+	if !helpers.Contains(s3.BucketNames, bucketName) {
 		return nil, errors.ErrInvalidImageFilepath
 	}
 

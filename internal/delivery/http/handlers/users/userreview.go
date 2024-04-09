@@ -2,11 +2,11 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"

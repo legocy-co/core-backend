@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/pagination"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"

@@ -2,17 +2,17 @@ package site
 
 import (
 	"github.com/gin-gonic/gin"
-	a "github.com/legocy-co/legocy/internal/app"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/image"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/market_item"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
+	"github.com/legocy-co/legocy/internal/pkg/app"
 	jwt "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 
-func AddMarketItems(rg *gin.RouterGroup, app *a.App) {
+func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 
 	handler := market_item.NewMarketItemHandler(
-		app.GetMarketItemService())
+		a.GetMarketItemService())
 
 	items := rg.Group("/market-items")
 	{
@@ -24,7 +24,7 @@ func AddMarketItems(rg *gin.RouterGroup, app *a.App) {
 			items.GET("/:itemID", handler.MarketItemDetail)
 
 			privateRoutes := items.Group("")
-			privateRoutes.Use(middleware.ItemOwnerOrAdmin("itemId", app.GetMarketItemRepo()))
+			privateRoutes.Use(middleware.ItemOwnerOrAdmin("itemId", a.GetMarketItemRepo()))
 			{
 				privateRoutes.DELETE("/:itemId", handler.DeleteMarketItem)
 				privateRoutes.PUT("/:itemId", handler.UpdateMarketItemByID)
@@ -32,7 +32,7 @@ func AddMarketItems(rg *gin.RouterGroup, app *a.App) {
 
 			checkSlotsRoutes := items.Group("")
 			checkSlotsRoutes.Use(
-				middleware.HasFreeMarketItemsSlot(a.MaxItemsOwnedByUser, app.GetMarketItemRepo()))
+				middleware.HasFreeMarketItemsSlot(app.MaxItemsOwnedByUser, a.GetMarketItemRepo()))
 			{
 				checkSlotsRoutes.POST("/", handler.CreateMarketItem)
 			}
@@ -41,9 +41,9 @@ func AddMarketItems(rg *gin.RouterGroup, app *a.App) {
 
 	itemImages := rg.Group("/market-items/images")
 	{
-		handler := image.NewHandler(app.GetMarketItemImageService(), app.GetImageStorageClient())
+		handler := image.NewHandler(a.GetMarketItemImageService(), a.GetImageStorageClient())
 
-		itemImages.Use(middleware.IsMarketItemOwner("marketItemID", app.GetMarketItemRepo()))
+		itemImages.Use(middleware.IsMarketItemOwner("marketItemID", a.GetMarketItemRepo()))
 		{
 			itemImages.POST("/:marketItemID", handler.UploadImage)
 			itemImages.DELETE("/:imageId", handler.Delete)

@@ -3,12 +3,12 @@ package site
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/legocy-co/legocy/docs"
-	"github.com/legocy-co/legocy/internal/app"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/profile"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/userImage"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
+	"github.com/legocy-co/legocy/internal/pkg/app"
 	jwt "github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 

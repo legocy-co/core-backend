@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/utils/image"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/pkg/storage"
+	"github.com/legocy-co/legocy/pkg/s3"
 	"net/http"
 	"strconv"
 )
@@ -30,7 +30,7 @@ func (h Handler) UploadImage(ctx *gin.Context) {
 	// Call generic upload handler
 	uploadHandler := image.NewUploadHandler(
 		h.storage,
-		storage.MarketItemsBucketName,
+		s3.MarketItemsBucketName,
 		"marketItemID",
 	)
 

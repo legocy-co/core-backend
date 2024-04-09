@@ -3,10 +3,10 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	log "github.com/sirupsen/logrus"

@@ -2,9 +2,9 @@ package app
 
 import (
 	"fmt"
-	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/data/postgres"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )

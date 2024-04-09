@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 

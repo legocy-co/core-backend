@@ -2,9 +2,9 @@ package admin
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	"github.com/legocy-co/legocy/internal/domain/calculator/models"
 	repository "github.com/legocy-co/legocy/internal/domain/calculator/repository/admin"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type LegoSetValuationAdminService struct {

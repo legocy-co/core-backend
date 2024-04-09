@@ -2,10 +2,10 @@ package client
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/pkg/storage"
-	"github.com/legocy-co/legocy/pkg/storage/models"
-	"github.com/legocy-co/legocy/pkg/storage/proto"
-	"github.com/legocy-co/legocy/pkg/storage/proto/mapper"
+	"github.com/legocy-co/legocy/pkg/s3"
+	"github.com/legocy-co/legocy/pkg/s3/models"
+	"github.com/legocy-co/legocy/pkg/s3/proto"
+	"github.com/legocy-co/legocy/pkg/s3/proto/mapper"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,7 +15,7 @@ func (s ImageStorage) UploadImage(
 	conn, err := s.getConnection()
 	if err != nil {
 		log.Fatalf("did not connect %v", err)
-		return "", storage.ErrConnectionRefused
+		return "", s3.ErrConnectionRefused
 	}
 
 	defer conn.Close()

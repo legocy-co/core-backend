@@ -2,9 +2,9 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
-	a "github.com/legocy-co/legocy/internal/app"
 	h "github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/admin/marketItem"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/image"
+	a "github.com/legocy-co/legocy/internal/pkg/app"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 

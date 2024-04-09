@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"github.com/legocy-co/legocy/config"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	log "github.com/sirupsen/logrus"
 	"net/http"

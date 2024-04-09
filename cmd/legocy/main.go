@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/legocy-co/legocy/internal/app"
 	r "github.com/legocy-co/legocy/internal/delivery/http/router/v1"
+	"github.com/legocy-co/legocy/internal/pkg/app"
 )
 
 func main() {

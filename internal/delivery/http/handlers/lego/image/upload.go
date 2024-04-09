@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/utils/image"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
-	"github.com/legocy-co/legocy/pkg/storage"
+	"github.com/legocy-co/legocy/pkg/s3"
 	"net/http"
 	"strconv"
 )
@@ -29,7 +29,7 @@ func (h LegoSetImageHandler) Upload(ctx *gin.Context) {
 	// Call generic upload handler
 	uploadHandler := image.NewUploadHandler(
 		h.storage,
-		storage.LegoSetsBucketName,
+		s3.LegoSetsBucketName,
 		"legoSetID",
 	)
 

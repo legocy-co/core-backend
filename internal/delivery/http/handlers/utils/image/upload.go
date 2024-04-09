@@ -2,8 +2,8 @@ package image
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/pkg/storage/client"
-	image "github.com/legocy-co/legocy/pkg/storage/models"
+	"github.com/legocy-co/legocy/pkg/s3/client"
+	image "github.com/legocy-co/legocy/pkg/s3/models"
 	"strconv"
 )
 
@@ -33,7 +33,7 @@ func NewUploadHandler(s client.ImageStorage, bucketName, objectIdQueryParam stri
 		// Domain Image
 		img := image.ImageUnitFromFile(src, objectId, file.Filename, file.Size)
 
-		// Save image to storage
+		// Save image to s3
 		imgUrl, err := s.UploadImage(img, bucketName)
 		if err != nil {
 			return "", err

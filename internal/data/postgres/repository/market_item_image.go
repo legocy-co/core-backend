@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"github.com/legocy-co/legocy/internal/app/errors"
 	"github.com/legocy-co/legocy/internal/data"
 	e "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/kafka/schemas"
 	log "github.com/sirupsen/logrus"

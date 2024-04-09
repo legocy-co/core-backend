@@ -2,9 +2,9 @@ package admin
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/internal/app/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )
 
