@@ -7,6 +7,7 @@ import (
 	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/logging"
 	log "github.com/sirupsen/logrus"
+	"time"
 
 	postgres "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -70,6 +71,15 @@ func (psql *PostgresConnection) Init() {
 	if err != nil {
 		log.Fatalln(fmt.Sprintf("[Postgres] %v", err.Error()))
 	}
+
+	sqlDB, err := psql.db.DB()
+	if err != nil {
+		log.Fatalln(fmt.Sprintf("[Postgres] %v", err.Error()))
+	}
+
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(500)
+	sqlDB.SetConnMaxLifetime(time.Minute * 30)
 }
 
 func (psql *PostgresConnection) GetDB() *gorm.DB {

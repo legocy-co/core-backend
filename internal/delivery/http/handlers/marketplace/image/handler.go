@@ -2,7 +2,7 @@ package image
 
 import (
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
-	"github.com/legocy-co/legocy/pkg/storage/client"
+	"github.com/legocy-co/legocy/pkg/s3/client"
 )
 
 type Handler struct {

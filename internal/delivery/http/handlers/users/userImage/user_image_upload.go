@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/utils/image"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	userModels "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/pkg/storage"
+	"github.com/legocy-co/legocy/pkg/s3"
 	"net/http"
 	"strconv"
 )
@@ -31,7 +31,7 @@ func (h UserImageHandler) UploadUserImage(c *gin.Context) {
 
 	uploadHandler := image.NewUploadHandler(
 		h.storage,
-		storage.UserBucketName,
+		s3.UserBucketName,
 		"userID",
 	)
 

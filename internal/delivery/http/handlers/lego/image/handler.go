@@ -2,7 +2,7 @@ package image
 
 import (
 	"github.com/legocy-co/legocy/internal/domain/lego/service"
-	storage "github.com/legocy-co/legocy/pkg/storage/client"
+	storage "github.com/legocy-co/legocy/pkg/s3/client"
 )
 
 type LegoSetImageHandler struct {

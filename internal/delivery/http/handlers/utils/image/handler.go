@@ -1,6 +1,6 @@
 package image
 
-import "github.com/legocy-co/legocy/pkg/storage/client"
+import "github.com/legocy-co/legocy/pkg/s3/client"
 
 type Handler struct {
 	storage client.ImageStorage

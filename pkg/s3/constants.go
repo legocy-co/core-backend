@@ -1,4 +1,4 @@
-package storage
+package s3
 
 const (
 	UserBucketName        = "users"
