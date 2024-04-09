@@ -66,3 +66,7 @@ func (a *App) GetMarketItemImageRepository() marketplace.MarketItemImageReposito
 func (a *App) GetLegoSetImageRepository() lego.LegoSetImageRepository {
 	return postgres.NewLegoSetImagePostgresRepository(a.GetDatabase())
 }
+
+func (a *App) GetMarketItemLikeRepository() marketplace.LikeRepository {
+	return postgres.NewLikePostgresRepository(a.GetDatabase())
+}
