@@ -8,5 +8,5 @@ import (
 type LikeRepository interface {
 	AddLike(vo models.LikeValueObject) *errors.AppError
 	RemoveLike(vo models.LikeValueObject) *errors.AppError
-	GetLikesByUserID(userID int) ([]models.Like, *errors.AppError)
+	GetLikesByUserID(userID int) ([]*models.Like, *errors.AppError)
 }

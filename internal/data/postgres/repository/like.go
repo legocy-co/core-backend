@@ -59,7 +59,7 @@ func (r LikePostgresRepository) RemoveLike(vo models.LikeValueObject) *errors.Ap
 	return nil
 }
 
-func (r LikePostgresRepository) GetLikesByUserID(userID int) ([]models.Like, *errors.AppError) {
+func (r LikePostgresRepository) GetLikesByUserID(userID int) ([]*models.Like, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
 		return nil, &d.ErrConnectionLost
@@ -82,9 +82,9 @@ func (r LikePostgresRepository) GetLikesByUserID(userID int) ([]models.Like, *er
 		return nil, &appErr
 	}
 
-	likesDomain := make([]models.Like, 0, len(likes))
+	likesDomain := make([]*models.Like, 0, len(likes))
 	for _, entity := range likes {
-		likesDomain = append(likesDomain, *entity.ToMarketItemLike())
+		likesDomain = append(likesDomain, entity.ToMarketItemLike())
 	}
 
 	return likesDomain, nil
