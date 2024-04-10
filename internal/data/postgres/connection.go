@@ -59,6 +59,7 @@ func (psql *PostgresConnection) Init() {
 
 		entities.MarketItemPostgres{},
 		entities.MarketItemImagePostgres{},
+		entities.MarketItemLikePostgres{},
 
 		entities.UserImagePostgres{},
 

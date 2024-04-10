@@ -3,6 +3,7 @@ package site
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/image"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/like"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/marketplace/market_item"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
 	"github.com/legocy-co/legocy/internal/pkg/app"
@@ -11,11 +12,10 @@ import (
 
 func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 
-	handler := market_item.NewMarketItemHandler(
-		a.GetMarketItemService())
-
 	items := rg.Group("/market-items")
 	{
+		handler := market_item.NewMarketItemHandler(a.GetMarketItemService())
+
 		items.GET("/", handler.ListMarketItems)
 
 		items.Use(jwt.IsAuthenticated())
@@ -47,6 +47,17 @@ func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 		{
 			itemImages.POST("/:marketItemID", handler.UploadImage)
 			itemImages.DELETE("/:imageId", handler.Delete)
+		}
+	}
+
+	likeRoutes := rg.Group("/market-items/like")
+	{
+		handler := like.NewHandler(a.GetMarketItemLikeRepository())
+
+		likeRoutes.Use(jwt.IsAuthenticated())
+		{
+			likeRoutes.POST("/:marketItemID", handler.LikeMarketItem)
+			likeRoutes.DELETE("/:marketItemID", handler.UnlikeMarketItem)
 		}
 	}
 
