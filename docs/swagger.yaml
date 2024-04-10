@@ -1983,6 +1983,26 @@ paths:
       summary: Download User Image
       tags:
       - users_images
+  /users/profile/:
+    get:
+      operationId: basic_user_profile_page
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Current User Profile Info
+      tags:
+      - user_profile_pages
   /users/profile/{userID}:
     get:
       operationId: detail_user_profile_page

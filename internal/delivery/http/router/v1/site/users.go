@@ -33,6 +33,7 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 	profileRoutes := rg.Group("/users/profile").Use(jwt.IsAuthenticated())
 	{
 		profileRoutes.GET("/:userID", profileHandler.UserProfilePageDetail)
+		profileRoutes.GET("/", profileHandler.GetProfileBasic)
 
 		privateProfileRoutes := profileRoutes.Use(middleware.IsOwnerOrAdmin("userID"))
 		{
