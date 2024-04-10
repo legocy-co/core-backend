@@ -1584,7 +1584,42 @@ const docTemplate = `{
                 }
             }
         },
-        "/market-items/like/{marketItemID}": {
+        "/market-items/likes/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Get Liked Items",
+                "operationId": "get_liked_items",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.LikeResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/market-items/likes/{marketItemID}": {
             "post": {
                 "security": [
                     {
@@ -2848,6 +2883,17 @@ const docTemplate = `{
                 },
                 "ok": {
                     "type": "boolean"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.LikeResponse": {
+            "type": "object",
+            "properties": {
+                "market_item_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },

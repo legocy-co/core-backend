@@ -50,12 +50,13 @@ func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 		}
 	}
 
-	likeRoutes := rg.Group("/market-items/like")
+	likeRoutes := rg.Group("/market-items/likes")
 	{
 		handler := like.NewHandler(a.GetMarketItemLikeRepository())
 
 		likeRoutes.Use(jwt.IsAuthenticated())
 		{
+			likeRoutes.GET("/", handler.GetLikedItems)
 			likeRoutes.POST("/:marketItemID", handler.LikeMarketItem)
 			likeRoutes.DELETE("/:marketItemID", handler.UnlikeMarketItem)
 		}

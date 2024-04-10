@@ -17,7 +17,7 @@ import (
 // @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} map[string]interface{}
 // @Failure 401 {object} map[string]interface{}
-// @Router /market-items/like/{marketItemID} [delete]
+// @Router /market-items/likes/{marketItemID} [delete]
 // @Security JWT
 func (h *Handler) UnlikeMarketItem(c *gin.Context) {
 
