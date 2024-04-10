@@ -21,7 +21,7 @@ import (
 //		@Router		/users/profile/{userID} [put]
 //
 //		@Security	JWT
-func (h UserProfilePageHandler) UpdateUserProfile(ctx *gin.Context) {
+func (h *UserProfilePageHandler) UpdateUserProfile(ctx *gin.Context) {
 	userID, err := strconv.Atoi(ctx.Param("userID"))
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})

@@ -2330,6 +2330,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/profile/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_profile_pages"
+                ],
+                "summary": "Get Current User Profile Info",
+                "operationId": "basic_user_profile_page",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/users/profile/{userID}": {
             "get": {
                 "security": [
