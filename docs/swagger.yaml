@@ -1334,6 +1334,11 @@ paths:
         type: number
       - in: query
         items:
+          type: integer
+        name: set_id__in
+        type: array
+      - in: query
+        items:
           type: string
         name: set_state__in
         type: array
@@ -1489,6 +1494,11 @@ paths:
         type: number
       - in: query
         items:
+          type: integer
+        name: set_id__in
+        type: array
+      - in: query
+        items:
           type: string
         name: set_state__in
         type: array
@@ -1571,6 +1581,69 @@ paths:
       summary: Upload Image
       tags:
       - market_item_images
+  /market-items/like/{marketItemID}:
+    delete:
+      operationId: unlike_market_item
+      parameters:
+      - description: Market Item ID
+        in: path
+        name: marketItemID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Unlike Market Item
+      tags:
+      - market_items
+    post:
+      operationId: like_market_item
+      parameters:
+      - description: Market Item ID
+        in: path
+        name: marketItemID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Like Market Item
+      tags:
+      - market_items
   /series/:
     get:
       operationId: list_lego_series

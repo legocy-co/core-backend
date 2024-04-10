@@ -1335,6 +1335,14 @@ const docTemplate = `{
                     {
                         "type": "array",
                         "items": {
+                            "type": "integer"
+                        },
+                        "name": "set_id__in",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
                             "type": "string"
                         },
                         "name": "set_state__in",
@@ -1444,6 +1452,14 @@ const docTemplate = `{
                     {
                         "type": "number",
                         "name": "price_lte",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "name": "set_id__in",
                         "in": "query"
                     },
                     {
@@ -1560,6 +1576,102 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/market-items/like/{marketItemID}": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Like Market Item",
+                "operationId": "like_market_item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Market Item ID",
+                        "name": "marketItemID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Unlike Market Item",
+                "operationId": "unlike_market_item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Market Item ID",
+                        "name": "marketItemID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
