@@ -59,7 +59,11 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
 	for _, entity := range itemsDB {
-		marketItems = append(marketItems, entity.ToMarketItem())
+		marketItem, err := entity.ToMarketItem()
+		if err != nil {
+			return pagination.NewEmptyPage[*models.MarketItem](), err
+		}
+		marketItems = append(marketItems, marketItem)
 	}
 
 	return pagination.NewPage[*models.MarketItem](
@@ -83,6 +87,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 		Joins("LegoSet").
 		Preload("LegoSet.LegoSeries").
 		Preload("Images").
+		Preload("Likes", "user_id = ?", userID).
 		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).
 		Order("created_at DESC")
 
@@ -107,7 +112,11 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
 	for _, entity := range itemsDB {
-		marketItems = append(marketItems, entity.ToMarketItem())
+		marketItem, err := entity.ToMarketItem()
+		if err != nil {
+			return pagination.NewEmptyPage[*models.MarketItem](), err
+		}
+		marketItems = append(marketItems, marketItem)
 	}
 
 	return pagination.NewPage[*models.MarketItem](
@@ -135,7 +144,7 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 		return nil, &e.ErrMarketItemsNotFound
 	}
 
-	return entity.ToMarketItem(), nil
+	return entity.ToMarketItem()
 }
 
 func (r MarketItemPostgresRepository) GetPendingMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError) {
@@ -154,7 +163,7 @@ func (r MarketItemPostgresRepository) GetPendingMarketItemByID(c context.Context
 		return nil, &e.ErrMarketItemsNotFound
 	}
 
-	return entity.ToMarketItem(), nil
+	return entity.ToMarketItem()
 }
 
 func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
@@ -177,7 +186,11 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 
 	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
 	for _, entity := range itemsDB {
-		marketItems = append(marketItems, entity.ToMarketItem())
+		marketItem, err := entity.ToMarketItem()
+		if err != nil {
+			return nil, err
+		}
+		marketItems = append(marketItems, marketItem)
 	}
 
 	return marketItems, nil

@@ -43,6 +43,7 @@ type MarketItemResponse struct {
 	SetState    string                        `json:"set_state"`
 	Description string                        `json:"description"`
 	Images      []ImageResponse               `json:"images"`
+	IsLiked     bool                          `json:"is_liked"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
@@ -56,5 +57,6 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		SetState:    m.SetState,
 		Description: m.Description,
 		Images:      GetImagesResponse(m.Images),
+		IsLiked:     m.Liked,
 	}
 }

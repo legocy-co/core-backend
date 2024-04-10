@@ -24,7 +24,8 @@ func (l *MarketItemLikePostgres) ToMarketItemLike() *models.Like {
 }
 
 func (l *MarketItemLikePostgres) ToMarketItemLikeAggregate() *models.Like {
-	return models.NewLikeAggregate(l.MarketItemID, l.MarketItem.ToMarketItem(), l.UserID, l.User.ToUser())
+	marketItem, _ := l.MarketItem.ToMarketItem()
+	return models.NewLikeAggregate(l.MarketItemID, marketItem, l.UserID, l.User.ToUser())
 }
 
 func (l *MarketItemLikePostgres) UpdatedFields(vo *models.LikeValueObject) {

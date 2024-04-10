@@ -2932,6 +2932,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse"
                     }
                 },
+                "is_liked": {
+                    "type": "boolean"
+                },
                 "lego_set": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
                 },

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
+	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type MarketItemPostgres struct {
@@ -16,30 +17,32 @@ type MarketItemPostgres struct {
 	SetState          string                    `gorm:"not null"`
 	Description       string                    `gorm:"not null"`
 	Images            []MarketItemImagePostgres `gorm:"foreignKey:MarketItemID"`
+	Likes             []MarketItemLikePostgres  `gorm:"foreignKey:MarketItemID"`
 }
 
 func (mp MarketItemPostgres) TableName() string {
 	return "market_items"
 }
 
-func (mp *MarketItemPostgres) ToMarketItem() *models.MarketItem {
+func (mp *MarketItemPostgres) ToMarketItem() (*models.MarketItem, *errors.AppError) {
 
 	images := make([]*models.MarketItemImage, 0, len(mp.Images))
 	for _, img := range mp.Images {
 		images = append(images, img.ToMarketItemImage())
 	}
 
-	return &models.MarketItem{
-		ID:          int(mp.ID),
-		LegoSet:     *mp.LegoSet.ToLegoSet(),
-		Seller:      *mp.Seller.ToUser(),
-		Price:       mp.Price,
-		Location:    mp.Location,
-		Status:      mp.Status,
-		SetState:    mp.SetState,
-		Description: mp.Description,
-		Images:      images,
-	}
+	return models.NewMarketItem(
+		int(mp.ID),
+		*mp.LegoSet.ToLegoSet(),
+		*mp.Seller.ToUser(),
+		mp.Price,
+		mp.Location,
+		mp.SetState,
+		mp.Status,
+		mp.Description,
+		images,
+		len(mp.Likes) != 0,
+	)
 }
 
 func FromMarketItemValueObject(mi *models.MarketItemValueObject) *MarketItemPostgres {
