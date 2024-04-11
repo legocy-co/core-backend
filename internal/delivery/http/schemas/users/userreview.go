@@ -6,7 +6,7 @@ import (
 )
 
 type UserReviewRequest struct {
-	SellerID int    `json:"seller_id"`
+	SellerID int    `json:"sellerID"`
 	Rating   int    `json:"rating"`
 	Message  string `json:"message"`
 }

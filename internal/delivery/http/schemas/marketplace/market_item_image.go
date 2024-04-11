@@ -2,9 +2,7 @@ package marketplace
 
 import (
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/domain/users/errors"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"strings"
 )
 
 type ImageUploadResponse struct {
@@ -21,31 +19,10 @@ func NewImageUploadResponse(imageURL string, img *models.MarketItemImage) *Image
 	}
 }
 
-type ImageDownloadRequest struct {
-	ImagePath string `json:"imagePath"`
-}
-
-func (r ImageDownloadRequest) ToBucketNameImageName() (bucketName string, imageName string, err error) {
-	fp := r.ImagePath
-	if f := string(fp[0]); f == "/" {
-		fp = fp[1:]
-	}
-
-	idx := strings.Index(fp, "/")
-	if idx == len(fp)-1 {
-		return "", "", errors.ErrInvalidImageFilepath
-	}
-	if idx < 0 || len(fp[idx+1:]) <= 0 {
-		return "", "", errors.ErrInvalidImageFilepath
-	}
-
-	return fp[:idx], fp[idx+1:], nil
-}
-
 type ImageResponse struct {
 	ID       int    `json:"id"`
-	ImageURL string `json:"image_url"`
-	IsMain   bool   `json:"is_main"`
+	ImageURL string `json:"imageURL"`
+	IsMain   bool   `json:"isMain"`
 }
 
 func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {

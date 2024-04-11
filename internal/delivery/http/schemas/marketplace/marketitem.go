@@ -9,10 +9,10 @@ import (
 )
 
 type MarketItemRequest struct {
-	LegoSetID   int     `json:"lego_set_id"`
+	LegoSetID   int     `json:"legoSetID"`
 	Price       float32 `json:"price"`
 	Location    string  `json:"location"`
-	SetState    string  `json:"set_state"`
+	SetState    string  `json:"setState"`
 	Description string  `json:"description"`
 }
 
@@ -37,13 +37,13 @@ type MarketItemResponse struct {
 	ID          int                           `json:"id"`
 	Price       float32                       `json:"price"`
 	Location    string                        `json:"location"`
-	LegoSet     legoResources.LegoSetResponse `json:"lego_set"`
+	LegoSet     legoResources.LegoSetResponse `json:"legoSet"`
 	Seller      users.UserDetailResponse      `json:"seller"`
 	Status      string                        `json:"status"`
-	SetState    string                        `json:"set_state"`
+	SetState    string                        `json:"setState"`
 	Description string                        `json:"description"`
 	Images      []ImageResponse               `json:"images"`
-	IsLiked     bool                          `json:"is_liked"`
+	IsLiked     bool                          `json:"isLiked"`
 }
 
 func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {

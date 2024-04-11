@@ -7,7 +7,7 @@ import (
 
 type LegoSetValuationResponse struct {
 	ID        int                  `json:"id"`
-	LegoSet   lego.LegoSetResponse `json:"lego_set"`
+	LegoSet   lego.LegoSetResponse `json:"legoSet"`
 	State     string               `json:"state"`
 	Valuation float32              `json:"valuation"`
 }

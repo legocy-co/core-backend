@@ -10,12 +10,12 @@ import (
 )
 
 type MarketItemAdminCreateRequest struct {
-	LegoSetID   int     `json:"lego_set_id"`
-	SellerID    int     `json:"seller_id"`
+	LegoSetID   int     `json:"legoSetID"`
+	SellerID    int     `json:"sellerID"`
 	Price       float32 `json:"price"`
 	Location    string  `json:"location"`
 	Status      string  `json:"status"`
-	SetState    string  `json:"set_state"`
+	SetState    string  `json:"setState"`
 	Description string  `json:"description"`
 }
 
@@ -42,12 +42,12 @@ func (r MarketItemAdminCreateRequest) ToMarketItemAdminValueObject() (
 }
 
 type MarketItemAdminUpdateRequest struct {
-	LegoSetID   int     `json:"lego_set_id"`
-	SellerID    int     `json:"seller_id"`
+	LegoSetID   int     `json:"legoSetID"`
+	SellerID    int     `json:"sellerID"`
 	Price       float32 `json:"price"`
 	Location    string  `json:"location"`
 	Status      string  `json:"status"`
-	SetState    string  `json:"set_state"`
+	SetState    string  `json:"setState"`
 	Description string  `json:"description"`
 }
 
@@ -77,10 +77,10 @@ type MarketItemAdminResponse struct {
 	ID          int                         `json:"id"`
 	Price       float32                     `json:"price"`
 	Location    string                      `json:"location"`
-	LegoSet     lego.LegoSetResponse        `json:"lego_set"`
+	LegoSet     lego.LegoSetResponse        `json:"legoSet"`
 	Seller      users.UserDetailResponse    `json:"seller"`
 	Status      string                      `json:"status"`
-	SetState    string                      `json:"set_state"`
+	SetState    string                      `json:"setState"`
 	Description string                      `json:"description"`
 	Images      []marketplace.ImageResponse `json:"images"`
 }

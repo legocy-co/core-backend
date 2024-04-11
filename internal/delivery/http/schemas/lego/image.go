@@ -7,9 +7,9 @@ import (
 
 type LegoSetImageResponse struct {
 	ID        int    `json:"id"`
-	LegoSetID int    `json:"lego_set_id"`
-	IsMain    bool   `json:"is_main"`
-	ImageURL  string `json:"image_url"`
+	LegoSetID int    `json:"legoSetID"`
+	IsMain    bool   `json:"isMain"`
+	ImageURL  string `json:"imageURL"`
 }
 
 func GetLegoSetImageResponse(m *models.LegoSetImage) LegoSetImageResponse {

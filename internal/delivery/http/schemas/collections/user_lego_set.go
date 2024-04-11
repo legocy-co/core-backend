@@ -12,16 +12,16 @@ import (
 
 type CollectionLegoSetResponse struct {
 	ID         int                                  `json:"id"`
-	LegoSet    legoResources.LegoSetResponse        `json:"lego_set"`
+	LegoSet    legoResources.LegoSetResponse        `json:"legoSet"`
 	Valuation  *calculator.LegoSetValuationResponse `json:"valuation"`
-	SetProfits *UserLegoSetProfitsResponse          `json:"set_profits"`
+	SetProfits *UserLegoSetProfitsResponse          `json:"setProfits"`
 	State      string                               `json:"state"`
-	BuyPrice   float32                              `json:"buy_price"`
+	BuyPrice   float32                              `json:"buyPrice"`
 }
 
 type UserLegoSetProfitsResponse struct {
-	TotalReturnUSD        float32 `json:"total_return_usd"`
-	TotalReturnPercentage float32 `json:"total_return_percentage"`
+	TotalReturnUSD        float32 `json:"totalReturnUSD"`
+	TotalReturnPercentage float32 `json:"totalReturnPercentage"`
 }
 
 func GetCollectionLegoSetResponse(collectionSet models.CollectionLegoSet, valuation *calculatorModels.LegoSetValuation) CollectionLegoSetResponse {
