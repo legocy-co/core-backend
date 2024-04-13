@@ -3296,7 +3296,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse": {
             "type": "object",
             "properties": {
-                "market_items": {
+                "marketItems": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse"
@@ -3305,7 +3305,7 @@ const docTemplate = `{
                 "user": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
                 },
-                "user_reviews": {
+                "userReviews": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse"

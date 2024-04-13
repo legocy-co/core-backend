@@ -440,13 +440,13 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse:
     properties:
-      market_items:
+      marketItems:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse'
         type: array
       user:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
-      user_reviews:
+      userReviews:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse'
         type: array
