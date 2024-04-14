@@ -2,7 +2,7 @@ basePath: /api/v1
 definitions:
   github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationCreateRequest:
     properties:
-      lego_set_id:
+      legoSetID:
         type: integer
       state:
         type: string
@@ -13,7 +13,7 @@ definitions:
     properties:
       id:
         type: integer
-      lego_set:
+      legoSet:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
       state:
         type: string
@@ -22,7 +22,7 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationUpdateRequest:
     properties:
-      lego_set_id:
+      legoSetID:
         type: integer
       state:
         type: string
@@ -40,13 +40,13 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetResponse:
     properties:
-      buy_price:
+      buyPrice:
         type: number
       id:
         type: integer
-      lego_set:
+      legoSet:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
-      set_profits:
+      setProfits:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse'
       state:
         type: string
@@ -64,9 +64,9 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse:
     properties:
-      total_return_percentage:
+      totalReturnPercentage:
         type: number
-      total_return_usd:
+      totalReturnUSD:
         type: number
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationResponse:
@@ -82,18 +82,18 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals:
     properties:
-      sets_valuated:
+      setsValuated:
         type: integer
       total:
         type: number
-      total_profits:
+      totalProfits:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse'
-      total_sets:
+      totalSets:
         type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetCollectionResponse:
     properties:
-      collection_sets:
+      collectionSets:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetResponse'
         type: array
@@ -104,9 +104,9 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse:
     properties:
-      total_return_percentage:
+      totalReturnPercentage:
         type: number
-      total_return_usd:
+      totalReturnUSD:
         type: number
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesRequest:
@@ -125,22 +125,22 @@ definitions:
     properties:
       id:
         type: integer
-      image_url:
+      imageURL:
         type: string
-      is_main:
+      isMain:
         type: boolean
-      lego_set_id:
+      legoSetID:
         type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetRequest:
     properties:
-      n_pieces:
+      nPieces:
         type: integer
       name:
         type: string
       number:
         type: integer
-      series_id:
+      seriesID:
         type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse:
@@ -151,7 +151,7 @@ definitions:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse'
         type: array
-      n_pieces:
+      nPieces:
         type: integer
       name:
         type: string
@@ -181,9 +181,9 @@ definitions:
     properties:
       id:
         type: integer
-      image_url:
+      imageURL:
         type: string
-      is_main:
+      isMain:
         type: boolean
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse:
@@ -197,22 +197,22 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.LikeResponse:
     properties:
-      market_item_id:
+      marketItemID:
         type: integer
-      user_id:
+      userID:
         type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemRequest:
     properties:
       description:
         type: string
-      lego_set_id:
+      legoSetID:
         type: integer
       location:
         type: string
       price:
         type: number
-      set_state:
+      setState:
         type: string
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse:
@@ -225,9 +225,9 @@ definitions:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse'
         type: array
-      is_liked:
+      isLiked:
         type: boolean
-      lego_set:
+      legoSet:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
       location:
         type: string
@@ -235,7 +235,7 @@ definitions:
         type: number
       seller:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
-      set_state:
+      setState:
         type: string
       status:
         type: string
@@ -244,15 +244,15 @@ definitions:
     properties:
       description:
         type: string
-      lego_set_id:
+      legoSetID:
         type: integer
       location:
         type: string
       price:
         type: number
-      seller_id:
+      sellerID:
         type: integer
-      set_state:
+      setState:
         type: string
       status:
         type: string
@@ -267,7 +267,7 @@ definitions:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse'
         type: array
-      lego_set:
+      legoSet:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse'
       location:
         type: string
@@ -275,7 +275,7 @@ definitions:
         type: number
       seller:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
-      set_state:
+      setState:
         type: string
       status:
         type: string
@@ -284,34 +284,34 @@ definitions:
     properties:
       description:
         type: string
-      lego_set_id:
+      legoSetID:
         type: integer
       location:
         type: string
       price:
         type: number
-      seller_id:
+      sellerID:
         type: integer
-      set_state:
+      setState:
         type: string
       status:
         type: string
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.AccessTokenResponse:
     properties:
-      access_token:
+      accessToken:
         type: string
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse:
     properties:
-      access_token:
+      accessToken:
         type: string
-      refresh_token:
+      refreshToken:
         type: string
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.RefreshTokenRequest:
     properties:
-      refresh_token:
+      refreshToken:
         type: string
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.SignInRequest:
@@ -374,7 +374,7 @@ definitions:
         type: string
       rating:
         type: integer
-      seller_id:
+      sellerID:
         type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse:
@@ -440,13 +440,13 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse:
     properties:
-      market_items:
+      marketItems:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse'
         type: array
       user:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
-      user_reviews:
+      userReviews:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse'
         type: array

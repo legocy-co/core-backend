@@ -7,8 +7,8 @@ import (
 
 type UserProfilePageResponse struct {
 	User        users.UserDetailResponse         `json:"user"`
-	UserReviews []users.UserReviewResponse       `json:"user_reviews"`
-	MarketItems []marketplace.MarketItemResponse `json:"market_items"`
+	UserReviews []users.UserReviewResponse       `json:"userReviews"`
+	MarketItems []marketplace.MarketItemResponse `json:"marketItems"`
 }
 
 func GetUserProfilePageResponse(

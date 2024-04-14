@@ -7,8 +7,8 @@ import (
 type LegoSetRequest struct {
 	Name         string `json:"name"`
 	Number       int    `json:"number"`
-	NPieces      int    `json:"n_pieces"`
-	LegoSeriesID int    `json:"series_id"`
+	NPieces      int    `json:"nPieces"`
+	LegoSeriesID int    `json:"seriesID"`
 }
 
 func (l *LegoSetRequest) ToLegoSeriesValueObject() *models.LegoSetValueObject {
@@ -24,7 +24,7 @@ type LegoSetResponse struct {
 	ID      int                    `json:"id"`
 	Name    string                 `json:"name"`
 	Number  int                    `json:"number"`
-	NPieces int                    `json:"n_pieces"`
+	NPieces int                    `json:"nPieces"`
 	Series  LegoSeriesResponse     `json:"series"`
 	Images  []LegoSetImageResponse `json:"images"`
 }

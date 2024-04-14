@@ -8,7 +8,7 @@ import (
 )
 
 type LegoSetValuationCreateRequest struct {
-	LegoSetID int     `json:"lego_set_id"`
+	LegoSetID int     `json:"legoSetID"`
 	State     string  `json:"state"`
 	Valuation float32 `json:"valuation"`
 }
@@ -32,7 +32,7 @@ func (r LegoSetValuationCreateRequest) ToLegoSetValuationVO() (
 }
 
 type LegoSetValuationUpdateRequest struct {
-	LegoSetID int     `json:"lego_set_id"`
+	LegoSetID int     `json:"legoSetID"`
 	State     string  `json:"state"`
 	Valuation float32 `json:"valuation"`
 }

@@ -8,7 +8,7 @@ import (
 
 type UserLegoSetCollectionResponse struct {
 	User   users.UserDetailResponse      `json:"user"`
-	Sets   []CollectionLegoSetResponse   `json:"collection_sets"`
+	Sets   []CollectionLegoSetResponse   `json:"collectionSets"`
 	Totals UserCollectionValuationTotals `json:"totals"`
 }
 

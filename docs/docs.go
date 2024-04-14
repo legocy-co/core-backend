@@ -2619,7 +2619,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationCreateRequest": {
             "type": "object",
             "properties": {
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 },
                 "state": {
@@ -2636,7 +2636,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "lego_set": {
+                "legoSet": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
                 },
                 "state": {
@@ -2650,7 +2650,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_calculator.LegoSetValuationUpdateRequest": {
             "type": "object",
             "properties": {
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 },
                 "state": {
@@ -2678,16 +2678,16 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetResponse": {
             "type": "object",
             "properties": {
-                "buy_price": {
+                "buyPrice": {
                     "type": "number"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "lego_set": {
+                "legoSet": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
                 },
-                "set_profits": {
+                "setProfits": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse"
                 },
                 "state": {
@@ -2715,10 +2715,10 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse": {
             "type": "object",
             "properties": {
-                "total_return_percentage": {
+                "totalReturnPercentage": {
                     "type": "number"
                 },
-                "total_return_usd": {
+                "totalReturnUSD": {
                     "type": "number"
                 }
             }
@@ -2743,16 +2743,16 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserCollectionValuationTotals": {
             "type": "object",
             "properties": {
-                "sets_valuated": {
+                "setsValuated": {
                     "type": "integer"
                 },
                 "total": {
                     "type": "number"
                 },
-                "total_profits": {
+                "totalProfits": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionTotalProfitsResponse"
                 },
-                "total_sets": {
+                "totalSets": {
                     "type": "integer"
                 }
             }
@@ -2760,7 +2760,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetCollectionResponse": {
             "type": "object",
             "properties": {
-                "collection_sets": {
+                "collectionSets": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetResponse"
@@ -2777,10 +2777,10 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.UserLegoSetProfitsResponse": {
             "type": "object",
             "properties": {
-                "total_return_percentage": {
+                "totalReturnPercentage": {
                     "type": "number"
                 },
-                "total_return_usd": {
+                "totalReturnUSD": {
                     "type": "number"
                 }
             }
@@ -2810,13 +2810,13 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "image_url": {
+                "imageURL": {
                     "type": "string"
                 },
-                "is_main": {
+                "isMain": {
                     "type": "boolean"
                 },
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 }
             }
@@ -2824,7 +2824,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetRequest": {
             "type": "object",
             "properties": {
-                "n_pieces": {
+                "nPieces": {
                     "type": "integer"
                 },
                 "name": {
@@ -2833,7 +2833,7 @@ const docTemplate = `{
                 "number": {
                     "type": "integer"
                 },
-                "series_id": {
+                "seriesID": {
                     "type": "integer"
                 }
             }
@@ -2850,7 +2850,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetImageResponse"
                     }
                 },
-                "n_pieces": {
+                "nPieces": {
                     "type": "integer"
                 },
                 "name": {
@@ -2896,10 +2896,10 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "image_url": {
+                "imageURL": {
                     "type": "string"
                 },
-                "is_main": {
+                "isMain": {
                     "type": "boolean"
                 }
             }
@@ -2921,10 +2921,10 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.LikeResponse": {
             "type": "object",
             "properties": {
-                "market_item_id": {
+                "marketItemID": {
                     "type": "integer"
                 },
-                "user_id": {
+                "userID": {
                     "type": "integer"
                 }
             }
@@ -2935,7 +2935,7 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 },
                 "location": {
@@ -2944,7 +2944,7 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "set_state": {
+                "setState": {
                     "type": "string"
                 }
             }
@@ -2964,10 +2964,10 @@ const docTemplate = `{
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse"
                     }
                 },
-                "is_liked": {
+                "isLiked": {
                     "type": "boolean"
                 },
-                "lego_set": {
+                "legoSet": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
                 },
                 "location": {
@@ -2979,7 +2979,7 @@ const docTemplate = `{
                 "seller": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
                 },
-                "set_state": {
+                "setState": {
                     "type": "string"
                 },
                 "status": {
@@ -2993,7 +2993,7 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 },
                 "location": {
@@ -3002,10 +3002,10 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "seller_id": {
+                "sellerID": {
                     "type": "integer"
                 },
-                "set_state": {
+                "setState": {
                     "type": "string"
                 },
                 "status": {
@@ -3028,7 +3028,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageResponse"
                     }
                 },
-                "lego_set": {
+                "legoSet": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSetResponse"
                 },
                 "location": {
@@ -3040,7 +3040,7 @@ const docTemplate = `{
                 "seller": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
                 },
-                "set_state": {
+                "setState": {
                     "type": "string"
                 },
                 "status": {
@@ -3054,7 +3054,7 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 },
                 "location": {
@@ -3063,10 +3063,10 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "seller_id": {
+                "sellerID": {
                     "type": "integer"
                 },
-                "set_state": {
+                "setState": {
                     "type": "string"
                 },
                 "status": {
@@ -3077,7 +3077,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.AccessTokenResponse": {
             "type": "object",
             "properties": {
-                "access_token": {
+                "accessToken": {
                     "type": "string"
                 }
             }
@@ -3085,10 +3085,10 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse": {
             "type": "object",
             "properties": {
-                "access_token": {
+                "accessToken": {
                     "type": "string"
                 },
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -3096,7 +3096,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.RefreshTokenRequest": {
             "type": "object",
             "properties": {
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -3194,7 +3194,7 @@ const docTemplate = `{
                 "rating": {
                     "type": "integer"
                 },
-                "seller_id": {
+                "sellerID": {
                     "type": "integer"
                 }
             }
@@ -3296,7 +3296,7 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse": {
             "type": "object",
             "properties": {
-                "market_items": {
+                "marketItems": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemResponse"
@@ -3305,7 +3305,7 @@ const docTemplate = `{
                 "user": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
                 },
-                "user_reviews": {
+                "userReviews": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewResponse"
