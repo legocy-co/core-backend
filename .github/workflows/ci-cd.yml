@@ -18,6 +18,7 @@ jobs:
       - name: Create .env file from Secrets
         run: |
             set | grep ^ENV_ | sed 's/^ENV_//' | sed 's/^/export /' > .env
+            cat .env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
