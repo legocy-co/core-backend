@@ -40,7 +40,7 @@ jobs:
           context: .
           file: ./deploy/Dockerfile
           push: true
-          tags: {{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVICE_NAME }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVICE_NAME }}:latest
 
 #  deploy-to-vps:
 #    needs: build-and-push
