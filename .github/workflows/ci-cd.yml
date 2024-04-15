@@ -57,5 +57,5 @@ jobs:
           script: |
             cd /home/ubuntu/src/deployment/
             docker system prune -f -a
-            docker-compose pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVICE_NAME }}:latest
-            docker-compose up -d ${{ secrets.SERVICE_NAME }}
+            docker image pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVICE_NAME }}
+            docker-compose up -d --force-recreate --no-deps ${{ secrets.SERVICE_NAME }}
