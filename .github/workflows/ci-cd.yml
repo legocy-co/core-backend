@@ -12,19 +12,19 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Create .env file from Secrets
       - uses: actions/checkout@v3
       - uses: thaind0/envfile@v1
         with:
           secrets: ${{ toJSON(secrets) }}
           include: ENV_*
-      - run: |
-          env | grep ^ENV_ | sed 's/^ENV_//' | sed 's/^/export /' > .env
-          cat .env
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create .env file from Secrets
+        run: |
+            env | grep ^ENV_ | sed 's/^ENV_//' | sed 's/^/export /' > .env
+            cat .env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
