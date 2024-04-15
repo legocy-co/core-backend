@@ -40,7 +40,7 @@ jobs:
           context: .
           file: ./deploy/Dockerfile
           push: true
-          tags: tkozzzlov/${{ secrets.SERVICE_NAME }}:latest
+          tags: {{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVICE_NAME }}:latest
 
 #  deploy-to-vps:
 #    needs: build-and-push
@@ -54,5 +54,5 @@ jobs:
 #          key: ${{ secrets.VPS_SSH_KEY }}
 #          script: |
 #            cd /home/ubuntu/src/deployment/
-#            docker-compose pull tkozzzlov/${{ secrets.SERVICE_NAME }}:latest
+#            docker-compose pull {{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVICE_NAME }}:latest
 #            docker-compose up -d ${{ secrets.SERVICE_NAME }}
