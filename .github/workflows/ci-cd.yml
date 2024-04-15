@@ -25,6 +25,7 @@ jobs:
         run: |
             env | grep ENV_ | sed 's/ENV_//g' > .env
             cat .env
+            cat ./deploy/Dockerfile
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
