@@ -1,0 +1,24 @@
+name: Compile & Run Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.20'  # Specify the Go version you need
+
+      - name: Build project
+        run: go build ./cmd/legocy/main.go
+
+      - name: Run tests
+        run: go test ./...
