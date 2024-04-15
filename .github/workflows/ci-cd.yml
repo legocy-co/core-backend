@@ -42,17 +42,17 @@ jobs:
           push: true
           tags: tkozzzlov/${{ secrets.SERVICE_NAME }}:latest
 
-  deploy-to-vps:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /home/ubuntu/src/deployment/
-            docker-compose pull tkozzzlov/${{ secrets.SERVICE_NAME }}:latest
-            docker-compose up -d ${{ secrets.SERVICE_NAME }}
+#  deploy-to-vps:
+#    needs: build-and-push
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Deploy to VPS
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.VPS_HOST }}
+#          username: ${{ secrets.VPS_USERNAME }}
+#          key: ${{ secrets.VPS_SSH_KEY }}
+#          script: |
+#            cd /home/ubuntu/src/deployment/
+#            docker-compose pull tkozzzlov/${{ secrets.SERVICE_NAME }}:latest
+#            docker-compose up -d ${{ secrets.SERVICE_NAME }}
