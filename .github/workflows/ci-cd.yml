@@ -23,7 +23,7 @@ jobs:
 
       - name: Create .env file from Secrets
         run: |
-            env | grep ^ENV_ | sed 's/^ENV_//' | sed 's/^/export /' > .env
+            env | grep ENV_ | sed 's/ENV_//g' > .env
             cat .env
 
       - name: Set up Docker Buildx
