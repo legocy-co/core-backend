@@ -2701,10 +2701,10 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_collections.CollectionLegoSetUpdateRequest": {
             "type": "object",
             "properties": {
-                "buy_price": {
+                "buyPrice": {
                     "type": "number"
                 },
-                "lego_set_id": {
+                "legoSetID": {
                     "type": "integer"
                 },
                 "state": {

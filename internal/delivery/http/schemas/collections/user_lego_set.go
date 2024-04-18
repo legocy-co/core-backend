@@ -75,9 +75,9 @@ func (r CollectionLegoSetAddRequest) ToCollectionLegoSetValueObject() (*models.C
 }
 
 type CollectionLegoSetUpdateRequest struct {
-	LegoSetID int     `json:"lego_set_id"`
+	LegoSetID int     `json:"legoSetID"`
 	State     string  `json:"state"`
-	BuyPrice  float32 `json:"buy_price"`
+	BuyPrice  float32 `json:"buyPrice"`
 }
 
 func (r CollectionLegoSetUpdateRequest) ToCollectionLegoSetValueObject() (*models.CollectionLegoSetValueObject, error) {
