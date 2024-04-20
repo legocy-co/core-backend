@@ -31,14 +31,18 @@ func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, pa
 		return &h.ErrHashError
 	}
 
-	var entity entities.UserPostgres = *entities.FromUser(u, passwordHash)
+	tx := db.Begin()
 
-	result := db.Create(&entity)
+	entity := *entities.FromUser(u, passwordHash)
 
-	if result.Error != nil {
-		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+	if err := tx.Create(entity).Error; err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
 		return &appErr
 	}
+
+	tx.Commit()
+	u = entity.ToUser()
 
 	if err := kafka.ProduceJSONEvent(kafka.UserCreatedTopic, users.FromDomain(u)); err != nil {
 		appErr := errors.NewAppError(errors.InternalError, err.Error())
