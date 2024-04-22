@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
@@ -17,7 +18,33 @@ func NewUserReviewPostgresRepository(
 	return UserReviewPostgresRepository{conn: conn}
 }
 
-func (r UserReviewPostgresRepository) GetUserReviews(
+func (r *UserPostgresRepository) GetUserReviewsTotals(c context.Context, sellerID int) (*models.UserRevewTotals, *errors.AppError) {
+
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return nil, &d.ErrConnectionLost
+	}
+
+	var totalReviews int64
+	var averageRating float64
+
+	query := db.Model(&entities.UserReviewPostgres{SellerPostgresID: uint(sellerID)})
+
+	if err := query.Count(&totalReviews).Error; err != nil {
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return nil, &appErr
+	}
+
+	if err := query.Select("AVG(rating) as average_rating").Scan(&averageRating).Error; err != nil {
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return nil, &appErr
+	}
+
+	return models.NewUserRevewTotals(averageRating, int(totalReviews)), nil
+}
+
+func (r *UserReviewPostgresRepository) GetUserReviews(
 	c context.Context) ([]*models.UserReview, *errors.AppError) {
 
 	var itemsDB []*entities.UserReviewPostgres
@@ -50,7 +77,7 @@ func (r UserReviewPostgresRepository) GetUserReviews(
 	return userReviews, nil
 }
 
-func (r UserReviewPostgresRepository) GetUserReviewByID(
+func (r *UserReviewPostgresRepository) GetUserReviewByID(
 	c context.Context, id int) (*models.UserReview, *errors.AppError) {
 
 	db := r.conn.GetDB()
@@ -76,7 +103,7 @@ func (r UserReviewPostgresRepository) GetUserReviewByID(
 	return userReview, nil
 }
 
-func (r UserReviewPostgresRepository) GetUserReviewsBySellerID(
+func (r *UserReviewPostgresRepository) GetUserReviewsBySellerID(
 	c context.Context, sellerID int) ([]*models.UserReview, *errors.AppError) {
 
 	var userReviewsDB []*entities.UserReviewPostgres
@@ -112,7 +139,7 @@ func (r UserReviewPostgresRepository) GetUserReviewsBySellerID(
 	return userReviews, nil
 }
 
-func (r UserReviewPostgresRepository) GetReviewerID(
+func (r *UserReviewPostgresRepository) GetReviewerID(
 	c context.Context, id int) (int, *errors.AppError) {
 
 	var count int
@@ -133,7 +160,7 @@ func (r UserReviewPostgresRepository) GetReviewerID(
 	return count, appErr
 }
 
-func (r UserReviewPostgresRepository) CreateUserReview(
+func (r *UserReviewPostgresRepository) CreateUserReview(
 	c context.Context, review *models.UserReviewValueObject) *errors.AppError {
 
 	db := r.conn.GetDB()
@@ -156,7 +183,7 @@ func (r UserReviewPostgresRepository) CreateUserReview(
 	return appErr
 }
 
-func (r UserReviewPostgresRepository) DeleteUserReview(c context.Context, id int) *errors.AppError {
+func (r *UserReviewPostgresRepository) DeleteUserReview(c context.Context, id int) *errors.AppError {
 
 	db := r.conn.GetDB()
 

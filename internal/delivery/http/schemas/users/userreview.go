@@ -1,8 +1,9 @@
 package users
 
 import (
-	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"time"
+
+	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 )
 
 type UserReviewRequest struct {
@@ -38,5 +39,17 @@ func GetUserReviewResponse(m *models.UserReview) UserReviewResponse {
 		Date:     m.Date,
 		Seller:   GetUserDetailResponse(&m.Seller),
 		Reviewer: GetUserDetailResponse(&m.Reviewer),
+	}
+}
+
+type UserReviewTotalsResponse struct {
+	AvgRating    float64 `json:"avgRating"`
+	TotalReviews int     `json:"totalReviews"`
+}
+
+func GetUserReviewsTotalsResponse(m *models.UserRevewTotals) *UserReviewTotalsResponse {
+	return &UserReviewTotalsResponse{
+		AvgRating:    m.AvgRating,
+		TotalReviews: m.TotalReviews,
 	}
 }

@@ -2,7 +2,9 @@ package marketplace
 
 import (
 	"errors"
-	"github.com/legocy-co/legocy/internal/domain/users/models"
+	"math"
+
+	auth "github.com/legocy-co/legocy/internal/domain/users/models"
 )
 
 type UserReview struct {
@@ -20,6 +22,18 @@ type UserReviewValueObject struct {
 	Rating     int
 	Message    string
 	Date       string
+}
+
+type UserRevewTotals struct {
+	AvgRating    float64
+	TotalReviews int
+}
+
+func NewUserRevewTotals(AvgRating float64, TotalReviews int) *UserRevewTotals {
+	return &UserRevewTotals{
+		AvgRating:    math.Max(AvgRating, 0),
+		TotalReviews: TotalReviews,
+	}
 }
 
 func NewUserReview(ID int, Seller auth.User, Reviewer auth.User, Rating int, Message string, Date string) (*UserReview, error) {

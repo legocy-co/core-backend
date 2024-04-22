@@ -1,28 +1,29 @@
 package market_item
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace/filters"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
-	users "github.com/legocy-co/legocy/internal/domain/users/service"
 	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
-	"net/http"
-	"strconv"
 )
 
 type MarketItemHandler struct {
-	service          s.MarketItemService
-	userImageService users.UserImageService
+	service        s.MarketItemService
+	reviewsService s.UserReviewService
 }
 
-func NewMarketItemHandler(service s.MarketItemService) MarketItemHandler {
+func NewMarketItemHandler(service s.MarketItemService, reviewsService s.UserReviewService) MarketItemHandler {
 	return MarketItemHandler{
-		service: service,
+		service:        service,
+		reviewsService: reviewsService,
 	}
 }
 
@@ -157,7 +158,12 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 		return
 	}
 
-	marketItemResponse := marketplace.GetMarketItemResponse(marketItem)
+	userReviewsTotals, _ := h.reviewsService.GetUserReviewsTotals(c, marketItem.Seller.ID)
+
+	marketItemResponse := marketplace.GetMarketItemResponseWithReviewTotals(
+		marketItem, userReviewsTotals,
+	)
+
 	c.JSON(http.StatusOK, marketItemResponse)
 }
 

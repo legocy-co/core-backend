@@ -3127,6 +3127,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserImageInfoResponse"
                     }
                 },
+                "reviewTotals": {
+                    "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewTotalsResponse"
+                },
                 "role": {
                     "type": "integer"
                 },
@@ -3219,6 +3222,17 @@ const docTemplate = `{
                 },
                 "seller": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewTotalsResponse": {
+            "type": "object",
+            "properties": {
+                "avgRating": {
+                    "type": "number"
+                },
+                "totalReviews": {
+                    "type": "integer"
                 }
             }
         },
