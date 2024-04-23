@@ -18,7 +18,7 @@ func NewUserReviewPostgresRepository(
 	return UserReviewPostgresRepository{conn: conn}
 }
 
-func (r *UserPostgresRepository) GetUserReviewsTotals(c context.Context, sellerID int) (*models.UserRevewTotals, *errors.AppError) {
+func (r *UserReviewPostgresRepository) GetUserReviewsTotals(c context.Context, sellerID int) (*models.UserRevewTotals, *errors.AppError) {
 
 	db := r.conn.GetDB()
 
