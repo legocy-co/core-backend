@@ -28,7 +28,10 @@ func (r *UserReviewPostgresRepository) GetUserReviewsTotals(c context.Context, s
 	var totalReviews int64
 	var averageRating float64
 
-	query := db.Model(&entities.UserReviewPostgres{SellerPostgresID: uint(sellerID)})
+	query := db.Model(
+		&entities.UserReviewPostgres{}).Where(
+		"seller_postgres_id = ?", sellerID,
+	)
 
 	if err := query.Count(&totalReviews).Error; err != nil {
 		appErr := errors.NewAppError(errors.ConflictError, err.Error())
