@@ -13,9 +13,8 @@ type UserReviewPostgresRepository struct {
 	conn d.DataBaseConnection
 }
 
-func NewUserReviewPostgresRepository(
-	conn d.DataBaseConnection) UserReviewPostgresRepository {
-	return UserReviewPostgresRepository{conn: conn}
+func NewUserReviewPostgresRepository(conn d.DataBaseConnection) *UserReviewPostgresRepository {
+	return &UserReviewPostgresRepository{conn: conn}
 }
 
 func (r *UserReviewPostgresRepository) GetUserReviewsTotals(c context.Context, sellerID int) (*models.UserRevewTotals, *errors.AppError) {
