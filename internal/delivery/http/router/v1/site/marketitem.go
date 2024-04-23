@@ -14,7 +14,7 @@ func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 
 	items := rg.Group("/market-items")
 	{
-		handler := market_item.NewMarketItemHandler(a.GetMarketItemService())
+		handler := market_item.NewMarketItemHandler(a.GetMarketItemService(), a.GetUserReviewService())
 
 		items.GET("/", handler.ListMarketItems)
 

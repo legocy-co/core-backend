@@ -60,3 +60,22 @@ func GetMarketItemResponse(m *models.MarketItem) MarketItemResponse {
 		IsLiked:     m.Liked,
 	}
 }
+
+func (r *MarketItemResponse) WithReviewsTotals(totals *users.UserReviewTotalsResponse) *MarketItemResponse {
+	r.Seller = *r.Seller.WithReviewTotals(totals)
+	return r
+}
+
+func GetMarketItemResponseWithReviewTotals(
+	m *models.MarketItem,
+	totals *models.UserRevewTotals) MarketItemResponse {
+
+	r := GetMarketItemResponse(m)
+
+	if totals == nil {
+		return r
+	}
+
+	totalsResponse := users.GetUserReviewsTotalsResponse(totals)
+	return *r.WithReviewsTotals(totalsResponse)
+}

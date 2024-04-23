@@ -47,3 +47,7 @@ func (ms *UserReviewService) UserReviewDetail(c context.Context, id int) (*model
 func (ms *UserReviewService) DeleteUserReview(c context.Context, id int) *errors.AppError {
 	return ms.repo.DeleteUserReview(c, id)
 }
+
+func (ms *UserReviewService) GetUserReviewsTotals(c context.Context, sellerID int) (*models.UserRevewTotals, *errors.AppError) {
+	return ms.repo.GetUserReviewsTotals(c, sellerID)
+}

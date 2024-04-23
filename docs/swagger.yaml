@@ -331,6 +331,8 @@ definitions:
         items:
           $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserImageInfoResponse'
         type: array
+      reviewTotals:
+        $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewTotalsResponse'
       role:
         type: integer
       username:
@@ -391,6 +393,13 @@ definitions:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
       seller:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
+    type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserReviewTotalsResponse:
+    properties:
+      avgRating:
+        type: number
+      totalReviews:
+        type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserUpdateRequest:
     properties:

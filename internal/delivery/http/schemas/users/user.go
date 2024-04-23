@@ -34,11 +34,17 @@ func (ur *UserRegistrationRequest) ToAdmin() *models.User {
 }
 
 type UserDetailResponse struct {
-	ID       int                     `json:"id"`
-	Username string                  `json:"username"`
-	Email    string                  `json:"email"`
-	Role     int                     `json:"role"`
-	Images   []UserImageInfoResponse `json:"images"`
+	ID           int                       `json:"id"`
+	Username     string                    `json:"username"`
+	Email        string                    `json:"email"`
+	Role         int                       `json:"role"`
+	Images       []UserImageInfoResponse   `json:"images"`
+	ReviewTotals *UserReviewTotalsResponse `json:"reviewTotals"`
+}
+
+func (r *UserDetailResponse) WithReviewTotals(totals *UserReviewTotalsResponse) *UserDetailResponse {
+	r.ReviewTotals = totals
+	return r
 }
 
 func GetUserDetailResponse(u *models.User) UserDetailResponse {
