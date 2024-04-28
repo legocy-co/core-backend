@@ -60,14 +60,14 @@ func (ms *MarketItemService) ListMarketItemsAuthorized(
 	return marketItems, err
 }
 
-func (ms *MarketItemService) MarketItemsBySellerID(
+func (ms *MarketItemService) ActiveMarketItemsBySellerID(
 	c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
-	return ms.repo.GetMarketItemsBySellerID(c, sellerID)
+	return ms.repo.GetActiveMarketItemsBySellerID(c, sellerID)
 }
 
-func (ms *MarketItemService) MarketItemDetail(
+func (ms *MarketItemService) ActiveMarketItemDetail(
 	c context.Context, id int) (*models.MarketItem, *errors.AppError) {
-	return ms.repo.GetMarketItemByID(c, id)
+	return ms.repo.GetActiveMarketItemByID(c, id)
 }
 
 func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) *errors.AppError {
@@ -95,4 +95,16 @@ func (ms *MarketItemService) UpdateMarketItemByID(
 
 func (ms *MarketItemService) GetMarketItemSellerID(c context.Context, id int) (int, *errors.AppError) {
 	return ms.repo.GetMarketItemSellerID(c, id)
+}
+
+func (ms *MarketItemService) GetSellerMarketItemsAmount(c context.Context, sellerID int) (int64, *errors.AppError) {
+	return ms.repo.GetSellerMarketItemsAmount(c, sellerID)
+}
+
+func (ms *MarketItemService) GetMarketItemsBySellerID(c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
+	return ms.repo.GetMarketItemsBySellerID(c, sellerID)
+}
+
+func (ms *MarketItemService) GetMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError) {
+	return ms.repo.GetMarketItemByID(c, id)
 }

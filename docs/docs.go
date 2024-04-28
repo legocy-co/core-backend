@@ -2343,6 +2343,47 @@ const docTemplate = `{
                 "tags": [
                     "user_profile_pages"
                 ],
+                "summary": "Get User Profile Page",
+                "operationId": "current_user_profile_page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/users/profile/header/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_profile_pages"
+                ],
                 "summary": "Get Current User Profile Info",
                 "operationId": "basic_user_profile_page",
                 "responses": {

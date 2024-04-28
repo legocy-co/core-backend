@@ -50,13 +50,15 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		return
 	}
 
-	marketItems, err := h.marketItemService.MarketItemsBySellerID(c, userID)
+	marketItems, err := h.marketItemService.ActiveMarketItemsBySellerID(c, userID)
 
+	// Get Active MarketItems for User
 	marketItemsResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
 	for _, mi := range marketItems {
 		marketItemsResponse = append(marketItemsResponse, marketplace.GetMarketItemResponse(mi))
 	}
 
+	// Get User
 	user, appErr := h.userService.GetUserByID(c, userID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
@@ -64,8 +66,20 @@ func (h *UserProfilePageHandler) UserProfilePageDetail(c *gin.Context) {
 		return
 	}
 
-	userResponse := users.GetUserDetailResponse(user)
+	// Get Review Totals
+	userReviewsTotals, appErr := h.userReviewService.GetUserReviewsTotals(c, userID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
 
+	reviewsTotalsResponse := users.GetUserReviewsTotalsResponse(userReviewsTotals)
+
+	userResponse := users.GetUserDetailResponse(user)
+	userResponse = *userResponse.WithReviewTotals(reviewsTotalsResponse)
+
+	// Get User Reviews
 	userReviews, appErr := h.userReviewService.UserReviewsBySellerID(c, userID)
 	if appErr != nil && appErr.GetErrorType() != appErrors.NotFoundError {
 		httpErr := errors.FromAppError(*appErr)

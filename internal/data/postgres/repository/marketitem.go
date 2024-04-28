@@ -127,7 +127,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 	), nil
 }
 
-func (r MarketItemPostgresRepository) GetMarketItemByID(
+func (r MarketItemPostgresRepository) GetActiveMarketItemByID(
 	c context.Context, id int) (*models.MarketItem, *errors.AppError) {
 
 	db := r.conn.GetDB()
@@ -147,7 +147,7 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(
 	return entity.ToMarketItem()
 }
 
-func (r MarketItemPostgresRepository) GetPendingMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError) {
+func (r MarketItemPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError) {
 
 	db := r.conn.GetDB()
 	if db == nil {
@@ -166,7 +166,7 @@ func (r MarketItemPostgresRepository) GetPendingMarketItemByID(c context.Context
 	return entity.ToMarketItem()
 }
 
-func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
+func (r MarketItemPostgresRepository) GetActiveMarketItemsBySellerID(
 	c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
 
 	var itemsDB []*entities.MarketItemPostgres
@@ -179,6 +179,34 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(
 		Preload("Seller").
 		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
 		Find(&itemsDB, "user_postgres_id = ? and status = 'ACTIVE'", sellerID)
+	if result.Error != nil {
+		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		return nil, &appErr
+	}
+
+	marketItems := make([]*models.MarketItem, 0, len(itemsDB))
+	for _, entity := range itemsDB {
+		marketItem, err := entity.ToMarketItem()
+		if err != nil {
+			return nil, err
+		}
+		marketItems = append(marketItems, marketItem)
+	}
+
+	return marketItems, nil
+}
+
+func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(c context.Context, sellerID int) ([]*models.MarketItem, *errors.AppError) {
+	var itemsDB []*entities.MarketItemPostgres
+	db := r.conn.GetDB()
+	if db == nil {
+		return nil, &d.ErrConnectionLost
+	}
+
+	result := db.Model(&entities.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
+		Preload("Seller").
+		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
+		Find(&itemsDB, "user_postgres_id = ?", sellerID)
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
 		return nil, &appErr
@@ -264,7 +292,7 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 	}
 
 	tx.Commit()
-	return r.GetPendingMarketItemByID(c, int(entity.ID))
+	return r.GetMarketItemByID(c, int(entity.ID))
 }
 
 func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int) *errors.AppError {
@@ -301,5 +329,5 @@ func (r MarketItemPostgresRepository) UpdateMarketItemByID(
 	entityUpdated := entity.GetUpdatedMarketItem(*item)
 	db.Save(entityUpdated)
 
-	return r.GetMarketItemByID(c, id)
+	return r.GetActiveMarketItemByID(c, id)
 }

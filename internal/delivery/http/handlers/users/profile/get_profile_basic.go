@@ -7,7 +7,7 @@ import (
 	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 
-// GetProfileBasic
+// CurrentUserProfileHeader
 //
 //	@Summary	Get Current User Profile Info
 //	@Tags		user_profile_pages
@@ -15,10 +15,10 @@ import (
 //	@Produce	json
 //	@Success	200	{object}	users.UserDetailResponse
 //	@Failure	400	{object}	map[string]interface{}
-//	@Router		/users/profile/ [get]
+//	@Router		/users/profile/header/ [get]
 //
 //	@Security	JWT
-func (h *UserProfilePageHandler) GetProfileBasic(ctx *gin.Context) {
+func (h *UserProfilePageHandler) CurrentUserProfileHeader(ctx *gin.Context) {
 	tokenPayload, err := middleware.GetUserPayload(ctx)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})

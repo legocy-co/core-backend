@@ -1994,14 +1994,20 @@ paths:
       - users_images
   /users/profile/:
     get:
-      operationId: basic_user_profile_page
+      operationId: current_user_profile_page
+      parameters:
+      - description: user ID
+        in: path
+        name: userID
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users_profile.UserProfilePageResponse'
         "400":
           description: Bad Request
           schema:
@@ -2009,7 +2015,7 @@ paths:
             type: object
       security:
       - JWT: []
-      summary: Get Current User Profile Info
+      summary: Get User Profile Page
       tags:
       - user_profile_pages
   /users/profile/{userID}:
@@ -2068,6 +2074,26 @@ paths:
       security:
       - JWT: []
       summary: Update User Profile Page
+      tags:
+      - user_profile_pages
+  /users/profile/header/:
+    get:
+      operationId: basic_user_profile_page
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.UserDetailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Current User Profile Info
       tags:
       - user_profile_pages
   /users/reviews/:
