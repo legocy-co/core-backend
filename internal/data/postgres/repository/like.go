@@ -8,10 +8,10 @@ import (
 )
 
 type LikePostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
-func NewLikePostgresRepository(conn d.DataBaseConnection) LikePostgresRepository {
+func NewLikePostgresRepository(conn d.DBConn) LikePostgresRepository {
 	return LikePostgresRepository{conn: conn}
 }
 

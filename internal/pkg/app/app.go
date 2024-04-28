@@ -47,7 +47,7 @@ func New() *App {
 }
 
 type App struct {
-	database d.DataBaseConnection
+	database d.DBConn
 }
 
 func (a *App) isReady() bool {

@@ -8,16 +8,21 @@ import (
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/events"
 	h "github.com/legocy-co/legocy/pkg/helpers"
 	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type UserPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn       d.DBConn
+	dispatcher events.Dispatcher
 }
 
-func NewUserPostgresRepository(conn d.DataBaseConnection) UserPostgresRepository {
-	return UserPostgresRepository{conn: conn}
+func NewUserPostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) UserPostgresRepository {
+	return UserPostgresRepository{
+		conn:       conn,
+		dispatcher: dispatcher,
+	}
 }
 
 func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, password string) *errors.AppError {
@@ -44,7 +49,7 @@ func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, pa
 	tx.Commit()
 	u = entity.ToUser()
 
-	if err := kafka.ProduceJSONEvent(kafka.UserCreatedTopic, users.FromDomain(u)); err != nil {
+	if err := r.dispatcher.ProduceJSONEvent(kafka.UserCreatedTopic, users.FromDomain(u)); err != nil {
 		appErr := errors.NewAppError(errors.InternalError, err.Error())
 		return &appErr
 	}
@@ -75,7 +80,7 @@ func (r UserPostgresRepository) UpdateUser(id int, vo models.UserValueObject) *e
 	}
 
 	eventData := users.FromDomainVO(&vo, id)
-	if err := kafka.ProduceJSONEvent(kafka.UserUpdatedTopic, eventData); err != nil {
+	if err := r.dispatcher.ProduceJSONEvent(kafka.UserUpdatedTopic, eventData); err != nil {
 		appErr := errors.NewAppError(errors.InternalError, err.Error())
 		return &appErr
 	}

@@ -9,16 +9,17 @@ import (
 	lego "github.com/legocy-co/legocy/internal/domain/lego/repository"
 	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	users "github.com/legocy-co/legocy/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/internal/pkg/di"
 )
 
 // Start Admin
 
 func (a *App) GetMarketItemAdminRepository() marketplace.MarketItemAdminRepository {
-	return postgresAdmin.NewMarketItemAdminPostgresRepository(a.GetDatabase())
+	return postgresAdmin.NewMarketItemAdminPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetUserAdminRepository() users.UserAdminRepository {
-	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase())
+	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetLegoSetsValuationAdminRepository() calculatorAdmin.LegoSetValuationAdminRepository {
@@ -28,7 +29,7 @@ func (a *App) GetLegoSetsValuationAdminRepository() calculatorAdmin.LegoSetValua
 // End Admin
 
 func (a *App) GetUserRepo() users.UserRepository {
-	return postgres.NewUserPostgresRepository(a.GetDatabase())
+	return postgres.NewUserPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetUserImagesRepo() users.UserImageRepository {
@@ -44,7 +45,7 @@ func (a *App) GetLegoSetRepo() lego.LegoSetRepository {
 }
 
 func (a *App) GetMarketItemRepo() marketplace.MarketItemRepository {
-	return postgres.NewMarketItemPostgresRepository(a.GetDatabase())
+	return postgres.NewMarketItemPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetUserReviewRepo() marketplace.UserReviewRepository {
@@ -60,11 +61,11 @@ func (a *App) GetLegoSetsValuationRepository() calculator.LegoSetValuationReposi
 }
 
 func (a *App) GetMarketItemImageRepository() marketplace.MarketItemImageRepository {
-	return postgres.NewMarketItemImagePostgresRepository(a.GetDatabase())
+	return postgres.NewMarketItemImagePostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetLegoSetImageRepository() lego.LegoSetImageRepository {
-	return postgres.NewLegoSetImagePostgresRepository(a.GetDatabase())
+	return postgres.NewLegoSetImagePostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetMarketItemLikeRepository() marketplace.LikeRepository {

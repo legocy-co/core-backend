@@ -11,10 +11,10 @@ import (
 )
 
 type UserImagePostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
-func NewUserImagePostgresRepository(conn d.DataBaseConnection) repository.UserImageRepository {
+func NewUserImagePostgresRepository(conn d.DBConn) repository.UserImageRepository {
 	return UserImagePostgresRepository{conn: conn}
 }
 

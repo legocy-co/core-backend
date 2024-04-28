@@ -11,10 +11,10 @@ import (
 )
 
 type LegoSetValuationAdminPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
-func NewLegoSetValuationPostgresAdminRepository(conn d.DataBaseConnection) LegoSetValuationAdminPostgresRepository {
+func NewLegoSetValuationPostgresAdminRepository(conn d.DBConn) LegoSetValuationAdminPostgresRepository {
 	return LegoSetValuationAdminPostgresRepository{conn: conn}
 }
 

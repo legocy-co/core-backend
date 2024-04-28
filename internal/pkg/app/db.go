@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (a *App) GetDatabase() data.DataBaseConnection {
+func (a *App) GetDatabase() data.DBConn {
 	return a.database
 }
 

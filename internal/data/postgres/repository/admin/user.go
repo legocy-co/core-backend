@@ -8,16 +8,21 @@ import (
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/events"
 	h "github.com/legocy-co/legocy/pkg/helpers"
 	"github.com/legocy-co/legocy/pkg/kafka"
 )
 
 type UserAdminPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn       d.DBConn
+	dispatcher events.Dispatcher
 }
 
-func NewUserAdminPostgresRepository(conn d.DataBaseConnection) UserAdminPostgresRepository {
-	return UserAdminPostgresRepository{conn: conn}
+func NewUserAdminPostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) UserAdminPostgresRepository {
+	return UserAdminPostgresRepository{
+		conn:       conn,
+		dispatcher: dispatcher,
+	}
 }
 
 func (r UserAdminPostgresRepository) GetUsers(c context.Context) ([]*models.UserAdmin, *errors.AppError) {
@@ -71,19 +76,16 @@ func (r UserAdminPostgresRepository) GetUserByEmail(
 		return nil, &d.ErrConnectionLost
 	}
 
-	var userAdmin *models.UserAdmin
-
 	var entity *entities.UserPostgres
 	ok := db.Where("email = ?", email).First(&entity).RowsAffected > 0
 	if !ok {
-		return userAdmin, &e.ErrUserNotFound
+		return nil, &e.ErrUserNotFound
 	}
 
-	userAdmin = entity.ToUserAdmin()
-	return userAdmin, nil
+	return entity.ToUserAdmin(), nil
 }
 
-func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.UserAdmin, password string) *errors.AppError {
+func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.UserAdminValueObject, password string) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
 		return &d.ErrConnectionLost
@@ -91,26 +93,30 @@ func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.U
 
 	tx := db.Begin()
 
-	passwordHash, err := h.HashPassword(password)
-	if err != nil {
-		return &h.ErrHashError
+	passwordHash, appErr := h.HashPassword(password)
+	if appErr != nil {
+		return appErr
 	}
 
-	var entity = *entities.FromAdmin(ua, passwordHash)
-	result := db.Create(&entity)
-
-	if result.Error != nil {
+	var entity = *entities.FromAdminVO(ua, passwordHash)
+	if err := tx.Create(&entity).Error; err != nil {
 		tx.Rollback()
-		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
+		appErr := errors.NewAppError(
+			errors.ConflictError,
+			err.Error(),
+		)
 		return &appErr
 	}
 
 	tx.Commit()
 
-	kafkaErr := kafka.ProduceJSONEvent(kafka.UserCreatedTopic, users.FromDomainAdmin(ua))
-	if kafkaErr != nil {
+	eventData := users.FromDomainVOAdmin(ua, int(entity.ID))
+	if err := r.dispatcher.ProduceJSONEvent(kafka.UserCreatedTopic, eventData); err != nil {
 		tx.Rollback()
-		appErr := errors.NewAppError(errors.InternalError, kafkaErr.Error())
+		appErr := errors.NewAppError(
+			errors.InternalError,
+			err.Error(),
+		)
 		return &appErr
 	}
 
@@ -136,16 +142,24 @@ func (r UserAdminPostgresRepository) UpdateUserByID(
 	entityUpdated := entity.GetUpdatedUserAdmin(*vo)
 	if err := tx.Save(entityUpdated).Error; err != nil {
 		tx.Rollback()
-		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		appErr := errors.NewAppError(
+			errors.ConflictError,
+			err.Error(),
+		)
 		return nil, &appErr
 	}
 
 	eventData := users.FromDomainVOAdmin(vo, userId)
-	if err := kafka.ProduceJSONEvent(kafka.UserUpdatedTopic, eventData); err != nil {
+	if err := r.dispatcher.ProduceJSONEvent(kafka.UserUpdatedTopic, eventData); err != nil {
 		tx.Rollback()
-		appErr := errors.NewAppError(errors.InternalError, err.Error())
+		appErr := errors.NewAppError(
+			errors.InternalError,
+			err.Error(),
+		)
 		return nil, &appErr
 	}
+
+	tx.Commit()
 
 	return r.GetUserByID(c, userId)
 }

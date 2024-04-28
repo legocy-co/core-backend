@@ -9,3 +9,7 @@ type MarketItemCreatedUpdated struct {
 	SetState    string  `json:"setState"`
 	Description string  `json:"description"`
 }
+
+type MarketItemDeleted struct {
+	ID int `json:"id"`
+}

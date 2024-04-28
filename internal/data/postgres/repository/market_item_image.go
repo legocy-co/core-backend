@@ -5,18 +5,21 @@ import (
 	e "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/kafka/schemas"
 	log "github.com/sirupsen/logrus"
 )
 
 type MarketItemImagePostgresRepository struct {
-	conn data.DataBaseConnection
+	conn       data.DBConn
+	dispatcher events.Dispatcher
 }
 
-func NewMarketItemImagePostgresRepository(conn data.DataBaseConnection) *MarketItemImagePostgresRepository {
+func NewMarketItemImagePostgresRepository(conn data.DBConn, dispatcher events.Dispatcher) *MarketItemImagePostgresRepository {
 	return &MarketItemImagePostgresRepository{
-		conn: conn,
+		conn:       conn,
+		dispatcher: dispatcher,
 	}
 }
 
@@ -102,7 +105,7 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 		return &appErr
 	}
 
-	err := kafka.ProduceJSONEvent(
+	err := r.dispatcher.ProduceJSONEvent(
 		kafka.MarketItemImagesDeletedTopic,
 		schemas.ImageDeletedEventData{
 			ImageFilepath: currentImage.ImageURL,
@@ -110,7 +113,11 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 	)
 	if err != nil {
 		tx.Rollback()
-		return err
+		appErr := errors.NewAppError(
+			errors.InternalError,
+			err.Error(),
+		)
+		return &appErr
 	}
 
 	tx.Commit()
