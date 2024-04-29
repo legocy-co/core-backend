@@ -62,10 +62,10 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 	}
 
 	// User Images
-
 	userImagesHandler := userImage.NewUserImageHandler(
 		app.GetUserImagesService(),
-		app.GetImageStorageClient())
+		app.GetImageStorageClient(),
+	)
 
 	userImages := rg.Group("/users/images").Use(jwt.IsOwnerOrAdmin("userID"))
 	{

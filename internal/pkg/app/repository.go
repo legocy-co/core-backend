@@ -33,7 +33,7 @@ func (a *App) GetUserRepo() users.UserRepository {
 }
 
 func (a *App) GetUserImagesRepo() users.UserImageRepository {
-	return postgres.NewUserImagePostgresRepository(a.GetDatabase())
+	return postgres.NewUserImagePostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
 }
 
 func (a *App) GetLegoSeriesRepo() lego.LegoSeriesRepository {
