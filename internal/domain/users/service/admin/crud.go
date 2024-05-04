@@ -24,7 +24,7 @@ func (s UserAdminService) GetUserByID(c context.Context, id int) (*models.UserAd
 }
 
 func (s UserAdminService) CreateAdmin(
-	c context.Context, ua *models.UserAdmin, password string) *errors.AppError {
+	c context.Context, ua *models.UserAdminValueObject, password string) *errors.AppError {
 	return s.repo.CreateAdmin(c, ua, password)
 }
 
