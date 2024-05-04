@@ -5,17 +5,20 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
 	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/kafka/schemas"
 )
 
 type LegoSetImagePostgresRepository struct {
-	conn data.DataBaseConnection
+	conn       data.DBConn
+	dispatcher events.Dispatcher
 }
 
-func NewLegoSetImagePostgresRepository(conn data.DataBaseConnection) LegoSetImagePostgresRepository {
+func NewLegoSetImagePostgresRepository(conn data.DBConn, dispatcher events.Dispatcher) LegoSetImagePostgresRepository {
 	return LegoSetImagePostgresRepository{
-		conn: conn,
+		conn:       conn,
+		dispatcher: dispatcher,
 	}
 }
 
@@ -86,7 +89,7 @@ func (r LegoSetImagePostgresRepository) Delete(id int) *errors.AppError {
 		return &appErr
 	}
 
-	err := kafka.ProduceJSONEvent(
+	err := r.dispatcher.ProduceJSONEvent(
 		kafka.LegoSetImagesDeletedTopic,
 		schemas.ImageDeletedEventData{
 			ImageFilepath: image.ImageURL,

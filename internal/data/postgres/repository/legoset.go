@@ -14,10 +14,10 @@ import (
 )
 
 type LegoSetPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
-func NewLegoSetPostgresRepository(conn d.DataBaseConnection) LegoSetPostgresRepository {
+func NewLegoSetPostgresRepository(conn d.DBConn) LegoSetPostgresRepository {
 	return LegoSetPostgresRepository{conn: conn}
 }
 

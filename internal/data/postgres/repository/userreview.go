@@ -10,10 +10,10 @@ import (
 )
 
 type UserReviewPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
-func NewUserReviewPostgresRepository(conn d.DataBaseConnection) *UserReviewPostgresRepository {
+func NewUserReviewPostgresRepository(conn d.DBConn) *UserReviewPostgresRepository {
 	return &UserReviewPostgresRepository{conn: conn}
 }
 

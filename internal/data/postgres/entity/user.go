@@ -60,15 +60,7 @@ func (up *UserPostgres) GetUpdatedUserAdmin(
 	return up
 }
 
-func FromUserAdminValueObject(vo models.UserAdminValueObject) *UserPostgres {
-	return &UserPostgres{
-		Username: vo.Username,
-		Email:    vo.Email,
-		Role:     vo.Role,
-	}
-}
-
-func FromAdmin(u *models.UserAdmin, password string) *UserPostgres {
+func FromAdminVO(u *models.UserAdminValueObject, password string) *UserPostgres {
 	return &UserPostgres{
 		Username: u.Username,
 		Email:    u.Email,

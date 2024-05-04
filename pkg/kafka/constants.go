@@ -5,6 +5,7 @@ import "errors"
 const (
 	HealthcheckTopic             = "legocy.healthcheck"
 	MarketItemUpdatesTopic       = "legocy.marketItems.updates.json"
+	MarketItemDeletedTopic       = "legocy.marketItems.delete.json"
 	UserImagesDeletedTopic       = "legocy.users.images.delete.json"
 	MarketItemImagesDeletedTopic = "legocy.marketItems.images.delete.json"
 	LegoSetImagesDeletedTopic    = "legocy.legoSets.images.delete.json"

@@ -17,7 +17,7 @@ type UserRepository interface {
 }
 
 type UserAdminRepository interface {
-	CreateAdmin(c context.Context, ua *models.UserAdmin, password string) *errors.AppError
+	CreateAdmin(c context.Context, ua *models.UserAdminValueObject, password string) *errors.AppError
 	GetUsers(c context.Context) ([]*models.UserAdmin, *errors.AppError)
 	GetUserByID(c context.Context, id int) (*models.UserAdmin, *errors.AppError)
 	GetUserByEmail(c context.Context, email string) (*models.UserAdmin, *errors.AppError)

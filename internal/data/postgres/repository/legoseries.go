@@ -10,7 +10,7 @@ import (
 )
 
 type LegoSeriesPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
 func (r LegoSeriesPostgresRepository) UpdateLegoSeries(legoSeriesID int, vo *models.LegoSeriesValueObject) *errors.AppError {
@@ -40,7 +40,7 @@ func (r LegoSeriesPostgresRepository) UpdateLegoSeries(legoSeriesID int, vo *mod
 	return nil
 }
 
-func NewLegoSeriesPostgresRepository(conn d.DataBaseConnection) LegoSeriesPostgresRepository {
+func NewLegoSeriesPostgresRepository(conn d.DBConn) LegoSeriesPostgresRepository {
 	return LegoSeriesPostgresRepository{conn: conn}
 }
 

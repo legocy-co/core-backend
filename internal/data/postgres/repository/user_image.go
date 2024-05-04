@@ -6,16 +6,21 @@ import (
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/domain/users/repository"
+	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/kafka/schemas"
 )
 
 type UserImagePostgresRepository struct {
-	conn d.DataBaseConnection
+	conn       d.DBConn
+	dispatcher events.Dispatcher
 }
 
-func NewUserImagePostgresRepository(conn d.DataBaseConnection) repository.UserImageRepository {
-	return UserImagePostgresRepository{conn: conn}
+func NewUserImagePostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) repository.UserImageRepository {
+	return UserImagePostgresRepository{
+		conn:       conn,
+		dispatcher: dispatcher,
+	}
 }
 
 func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *models.UserImage) error {
@@ -64,7 +69,7 @@ func (r UserImagePostgresRepository) DeleteImagesByUserID(c context.Context, use
 			return err
 		}
 
-		err = kafka.ProduceJSONEvent(
+		err = r.dispatcher.ProduceJSONEvent(
 			kafka.UserImagesDeletedTopic,
 			schemas.ImageDeletedEventData{
 				ImageFilepath: userImage.FilepathURL,

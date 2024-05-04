@@ -10,10 +10,10 @@ import (
 )
 
 type CollectionPostgresRepository struct {
-	conn d.DataBaseConnection
+	conn d.DBConn
 }
 
-func NewCollectionPostgresRepository(conn d.DataBaseConnection) CollectionPostgresRepository {
+func NewCollectionPostgresRepository(conn d.DBConn) CollectionPostgresRepository {
 	return CollectionPostgresRepository{conn: conn}
 }
 

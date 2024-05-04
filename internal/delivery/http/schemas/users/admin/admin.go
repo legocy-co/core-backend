@@ -10,8 +10,8 @@ type AdminRegistrationRequest struct {
 	Password string `json:"password"`
 }
 
-func (uar *AdminRegistrationRequest) ToAdmin() *models.UserAdmin {
-	return &models.UserAdmin{
+func (uar *AdminRegistrationRequest) ToAdmin() *models.UserAdminValueObject {
+	return &models.UserAdminValueObject{
 		Email:    uar.Email,
 		Username: uar.Username,
 		Role:     models.ADMIN,
@@ -24,7 +24,7 @@ type AdminRegistrationResponse struct {
 	Username string `json:"username"`
 }
 
-func GetAdminResponse(ua *models.UserAdmin) *AdminRegistrationResponse {
+func GetAdminResponse(ua *models.UserAdminValueObject) *AdminRegistrationResponse {
 	return &AdminRegistrationResponse{
 		Email:    ua.Email,
 		Role:     ua.Role,
