@@ -38,7 +38,7 @@ func (r *UserReviewPostgresRepository) GetUserReviewsTotals(c context.Context, s
 		return nil, &appErr
 	}
 
-	if err := query.Select("AVG(rating) as average_rating").Scan(&averageRating).Error; err != nil {
+	if err := query.Select("COALESCE(AVG(rating), 0) as average_rating").Scan(&averageRating).Error; err != nil {
 		appErr := errors.NewAppError(errors.ConflictError, err.Error())
 		return nil, &appErr
 	}
