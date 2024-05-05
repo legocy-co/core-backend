@@ -1995,12 +1995,6 @@ paths:
   /users/profile/:
     get:
       operationId: current_user_profile_page
-      parameters:
-      - description: user ID
-        in: path
-        name: userID
-        required: true
-        type: integer
       produces:
       - application/json
       responses:

@@ -2345,15 +2345,6 @@ const docTemplate = `{
                 ],
                 "summary": "Get User Profile Page",
                 "operationId": "current_user_profile_page",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "user ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",

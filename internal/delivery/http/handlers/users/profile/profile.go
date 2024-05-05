@@ -7,8 +7,8 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users/profile"
 	appErrors "github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"net/http"
-	"strconv"
 )
 
 // CurrentUserProfilePage
@@ -16,7 +16,6 @@ import (
 //	@Summary	Get User Profile Page
 //	@Tags		user_profile_pages
 //	@ID			current_user_profile_page
-//	@Param		userID	path	int	true	"user ID"
 //	@Produce	json
 //	@Success	200	{object}	profile.UserProfilePageResponse
 //	@Failure	400	{object}	map[string]interface{}
@@ -24,13 +23,13 @@ import (
 //
 //	@Security	JWT
 func (h *UserProfilePageHandler) CurrentUserProfilePage(c *gin.Context) {
-	userID, err := strconv.Atoi(c.Param("userID"))
+	tokenPayload, err := middleware.GetUserPayload(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Couldn't extract ID from URL path"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	marketItems, err := h.marketItemService.GetMarketItemsBySellerID(c, userID)
+	marketItems, err := h.marketItemService.GetMarketItemsBySellerID(c, tokenPayload.ID)
 
 	// Get Active MarketItems for User
 	marketItemsResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems))
@@ -39,7 +38,7 @@ func (h *UserProfilePageHandler) CurrentUserProfilePage(c *gin.Context) {
 	}
 
 	// Get User
-	user, appErr := h.userService.GetUserByID(c, userID)
+	user, appErr := h.userService.GetUserByID(c, tokenPayload.ID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
@@ -47,7 +46,7 @@ func (h *UserProfilePageHandler) CurrentUserProfilePage(c *gin.Context) {
 	}
 
 	// Get Review Totals
-	userReviewsTotals, appErr := h.userReviewService.GetUserReviewsTotals(c, userID)
+	userReviewsTotals, appErr := h.userReviewService.GetUserReviewsTotals(c, tokenPayload.ID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
@@ -60,7 +59,7 @@ func (h *UserProfilePageHandler) CurrentUserProfilePage(c *gin.Context) {
 	userResponse = *userResponse.WithReviewTotals(reviewsTotalsResponse)
 
 	// Get User Reviews
-	userReviews, appErr := h.userReviewService.UserReviewsBySellerID(c, userID)
+	userReviews, appErr := h.userReviewService.UserReviewsBySellerID(c, tokenPayload.ID)
 	if appErr != nil && appErr.GetErrorType() != appErrors.NotFoundError {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
