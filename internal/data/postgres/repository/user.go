@@ -38,9 +38,9 @@ func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, pa
 
 	tx := db.Begin()
 
-	entity := *entities.FromUser(u, passwordHash)
+	entity := entities.FromUser(u, passwordHash)
 
-	if err := tx.Create(entity).Error; err != nil {
+	if err := tx.Create(&entity).Error; err != nil {
 		tx.Rollback()
 		appErr := errors.NewAppError(errors.ConflictError, err.Error())
 		return &appErr
