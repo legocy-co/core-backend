@@ -1315,6 +1315,11 @@
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "name": "market_item_ids",
+                        "in": "query"
+                    },
+                    {
                         "type": "number",
                         "name": "price_gte",
                         "in": "query"
@@ -1434,6 +1439,11 @@
                             "type": "string"
                         },
                         "name": "location__in",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "market_item_ids",
                         "in": "query"
                     },
                     {

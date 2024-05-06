@@ -2,11 +2,12 @@ package filters
 
 import (
 	"encoding/json"
-	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
-	"github.com/legocy-co/legocy/pkg/helpers"
 	"net/url"
 	"reflect"
 	"testing"
+
+	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
+	"github.com/legocy-co/legocy/pkg/helpers"
 )
 
 // TestBindMarketItemAndLegoSetFilters final version
@@ -72,6 +73,30 @@ func TestBindMarketItemAndLegoSetFilters(t *testing.T) {
 				PriceGTE:  ptrFloat64(300.0),
 				SetStates: []string{"new", "used"},
 				Locations: []string{"online"},
+				LegoSet: &filters.LegoSetFilterDTO{
+					NpiecesGTE: ptrInt(100),
+					NpiecesLTE: nil,
+					SeriesIDs:  []int{123, 456},
+					SetNumbers: nil,
+					Name:       nil,
+				},
+			},
+		},
+		{
+			name: "Partially Initialized with IDs list",
+			query: url.Values{
+				"price_gte":               []string{"300.0"},
+				"set_state__in":           []string{"new", "used"},
+				"location__in":            []string{"online"},
+				"lego_set[npieces_gte]":   []string{"100"},
+				"lego_set[series_id__in]": []string{"123", "456"},
+				"market_item_ids":         []string{"1,2,3,45,67,a"},
+			},
+			wantStruct: MarketItemFilterDTO{
+				MarketItemIds: "1,2,3,45,67,a",
+				PriceGTE:      ptrFloat64(300.0),
+				SetStates:     []string{"new", "used"},
+				Locations:     []string{"online"},
 				LegoSet: &filters.LegoSetFilterDTO{
 					NpiecesGTE: ptrInt(100),
 					NpiecesLTE: nil,

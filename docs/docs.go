@@ -1323,6 +1323,11 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "name": "market_item_ids",
+                        "in": "query"
+                    },
+                    {
                         "type": "number",
                         "name": "price_gte",
                         "in": "query"
@@ -1442,6 +1447,11 @@ const docTemplate = `{
                             "type": "string"
                         },
                         "name": "location__in",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "market_item_ids",
                         "in": "query"
                     },
                     {

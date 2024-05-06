@@ -1345,6 +1345,9 @@ paths:
         name: location__in
         type: array
       - in: query
+        name: market_item_ids
+        type: string
+      - in: query
         name: price_gte
         type: number
       - in: query
@@ -1504,6 +1507,9 @@ paths:
           type: string
         name: location__in
         type: array
+      - in: query
+        name: market_item_ids
+        type: string
       - in: query
         name: price_gte
         type: number
