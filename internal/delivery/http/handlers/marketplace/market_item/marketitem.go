@@ -151,7 +151,7 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 		return
 	}
 
-	marketItem, appErr := h.service.ActiveMarketItemDetail(c, itemID)
+	marketItem, appErr := h.service.GetMarketItemByID(c, itemID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		c.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
