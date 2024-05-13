@@ -204,8 +204,12 @@ definitions:
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemRequest:
     properties:
+      changed:
+        type: boolean
       description:
         type: string
+      isSold:
+        type: boolean
       legoSetID:
         type: integer
       location:
@@ -1541,6 +1545,35 @@ paths:
       security:
       - JWT: []
       summary: Get Market Items Authorized
+      tags:
+      - market_items
+  /market-items/favorites/:
+    get:
+      operationId: list_market_items_favorites
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get Favorite Market Items
       tags:
       - market_items
   /market-items/images/{imageId}:

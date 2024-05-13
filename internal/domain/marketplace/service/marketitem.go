@@ -13,6 +13,7 @@ import (
 
 type MarketItemService struct {
 	imageRepo r.MarketItemImageRepository
+	likesRepo r.LikeRepository
 	repo      r.MarketItemRepository
 }
 
@@ -107,4 +108,26 @@ func (ms *MarketItemService) GetMarketItemsBySellerID(c context.Context, sellerI
 
 func (ms *MarketItemService) GetMarketItemByID(c context.Context, id int) (*models.MarketItem, *errors.AppError) {
 	return ms.repo.GetMarketItemByID(c, id)
+}
+
+func (ms *MarketItemService) GetLikedItems(
+	c pagination.PaginationContext,
+	userID int,
+) (pagination.Page[*models.MarketItem], *errors.AppError) {
+
+	// get liked items
+	likedItems, err := ms.likesRepo.GetLikesByUserID(userID)
+	if err != nil {
+		return pagination.NewEmptyPage[*models.MarketItem](), err
+	}
+
+	// Get ids to filter
+	var ids = make([]int, 0, len(likedItems))
+	for _, item := range likedItems {
+		ids = append(ids, item.MarketItemID())
+	}
+
+	filterCriteria := domain.MarketItemFilterCriteria{Ids: ids}
+
+	return ms.repo.GetMarketItemsAuthorized(c, &filterCriteria, userID)
 }

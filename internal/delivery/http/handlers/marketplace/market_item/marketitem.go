@@ -132,6 +132,52 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 	c.JSON(http.StatusOK, responsePage)
 }
 
+// GetFavorites
+//
+//	@Summary	Get Favorite Market Items
+//	@Tags		market_items
+//	@ID			list_market_items_favorites
+//	@Produce	json
+//	@Param		limit	query	int	false	"limit" 10
+//	@Param		offset	query	int	false	"offset" 0
+//
+//	@Success	200	{object}	pagination.PageResponse[marketplace.MarketItemResponse]
+//	@Failure	400	{object}	map[string]interface{}
+//	@Router		/market-items/favorites/ [get]
+//
+//	@Security	JWT
+func (h *MarketItemHandler) GetFavorites(ctx *gin.Context) {
+	tokenPayload, err := middleware.GetUserPayload(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(
+			http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	paginationCtx := pagination.GetPaginationContext(ctx)
+
+	marketItems, appErr := h.service.GetLikedItems(paginationCtx, tokenPayload.ID)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
+	marketItemResponse := make([]marketplace.MarketItemResponse, 0, len(marketItems.GetObjects()))
+	for _, m := range marketItems.GetObjects() {
+		marketItemResponse = append(marketItemResponse, marketplace.GetMarketItemResponse(m))
+	}
+
+	responsePage := pagination.GetPageResponse[marketplace.MarketItemResponse](
+		marketItemResponse,
+		marketItems.GetTotal(),
+		marketItems.GetLimit(),
+		marketItems.GetOffset(),
+	)
+
+	ctx.JSON(http.StatusOK, responsePage)
+}
+
 // MarketItemDetail
 //
 //	@Summary	Get Market Item

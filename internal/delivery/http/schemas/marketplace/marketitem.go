@@ -14,6 +14,8 @@ type MarketItemRequest struct {
 	Location    string  `json:"location"`
 	SetState    string  `json:"setState"`
 	Description string  `json:"description"`
+	IsSold      bool    `json:"isSold"`
+	Changed     bool    `json:"changed"`
 }
 
 func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) (*models.MarketItemValueObject, error) {
@@ -22,12 +24,19 @@ func (r *MarketItemRequest) ToMarketItemValueObject(sellerID int) (*models.Marke
 		return nil, errors.ErrMarketItemInvalidSetState
 	}
 
+	var status = models.ListingStatusActive
+	if r.IsSold {
+		status = models.ListingStatusSold
+	} else if r.Changed {
+		status = models.ListingStatusCheckRequired
+	}
+
 	return &models.MarketItemValueObject{
 		LegoSetID:   r.LegoSetID,
 		SellerID:    sellerID,
 		Price:       r.Price,
 		Location:    r.Location,
-		Status:      models.ListingStatusActive,
+		Status:      status,
 		Description: r.Description,
 		SetState:    r.SetState,
 	}, nil

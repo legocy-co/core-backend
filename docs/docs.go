@@ -1498,6 +1498,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/market-items/favorites/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_items"
+                ],
+                "summary": "Get Favorite Market Items",
+                "operationId": "list_market_items_favorites",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_utils_pagination.PageResponse-github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace_MarketItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/market-items/images/{imageId}": {
             "delete": {
                 "security": [
@@ -2974,8 +3020,14 @@ const docTemplate = `{
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.MarketItemRequest": {
             "type": "object",
             "properties": {
+                "changed": {
+                    "type": "boolean"
+                },
                 "description": {
                     "type": "string"
+                },
+                "isSold": {
+                    "type": "boolean"
                 },
                 "legoSetID": {
                     "type": "integer"

@@ -22,6 +22,7 @@ func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 		{
 			items.GET("/authorized/", handler.ListMarketItemsAuthorized)
 			items.GET("/:itemID", handler.MarketItemDetail)
+			items.GET("/favorites/", handler.GetFavorites)
 
 			privateRoutes := items.Group("")
 			privateRoutes.Use(middleware.ItemOwnerOrAdmin("itemId", a.GetMarketItemRepo()))
