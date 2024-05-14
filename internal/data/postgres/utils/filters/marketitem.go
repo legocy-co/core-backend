@@ -19,7 +19,7 @@ func AddMarketItemsFilters(
 		if isNested {
 			db = db.Where("market_items.id IN ?", criteria.Ids)
 		} else {
-			db = db.Where("id IN ?", criteria.Ids)
+			db = db.Where("market_items.id IN ?", criteria.Ids)
 		}
 	}
 
