@@ -76,7 +76,7 @@ func (mp *MarketItemPostgres) GetUpdatedMarketItemAdmin(
 	mp.Location = vo.Location
 	mp.Price = vo.Price
 	mp.UserPostgresID = uint(vo.SellerID)
-	mp.Status = models.ListingStatusActive
+	mp.Status = vo.Status
 	mp.SetState = vo.SetState
 	mp.Description = vo.Description
 
