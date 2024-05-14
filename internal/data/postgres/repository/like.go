@@ -74,12 +74,12 @@ func (r LikePostgresRepository) GetLikesByUserID(userID int) ([]*models.Like, *e
 	)
 	if query.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, query.Error.Error())
-		return nil, &appErr
+		return []*models.Like{}, &appErr
 	}
 
 	if query.RowsAffected == 0 {
 		appErr := errors.NewAppError(errors.NotFoundError, "No likes found")
-		return nil, &appErr
+		return []*models.Like{}, &appErr
 	}
 
 	likesDomain := make([]*models.Like, 0, len(likes))

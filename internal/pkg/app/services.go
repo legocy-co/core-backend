@@ -44,7 +44,12 @@ func (a *App) GetLegoSetService() lego.LegoSetService {
 }
 
 func (a *App) GetMarketItemService() marketplace.MarketItemService {
-	return marketplace.NewMarketItemService(a.GetMarketItemRepo(), a.GetMarketItemImageRepository())
+	return marketplace.NewMarketItemService(
+		marketplace.MarketItemsServiceOpts{
+			Repo:      a.GetMarketItemRepo(),
+			ImageRepo: a.GetMarketItemImageRepository(),
+			LikesRepo: a.GetMarketItemLikeRepository(),
+		})
 }
 
 func (a *App) GetUserReviewService() marketplace.UserReviewService {

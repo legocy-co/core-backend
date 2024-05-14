@@ -17,8 +17,18 @@ type MarketItemService struct {
 	repo      r.MarketItemRepository
 }
 
-func NewMarketItemService(repo r.MarketItemRepository, imageRepo r.MarketItemImageRepository) MarketItemService {
-	return MarketItemService{repo: repo, imageRepo: imageRepo}
+type MarketItemsServiceOpts struct {
+	Repo      r.MarketItemRepository
+	ImageRepo r.MarketItemImageRepository
+	LikesRepo r.LikeRepository
+}
+
+func NewMarketItemService(opts MarketItemsServiceOpts) MarketItemService {
+	return MarketItemService{
+		repo:      opts.Repo,
+		imageRepo: opts.ImageRepo,
+		likesRepo: opts.LikesRepo,
+	}
 }
 
 func (ms *MarketItemService) CreateMarketItem(
