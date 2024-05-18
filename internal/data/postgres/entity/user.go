@@ -6,11 +6,13 @@ import (
 
 type UserPostgres struct {
 	Model
-	Username string `gorm:"unique;not null"`
-	Email    string `gorm:"unique;not null"`
-	Role     int
-	Password string
-	Images   []UserImagePostgres `gorm:"foreignKey:UserID"`
+	Username   string `gorm:"unique;not null"`
+	Email      string `gorm:"unique;not null"`
+	Role       int
+	Password   string
+	GoogleID   *string             `gorm:"unique;default:null"`
+	FacebookID *string             `gorm:"unique;default:null"`
+	Images     []UserImagePostgres `gorm:"foreignKey:UserID"`
 }
 
 func (up UserPostgres) TableName() string {
@@ -26,6 +28,16 @@ func FromUser(u *models.User, password string) *UserPostgres {
 	}
 }
 
+func FromVO(vo models.UserValueObject) *UserPostgres {
+	return &UserPostgres{
+		Username:   vo.Username,
+		Email:      vo.Email,
+		Role:       models.USER,
+		GoogleID:   vo.GoogleID,
+		FacebookID: vo.FacebookID,
+	}
+}
+
 func (up *UserPostgres) ToUser() *models.User {
 
 	if up.Images == nil {
@@ -34,6 +46,8 @@ func (up *UserPostgres) ToUser() *models.User {
 			up.Username,
 			up.Email,
 			up.Role,
+			up.GoogleID,
+			up.FacebookID,
 			[]*models.UserImage{},
 		)
 	}
@@ -48,6 +62,8 @@ func (up *UserPostgres) ToUser() *models.User {
 		up.Username,
 		up.Email,
 		up.Role,
+		up.GoogleID,
+		up.FacebookID,
 		images,
 	)
 }
@@ -57,29 +73,37 @@ func (up *UserPostgres) GetUpdatedUserAdmin(
 	up.Username = vo.Username
 	up.Email = vo.Email
 	up.Role = vo.Role
+	up.GoogleID = vo.GoogleID
+	up.FacebookID = vo.FacebookID
 	return up
 }
 
 func FromAdminVO(u *models.UserAdminValueObject, password string) *UserPostgres {
 	return &UserPostgres{
-		Username: u.Username,
-		Email:    u.Email,
-		Password: password,
-		Role:     u.Role,
+		Username:   u.Username,
+		Email:      u.Email,
+		Password:   password,
+		Role:       u.Role,
+		GoogleID:   u.GoogleID,
+		FacebookID: u.FacebookID,
 	}
 }
 
 func (up *UserPostgres) ToUserAdmin() *models.UserAdmin {
 	return &models.UserAdmin{
-		ID:       int(up.ID),
-		Username: up.Username,
-		Email:    up.Email,
-		Role:     up.Role,
+		ID:         int(up.ID),
+		Username:   up.Username,
+		Email:      up.Email,
+		Role:       up.Role,
+		GoogleID:   up.GoogleID,
+		FacebookID: up.FacebookID,
 	}
 }
 
 func GetUpdatedUserEntity(vo models.UserValueObject, up *UserPostgres) *UserPostgres {
 	up.Username = vo.Username
 	up.Email = vo.Email
+	up.GoogleID = vo.GoogleID
+	up.FacebookID = vo.FacebookID
 	return up
 }

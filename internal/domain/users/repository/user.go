@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
@@ -24,4 +25,9 @@ type UserAdminRepository interface {
 	DeleteUser(c context.Context, id int) *errors.AppError
 	UpdateUserByID(c context.Context, itemId int, vo *models.UserAdminValueObject) (*models.UserAdmin, *errors.AppError)
 	ValidateUser(c context.Context, email, password string) *errors.AppError
+}
+
+type UserExternalAuthRepository interface {
+	GetByExternalID(c context.Context, externalID string) (*models.User, *errors.AppError)
+	CreateUser(c context.Context, u models.UserValueObject) *errors.AppError
 }
