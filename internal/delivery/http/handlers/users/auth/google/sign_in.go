@@ -9,6 +9,17 @@ import (
 	"google.golang.org/api/idtoken"
 )
 
+// SignIn godoc
+// @Summary Sign in with Google
+// @Description Sign in with Google
+// @ID sign-in-google
+// @Tags authentication
+// @Accept json
+// @Produce json
+// @Param data body schemas.GoogleSignInUpRequest true "Google sign in request"
+// @Success 200 {object} schemas.JWTResponse
+// @Failure 400 {object} map[string]interface{}
+// @Router /users/auth/google/sign-in [post]
 func (h Handler) SignIn(ctx *gin.Context) {
 
 	var req schemas.GoogleSignInUpRequest

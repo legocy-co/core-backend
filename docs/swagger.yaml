@@ -306,6 +306,11 @@ definitions:
       accessToken:
         type: string
     type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_users.GoogleSignInUpRequest:
+    properties:
+      token:
+        type: string
+    type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse:
     properties:
       accessToken:
@@ -444,6 +449,10 @@ definitions:
   github_com_legocy-co_legocy_internal_delivery_http_schemas_users_admin.UserAdminUpdateRequest:
     properties:
       email:
+        type: string
+      facebookID:
+        type: string
+      googleID:
         type: string
       role:
         description: Admin/User/etc.
@@ -1897,6 +1906,62 @@ paths:
       summary: List of LegoSet objects
       tags:
       - lego_sets
+  /users/auth/google/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Sign in with Google
+      operationId: sign-in-google
+      parameters:
+      - description: Google sign in request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.GoogleSignInUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Sign in with Google
+      tags:
+      - authentication
+  /users/auth/google/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Sign up with Google
+      operationId: sign-up-google
+      parameters:
+      - description: Google sign up request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.GoogleSignInUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Sign up with Google
+      tags:
+      - authentication
   /users/auth/refresh:
     post:
       operationId: refresh-jwt

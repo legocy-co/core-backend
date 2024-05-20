@@ -8,6 +8,20 @@ import (
 	"google.golang.org/api/idtoken"
 )
 
+// SignUp godoc
+// @Summary Sign up with Google
+// @Description Sign up with Google
+//
+//	@ID			sign-up-google
+//
+//	@Tags		authentication
+//
+// @Accept  json
+// @Produce  json
+// @Param data body schemas.GoogleSignInUpRequest true "Google sign up request"
+// @Success 200 {object} schemas.JWTResponse
+// @Failure 400 {object} map[string]interface{}
+// @Router /users/auth/google/sign-up [post]
 func (h *Handler) SignUp(ctx *gin.Context) {
 
 	var req schemas.GoogleSignInUpRequest
@@ -19,7 +33,7 @@ func (h *Handler) SignUp(ctx *gin.Context) {
 	cfg := config.GetAppConfig()
 	payload, err := idtoken.Validate(ctx, req.Token, cfg.GoogleClientID)
 	if err != nil {
-		ctx.AbortWithStatusJSON(403, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(401, gin.H{"error": err.Error()})
 		return
 	}
 
