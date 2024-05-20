@@ -1,4 +1,4 @@
-package auth
+package models
 
 type UserImage struct {
 	UserID      int

@@ -3,6 +3,7 @@ package app
 import (
 	postgres "github.com/legocy-co/legocy/internal/data/postgres/repository"
 	postgresAdmin "github.com/legocy-co/legocy/internal/data/postgres/repository/admin"
+	"github.com/legocy-co/legocy/internal/data/postgres/repository/google"
 	calculator "github.com/legocy-co/legocy/internal/domain/calculator/repository"
 	calculatorAdmin "github.com/legocy-co/legocy/internal/domain/calculator/repository/admin"
 	collections "github.com/legocy-co/legocy/internal/domain/collections/repository"
@@ -70,4 +71,8 @@ func (a *App) GetLegoSetImageRepository() lego.LegoSetImageRepository {
 
 func (a *App) GetMarketItemLikeRepository() marketplace.LikeRepository {
 	return postgres.NewLikePostgresRepository(a.GetDatabase())
+}
+
+func (a *App) GetGoogleAuthRepository() users.UserExternalAuthRepository {
+	return google.NewUserAuthRepository(a.GetDatabase(), di.ProvideDispatcher())
 }

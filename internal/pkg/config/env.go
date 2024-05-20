@@ -47,14 +47,17 @@ func SetupFromEnv() error {
 	s3Port := os.Getenv("S3_PORT")
 	cdnBaseUrl := os.Getenv("CDN_BASE_URL")
 
+	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
+
 	appConfig := AppConfig{
-		BaseURL:    baseUrl,
-		DbConf:     dbConfig,
-		JwtConf:    jwtConfig,
-		KafkaConf:  kafkaConfig,
-		S3Host:     s3Host,
-		S3Port:     s3Port,
-		CDNBaseURL: cdnBaseUrl,
+		BaseURL:        baseUrl,
+		DbConf:         dbConfig,
+		JwtConf:        jwtConfig,
+		KafkaConf:      kafkaConfig,
+		S3Host:         s3Host,
+		S3Port:         s3Port,
+		CDNBaseURL:     cdnBaseUrl,
+		GoogleClientID: googleClientID,
 	}
 
 	return SetAppConfig(&appConfig)

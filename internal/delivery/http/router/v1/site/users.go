@@ -5,6 +5,7 @@ import (
 	_ "github.com/legocy-co/legocy/docs"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth/google"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/profile"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/userImage"
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware"
@@ -17,12 +18,17 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 	// Authentication
 
 	authHandler := auth.NewTokenHandler(app.GetUserService())
+	authGoogleHandler := google.NewHandler(app.GetGoogleAuthRepository())
 
 	authRouter := rg.Group("/users/auth")
 	{
 		authRouter.POST("/sign-in", authHandler.GenerateToken)
 		authRouter.POST("/refresh", authHandler.RefreshToken)
 		authRouter.POST("/register", authHandler.UserRegister)
+
+		// Google
+		authRouter.POST("/google/sign-in", authGoogleHandler.SignIn)
+		authRouter.POST("/google/sign-up", authGoogleHandler.SignUp)
 	}
 
 	// User Profile

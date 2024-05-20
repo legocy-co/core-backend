@@ -12,6 +12,8 @@ type AppConfig struct {
 	S3Host     string `json:"s3_host"`
 	S3Port     string `json:"s3_port"`
 	CDNBaseURL string `json:"cdn_base_url"`
+
+	GoogleClientID string `json:"google_client_id"`
 }
 
 func GetAppConfig() *AppConfig {

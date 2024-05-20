@@ -2180,6 +2180,90 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/auth/google/sign-in": {
+            "post": {
+                "description": "Sign in with Google",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Sign in with Google",
+                "operationId": "sign-in-google",
+                "parameters": [
+                    {
+                        "description": "Google sign in request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.GoogleSignInUpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/users/auth/google/sign-up": {
+            "post": {
+                "description": "Sign up with Google",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Sign up with Google",
+                "operationId": "sign-up-google",
+                "parameters": [
+                    {
+                        "description": "Google sign up request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.GoogleSignInUpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/users/auth/refresh": {
             "post": {
                 "produces": [
@@ -3176,6 +3260,14 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.GoogleSignInUpRequest": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse": {
             "type": "object",
             "properties": {
@@ -3390,6 +3482,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
+                    "type": "string"
+                },
+                "facebookID": {
+                    "type": "string"
+                },
+                "googleID": {
                     "type": "string"
                 },
                 "role": {
