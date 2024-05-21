@@ -3,14 +3,13 @@ package client
 import (
 	"context"
 	"github.com/legocy-co/legocy/pkg/s3"
-	"github.com/legocy-co/legocy/pkg/s3/models"
 	"github.com/legocy-co/legocy/pkg/s3/proto"
 	"github.com/legocy-co/legocy/pkg/s3/proto/mapper"
 	log "github.com/sirupsen/logrus"
+	"os"
 )
 
-func (s ImageStorage) UploadImage(
-	image *models.ImageUnit, bucketName string) (string, error) {
+func (s ImageStorage) UploadImage(file *os.File, filename, bucketName string) (string, error) {
 
 	conn, err := s.getConnection()
 	if err != nil {

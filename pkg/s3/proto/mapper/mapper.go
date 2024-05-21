@@ -1,19 +1,21 @@
 package mapper
 
 import (
+	"github.com/docker/docker/image"
 	"github.com/legocy-co/legocy/pkg/helpers"
 	"github.com/legocy-co/legocy/pkg/s3/models"
 	"github.com/legocy-co/legocy/pkg/s3/proto"
+	"os"
 )
 
-func GetImageUploadRequest(image *models.ImageUnit, bucketName string) *proto.UploadImageRequest {
+func GetImageUploadRequest(file *os.File, bucketName string) *proto.UploadImageRequest {
 	return &proto.UploadImageRequest{
 		Meta: &proto.ImageInfo{
 			Id:         int32(image.ID),
 			BucketName: bucketName,
-			FileFormat: image.PayloadType,
+			FileFormat: file.,
 		},
-		Data: helpers.StreamToByte(image.Payload),
+		Data: helpers.StreamToByte(file),
 	}
 }
 
