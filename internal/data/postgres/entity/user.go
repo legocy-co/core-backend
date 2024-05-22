@@ -21,10 +21,12 @@ func (up UserPostgres) TableName() string {
 
 func FromUser(u *models.User, password string) *UserPostgres {
 	return &UserPostgres{
-		Username: u.Username,
-		Email:    u.Email,
-		Password: password,
-		Role:     u.Role,
+		Username:   u.Username,
+		Email:      u.Email,
+		Password:   password,
+		Role:       u.Role,
+		GoogleID:   u.GoogleID,
+		FacebookID: u.FacebookID,
 	}
 }
 
