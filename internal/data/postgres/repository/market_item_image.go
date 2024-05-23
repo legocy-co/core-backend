@@ -77,6 +77,51 @@ func (r MarketItemImagePostgresRepository) Get(marketItemID int) ([]*models.Mark
 	return markItemImages, nil
 }
 
+func (r MarketItemImagePostgresRepository) GetByID(id int) (*models.MarketItemImage, *errors.AppError) {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return nil, &data.ErrConnectionLost
+	}
+
+	var marketItemImageDB *e.MarketItemImagePostgres
+
+	err := db.Model(
+		&e.MarketItemImagePostgres{},
+	).First(
+		&marketItemImageDB, id,
+	).Error
+
+	if err != nil {
+		appErr := errors.NewAppError(errors.NotFoundError, err.Error())
+		return nil, &appErr
+	}
+
+	return marketItemImageDB.ToMarketItemImage(), nil
+}
+
+func (r MarketItemImagePostgresRepository) Update(
+	id int, vo models.MarketItemImagePartialVO,
+) (*models.MarketItemImage, *errors.AppError) {
+	db := r.conn.GetDB()
+
+	if db == nil {
+		return nil, &data.ErrConnectionLost
+	}
+
+	tx := db.Begin()
+
+	err := tx.Exec("UPDATE market_item_images SET sort_index = ? WHERE id = ?", vo.SortIndex, id).Error
+	if err != nil {
+		tx.Rollback()
+		appErr := errors.NewAppError(errors.ConflictError, err.Error())
+		return nil, &appErr
+	}
+
+	tx.Commit()
+	return nil, nil
+}
+
 func (r MarketItemImagePostgresRepository) Delete(id int) error {
 	db := r.conn.GetDB()
 

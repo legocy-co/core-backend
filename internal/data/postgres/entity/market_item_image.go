@@ -7,7 +7,7 @@ type MarketItemImagePostgres struct {
 	MarketItemID uint               `gorm:"not null"`
 	MarketItem   MarketItemPostgres `gorm:"foreignKey:MarketItemID"`
 	ImageURL     string             `gorm:"not null"`
-	IsMain       bool               `gorm:"default=false"`
+	SortIndex    int                `gorm:"default:0"`
 }
 
 func (m *MarketItemImagePostgres) TableName() string {
@@ -18,7 +18,7 @@ func FromMarketItemImageValueObject(vo models.MarketItemImageValueObject) *Marke
 	return &MarketItemImagePostgres{
 		MarketItemID: uint(vo.MarketItemID),
 		ImageURL:     vo.ImageURL,
-		IsMain:       vo.IsMain,
+		SortIndex:    vo.SortIndex,
 	}
 }
 
@@ -27,6 +27,6 @@ func (m *MarketItemImagePostgres) ToMarketItemImage() *models.MarketItemImage {
 		ID:           int(m.ID),
 		MarketItemID: int(m.MarketItemID),
 		ImageURL:     m.ImageURL,
-		IsMain:       m.IsMain,
+		SortIndex:    m.SortIndex,
 	}
 }

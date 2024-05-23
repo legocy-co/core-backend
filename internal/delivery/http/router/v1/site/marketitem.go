@@ -48,6 +48,7 @@ func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 		{
 			itemImages.POST("/:marketItemID", handler.UploadImage)
 			itemImages.DELETE("/:imageId", handler.Delete)
+			itemImages.PATCH("/:marketItemID/:imageID", handler.Update)
 		}
 	}
 

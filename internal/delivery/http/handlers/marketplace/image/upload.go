@@ -19,6 +19,7 @@ import (
 //		@Accept		multipart/form-data
 //		@Produce	json
 //		@Param		file	formData  file	true	"filepath"
+//		@Param		sortIndex	formData  int	false	"sort index"
 //	 	@Param		marketItemID path int true "market item id"
 //		@Success	200		{object}	marketplace.ImageUploadResponse
 //		@Failure	400		{object}	map[string]interface{}
@@ -46,10 +47,14 @@ func (h Handler) UploadImage(ctx *gin.Context) {
 	// Assuming err == nil always since upload handler didn't return error
 	marketItemId, err := strconv.Atoi(ctx.Param("marketItemID"))
 
-	isMain := ctx.Param("isMain") == "true"
+	// Get Sort Index from request
+	sortIndex, err := strconv.Atoi(ctx.PostForm("sortIndex"))
+	if err != nil {
+		sortIndex = 0
+	}
 
 	vo, e := models.NewMarketItemImageValueObject(
-		marketItemId, imgUrl, isMain,
+		marketItemId, imgUrl, sortIndex,
 	)
 	if e != nil {
 		httpErr := errors.FromAppError(*e)

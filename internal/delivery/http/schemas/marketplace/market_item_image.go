@@ -20,9 +20,10 @@ func NewImageUploadResponse(imageURL string, img *models.MarketItemImage) *Image
 }
 
 type ImageResponse struct {
-	ID       int    `json:"id"`
-	ImageURL string `json:"imageURL"`
-	IsMain   bool   `json:"isMain"`
+	ID        int    `json:"id"`
+	ImageURL  string `json:"imageURL"`
+	IsMain    bool   `json:"isMain"`
+	SortIndex int    `json:"sortIndex"`
 }
 
 func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {
@@ -35,8 +36,19 @@ func GetImagesResponse(imgs []*models.MarketItemImage) []ImageResponse {
 
 func GetImageResponse(img *models.MarketItemImage) ImageResponse {
 	return ImageResponse{
-		ID:       img.ID,
-		ImageURL: config.GetAppConfig().CDNBaseURL + img.ImageURL,
-		IsMain:   img.IsMain,
+		ID:        img.ID,
+		ImageURL:  config.GetAppConfig().CDNBaseURL + img.ImageURL,
+		IsMain:    false,
+		SortIndex: img.SortIndex,
+	}
+}
+
+type ImageUpdateRequest struct {
+	SortIndex int `json:"sortIndex"`
+}
+
+func (r ImageUpdateRequest) ToVO() models.MarketItemImagePartialVO {
+	return models.MarketItemImagePartialVO{
+		SortIndex: r.SortIndex,
 	}
 }

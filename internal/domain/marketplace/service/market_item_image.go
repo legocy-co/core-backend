@@ -25,3 +25,7 @@ func (s *MarketItemImageService) StoreMarketItemImage(
 func (s *MarketItemImageService) DeleteImageByID(id int) error {
 	return s.repo.Delete(id)
 }
+
+func (s *MarketItemImageService) UpdateImageByID(id int, vo models.MarketItemImagePartialVO) (*models.MarketItemImage, *errors.AppError) {
+	return s.repo.Update(id, vo)
+}

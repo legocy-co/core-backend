@@ -185,6 +185,13 @@ definitions:
         type: string
       isMain:
         type: boolean
+      sortIndex:
+        type: integer
+    type: object
+  github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUpdateRequest:
+    properties:
+      sortIndex:
+        type: integer
     type: object
   github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse:
     properties:
@@ -1625,6 +1632,10 @@ paths:
         name: file
         required: true
         type: file
+      - description: sort index
+        in: formData
+        name: sortIndex
+        type: integer
       - description: market item id
         in: path
         name: marketItemID
@@ -1645,6 +1656,46 @@ paths:
       security:
       - JWT: []
       summary: Upload Image
+      tags:
+      - market_item_images
+  /market-items/images/{marketItemID}/{imageID}:
+    patch:
+      consumes:
+      - application/json
+      operationId: update_market_item_image
+      parameters:
+      - description: image id
+        in: path
+        name: imageID
+        required: true
+        type: integer
+      - description: market item id
+        in: path
+        name: marketItemID
+        required: true
+        type: integer
+      - description: image update request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Update Image
       tags:
       - market_item_images
   /market-items/likes/:

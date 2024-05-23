@@ -7,14 +7,18 @@ import (
 type MarketItemImageValueObject struct {
 	MarketItemID int    `validate:"required"`
 	ImageURL     string `validate:"required"`
-	IsMain       bool   `validate:"default=false"`
+	SortIndex    int    `validate:"default=0"`
 }
 
-func NewMarketItemImageValueObject(marketItemID int, imageURL string, isMain bool) (*MarketItemImageValueObject, *errors.AppError) {
+type MarketItemImagePartialVO struct {
+	SortIndex int `validate:"required"`
+}
+
+func NewMarketItemImageValueObject(marketItemID int, imageURL string, sortIndex int) (*MarketItemImageValueObject, *errors.AppError) {
 	return &MarketItemImageValueObject{
 		MarketItemID: marketItemID,
 		ImageURL:     imageURL,
-		IsMain:       isMain,
+		SortIndex:    sortIndex,
 	}, nil
 }
 
@@ -22,5 +26,5 @@ type MarketItemImage struct {
 	ID           int
 	MarketItemID int    `validate:"required"`
 	ImageURL     string `validate:"required"`
-	IsMain       bool   `validate:"default=false"`
+	SortIndex    int    `validate:"default=0"`
 }
