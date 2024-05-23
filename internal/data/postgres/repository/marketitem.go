@@ -14,6 +14,7 @@ import (
 	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/pkg/kafka"
 	"github.com/legocy-co/legocy/pkg/pagination"
+	"gorm.io/gorm"
 )
 
 type MarketItemPostgresRepository struct {
@@ -39,7 +40,9 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 		Preload("Seller").
 		Joins("LegoSet").
 		Preload("LegoSet.LegoSeries").
-		Preload("Images").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_index ASC")
+		}).
 		Order("created_at DESC").
 		Where("status = 'ACTIVE'")
 
@@ -90,7 +93,9 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 		Preload("Seller").
 		Joins("LegoSet").
 		Preload("LegoSet.LegoSeries").
-		Preload("Images").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_index ASC")
+		}).
 		Preload("Likes", "user_id = ?", userID).
 		Where("user_postgres_id <> ? and status = 'ACTIVE'", userID).
 		Order("created_at DESC")
@@ -140,8 +145,14 @@ func (r MarketItemPostgresRepository) GetActiveMarketItemByID(
 	}
 
 	var entity *entity.MarketItemPostgres
-	query := db.Preload("Seller").Preload("Seller.Images").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
+	query := db.
+		Preload("Seller").
+		Preload("Seller.Images").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_index ASC")
+		}).
 		Find(&entity, "id = ? and status = 'ACTIVE'", id)
 
 	if query.RowsAffected == 0 {
@@ -159,8 +170,14 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(c context.Context, id in
 	}
 
 	var entity *entity.MarketItemPostgres
-	query := db.Preload("Seller").Preload("Seller.Images").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
+	query := db.
+		Preload("Seller").
+		Preload("Seller.Images").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_index ASC")
+		}).
 		Find(&entity, "id = ?", id)
 
 	if query.RowsAffected == 0 {
@@ -179,9 +196,13 @@ func (r MarketItemPostgresRepository) GetActiveMarketItemsBySellerID(
 		return nil, &data.ErrConnectionLost
 	}
 
-	result := db.Model(&entity.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
+	result := db.Model(&entity.MarketItemPostgres{}).
 		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_index ASC")
+		}).
 		Find(&itemsDB, "user_postgres_id = ? and status = 'ACTIVE'", sellerID)
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
@@ -209,7 +230,11 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(c context.Context
 
 	result := db.Model(&entity.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
 		Preload("Seller").
-		Preload("LegoSet").Preload("LegoSet.LegoSeries").Preload("Images").
+		Preload("LegoSet").
+		Preload("LegoSet.LegoSeries").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_index ASC")
+		}).
 		Find(&itemsDB, "user_postgres_id = ?", sellerID)
 	if result.Error != nil {
 		appErr := errors.NewAppError(errors.ConflictError, result.Error.Error())
