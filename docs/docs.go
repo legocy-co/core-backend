@@ -1617,6 +1617,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "description": "sort index",
+                        "name": "sortIndex",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
                         "description": "market item id",
                         "name": "marketItemID",
                         "in": "path",
@@ -1628,6 +1634,67 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUploadResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/market-items/images/{marketItemID}/{imageID}": {
+            "patch": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_item_images"
+                ],
+                "summary": "Update Image",
+                "operationId": "update_market_item_image",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "image id",
+                        "name": "imageID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "market item id",
+                        "name": "marketItemID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "image update request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "400": {
@@ -3073,6 +3140,17 @@ const docTemplate = `{
                 },
                 "isMain": {
                     "type": "boolean"
+                },
+                "sortIndex": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "sortIndex": {
+                    "type": "integer"
                 }
             }
         },
