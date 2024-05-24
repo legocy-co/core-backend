@@ -1569,6 +1569,13 @@ const docTemplate = `{
                         "name": "imageId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "market item id",
+                        "name": "marketItemID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

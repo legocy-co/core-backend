@@ -1603,6 +1603,11 @@ paths:
         name: imageId
         required: true
         type: integer
+      - description: market item id
+        in: path
+        name: marketItemID
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

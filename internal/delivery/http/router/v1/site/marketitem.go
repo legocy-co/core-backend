@@ -47,7 +47,7 @@ func AddMarketItems(rg *gin.RouterGroup, a *app.App) {
 		itemImages.Use(middleware.IsMarketItemOwner("marketItemID", a.GetMarketItemRepo()))
 		{
 			itemImages.POST("/:marketItemID", handler.UploadImage)
-			itemImages.DELETE("/:imageId", handler.Delete)
+			itemImages.DELETE("/:marketItemID/:imageId", handler.Delete)
 			itemImages.PATCH("/:marketItemID/:imageID", handler.Update)
 		}
 	}
