@@ -1592,40 +1592,6 @@ paths:
       summary: Get Favorite Market Items
       tags:
       - market_items
-  /market-items/images/{imageId}:
-    delete:
-      consumes:
-      - application/json
-      operationId: delete_market_item_image
-      parameters:
-      - description: image id
-        in: path
-        name: imageId
-        required: true
-        type: integer
-      - description: market item id
-        in: path
-        name: marketItemID
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - JWT: []
-      summary: Delete Image
-      tags:
-      - market_item_images
   /market-items/images/{marketItemID}:
     post:
       consumes:
@@ -1701,6 +1667,40 @@ paths:
       security:
       - JWT: []
       summary: Update Image
+      tags:
+      - market_item_images
+  /market-items/images/{marketItemID}/{imageId}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete_market_item_image
+      parameters:
+      - description: image id
+        in: path
+        name: imageId
+        required: true
+        type: integer
+      - description: market item id
+        in: path
+        name: marketItemID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Delete Image
       tags:
       - market_item_images
   /market-items/likes/:

@@ -16,7 +16,7 @@ import (
 // @Param marketItemID path int true "market item id"
 // @Success	200		{object}	map[string]interface{}
 // @Failure	400		{object}	map[string]interface{}
-// @Router		/market-items/images/{imageId} [delete]
+// @Router		/market-items/images/{marketItemID}/{imageId} [delete]
 //
 // @Security JWT
 func (h Handler) Delete(ctx *gin.Context) {

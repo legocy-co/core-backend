@@ -1544,58 +1544,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/market-items/images/{imageId}": {
-            "delete": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "market_item_images"
-                ],
-                "summary": "Delete Image",
-                "operationId": "delete_market_item_image",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "image id",
-                        "name": "imageId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "market item id",
-                        "name": "marketItemID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/market-items/images/{marketItemID}": {
             "post": {
                 "security": [
@@ -1694,6 +1642,58 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_marketplace.ImageUpdateRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/market-items/images/{marketItemID}/{imageId}": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "market_item_images"
+                ],
+                "summary": "Delete Image",
+                "operationId": "delete_market_item_image",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "image id",
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "market item id",
+                        "name": "marketItemID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
