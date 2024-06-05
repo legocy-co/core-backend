@@ -58,6 +58,14 @@ func AddLegoSetFilters(
 		}
 	}
 
+	if criteria.ReleaseYears != nil && len(criteria.ReleaseYears) > 0 {
+		if !isNested {
+			db = db.Where("release_year IN ?", criteria.ReleaseYears)
+		} else {
+			db = db.Where(fmt.Sprintf("%srelease_year IN ?", tablePrefix), criteria.ReleaseYears)
+		}
+	}
+
 	return db
 
 }

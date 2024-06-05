@@ -9,6 +9,7 @@ type LegoSetPostgres struct {
 	Number       int    `gorm:"unique"`
 	Name         string `gorm:"unique"`
 	NPieces      int
+	ReleaseYear  int                     `gorm:"default:2010;column:release_year"`
 	LegoSeriesID uint                    `gorm:"index:idx_lego_set_lego_series"`
 	LegoSeries   LegoSeriesPostgres      `gorm:"ForeignKey:LegoSeriesID"`
 	Images       []*LegoSetImagePostgres `gorm:"foreignKey:LegoSetID;constraint:OnDelete:CASCADE;"`
@@ -41,6 +42,7 @@ func FromLegoSet(s *models.LegoSet) *LegoSetPostgres {
 		Name:         s.Name,
 		NPieces:      s.NPieces,
 		LegoSeriesID: uint(s.Series.ID),
+		ReleaseYear:  s.ReleaseYear,
 	}
 }
 
@@ -50,6 +52,7 @@ func FromLegoSetValueObject(s *models.LegoSetValueObject) *LegoSetPostgres {
 		Name:         s.Name,
 		NPieces:      s.NPieces,
 		LegoSeriesID: uint(s.SeriesID),
+		ReleaseYear:  s.ReleaseYear,
 	}
 }
 
@@ -58,6 +61,7 @@ func GetUpdatedLegoSetPostgres(entity *LegoSetPostgres, vo *models.LegoSetValueO
 	entity.Name = vo.Name
 	entity.NPieces = vo.NPieces
 	entity.LegoSeriesID = uint(vo.SeriesID)
+	entity.ReleaseYear = vo.ReleaseYear
 
 	return entity
 }

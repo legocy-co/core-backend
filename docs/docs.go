@@ -2145,6 +2145,11 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "name": "release_year__in",
+                        "in": "query"
+                    },
+                    {
                         "type": "array",
                         "items": {
                             "type": "integer"
@@ -3079,6 +3084,9 @@ const docTemplate = `{
                 "number": {
                     "type": "integer"
                 },
+                "releaseYear": {
+                    "type": "integer"
+                },
                 "seriesID": {
                     "type": "integer"
                 }
@@ -3105,6 +3113,9 @@ const docTemplate = `{
                 "number": {
                     "type": "integer"
                 },
+                "releaseYear": {
+                    "type": "integer"
+                },
                 "series": {
                     "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse"
                 }
@@ -3121,6 +3132,9 @@ const docTemplate = `{
                 },
                 "npieces_lte": {
                     "type": "integer"
+                },
+                "release_year__in": {
+                    "type": "string"
                 },
                 "series_id__in": {
                     "type": "array",

@@ -140,6 +140,8 @@ definitions:
         type: string
       number:
         type: integer
+      releaseYear:
+        type: integer
       seriesID:
         type: integer
     type: object
@@ -157,6 +159,8 @@ definitions:
         type: string
       number:
         type: integer
+      releaseYear:
+        type: integer
       series:
         $ref: '#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_lego.LegoSeriesResponse'
     type: object
@@ -168,6 +172,8 @@ definitions:
         type: integer
       npieces_lte:
         type: integer
+      release_year__in:
+        type: string
       series_id__in:
         items:
           type: integer
@@ -1887,6 +1893,9 @@ paths:
       - in: query
         name: npieces_lte
         type: integer
+      - in: query
+        name: release_year__in
+        type: string
       - in: query
         items:
           type: integer
