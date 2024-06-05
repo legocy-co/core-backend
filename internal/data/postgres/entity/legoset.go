@@ -27,12 +27,13 @@ func (lsp *LegoSetPostgres) ToLegoSet() *models.LegoSet {
 	}
 
 	return &models.LegoSet{
-		ID:      int(lsp.ID),
-		Number:  lsp.Number,
-		Name:    lsp.Name,
-		NPieces: lsp.NPieces,
-		Series:  *lsp.LegoSeries.ToLegoSeries(),
-		Images:  images,
+		ID:          int(lsp.ID),
+		Number:      lsp.Number,
+		Name:        lsp.Name,
+		NPieces:     lsp.NPieces,
+		Series:      *lsp.LegoSeries.ToLegoSeries(),
+		ReleaseYear: lsp.ReleaseYear,
+		Images:      images,
 	}
 }
 
