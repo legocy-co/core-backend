@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func FileExists(fp string) bool {
@@ -26,4 +27,8 @@ func ByteToStream(data []byte) io.Reader {
 func GetConfigFilepath(fp string) string {
 	cwd, _ := os.Getwd()
 	return filepath.Dir(cwd) + "/" + filepath.Base(cwd) + fp
+}
+
+func GetFileExtension(fp string) string {
+	return strings.ReplaceAll(filepath.Ext(fp), ".", "")
 }
