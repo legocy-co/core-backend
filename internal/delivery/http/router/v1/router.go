@@ -61,7 +61,6 @@ func GetV1Router(app *app.App) V1router {
 	admin.AddAdminLegoSetValuations(v1Admin, app.GetLegoSetValuationAdminService())
 
 	// Site Routers
-	site.AddImagesRoutes(v1, app)
 	site.AddUsers(v1, app)
 	site.AddUserCollections(v1, app)
 	site.AddLegoSeries(v1, app.GetLegoSeriesService())
