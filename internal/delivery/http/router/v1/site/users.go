@@ -16,9 +16,8 @@ import (
 func AddUsers(rg *gin.RouterGroup, app *app.App) {
 
 	// Authentication
-
 	authHandler := auth.NewTokenHandler(app.GetUserService())
-	authGoogleHandler := google.NewHandler(app.GetGoogleAuthRepository())
+	authGoogleHandler := google.NewHandler(app)
 
 	authRouter := rg.Group("/users/auth")
 	{

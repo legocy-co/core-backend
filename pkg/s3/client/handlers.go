@@ -2,51 +2,49 @@ package client
 
 import (
 	"context"
-	"github.com/legocy-co/legocy/pkg/s3"
-	"github.com/legocy-co/legocy/pkg/s3/models"
+
 	"github.com/legocy-co/legocy/pkg/s3/proto"
-	"github.com/legocy-co/legocy/pkg/s3/proto/mapper"
-	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 )
 
-func (s ImageStorage) UploadImage(
-	image *models.ImageUnit, bucketName string) (string, error) {
-
+// UploadImageFromFile uploads an image from a file
+// to the S3 bucket
+// It returns the Slug of the uploaded image
+func (s ImageStorage) UploadImageFromFile(ctx context.Context, in *proto.UploadImageFileRequest, opts ...grpc.CallOption) (string, error) {
 	conn, err := s.getConnection()
-	if err != nil {
-		log.Fatalf("did not connect %v", err)
-		return "", s3.ErrConnectionRefused
-	}
-
-	defer conn.Close()
-
-	client := proto.NewS3ServiceClient(conn)
-
-	request := mapper.GetImageUploadRequest(image, bucketName)
-	response, err := client.UploadImage(context.Background(), request)
 	if err != nil {
 		return "", err
 	}
 
-	return response.ImageURL, nil
+	defer conn.Close()
+
+	client := proto.NewS3ServiceClient(conn)
+
+	response, err := client.UploadImageFromFile(ctx, in, opts...)
+	if err != nil {
+		return "", err
+	}
+
+	return response.GetImageURL(), nil
 }
 
-func (s ImageStorage) DownloadImage(bucketName, imageName string) (*models.ImageUnit, error) {
+// UploadImageFromURL uploads an image from a URL
+// to the S3 bucket
+// It returns the Slug of the uploaded image
+func (s ImageStorage) UploadImageFromURL(ctx context.Context, in *proto.UploadImageURLRequest, opts ...grpc.CallOption) (string, error) {
 	conn, err := s.getConnection()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	defer conn.Close()
 
 	client := proto.NewS3ServiceClient(conn)
 
-	request := mapper.GetImageDownloadRequest(bucketName, imageName)
-	imageResponse, err := client.DownloadImage(context.Background(), request)
+	response, err := client.UploadImageFromURL(ctx, in, opts...)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return mapper.DownloadImageResponseToImageUnit(imageResponse), nil
-
+	return response.GetImageURL(), nil
 }

@@ -6,32 +6,28 @@ option go_package ="./proto";
 package s3_bucket;
 
 service S3Service{
-  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
-  rpc DownloadImage(DownloadImageRequest) returns (DownloadImageResponse);
+  rpc UploadImageFromFile(UploadImageFileRequest) returns (UploadImageResponse);
+  rpc UploadImageFromURL(UploadImageURLRequest) returns (UploadImageResponse);
 }
 
 message NoParam{};
 
-message UploadImageRequest {
-  ImageInfo meta = 1;
+message UploadImageFileRequest {
+  ObjectParams meta = 1;
   bytes data = 2;
 }
 
-message ImageInfo {
-  int32 id = 1;
+message UploadImageURLRequest {
+  ObjectParams meta = 1;
+  string url = 2;
+}
+
+message ObjectParams {
+  int32 objectID = 1;
   string bucketName = 2;
-  string fileFormat = 3;
+  string format = 3; // png jpeg etc..
 }
 
 message UploadImageResponse {
   string imageURL = 1;
-}
-
-message DownloadImageRequest {
-    string bucketName = 1;
-    string imageName = 2;
-}
-
-message DownloadImageResponse {
-  bytes data = 1;
 }

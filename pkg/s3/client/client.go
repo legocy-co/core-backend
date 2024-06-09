@@ -15,6 +15,5 @@ func NewImageStorage(host string, port string) ImageStorage {
 }
 
 func (s ImageStorage) getConnection() (*grpc.ClientConn, error) {
-	return grpc.Dial(s.host+s.port,
-		grpc.WithTransportCredentials(insecure.NewCredentials()))
+	return grpc.Dial(s.host+s.port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 }
