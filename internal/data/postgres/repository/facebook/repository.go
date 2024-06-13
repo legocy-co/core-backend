@@ -1,8 +1,7 @@
-package google
+package facebook
 
 import (
 	"context"
-
 	d "github.com/legocy-co/legocy/internal/data"
 	entity "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	postgres "github.com/legocy-co/legocy/internal/data/postgres/repository"
@@ -32,7 +31,7 @@ func (r UserAuthRepository) GetByExternalID(c context.Context, externalID string
 	}
 
 	var userDB *entity.UserPostgres
-	if ok := db.Where("google_id = ?", externalID).First(&userDB).RowsAffected > 0; !ok {
+	if ok := db.Where("facebook_id = ?", externalID).First(&userDB).RowsAffected > 0; !ok {
 		return nil, &e.ErrUserNotFound
 	}
 

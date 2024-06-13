@@ -14,6 +14,11 @@ type AppConfig struct {
 	CDNBaseURL string `json:"cdn_base_url"`
 
 	GoogleClientID string `json:"google_client_id"`
+
+	FacebookAppID         string `json:"facebook_app_id"`
+	FacebookSecret        string `json:"facebook_secret"`
+	FacebookCallbackURL   string `json:"facebook_callback_url"`
+	FacebookSessionSecret string
 }
 
 func GetAppConfig() *AppConfig {

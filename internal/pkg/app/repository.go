@@ -3,6 +3,7 @@ package app
 import (
 	postgres "github.com/legocy-co/legocy/internal/data/postgres/repository"
 	postgresAdmin "github.com/legocy-co/legocy/internal/data/postgres/repository/admin"
+	"github.com/legocy-co/legocy/internal/data/postgres/repository/facebook"
 	"github.com/legocy-co/legocy/internal/data/postgres/repository/google"
 	calculator "github.com/legocy-co/legocy/internal/domain/calculator/repository"
 	calculatorAdmin "github.com/legocy-co/legocy/internal/domain/calculator/repository/admin"
@@ -75,4 +76,8 @@ func (a *App) GetMarketItemLikeRepository() marketplace.LikeRepository {
 
 func (a *App) GetGoogleAuthRepository() users.UserExternalAuthRepository {
 	return google.NewUserAuthRepository(a.GetDatabase(), di.ProvideDispatcher())
+}
+
+func (a *App) GetFacebookAuthRepository() users.UserExternalAuthRepository {
+	return facebook.NewUserAuthRepository(a.GetDatabase(), di.ProvideDispatcher())
 }

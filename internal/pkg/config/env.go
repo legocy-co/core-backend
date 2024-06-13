@@ -49,15 +49,24 @@ func SetupFromEnv() error {
 
 	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
 
+	facebookAppID := os.Getenv("FACEBOOK_APP_ID")
+	facebookSecret := os.Getenv("FACEBOOK_SECRET")
+	facebookCallbackURL := os.Getenv("FACEBOOK_CALLBACK_URL")
+	facebookSessionSecret := os.Getenv("FACEBOOK_SESSION_SECRET")
+
 	appConfig := AppConfig{
-		BaseURL:        baseUrl,
-		DbConf:         dbConfig,
-		JwtConf:        jwtConfig,
-		KafkaConf:      kafkaConfig,
-		S3Host:         s3Host,
-		S3Port:         s3Port,
-		CDNBaseURL:     cdnBaseUrl,
-		GoogleClientID: googleClientID,
+		BaseURL:               baseUrl,
+		DbConf:                dbConfig,
+		JwtConf:               jwtConfig,
+		KafkaConf:             kafkaConfig,
+		S3Host:                s3Host,
+		S3Port:                s3Port,
+		CDNBaseURL:            cdnBaseUrl,
+		GoogleClientID:        googleClientID,
+		FacebookAppID:         facebookAppID,
+		FacebookSecret:        facebookSecret,
+		FacebookCallbackURL:   facebookCallbackURL,
+		FacebookSessionSecret: facebookSessionSecret,
 	}
 
 	return SetAppConfig(&appConfig)
