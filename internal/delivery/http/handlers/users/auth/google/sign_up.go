@@ -6,6 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/pkg/config"
+	"github.com/legocy-co/legocy/pkg/auth/jwt"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/api/idtoken"
 )
@@ -48,7 +49,37 @@ func (h Handler) SignUp(ctx *gin.Context) {
 
 	go h.saveGoogleImage(payload)
 
-	h.SignIn(ctx)
+	user, appErr := h.r.GetByExternalID(ctx, payload.Subject)
+	if appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+	}
+
+	accessToken, err := jwt.GenerateAccessToken(
+		user.Email,
+		user.ID,
+		user.Role,
+		cfg.JwtConf.SecretKey,
+		cfg.JwtConf.AccessTokenLifeTime,
+	)
+	if err != nil {
+		ctx.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	refreshToken, err := jwt.GenerateRefreshToken(
+		user.Email,
+		user.ID,
+		user.Role,
+		cfg.JwtConf.SecretKey,
+		cfg.JwtConf.RefreshTokenLifeTime,
+	)
+	if err != nil {
+		ctx.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, schemas.JWTResponse{AccessToken: accessToken, RefreshToken: refreshToken})
 }
 
 func (h Handler) saveGoogleImage(payload *idtoken.Payload) {
@@ -64,4 +95,3 @@ func (h Handler) saveGoogleImage(payload *idtoken.Payload) {
 	}
 
 }
-
