@@ -23,7 +23,10 @@ type MarketItemPostgresRepository struct {
 }
 
 func NewMarketItemPostgresRepository(conn data.DBConn, dispatcher events.Dispatcher) MarketItemPostgresRepository {
-	return MarketItemPostgresRepository{conn: conn}
+	return MarketItemPostgresRepository{
+		conn:       conn,
+		dispatcher: dispatcher,
+	}
 }
 
 func (r MarketItemPostgresRepository) GetMarketItems(
