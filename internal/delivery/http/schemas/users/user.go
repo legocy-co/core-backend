@@ -75,7 +75,3 @@ func (r *UserUpdateRequest) ToUserValueObject() *models.UserValueObject {
 		Username: r.Username,
 	}
 }
-
-type GoogleSignInUpRequest struct {
-	Token string `json:"token"`
-}

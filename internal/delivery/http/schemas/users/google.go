@@ -5,6 +5,10 @@ import (
 	"google.golang.org/api/idtoken"
 )
 
+type GoogleSignInUpRequest struct {
+	Token string `json:"token"`
+}
+
 func FromGoogleToken(token *idtoken.Payload) models.UserValueObject {
 	return models.UserValueObject{
 		Email:    token.Claims["email"].(string),

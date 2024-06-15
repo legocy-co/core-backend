@@ -5,6 +5,7 @@ import (
 	_ "github.com/legocy-co/legocy/docs"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth/fb"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/auth/google"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/profile"
 	"github.com/legocy-co/legocy/internal/delivery/http/handlers/users/userImage"
@@ -18,6 +19,7 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 	// Authentication
 	authHandler := auth.NewTokenHandler(app.GetUserService())
 	authGoogleHandler := google.NewHandler(app)
+	authFBHandler := fb.NewHandler(app)
 
 	authRouter := rg.Group("/users/auth")
 	{
@@ -28,6 +30,12 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 		// Google
 		authRouter.POST("/google/sign-in", authGoogleHandler.SignIn)
 		authRouter.POST("/google/sign-up", authGoogleHandler.SignUp)
+
+		// Facebook
+		authRouter.POST("/fb/sign-in", authFBHandler.SignIn)
+		authRouter.POST("/fb/sign-in/callback", authFBHandler.SignInCallback)
+		authRouter.POST("/fb/sign-up", authFBHandler.SignUp)
+		authRouter.POST("/fb/sign-up/callback", authFBHandler.SignUpCallback)
 	}
 
 	// User Profile

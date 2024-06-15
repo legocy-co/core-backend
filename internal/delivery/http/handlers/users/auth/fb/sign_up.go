@@ -9,30 +9,37 @@ import (
 	"github.com/legocy-co/legocy/pkg/facebook"
 )
 
-// SignIn godoc
-// @Summary Sign in with Facebook
-// @Description Sign in with Facebook
-// @ID sign-in-facebook
+// SignUp godoc
+// @Summary Sign up with Facebook
+// @Description Sign up with Facebook
+// @ID sign-up-facebook
 // @Tags authentication
-// @Router /users/auth/fb/sign-in [get]
-func (h Handler) SignIn(ctx *gin.Context) {
-	ctx.Redirect(307, facebook.GetOAuthConfig(true).AuthCodeURL(facebook.GetSessionSecret()))
+// @Router /users/auth/fb/sign-up [get]
+func (h Handler) SignUp(ctx *gin.Context) {
+	ctx.Redirect(307, facebook.GetOAuthConfig(false).AuthCodeURL("state"))
 }
 
-// SignInCallback godoc
-// @Summary Sign in with Facebook callback
-// @Description Sign in with Facebook callback
-// @ID sign-in-facebook-callback
+// SignUpCallback godoc
+// @Summary Sign up with Facebook callback
+// @Description Sign up with Facebook callback
+// @ID sign-up-facebook-callback
 // @Tags authentication
-// @Router /users/auth/fb/sign-in/callback [get]
-func (h Handler) SignInCallback(ctx *gin.Context) {
+// @Router /users/auth/fb/sign-up/callback [get]
+func (h Handler) SignUpCallback(ctx *gin.Context) {
 
-	cfg := facebook.GetOAuthConfig(true)
+	cfg := facebook.GetOAuthConfig(false)
 	code := ctx.Query("code")
 
 	payload, err := facebook.GetUserInfo(ctx, cfg, code)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	vo := payload.ToUserVO()
+	if appErr := h.r.CreateUser(ctx, vo); appErr != nil {
+		httpErr := errors.FromAppError(*appErr)
+		ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 

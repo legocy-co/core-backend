@@ -10,11 +10,22 @@ var (
 	cfg = config.GetAppConfig()
 )
 
-func GetOAuthConfig() *oauth2.Config {
+func GetOAuthConfig(signIn bool) *oauth2.Config {
+
+	if signIn {
+		return &oauth2.Config{
+			ClientID:     cfg.FacebookAppID,
+			ClientSecret: cfg.FacebookSecret,
+			RedirectURL:  cfg.FacebookSignInCallbackURL,
+			Scopes:       []string{"email"},
+			Endpoint:     facebook.Endpoint,
+		}
+	}
+
 	return &oauth2.Config{
 		ClientID:     cfg.FacebookAppID,
 		ClientSecret: cfg.FacebookSecret,
-		RedirectURL:  cfg.FacebookCallbackURL,
+		RedirectURL:  cfg.FacebookSignInCallbackURL,
 		Scopes:       []string{"email"},
 		Endpoint:     facebook.Endpoint,
 	}
