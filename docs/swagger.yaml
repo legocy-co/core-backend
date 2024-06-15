@@ -1971,6 +1971,38 @@ paths:
       summary: List of LegoSet objects
       tags:
       - lego_sets
+  /users/auth/fb/sign-in:
+    get:
+      description: Sign in with Facebook
+      operationId: sign-in-facebook
+      responses: {}
+      summary: Sign in with Facebook
+      tags:
+      - authentication
+  /users/auth/fb/sign-in/callback:
+    get:
+      description: Sign in with Facebook callback
+      operationId: sign-in-facebook-callback
+      responses: {}
+      summary: Sign in with Facebook callback
+      tags:
+      - authentication
+  /users/auth/fb/sign-up:
+    get:
+      description: Sign up with Facebook
+      operationId: sign-up-facebook
+      responses: {}
+      summary: Sign up with Facebook
+      tags:
+      - authentication
+  /users/auth/fb/sign-up/callback:
+    get:
+      description: Sign up with Facebook callback
+      operationId: sign-up-facebook-callback
+      responses: {}
+      summary: Sign up with Facebook callback
+      tags:
+      - authentication
   /users/auth/google/sign-in:
     post:
       consumes:

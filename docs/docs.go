@@ -2259,6 +2259,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/auth/fb/sign-in": {
+            "get": {
+                "description": "Sign in with Facebook",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Sign in with Facebook",
+                "operationId": "sign-in-facebook",
+                "responses": {}
+            }
+        },
+        "/users/auth/fb/sign-in/callback": {
+            "get": {
+                "description": "Sign in with Facebook callback",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Sign in with Facebook callback",
+                "operationId": "sign-in-facebook-callback",
+                "responses": {}
+            }
+        },
+        "/users/auth/fb/sign-up": {
+            "get": {
+                "description": "Sign up with Facebook",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Sign up with Facebook",
+                "operationId": "sign-up-facebook",
+                "responses": {}
+            }
+        },
+        "/users/auth/fb/sign-up/callback": {
+            "get": {
+                "description": "Sign up with Facebook callback",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Sign up with Facebook callback",
+                "operationId": "sign-up-facebook-callback",
+                "responses": {}
+            }
+        },
         "/users/auth/google/sign-in": {
             "post": {
                 "description": "Sign in with Google",
