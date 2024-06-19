@@ -32,10 +32,10 @@ func AddUsers(rg *gin.RouterGroup, app *app.App) {
 		authRouter.POST("/google/sign-up", authGoogleHandler.SignUp)
 
 		// Facebook
-		authRouter.POST("/fb/sign-in", authFBHandler.SignIn)
-		authRouter.POST("/fb/sign-in/callback", authFBHandler.SignInCallback)
-		authRouter.POST("/fb/sign-up", authFBHandler.SignUp)
-		authRouter.POST("/fb/sign-up/callback", authFBHandler.SignUpCallback)
+		authRouter.GET("/fb/sign-in", authFBHandler.SignIn)
+		authRouter.GET("/fb/sign-in/callback", authFBHandler.SignInCallback)
+		authRouter.GET("/fb/sign-up", authFBHandler.SignUp)
+		authRouter.GET("/fb/sign-up/callback", authFBHandler.SignUpCallback)
 	}
 
 	// User Profile
