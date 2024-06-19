@@ -16,7 +16,8 @@ import (
 // @Tags authentication
 // @Router /users/auth/fb/sign-up [get]
 func (h Handler) SignUp(ctx *gin.Context) {
-	ctx.Redirect(307, facebook.GetOAuthConfig(false).AuthCodeURL("state"))
+	cfg, secret := facebook.GetOAuthConfig(false), facebook.GetSessionSecret()
+	ctx.Redirect(307, cfg.AuthCodeURL(secret))
 }
 
 // SignUpCallback godoc
