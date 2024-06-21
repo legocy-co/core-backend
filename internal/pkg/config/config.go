@@ -15,12 +15,7 @@ type AppConfig struct {
 
 	GoogleClientID string `json:"google_client_id"`
 
-	FacebookAppID         string `json:"facebook_app_id"`
-	FacebookSecret        string `json:"facebook_secret"`
-	FacebookSessionSecret string `json:"facebook_session_secret"`
-
-	FacebookSignInCallbackURL string `json:"facebook_callback_url"`
-	FacebookSignUpCallbackURL string `json:"google_callback_url"`
+	FacebookSecretKeySalt string `json:"facebook_secret_key_salt"`
 }
 
 func GetAppConfig() *AppConfig {

@@ -6,45 +6,43 @@ import (
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
-	"github.com/legocy-co/legocy/pkg/facebook"
 )
 
 // SignUp godoc
 // @Summary Sign up with Facebook
 // @Description Sign up with Facebook
-// @ID sign-up-facebook
-// @Tags authentication
-// @Router /users/auth/fb/sign-up [get]
-func (h Handler) SignUp(ctx *gin.Context) {
-	cfg, secret := facebook.GetOAuthConfig(false), facebook.GetSessionSecret()
-	ctx.Redirect(307, cfg.AuthCodeURL(secret))
-}
-
-// SignUpCallback godoc
-// @Summary Sign up with Facebook callback
-// @Description Sign up with Facebook callback
 // @ID sign-up-facebook-callback
 // @Tags authentication
-// @Router /users/auth/fb/sign-up/callback [get]
-func (h Handler) SignUpCallback(ctx *gin.Context) {
+// @Accept json
+// @Produce json
+// @Param data body schemas.FacebookSignUpRequest true "Facebook sign up request"
+// @Param X-Secret-Key header string true "Sign up key"
+// @Success 200 {object} schemas.JWTResponse
+// @Failure 400 {object} string
+// @Failure 403 {object} string
+// @Failure 500 {object} string
+// @Router /users/auth/fb/sign-up/callback [post]
+func (h Handler) SignUp(ctx *gin.Context) {
 
-	cfg := facebook.GetOAuthConfig(false)
-	code := ctx.Query("code")
-
-	payload, err := facebook.GetUserInfo(ctx, cfg, code)
-	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+	var data schemas.FacebookSignUpRequest
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		ctx.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	vo := payload.ToUserVO()
+	if err := checkSignUpKey(ctx, data); err != nil {
+		ctx.AbortWithStatusJSON(403, gin.H{"error": err.Error()})
+		return
+	}
+
+	vo := data.ToVO()
 	if appErr := h.r.CreateUser(ctx, vo); appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
 		return
 	}
 
-	user, appErr := h.r.GetByExternalID(ctx, payload.ID)
+	user, appErr := h.r.GetByExternalID(ctx, data.FacebookID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)

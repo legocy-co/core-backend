@@ -2259,48 +2259,124 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/auth/fb/sign-in": {
-            "get": {
-                "description": "Sign in with Facebook",
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Sign in with Facebook",
-                "operationId": "sign-in-facebook",
-                "responses": {}
-            }
-        },
         "/users/auth/fb/sign-in/callback": {
-            "get": {
+            "post": {
                 "description": "Sign in with Facebook callback",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "authentication"
                 ],
                 "summary": "Sign in with Facebook callback",
                 "operationId": "sign-in-facebook-callback",
-                "responses": {}
+                "parameters": [
+                    {
+                        "description": "Facebook sign in request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.FacebookSignInRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sign in key",
+                        "name": "X-Secret-Key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
-        "/users/auth/fb/sign-up": {
-            "get": {
+        "/users/auth/fb/sign-up/callback": {
+            "post": {
                 "description": "Sign up with Facebook",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "authentication"
                 ],
                 "summary": "Sign up with Facebook",
-                "operationId": "sign-up-facebook",
-                "responses": {}
-            }
-        },
-        "/users/auth/fb/sign-up/callback": {
-            "get": {
-                "description": "Sign up with Facebook callback",
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Sign up with Facebook callback",
                 "operationId": "sign-up-facebook-callback",
-                "responses": {}
+                "parameters": [
+                    {
+                        "description": "Facebook sign up request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.FacebookSignUpRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sign up key",
+                        "name": "X-Secret-Key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_legocy-co_legocy_internal_delivery_http_schemas_users.JWTResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/users/auth/google/sign-in": {
@@ -3399,6 +3475,36 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "accessToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.FacebookSignInRequest": {
+            "type": "object",
+            "required": [
+                "facebook_id"
+            ],
+            "properties": {
+                "facebook_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_legocy-co_legocy_internal_delivery_http_schemas_users.FacebookSignUpRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "facebook_id",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "facebook_id": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

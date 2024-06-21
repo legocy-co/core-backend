@@ -11,6 +11,6 @@ type Handler struct {
 
 func NewHandler(app *app.App) Handler {
 	return Handler{
-		r: app.GetGoogleAuthRepository(),
+		r: app.GetFacebookAuthRepository(),
 	}
 }

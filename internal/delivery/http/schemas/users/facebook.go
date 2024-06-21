@@ -1,18 +1,21 @@
 package users
 
-import (
-	"github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/pkg/facebook"
-)
+import "github.com/legocy-co/legocy/internal/domain/users/models"
 
-type FacebookSignInUpRequest struct {
-	Token string `json:"token"`
+type FacebookSignUpRequest struct {
+	FacebookID string `json:"facebook_id" binding:"required"`
+	Email      string `json:"email" binding:"required"`
+	Username   string `json:"username" binding:"required"`
 }
 
-func FromFacebookPayload(payload facebook.TokenPayload) models.UserValueObject {
+func (r FacebookSignUpRequest) ToVO() models.UserValueObject {
 	return models.UserValueObject{
-		Email:      payload.Email,
-		Username:   payload.Name,
-		FacebookID: &payload.ID,
+		Username:   r.Username,
+		Email:      r.Email,
+		FacebookID: &r.FacebookID,
 	}
+}
+
+type FacebookSignInRequest struct {
+	FacebookID string `json:"facebook_id" binding:"required"`
 }

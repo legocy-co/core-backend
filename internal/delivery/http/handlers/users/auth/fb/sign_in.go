@@ -6,41 +6,39 @@ import (
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/pkg/config"
 	"github.com/legocy-co/legocy/pkg/auth/jwt"
-	"github.com/legocy-co/legocy/pkg/facebook"
 )
 
 // SignIn godoc
-// @Summary Sign in with Facebook
-// @Description Sign in with Facebook
-// @ID sign-in-facebook
-// @Tags authentication
-// @Router /users/auth/fb/sign-in [get]
-func (h Handler) SignIn(ctx *gin.Context) {
-	cfg, secret := facebook.GetOAuthConfig(true), facebook.GetSessionSecret()
-	ctx.Redirect(307, cfg.AuthCodeURL(secret))
-}
-
-// SignInCallback godoc
 // @Summary Sign in with Facebook callback
 // @Description Sign in with Facebook callback
 // @ID sign-in-facebook-callback
 // @Tags authentication
-// @Router /users/auth/fb/sign-in/callback [get]
-func (h Handler) SignInCallback(ctx *gin.Context) {
+// @Accept json
+// @Produce json
+// @Param data body schemas.FacebookSignInRequest true "Facebook sign in request"
+// @Param X-Secret-Key header string true "Sign in key"
+// @Success 200 {object} schemas.JWTResponse
+// @Failure 400 {object} string
+// @Failure 403 {object} string
+// @Failure 500 {object} string
+// @Router /users/auth/fb/sign-in/callback [post]
+func (h Handler) SignIn(ctx *gin.Context) {
 
-	cfg := facebook.GetOAuthConfig(true)
-	code := ctx.Query("code")
-
-	payload, err := facebook.GetUserInfo(ctx, cfg, code)
-	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+	var data schemas.FacebookSignInRequest
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		ctx.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, appErr := h.r.GetByExternalID(ctx, payload.ID)
+	user, appErr := h.r.GetByExternalID(ctx, data.FacebookID)
 	if appErr != nil {
 		httpErr := errors.FromAppError(*appErr)
 		ctx.AbortWithStatusJSON(httpErr.Status, httpErr.Message)
+		return
+	}
+
+	if err := checkSignInKey(ctx, data, *user); err != nil {
+		ctx.AbortWithStatusJSON(403, gin.H{"error": err.Error()})
 		return
 	}
 
