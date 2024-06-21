@@ -2259,7 +2259,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/auth/fb/sign-in/callback": {
+        "/users/auth/fb/sign-in": {
             "post": {
                 "description": "Sign in with Facebook callback",
                 "consumes": [
@@ -2319,7 +2319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/auth/fb/sign-up/callback": {
+        "/users/auth/fb/sign-up": {
             "post": {
                 "description": "Sign up with Facebook",
                 "consumes": [

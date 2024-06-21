@@ -1991,7 +1991,7 @@ paths:
       summary: List of LegoSet objects
       tags:
       - lego_sets
-  /users/auth/fb/sign-in/callback:
+  /users/auth/fb/sign-in:
     post:
       consumes:
       - application/json
@@ -2031,7 +2031,7 @@ paths:
       summary: Sign in with Facebook callback
       tags:
       - authentication
-  /users/auth/fb/sign-up/callback:
+  /users/auth/fb/sign-up:
     post:
       consumes:
       - application/json

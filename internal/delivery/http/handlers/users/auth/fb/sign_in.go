@@ -21,7 +21,7 @@ import (
 // @Failure 400 {object} string
 // @Failure 403 {object} string
 // @Failure 500 {object} string
-// @Router /users/auth/fb/sign-in/callback [post]
+// @Router /users/auth/fb/sign-in [post]
 func (h Handler) SignIn(ctx *gin.Context) {
 
 	var data schemas.FacebookSignInRequest
