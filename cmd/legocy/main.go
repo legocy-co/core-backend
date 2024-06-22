@@ -6,9 +6,12 @@ import (
 )
 
 func main() {
-	a := app.New()
+	_app, err := app.New()
+	if err != nil {
+		panic(err)
+	}
 
-	srv := server.New(a)
+	srv := server.New(_app)
 	if err := srv.Run("8080"); err != nil {
 		panic(err)
 	}
