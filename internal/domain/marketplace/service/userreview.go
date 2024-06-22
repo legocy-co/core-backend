@@ -4,7 +4,7 @@ import (
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"golang.org/x/net/context"
 )
 

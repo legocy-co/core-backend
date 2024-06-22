@@ -5,7 +5,7 @@ import (
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/pkg/pagination"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"

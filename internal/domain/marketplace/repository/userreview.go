@@ -2,9 +2,9 @@ package marketplace
 
 import (
 	"context"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type UserReviewRepository interface {

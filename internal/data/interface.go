@@ -2,8 +2,8 @@ package data
 
 import "gorm.io/gorm"
 
-type DBConn interface {
-	Init()
+type Storage interface {
+	Init() error
 	IsReady() bool
 	GetDB() *gorm.DB
 }

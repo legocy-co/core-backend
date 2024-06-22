@@ -11,17 +11,16 @@ import (
 	lego "github.com/legocy-co/legocy/internal/domain/lego/repository"
 	marketplace "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	users "github.com/legocy-co/legocy/internal/domain/users/repository"
-	"github.com/legocy-co/legocy/internal/pkg/di"
 )
 
 // Start Admin
 
 func (a *App) GetMarketItemAdminRepository() marketplace.MarketItemAdminRepository {
-	return postgresAdmin.NewMarketItemAdminPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgresAdmin.NewMarketItemAdminPostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetUserAdminRepository() users.UserAdminRepository {
-	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgresAdmin.NewUserAdminPostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetLegoSetsValuationAdminRepository() calculatorAdmin.LegoSetValuationAdminRepository {
@@ -31,11 +30,11 @@ func (a *App) GetLegoSetsValuationAdminRepository() calculatorAdmin.LegoSetValua
 // End Admin
 
 func (a *App) GetUserRepo() users.UserRepository {
-	return postgres.NewUserPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgres.NewUserPostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetUserImagesRepo() users.UserImageRepository {
-	return postgres.NewUserImagePostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgres.NewUserImagePostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetLegoSeriesRepo() lego.LegoSeriesRepository {
@@ -47,7 +46,7 @@ func (a *App) GetLegoSetRepo() lego.LegoSetRepository {
 }
 
 func (a *App) GetMarketItemRepo() marketplace.MarketItemRepository {
-	return postgres.NewMarketItemPostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgres.NewMarketItemPostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetUserReviewRepo() marketplace.UserReviewRepository {
@@ -63,11 +62,11 @@ func (a *App) GetLegoSetsValuationRepository() calculator.LegoSetValuationReposi
 }
 
 func (a *App) GetMarketItemImageRepository() marketplace.MarketItemImageRepository {
-	return postgres.NewMarketItemImagePostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgres.NewMarketItemImagePostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetLegoSetImageRepository() lego.LegoSetImageRepository {
-	return postgres.NewLegoSetImagePostgresRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return postgres.NewLegoSetImagePostgresRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetMarketItemLikeRepository() marketplace.LikeRepository {
@@ -75,9 +74,9 @@ func (a *App) GetMarketItemLikeRepository() marketplace.LikeRepository {
 }
 
 func (a *App) GetGoogleAuthRepository() users.UserExternalAuthRepository {
-	return google.NewUserAuthRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return google.NewUserAuthRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }
 
 func (a *App) GetFacebookAuthRepository() users.UserExternalAuthRepository {
-	return facebook.NewUserAuthRepository(a.GetDatabase(), di.ProvideDispatcher())
+	return facebook.NewUserAuthRepository(a.GetDatabase(), a.GetEventsDispatcher())
 }

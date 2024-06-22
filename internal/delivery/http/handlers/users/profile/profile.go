@@ -3,11 +3,11 @@ package profile
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users/profile"
-	appErrors "github.com/legocy-co/legocy/internal/pkg/app/errors"
-	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
+	appErrors "github.com/legocy-co/legocy/internal/pkg/errors"
 	"net/http"
 )
 
@@ -23,7 +23,7 @@ import (
 //
 //	@Security	JWT
 func (h *UserProfilePageHandler) CurrentUserProfilePage(c *gin.Context) {
-	tokenPayload, err := middleware.GetUserPayload(c)
+	tokenPayload, err := auth.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return

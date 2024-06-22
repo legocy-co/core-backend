@@ -3,6 +3,8 @@ package config
 var appConfigInstance *AppConfig // private singleton variable
 
 type AppConfig struct {
+	Environment Environment `json:"environment"`
+
 	BaseURL string `json:"base_url"`
 
 	DbConf    DatabaseConfig `yaml:"database" json:"database"`

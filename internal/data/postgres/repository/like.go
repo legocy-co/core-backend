@@ -2,23 +2,24 @@ package postgres
 
 import (
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 type LikePostgresRepository struct {
-	conn d.DBConn
+	conn d.Storage
 }
 
-func NewLikePostgresRepository(conn d.DBConn) LikePostgresRepository {
+func NewLikePostgresRepository(conn d.Storage) LikePostgresRepository {
 	return LikePostgresRepository{conn: conn}
 }
 
 func (r LikePostgresRepository) AddLike(vo models.LikeValueObject) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -38,7 +39,7 @@ func (r LikePostgresRepository) AddLike(vo models.LikeValueObject) *errors.AppEr
 func (r LikePostgresRepository) RemoveLike(vo models.LikeValueObject) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -62,7 +63,7 @@ func (r LikePostgresRepository) RemoveLike(vo models.LikeValueObject) *errors.Ap
 func (r LikePostgresRepository) GetLikesByUserID(userID int) ([]*models.Like, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var likes []entities.MarketItemLikePostgres

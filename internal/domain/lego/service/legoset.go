@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/lego/filters"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
 	r "github.com/legocy-co/legocy/internal/domain/lego/repository"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/pkg/pagination"
 )
 

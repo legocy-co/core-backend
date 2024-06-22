@@ -1,14 +1,14 @@
 package main
 
 import (
-	router "github.com/legocy-co/legocy/internal/delivery/http/router/v1"
+	"github.com/legocy-co/legocy/internal/delivery/http/server"
 	"github.com/legocy-co/legocy/internal/pkg/app"
 )
 
 func main() {
-	_app := app.New()
+	a := app.New()
 
-	srv := router.GetV1Router(_app)
+	srv := server.New(a)
 	if err := srv.Run("8080"); err != nil {
 		panic(err)
 	}

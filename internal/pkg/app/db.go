@@ -1,25 +1,21 @@
 package app
 
 import (
-	"fmt"
 	"github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/data/postgres"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	log "github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 )
 
-func (a *App) GetDatabase() data.DBConn {
+func (a *App) GetDatabase() data.Storage {
 	return a.database
 }
 
-func (a *App) setDatabase(dbCfg *config.DatabaseConfig) {
-	var dbConn *gorm.DB
-	conn, err := postgres.CreateConnection(dbCfg, dbConn)
+func (a *App) setDatabase(dbCfg *config.DatabaseConfig) error {
+	conn, err := postgres.New(dbCfg, a.GetLogger())
 	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Database] %v", err.Error()))
-		return
+		return err
 	}
-	conn.Init()
+
 	a.database = conn
+	return nil
 }

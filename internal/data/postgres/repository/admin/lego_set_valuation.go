@@ -2,19 +2,20 @@ package admin
 
 import (
 	"context"
-	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/domain/calculator"
 	"github.com/legocy-co/legocy/internal/domain/calculator/models"
 	"github.com/legocy-co/legocy/internal/domain/collections"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 type LegoSetValuationAdminPostgresRepository struct {
-	conn d.DBConn
+	conn data.Storage
 }
 
-func NewLegoSetValuationPostgresAdminRepository(conn d.DBConn) LegoSetValuationAdminPostgresRepository {
+func NewLegoSetValuationPostgresAdminRepository(conn data.Storage) LegoSetValuationAdminPostgresRepository {
 	return LegoSetValuationAdminPostgresRepository{conn: conn}
 }
 
@@ -23,7 +24,7 @@ func (r LegoSetValuationAdminPostgresRepository) GetLegoSetValuations(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var setValuations []entities.LegoSetValuationPostgres
@@ -52,7 +53,7 @@ func (r LegoSetValuationAdminPostgresRepository) GetLegoSetValuationByID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.LegoSetValuationPostgres
@@ -75,7 +76,7 @@ func (r LegoSetValuationAdminPostgresRepository) AddLegoSetValuation(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	entityToCreate := entities.FromLegoSetValuationVO(vo)
@@ -96,7 +97,7 @@ func (r LegoSetValuationAdminPostgresRepository) AddLegoSetValuation(
 func (r LegoSetValuationAdminPostgresRepository) DeleteLegoSetValuationByID(c context.Context, id int) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -117,7 +118,7 @@ func (r LegoSetValuationAdminPostgresRepository) UpdateLegoSetValuationByID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()

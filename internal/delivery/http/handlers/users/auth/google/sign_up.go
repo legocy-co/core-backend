@@ -6,7 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/auth/jwt"
+	"github.com/legocy-co/legocy/pkg/jwt"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/api/idtoken"
 )

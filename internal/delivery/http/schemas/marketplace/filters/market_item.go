@@ -5,7 +5,7 @@ import (
 	legoFilters "github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
 	legoFilterDomain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/pkg/helpers"
 )
 

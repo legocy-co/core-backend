@@ -3,8 +3,8 @@ package like
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
-	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 
 // GetLikedItems godoc
@@ -18,7 +18,7 @@ import (
 // @Security JWT
 func (h *Handler) GetLikedItems(c *gin.Context) {
 
-	tokenPayload, err := middleware.GetUserPayload(c)
+	tokenPayload, err := auth.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorized"})
 		return

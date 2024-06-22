@@ -8,7 +8,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users/profile"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	ser "github.com/legocy-co/legocy/internal/domain/users/service"
-	appErrors "github.com/legocy-co/legocy/internal/pkg/app/errors"
+	appErrors "github.com/legocy-co/legocy/internal/pkg/errors"
 	"net/http"
 	"strconv"
 )

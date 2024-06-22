@@ -3,20 +3,21 @@ package postgres
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/domain/users/repository"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	"github.com/legocy-co/legocy/pkg/kafka"
-	"github.com/legocy-co/legocy/pkg/kafka/schemas"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/image"
 )
 
 type UserImagePostgresRepository struct {
-	conn       d.DBConn
+	conn       d.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewUserImagePostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) repository.UserImageRepository {
+func NewUserImagePostgresRepository(conn d.Storage, dispatcher events.Dispatcher) repository.UserImageRepository {
 	return UserImagePostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -26,7 +27,7 @@ func NewUserImagePostgresRepository(conn d.DBConn, dispatcher events.Dispatcher)
 func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *models.UserImage) error {
 	db := r.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -52,7 +53,7 @@ func (r UserImagePostgresRepository) AddUserImage(c context.Context, image *mode
 func (r UserImagePostgresRepository) DeleteImagesByUserID(c context.Context, userID int) error {
 	db := r.conn.GetDB()
 	if db == nil {
-		return d.ErrConnectionLost
+		return postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -71,7 +72,7 @@ func (r UserImagePostgresRepository) DeleteImagesByUserID(c context.Context, use
 
 		err = r.dispatcher.ProduceJSONEvent(
 			kafka.UserImagesDeletedTopic,
-			schemas.ImageDeletedEventData{
+			image.ImageDeletedEventData{
 				ImageFilepath: userImage.FilepathURL,
 			},
 		)
@@ -89,7 +90,7 @@ func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, d.ErrConnectionLost
+		return nil, postgres.ErrConnectionLost
 	}
 
 	var userImagesDB []*entities.UserImagePostgres
@@ -97,7 +98,7 @@ func (r UserImagePostgresRepository) GetUserImages(c context.Context, userID int
 		&userImagesDB, entities.UserImagePostgres{UserID: uint(userID)})
 
 	if len(userImagesDB) == 0 {
-		return nil, d.ErrItemNotFound
+		return nil, postgres.ErrItemNotFound
 	}
 
 	userImages := make([]*models.UserImage, 0, len(userImagesDB))

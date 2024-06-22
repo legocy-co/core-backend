@@ -7,6 +7,16 @@ import (
 
 func SetupFromEnv() error {
 
+	var env Environment
+	switch os.Getenv("ENV") {
+	case "dev":
+		env = EnvDevelopment
+	case "prod":
+		env = EnvProduction
+	default:
+		env = EnvDevelopment
+	}
+
 	baseUrl := os.Getenv("BASE_URL")
 	if baseUrl == "" {
 		baseUrl = "localhost"
@@ -51,6 +61,7 @@ func SetupFromEnv() error {
 	fbSalt := os.Getenv("FACEBOOK_SECRET_KEY_SALT")
 
 	appConfig := AppConfig{
+		Environment:           env,
 		BaseURL:               baseUrl,
 		DbConf:                dbConfig,
 		JwtConf:               jwtConfig,

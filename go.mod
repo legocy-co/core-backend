@@ -1,11 +1,12 @@
 module github.com/legocy-co/legocy
 
-go 1.19
+go 1.22
 
 require (
 	github.com/confluentinc/confluent-kafka-go/v2 v2.3.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.8.2
+	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/swaggo/files v1.0.0

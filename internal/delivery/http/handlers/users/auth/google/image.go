@@ -2,10 +2,10 @@ package google
 
 import (
 	"context"
+	"github.com/legocy-co/legocy/internal/pkg/s3"
+	proto2 "github.com/legocy-co/legocy/internal/pkg/s3/proto"
 
 	"github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/pkg/s3"
-	"github.com/legocy-co/legocy/pkg/s3/proto"
 )
 
 func (h Handler) uploadImage(user *models.User, url string) error {
@@ -14,8 +14,8 @@ func (h Handler) uploadImage(user *models.User, url string) error {
 		return nil
 	}
 
-	req := proto.NewUploadImageURLRequest(
-		proto.UploadImageURLOpts{
+	req := proto2.NewUploadImageURLRequest(
+		proto2.UploadImageURLOpts{
 			URL:      url,
 			ObjectID: user.ID,
 			Bucket:   s3.UserBucketName,

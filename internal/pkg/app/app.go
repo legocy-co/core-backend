@@ -6,16 +6,16 @@ import (
 	"github.com/joho/godotenv"
 	d "github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
 	log "github.com/sirupsen/logrus"
 	"time"
 )
 
-func New() *App {
+func New() (*App, error) {
 
 	godotenv.Load()
 
-	app := App{}
+	app := &App{}
 
 	// Load config json
 	log.SetFormatter(&log.JSONFormatter{})
@@ -33,21 +33,20 @@ func New() *App {
 
 	//Database
 	dbCfg := config.GetDBConfig()
-	if cfg == nil {
-		log.Fatalln("empty data config")
+	if err := app.setDatabase(dbCfg); err != nil {
+		return nil, err
 	}
-	app.setDatabase(dbCfg)
 
 	// Check all deps
 	if !app.isReady() {
 		panic("Some dependencies failed to inject")
 	}
 
-	return &app
+	return app, nil
 }
 
 type App struct {
-	database d.DBConn
+	database d.Storage
 }
 
 func (a *App) isReady() bool {

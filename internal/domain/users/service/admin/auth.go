@@ -3,7 +3,7 @@ package admin
 import (
 	"context"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 func (s UserAdminService) LoginAdmin(c context.Context, email string, password string) (*models.UserAdmin, *errors.AppError) {

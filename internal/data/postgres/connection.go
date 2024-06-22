@@ -2,87 +2,93 @@ package postgres
 
 import (
 	"fmt"
-	d "github.com/legocy-co/legocy/internal/data"
-	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/logging"
-	log "github.com/sirupsen/logrus"
+	"gorm.io/gorm/logger"
+	"log/slog"
 	"time"
 
-	postgres "gorm.io/driver/postgres"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func CreateConnection(config *config.DatabaseConfig, db *gorm.DB) (d.DBConn, error) {
-	if postgresConn != nil {
-		return nil, d.ErrConnectionAlreadyExists
-	}
-	postgresConn = &Connection{config, db}
-	return postgresConn, nil
-}
+var (
+	postgresConn *Connection
+)
 
-var postgresConn *Connection // private singleton instance
 type Connection struct {
 	config *config.DatabaseConfig
 	db     *gorm.DB
+	log    *slog.Logger
 }
 
-func (psql *Connection) IsReady() bool {
-	return psql.db != nil
-}
-
-func (psql *Connection) getConnectionString() string {
-	return fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		psql.config.Hostname, psql.config.Port, psql.config.DbUser, psql.config.DbPassword, psql.config.DbName)
-}
-
-func (psql *Connection) Init() {
-	dsn := psql.getConnectionString()
-	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logging.NewGORMLogger(),
-	})
-	if err != nil {
-		fmt.Printf("Error connecting to database! %v", err.Error())
-		panic(err)
+func New(config *config.DatabaseConfig, log *slog.Logger) (*Connection, error) {
+	if postgresConn != nil {
+		return nil, ErrConnectionAlreadyExists
 	}
 
-	psql.db = conn
+	postgresConn = &Connection{config, nil, log}
 
-	err = psql.db.Debug().AutoMigrate(
-		entities.UserPostgres{},
-		entities.UserImagePostgres{},
+	if err := postgresConn.Init(); err != nil {
+		return nil, err
+	}
 
-		entities.LegoSeriesPostgres{},
-		entities.LegoSetPostgres{},
-		entities.LegoSetValuationPostgres{},
+	return postgresConn, nil
+}
 
-		entities.MarketItemPostgres{},
-		entities.MarketItemImagePostgres{},
-		entities.MarketItemLikePostgres{},
+func (c *Connection) IsReady() bool {
+	return c.db != nil
+}
 
-		entities.UserImagePostgres{},
+func (c *Connection) Init() error {
 
-		entities.UserReviewPostgres{},
-		entities.UserLegoSetPostgres{},
-
-		entities.LegoSetImagePostgres{},
+	conn, err := gorm.Open(
+		postgres.Open(
+			c.getConnectionString(),
+		),
+		&gorm.Config{
+			Logger: logger.Default.LogMode(logger.Error),
+		},
 	)
 
 	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Postgres] %v", err.Error()))
+		return err
 	}
 
-	sqlDB, err := psql.db.DB()
+	c.db = conn
+
+	if err := c.applyMigrations(); err != nil {
+		return err
+	}
+
 	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Postgres] %v", err.Error()))
+		c.log.Error(
+			"DB Connection Error",
+			"error", err.Error(),
+		)
+	}
+
+	sqlDB, err := c.db.DB()
+	if err != nil {
+		return err
 	}
 
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(500)
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
+
+	return nil
 }
 
-func (psql *Connection) GetDB() *gorm.DB {
-	return psql.db
+func (c *Connection) GetDB() *gorm.DB {
+	return c.db
+}
+
+func (c *Connection) GetLogger() *slog.Logger {
+	return c.log
+}
+
+func (c *Connection) getConnectionString() string {
+	return fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		c.config.Hostname, c.config.Port, c.config.DbUser, c.config.DbPassword, c.config.DbName)
 }

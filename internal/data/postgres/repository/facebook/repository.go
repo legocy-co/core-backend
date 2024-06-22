@@ -3,21 +3,22 @@ package facebook
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	postgres2 "github.com/legocy-co/legocy/internal/data/postgres"
 	entity "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	postgres "github.com/legocy-co/legocy/internal/data/postgres/repository"
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	"github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/pkg/helpers"
 )
 
 type UserAuthRepository struct {
-	conn d.DBConn
+	conn d.Storage
 	base postgres.UserPostgresRepository
 }
 
-func NewUserAuthRepository(conn d.DBConn, dispatcher events.Dispatcher) UserAuthRepository {
+func NewUserAuthRepository(conn d.Storage, dispatcher events.Dispatcher) UserAuthRepository {
 	return UserAuthRepository{
 		conn: conn,
 		base: postgres.NewUserPostgresRepository(conn, dispatcher),
@@ -27,7 +28,7 @@ func NewUserAuthRepository(conn d.DBConn, dispatcher events.Dispatcher) UserAuth
 func (r UserAuthRepository) GetByExternalID(c context.Context, externalID string) (*models.User, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres2.ErrConnectionLost
 	}
 
 	var userDB *entity.UserPostgres
