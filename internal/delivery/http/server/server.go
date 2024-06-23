@@ -34,10 +34,13 @@ type Server struct {
 // @externalDocs.url			https://swagger.io/resources/open-api/
 func New(app *app.App) *Server {
 
-	e := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+
+	e := gin.New()
 
 	// Use middleware
 	e.Use(
+		gin.Recovery(),
 		id.RequestIDMiddleware(),
 		logging.JSONLogMiddleware(app.GetLogger()),
 	)

@@ -52,6 +52,7 @@ func (c *Connection) Init() error {
 		return err
 	}
 
+	c.db = conn
 	if err := c.applyMigrations(); err != nil {
 		return err
 	}
@@ -66,8 +67,6 @@ func (c *Connection) Init() error {
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(500)
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
-
-	c.db = conn
 
 	return nil
 }

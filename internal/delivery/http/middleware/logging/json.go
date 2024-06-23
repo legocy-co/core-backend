@@ -23,7 +23,7 @@ func JSONLogMiddleware(log *slog.Logger) gin.HandlerFunc {
 			slog.Int64("response_time", duration),
 			slog.String("method", c.Request.Method),
 			slog.String("path", c.Request.RequestURI),
-			slog.String("request_id", c.Writer.Header().Get("Request-Id")),
+			slog.String("request_id", c.GetHeader("X-Request-ID")),
 			slog.Int("response_status", c.Writer.Status()),
 		)
 

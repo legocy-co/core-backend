@@ -16,7 +16,7 @@ func getLoggerConfig() logger.Config {
 		}
 	case config.EnvProduction:
 		cfg = logger.Config{
-			LogLevel: logger.Warn,
+			LogLevel: logger.Error,
 		}
 	default:
 		cfg = logger.Config{
