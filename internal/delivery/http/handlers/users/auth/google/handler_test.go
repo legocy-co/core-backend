@@ -2,7 +2,7 @@ package google
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
+	"fmt"
 	"google.golang.org/api/idtoken"
 	"os"
 	"testing"
@@ -14,8 +14,7 @@ func TestTokenValidation(t *testing.T) {
 	token := os.Getenv("GOOGLE_TEST_TOKEN")
 
 	if token == "" {
-		log.Println("empty token. Skipping test...")
-		return
+		t.Error("Token not found\n")
 	}
 
 	payload, err := idtoken.Validate(context.Background(), token, appID)
@@ -23,5 +22,5 @@ func TestTokenValidation(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 
-	log.Printf("%+v", payload)
+	fmt.Printf("%+v", payload)
 }

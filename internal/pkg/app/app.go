@@ -1,11 +1,9 @@
 package app
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	d "github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	log "github.com/sirupsen/logrus"
 )
 
 type App struct {
@@ -21,12 +19,12 @@ func New() (*App, error) {
 	// Load config
 	err := config.SetupFromEnv()
 	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Config] %v", err.Error()))
+		return nil, err
 	}
 
 	cfg := config.GetAppConfig()
 	if cfg == nil {
-		log.Fatalln("Error getting app config")
+		return nil, config.ErrConfigNotFound
 	}
 
 	//Database

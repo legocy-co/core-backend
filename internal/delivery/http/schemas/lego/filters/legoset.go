@@ -3,7 +3,7 @@ package filters
 import (
 	"github.com/gin-gonic/gin"
 	domain "github.com/legocy-co/legocy/internal/domain/lego/filters"
-	"github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/lib/helpers"
 )
 
 func GetLegoSetFilterCriteria(ctx *gin.Context) *domain.LegoSetFilterCriteria {

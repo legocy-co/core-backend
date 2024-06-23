@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/lego/filters"
-	"github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/lib/helpers"
 )
 
 // TestBindMarketItemAndLegoSetFilters final version

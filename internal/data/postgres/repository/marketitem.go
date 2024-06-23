@@ -14,7 +14,7 @@ import (
 	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/internal/pkg/kafka"
 	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/marketplace"
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/lib/pagination"
 	"gorm.io/gorm"
 )
 

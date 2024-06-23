@@ -11,7 +11,7 @@ import (
 	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/internal/pkg/kafka"
 	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/users"
-	h "github.com/legocy-co/legocy/pkg/helpers"
+	h "github.com/legocy-co/legocy/lib/helpers"
 )
 
 type UserAdminPostgresRepository struct {

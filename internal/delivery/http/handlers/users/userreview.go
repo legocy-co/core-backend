@@ -8,7 +8,7 @@ import (
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/jwt"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"net/http"
 	"strconv"
 )

@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/lib/helpers"
 )
 
 type UploadHandler func(ctx *gin.Context) (string, error)

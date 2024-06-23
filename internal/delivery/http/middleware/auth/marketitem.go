@@ -5,10 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
-	models "github.com/legocy-co/legocy/internal/domain/users/models"
+	"github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/jwt"
-	log "github.com/sirupsen/logrus"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"net/http"
 	"strconv"
 )
@@ -121,7 +120,6 @@ func HasFreeMarketItemsSlot(
 			return
 		}
 
-		log.Info("Checking if user has free slots to create market item")
 		userItemsCount, err := repo.GetSellerMarketItemsAmount(ctx, tokenPayload.ID)
 		if err != nil {
 			ctx.AbortWithStatusJSON(
@@ -136,7 +134,7 @@ func HasFreeMarketItemsSlot(
 					"error": "User has exceeded limit of publishing items"})
 			return
 		}
-		log.Info("User has free slots to create market item")
+
 		ctx.Next()
 	}
 }

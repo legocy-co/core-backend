@@ -3,8 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	r "github.com/legocy-co/legocy/internal/domain/collections/repository"
-	models "github.com/legocy-co/legocy/internal/domain/users/models"
-	log "github.com/sirupsen/logrus"
+	"github.com/legocy-co/legocy/internal/domain/users/models"
 	"net/http"
 	"strconv"
 )
@@ -21,8 +20,6 @@ func CollectionSetOwnerOrAdmin(
 		}
 
 		if tokenPayload.Role == models.ADMIN {
-
-			log.Printf("Current User is Admin. Access Allowed")
 			ctx.Next()
 			return
 		}

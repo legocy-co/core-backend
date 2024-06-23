@@ -6,7 +6,7 @@ import (
 	legoFilterDomain "github.com/legocy-co/legocy/internal/domain/lego/filters"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	"github.com/legocy-co/legocy/internal/pkg/errors"
-	"github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/lib/helpers"
 )
 
 func GetMarketItemFilterCritera(ctx *gin.Context) (*domain.MarketItemFilterCriteria, *errors.AppError) {

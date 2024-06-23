@@ -49,7 +49,8 @@ func (a *App) GetMarketItemService() marketplace.MarketItemService {
 			Repo:      a.GetMarketItemRepo(),
 			ImageRepo: a.GetMarketItemImageRepository(),
 			LikesRepo: a.GetMarketItemLikeRepository(),
-		})
+		},
+	)
 }
 
 func (a *App) GetUserReviewService() marketplace.UserReviewService {

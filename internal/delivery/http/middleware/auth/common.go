@@ -5,7 +5,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	"github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/jwt"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"net/http"
 	"strconv"
 	"strings"

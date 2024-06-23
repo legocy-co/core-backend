@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/lib/pagination"
 	"gorm.io/gorm"
 )
 

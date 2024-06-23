@@ -6,8 +6,7 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/jwt"
-	log "github.com/sirupsen/logrus"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"google.golang.org/api/idtoken"
 )
 
@@ -89,9 +88,5 @@ func (h Handler) saveGoogleImage(payload *idtoken.Payload) {
 		return
 	}
 
-	err := h.uploadImage(user, payload.Claims["picture"].(string))
-	if err != nil {
-		log.Errorf("Failed to save user image: error - %v", err.Error())
-	}
-
+	_ = h.uploadImage(user, payload.Claims["picture"].(string))
 }

@@ -6,8 +6,7 @@ import (
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	r "github.com/legocy-co/legocy/internal/domain/marketplace/repository"
 	"github.com/legocy-co/legocy/internal/pkg/errors"
-	"github.com/legocy-co/legocy/pkg/pagination"
-	log "github.com/sirupsen/logrus"
+	"github.com/legocy-co/legocy/lib/pagination"
 	"golang.org/x/net/context"
 )
 
@@ -82,9 +81,8 @@ func (ms *MarketItemService) ActiveMarketItemDetail(
 }
 
 func (ms *MarketItemService) DeleteMarketItem(c context.Context, id int) *errors.AppError {
-	err := ms.imageRepo.DeleteByMarketItemId(id)
-	if err != nil {
-		log.Printf("Error deleting market item images: %v", err)
+	if err := ms.imageRepo.DeleteByMarketItemId(id); err != nil {
+		return err
 	}
 
 	return ms.repo.DeleteMarketItem(c, id)

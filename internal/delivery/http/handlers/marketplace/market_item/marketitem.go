@@ -2,7 +2,7 @@ package market_item
 
 import (
 	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
-	"github.com/legocy-co/legocy/pkg/jwt"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"net/http"
 	"strconv"
 

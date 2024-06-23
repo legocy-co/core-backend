@@ -9,7 +9,6 @@ import (
 	"github.com/legocy-co/legocy/internal/pkg/events"
 	"github.com/legocy-co/legocy/internal/pkg/kafka"
 	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/image"
-	log "github.com/sirupsen/logrus"
 )
 
 type MarketItemImagePostgresRepository struct {
@@ -187,10 +186,11 @@ func (r MarketItemImagePostgresRepository) DeleteByMarketItemId(marketItemId int
 		return &appErr
 	}
 
-	for _, image := range currentImages {
-		err := r.Delete(int(image.ID))
-		if err != nil {
-			log.Printf("Error deleting image: %v", err.Error())
+	for _, img := range currentImages {
+		if err := r.Delete(int(img.ID)); err != nil {
+			tx.Rollback()
+			appErr := errors.NewAppError(errors.ConflictError, err.Error())
+			return &appErr
 		}
 	}
 

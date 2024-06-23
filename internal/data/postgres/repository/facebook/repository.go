@@ -10,7 +10,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/users/models"
 	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	"github.com/legocy-co/legocy/pkg/helpers"
+	"github.com/legocy-co/legocy/lib/helpers"
 )
 
 type UserAuthRepository struct {
