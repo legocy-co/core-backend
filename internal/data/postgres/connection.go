@@ -3,10 +3,10 @@ package postgres
 import (
 	"fmt"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"gorm.io/gorm/logger"
 	"log/slog"
 	"time"
 
+	log "github.com/legocy-co/legocy/internal/pkg/logging/handlers/gorm"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -42,11 +42,9 @@ func (c *Connection) IsReady() bool {
 func (c *Connection) Init() error {
 
 	conn, err := gorm.Open(
-		postgres.Open(
-			c.getConnectionString(),
-		),
+		postgres.Open(c.getConnectionString()),
 		&gorm.Config{
-			Logger: logger.Default.LogMode(logger.Error),
+			Logger: log.NewLogger(c.log),
 		},
 	)
 
@@ -54,17 +52,8 @@ func (c *Connection) Init() error {
 		return err
 	}
 
-	c.db = conn
-
 	if err := c.applyMigrations(); err != nil {
 		return err
-	}
-
-	if err != nil {
-		c.log.Error(
-			"DB Connection Error",
-			"error", err.Error(),
-		)
 	}
 
 	sqlDB, err := c.db.DB()
@@ -72,9 +61,13 @@ func (c *Connection) Init() error {
 		return err
 	}
 
+	defer sqlDB.Close()
+
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(500)
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
+
+	c.db = conn
 
 	return nil
 }

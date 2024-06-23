@@ -6,5 +6,5 @@ import (
 )
 
 func (a *App) GetEventsDispatcher() events.Dispatcher {
-	return kafka.NewDispatcher()
+	return kafka.NewDispatcher(a.GetLogger())
 }
