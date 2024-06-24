@@ -62,8 +62,6 @@ func (c *Connection) Init() error {
 		return err
 	}
 
-	defer sqlDB.Close()
-
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(500)
 	sqlDB.SetConnMaxLifetime(time.Minute * 30)
