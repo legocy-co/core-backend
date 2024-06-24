@@ -3,7 +3,7 @@ package postgres
 import entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 
 func (c *Connection) applyMigrations() error {
-	return c.db.Debug().AutoMigrate(
+	return c.db.AutoMigrate(
 		entities.UserPostgres{},
 		entities.UserImagePostgres{},
 
