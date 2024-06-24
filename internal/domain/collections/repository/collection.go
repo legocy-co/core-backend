@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"github.com/legocy-co/legocy/internal/domain/collections/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 type UserCollectionRepository interface {

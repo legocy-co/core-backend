@@ -3,10 +3,10 @@ package image
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
-	"github.com/legocy-co/legocy/internal/delivery/http/handlers/utils/image"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/image"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/marketplace"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/pkg/s3"
+	"github.com/legocy-co/legocy/internal/pkg/s3"
 	"net/http"
 	"strconv"
 )

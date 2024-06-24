@@ -2,21 +2,21 @@ package postgres
 
 import (
 	"github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	e "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	"github.com/legocy-co/legocy/pkg/kafka"
-	"github.com/legocy-co/legocy/pkg/kafka/schemas"
-	log "github.com/sirupsen/logrus"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/image"
 )
 
 type MarketItemImagePostgresRepository struct {
-	conn       data.DBConn
+	conn       data.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewMarketItemImagePostgresRepository(conn data.DBConn, dispatcher events.Dispatcher) *MarketItemImagePostgresRepository {
+func NewMarketItemImagePostgresRepository(conn data.Storage, dispatcher events.Dispatcher) *MarketItemImagePostgresRepository {
 	return &MarketItemImagePostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -31,7 +31,7 @@ func (r MarketItemImagePostgresRepository) Store(
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -53,7 +53,7 @@ func (r MarketItemImagePostgresRepository) Get(marketItemID int) ([]*models.Mark
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var marketItemImagesDB []*e.MarketItemImagePostgres
@@ -81,7 +81,7 @@ func (r MarketItemImagePostgresRepository) GetByID(id int) (*models.MarketItemIm
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var marketItemImageDB *e.MarketItemImagePostgres
@@ -106,7 +106,7 @@ func (r MarketItemImagePostgresRepository) Update(
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -126,7 +126,7 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &data.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -152,10 +152,11 @@ func (r MarketItemImagePostgresRepository) Delete(id int) error {
 
 	err := r.dispatcher.ProduceJSONEvent(
 		kafka.MarketItemImagesDeletedTopic,
-		schemas.ImageDeletedEventData{
+		image.ImageDeletedEventData{
 			ImageFilepath: currentImage.ImageURL,
 		},
 	)
+
 	if err != nil {
 		tx.Rollback()
 		appErr := errors.NewAppError(
@@ -173,7 +174,7 @@ func (r MarketItemImagePostgresRepository) DeleteByMarketItemId(marketItemId int
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &data.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -185,10 +186,11 @@ func (r MarketItemImagePostgresRepository) DeleteByMarketItemId(marketItemId int
 		return &appErr
 	}
 
-	for _, image := range currentImages {
-		err := r.Delete(int(image.ID))
-		if err != nil {
-			log.Printf("Error deleting image: %v", err.Error())
+	for _, img := range currentImages {
+		if err := r.Delete(int(img.ID)); err != nil {
+			tx.Rollback()
+			appErr := errors.NewAppError(errors.ConflictError, err.Error())
+			return &appErr
 		}
 	}
 

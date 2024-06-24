@@ -3,8 +3,8 @@ package like
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 	"strconv"
 )
 
@@ -27,7 +27,7 @@ func (h *Handler) LikeMarketItem(c *gin.Context) {
 		return
 	}
 
-	tokenPayload, err := middleware.GetUserPayload(c)
+	tokenPayload, err := auth.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorized"})
 		return

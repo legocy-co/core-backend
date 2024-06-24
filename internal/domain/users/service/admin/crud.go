@@ -4,7 +4,7 @@ import (
 	"context"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
 	r "github.com/legocy-co/legocy/internal/domain/users/repository"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 type UserAdminService struct {

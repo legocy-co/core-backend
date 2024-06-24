@@ -3,26 +3,27 @@ package postgres
 import (
 	"context"
 	"github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entity "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils/filters"
-	"github.com/legocy-co/legocy/internal/delivery/kafka/types/marketplace"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	filtersDomain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	"github.com/legocy-co/legocy/pkg/kafka"
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/marketplace"
+	"github.com/legocy-co/legocy/lib/pagination"
 	"gorm.io/gorm"
 )
 
 type MarketItemPostgresRepository struct {
-	conn       data.DBConn
+	conn       data.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewMarketItemPostgresRepository(conn data.DBConn, dispatcher events.Dispatcher) MarketItemPostgresRepository {
+func NewMarketItemPostgresRepository(conn data.Storage, dispatcher events.Dispatcher) MarketItemPostgresRepository {
 	return MarketItemPostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -34,7 +35,7 @@ func (r MarketItemPostgresRepository) GetMarketItems(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return pagination.NewEmptyPage[*models.MarketItem](), &data.ErrConnectionLost
+		return pagination.NewEmptyPage[*models.MarketItem](), &postgres.ErrConnectionLost
 	}
 
 	query := db.Model(
@@ -87,7 +88,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsAuthorized(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return pagination.NewEmptyPage[*models.MarketItem](), &data.ErrConnectionLost
+		return pagination.NewEmptyPage[*models.MarketItem](), &postgres.ErrConnectionLost
 	}
 
 	query := db.Model(
@@ -144,7 +145,7 @@ func (r MarketItemPostgresRepository) GetActiveMarketItemByID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entity.MarketItemPostgres
@@ -169,7 +170,7 @@ func (r MarketItemPostgresRepository) GetMarketItemByID(c context.Context, id in
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entity.MarketItemPostgres
@@ -196,7 +197,7 @@ func (r MarketItemPostgresRepository) GetActiveMarketItemsBySellerID(
 	var itemsDB []*entity.MarketItemPostgres
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	result := db.Model(&entity.MarketItemPostgres{}).
@@ -228,7 +229,7 @@ func (r MarketItemPostgresRepository) GetMarketItemsBySellerID(c context.Context
 	var itemsDB []*entity.MarketItemPostgres
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	result := db.Model(&entity.MarketItemPostgres{UserPostgresID: uint(sellerID)}).
@@ -263,7 +264,7 @@ func (r MarketItemPostgresRepository) GetMarketItemSellerID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return count, &data.ErrConnectionLost
+		return count, &postgres.ErrConnectionLost
 	}
 
 	err := db.Model(entity.MarketItemPostgres{}).Where(
@@ -283,7 +284,7 @@ func (r MarketItemPostgresRepository) GetSellerMarketItemsAmount(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return count, &data.ErrConnectionLost
+		return count, &postgres.ErrConnectionLost
 	}
 
 	res := db.Model(
@@ -305,14 +306,14 @@ func (r MarketItemPostgresRepository) CreateMarketItem(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
 
 	entity := entity.FromMarketItemValueObject(item)
 	if entity == nil {
-		return nil, &data.ErrItemNotFound
+		return nil, &postgres.ErrItemNotFound
 	}
 
 	result := tx.Create(&entity)
@@ -331,7 +332,7 @@ func (r MarketItemPostgresRepository) DeleteMarketItem(c context.Context, id int
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &data.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -364,7 +365,7 @@ func (r MarketItemPostgresRepository) UpdateMarketItemByID(
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entity.MarketItemPostgres

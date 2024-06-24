@@ -3,7 +3,7 @@ package marketplace
 import (
 	lego "github.com/legocy-co/legocy/internal/domain/lego/models"
 	users "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 var (

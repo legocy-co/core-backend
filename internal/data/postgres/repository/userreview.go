@@ -2,18 +2,19 @@ package postgres
 
 import (
 	"context"
+	"github.com/legocy-co/legocy/internal/data/postgres"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 
 	d "github.com/legocy-co/legocy/internal/data"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
 )
 
 type UserReviewPostgresRepository struct {
-	conn d.DBConn
+	conn d.Storage
 }
 
-func NewUserReviewPostgresRepository(conn d.DBConn) *UserReviewPostgresRepository {
+func NewUserReviewPostgresRepository(conn d.Storage) *UserReviewPostgresRepository {
 	return &UserReviewPostgresRepository{conn: conn}
 }
 
@@ -22,7 +23,7 @@ func (r *UserReviewPostgresRepository) GetUserReviewsTotals(c context.Context, s
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var totalReviews int64
@@ -53,7 +54,7 @@ func (r *UserReviewPostgresRepository) GetUserReviews(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	res := db.Model(&entities.UserReviewPostgres{}).
@@ -84,7 +85,7 @@ func (r *UserReviewPostgresRepository) GetUserReviewByID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.UserReviewPostgres
@@ -111,7 +112,7 @@ func (r *UserReviewPostgresRepository) GetUserReviewsBySellerID(
 	var userReviewsDB []*entities.UserReviewPostgres
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	result := db.Model(&entities.UserReviewPostgres{SellerPostgresID: uint(sellerID)}).
@@ -124,7 +125,7 @@ func (r *UserReviewPostgresRepository) GetUserReviewsBySellerID(
 	}
 
 	if len(userReviewsDB) == 0 {
-		return nil, &d.ErrItemNotFound
+		return nil, &postgres.ErrItemNotFound
 	}
 
 	userReviews := make([]*models.UserReview, 0, len(userReviewsDB))
@@ -148,7 +149,7 @@ func (r *UserReviewPostgresRepository) GetReviewerID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return count, &d.ErrConnectionLost
+		return count, &postgres.ErrConnectionLost
 	}
 
 	err := db.Model(entities.UserReviewPostgres{}).
@@ -167,12 +168,12 @@ func (r *UserReviewPostgresRepository) CreateUserReview(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	entity := entities.FromUserReviewValueObject(review)
 	if entity == nil {
-		return &d.ErrItemNotFound
+		return &postgres.ErrItemNotFound
 	}
 
 	result := db.Create(&entity)
@@ -190,7 +191,7 @@ func (r *UserReviewPostgresRepository) DeleteUserReview(c context.Context, id in
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	result := db.Delete(entities.UserReviewPostgres{}, id)

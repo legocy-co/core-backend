@@ -3,10 +3,10 @@ package userImage
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/internal/delivery/http/handlers/utils/image"
+	"github.com/legocy-co/legocy/internal/delivery/http/handlers/image"
 	schemas "github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	userModels "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/pkg/s3"
+	"github.com/legocy-co/legocy/internal/pkg/s3"
 	"net/http"
 	"strconv"
 )

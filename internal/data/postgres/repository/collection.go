@@ -3,24 +3,25 @@ package postgres
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/domain/collections/models"
 	auth "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 type CollectionPostgresRepository struct {
-	conn d.DBConn
+	conn d.Storage
 }
 
-func NewCollectionPostgresRepository(conn d.DBConn) CollectionPostgresRepository {
+func NewCollectionPostgresRepository(conn d.Storage) CollectionPostgresRepository {
 	return CollectionPostgresRepository{conn: conn}
 }
 
 func (r CollectionPostgresRepository) GetUserCollection(c context.Context, userID int) (*models.LegoCollection, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var userLegoSetsDB []*entities.UserLegoSetPostgres
@@ -64,7 +65,7 @@ func (r CollectionPostgresRepository) AddSetToUserCollection(
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -87,7 +88,7 @@ func (r CollectionPostgresRepository) RemoveSetFromUserCollection(
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -111,7 +112,7 @@ func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.UserLegoSetPostgres
@@ -138,7 +139,7 @@ func (r CollectionPostgresRepository) UpdateUserCollectionSetByID(
 func (r CollectionPostgresRepository) GetCollectionSetOwner(c context.Context, collectionSetID int) (int, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return -1, &d.ErrConnectionLost
+		return -1, &postgres.ErrConnectionLost
 	}
 
 	var ownerID int
@@ -157,7 +158,7 @@ func (r CollectionPostgresRepository) GetUserCollectionSetsAmount(userID int) (i
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return 0, &d.ErrConnectionLost
+		return 0, &postgres.ErrConnectionLost
 	}
 
 	var total int64

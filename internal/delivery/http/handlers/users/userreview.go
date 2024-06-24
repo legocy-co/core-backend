@@ -3,12 +3,12 @@ package users
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/auth/jwt"
-	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"net/http"
 	"strconv"
 )
@@ -98,7 +98,7 @@ func (h *UserReviewHandler) UserReviewDetail(c *gin.Context) {
 //	@Security	JWT
 func (h *UserReviewHandler) CreateUserReview(c *gin.Context) {
 	// If we get here, then token payload is valid
-	tokenString := middleware.GetAuthTokenHeader(c)
+	tokenString := auth.GetAuthTokenHeader(c)
 	userPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,

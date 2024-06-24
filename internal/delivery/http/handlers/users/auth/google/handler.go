@@ -4,7 +4,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/users/repository"
 	"github.com/legocy-co/legocy/internal/domain/users/service"
 	"github.com/legocy-co/legocy/internal/pkg/app"
-	"github.com/legocy-co/legocy/pkg/s3/client"
+	"github.com/legocy-co/legocy/internal/pkg/s3/client"
 )
 
 type Handler struct {

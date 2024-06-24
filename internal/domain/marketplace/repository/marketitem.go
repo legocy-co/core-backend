@@ -4,8 +4,8 @@ import (
 	"context"
 	domain "github.com/legocy-co/legocy/internal/domain/marketplace/filters"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
+	"github.com/legocy-co/legocy/lib/pagination"
 )
 
 type MarketItemRepository interface {

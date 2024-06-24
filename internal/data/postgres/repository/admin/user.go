@@ -3,22 +3,23 @@ package admin
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
-	"github.com/legocy-co/legocy/internal/delivery/kafka/types/users"
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	h "github.com/legocy-co/legocy/pkg/helpers"
-	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/users"
+	h "github.com/legocy-co/legocy/lib/helpers"
 )
 
 type UserAdminPostgresRepository struct {
-	conn       d.DBConn
+	conn       d.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewUserAdminPostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) UserAdminPostgresRepository {
+func NewUserAdminPostgresRepository(conn d.Storage, dispatcher events.Dispatcher) UserAdminPostgresRepository {
 	return UserAdminPostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -30,7 +31,7 @@ func (r UserAdminPostgresRepository) GetUsers(c context.Context) ([]*models.User
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	db.Find(&usersAdminDb)
@@ -53,7 +54,7 @@ func (r UserAdminPostgresRepository) GetUserByID(
 	c context.Context, id int) (*models.UserAdmin, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var userAdmin *models.UserAdmin
@@ -73,7 +74,7 @@ func (r UserAdminPostgresRepository) GetUserByEmail(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.UserPostgres
@@ -88,7 +89,7 @@ func (r UserAdminPostgresRepository) GetUserByEmail(
 func (r UserAdminPostgresRepository) CreateAdmin(c context.Context, ua *models.UserAdminValueObject, password string) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -128,7 +129,7 @@ func (r UserAdminPostgresRepository) UpdateUserByID(
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.UserPostgres
@@ -167,7 +168,7 @@ func (r UserAdminPostgresRepository) UpdateUserByID(
 func (r UserAdminPostgresRepository) DeleteUser(c context.Context, userId int) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	result := db.Delete(entities.UserPostgres{}, userId)
@@ -182,7 +183,7 @@ func (r UserAdminPostgresRepository) DeleteUser(c context.Context, userId int) *
 func (r UserAdminPostgresRepository) ValidateUser(c context.Context, email, password string) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	var user *entities.UserPostgres

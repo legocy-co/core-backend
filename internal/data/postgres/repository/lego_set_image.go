@@ -2,20 +2,21 @@ package postgres
 
 import (
 	"github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	"github.com/legocy-co/legocy/pkg/kafka"
-	"github.com/legocy-co/legocy/pkg/kafka/schemas"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
+	schemas "github.com/legocy-co/legocy/internal/pkg/kafka/schemas/image"
 )
 
 type LegoSetImagePostgresRepository struct {
-	conn       data.DBConn
+	conn       data.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewLegoSetImagePostgresRepository(conn data.DBConn, dispatcher events.Dispatcher) LegoSetImagePostgresRepository {
+func NewLegoSetImagePostgresRepository(conn data.Storage, dispatcher events.Dispatcher) LegoSetImagePostgresRepository {
 	return LegoSetImagePostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -26,7 +27,7 @@ func (r LegoSetImagePostgresRepository) Get(legoSetID int) ([]*models.LegoSetIma
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var images []*entities.LegoSetImagePostgres
@@ -46,7 +47,7 @@ func (r LegoSetImagePostgresRepository) Get(legoSetID int) ([]*models.LegoSetIma
 func (r LegoSetImagePostgresRepository) Store(vo models.LegoSetImageValueObject) (*models.LegoSetImage, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &data.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
@@ -65,7 +66,7 @@ func (r LegoSetImagePostgresRepository) Store(vo models.LegoSetImageValueObject)
 func (r LegoSetImagePostgresRepository) Delete(id int) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &data.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()

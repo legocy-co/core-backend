@@ -2,7 +2,7 @@ package pagination
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/lib/pagination"
 	"strconv"
 )
 

@@ -2,8 +2,8 @@ package image
 
 import (
 	"github.com/legocy-co/legocy/internal/domain/users/errors"
-	"github.com/legocy-co/legocy/pkg/helpers"
-	"github.com/legocy-co/legocy/pkg/s3"
+	"github.com/legocy-co/legocy/internal/pkg/s3"
+	"github.com/legocy-co/legocy/lib/helpers"
 	"strings"
 )
 

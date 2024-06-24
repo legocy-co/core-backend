@@ -3,22 +3,23 @@ package postgres
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
-	"github.com/legocy-co/legocy/internal/delivery/kafka/types/users"
 	e "github.com/legocy-co/legocy/internal/domain/users/errors"
 	models "github.com/legocy-co/legocy/internal/domain/users/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	h "github.com/legocy-co/legocy/pkg/helpers"
-	"github.com/legocy-co/legocy/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka"
+	"github.com/legocy-co/legocy/internal/pkg/kafka/schemas/users"
+	h "github.com/legocy-co/legocy/lib/helpers"
 )
 
 type UserPostgresRepository struct {
-	conn       d.DBConn
+	conn       d.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewUserPostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) UserPostgresRepository {
+func NewUserPostgresRepository(conn d.Storage, dispatcher events.Dispatcher) UserPostgresRepository {
 	return UserPostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -29,7 +30,7 @@ func (r UserPostgresRepository) CreateUser(c context.Context, u *models.User, pa
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 	passwordHash, err := h.HashPassword(password)
 	if err != nil {
@@ -61,7 +62,7 @@ func (r UserPostgresRepository) UpdateUser(id int, vo models.UserValueObject) *e
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.UserPostgres
@@ -92,7 +93,7 @@ func (r UserPostgresRepository) ValidateUser(c context.Context, email, password 
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.UserPostgres
@@ -115,7 +116,7 @@ func (r UserPostgresRepository) GetUsers(c context.Context) ([]*models.User, *er
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	db.Preload("Images").Find(usersDb)
@@ -140,7 +141,7 @@ func (r UserPostgresRepository) GetUserByEmail(c context.Context, email string) 
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return user, &d.ErrConnectionLost
+		return user, &postgres.ErrConnectionLost
 	}
 
 	db.Where("email = ?", email).First(&entity)
@@ -158,7 +159,7 @@ func (r UserPostgresRepository) GetUserByID(c context.Context, id int) (*models.
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return user, &d.ErrConnectionLost
+		return user, &postgres.ErrConnectionLost
 	}
 
 	db.Preload("Images").First(&entity, id)
@@ -173,7 +174,7 @@ func (r UserPostgresRepository) GetUserByID(c context.Context, id int) (*models.
 func (r UserPostgresRepository) DeleteUser(c context.Context, id int) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()

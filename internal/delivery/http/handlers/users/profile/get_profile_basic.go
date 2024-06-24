@@ -3,8 +3,8 @@ package profile
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/legocy-co/legocy/internal/delivery/http/errors"
+	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/users"
-	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 
 // CurrentUserProfileHeader
@@ -19,7 +19,7 @@ import (
 //
 //	@Security	JWT
 func (h *UserProfilePageHandler) CurrentUserProfileHeader(ctx *gin.Context) {
-	tokenPayload, err := middleware.GetUserPayload(ctx)
+	tokenPayload, err := auth.GetUserPayload(ctx)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return

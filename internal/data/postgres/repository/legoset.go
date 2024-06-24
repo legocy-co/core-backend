@@ -3,21 +3,22 @@ package postgres
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	pgFilter "github.com/legocy-co/legocy/internal/data/postgres/utils/filters"
 	"github.com/legocy-co/legocy/internal/domain/lego"
 	"github.com/legocy-co/legocy/internal/domain/lego/filters"
 	models "github.com/legocy-co/legocy/internal/domain/lego/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
+	"github.com/legocy-co/legocy/lib/pagination"
 )
 
 type LegoSetPostgresRepository struct {
-	conn d.DBConn
+	conn d.Storage
 }
 
-func NewLegoSetPostgresRepository(conn d.DBConn) LegoSetPostgresRepository {
+func NewLegoSetPostgresRepository(conn d.Storage) LegoSetPostgresRepository {
 	return LegoSetPostgresRepository{conn: conn}
 }
 
@@ -25,7 +26,7 @@ func (r LegoSetPostgresRepository) CreateLegoSet(c context.Context, s *models.Le
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	entity := entities.FromLegoSetValueObject(s)
@@ -45,7 +46,7 @@ func (r LegoSetPostgresRepository) GetLegoSets(c context.Context) ([]*models.Leg
 	var err *errors.AppError
 
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entitiesList []*entities.LegoSetPostgres
@@ -73,7 +74,7 @@ func (r LegoSetPostgresRepository) GetLegoSetByID(c context.Context, id int) (*m
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return legoSet, &d.ErrConnectionLost
+		return legoSet, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.LegoSetPostgres
@@ -96,7 +97,7 @@ func (r LegoSetPostgresRepository) DeleteLegoSet(c context.Context, id int) *err
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	_err := db.Delete(&entities.LegoSetPostgres{}, id).Error
@@ -113,7 +114,7 @@ func (r LegoSetPostgresRepository) GetSetsPage(ctx pagination.PaginationContext,
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return pagination.Page[models.LegoSet]{}, &d.ErrConnectionLost
+		return pagination.Page[models.LegoSet]{}, &postgres.ErrConnectionLost
 	}
 
 	var total int64
@@ -152,7 +153,7 @@ func (r LegoSetPostgresRepository) UpdateLegoSetByID(legoSetID int, vo *models.L
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	var currentEntity *entities.LegoSetPostgres

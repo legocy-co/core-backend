@@ -2,7 +2,7 @@ package models
 
 import (
 	lego "github.com/legocy-co/legocy/internal/domain/lego/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 var (

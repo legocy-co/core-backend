@@ -3,21 +3,22 @@ package admin
 import (
 	"context"
 	d "github.com/legocy-co/legocy/internal/data"
+	"github.com/legocy-co/legocy/internal/data/postgres"
 	entities "github.com/legocy-co/legocy/internal/data/postgres/entity"
 	"github.com/legocy-co/legocy/internal/data/postgres/utils"
 	e "github.com/legocy-co/legocy/internal/domain/marketplace/errors"
 	models "github.com/legocy-co/legocy/internal/domain/marketplace/models"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 	"github.com/legocy-co/legocy/internal/pkg/events"
-	"github.com/legocy-co/legocy/pkg/pagination"
+	"github.com/legocy-co/legocy/lib/pagination"
 )
 
 type MarketItemAdminPostgresRepository struct {
-	conn       d.DBConn
+	conn       d.Storage
 	dispatcher events.Dispatcher
 }
 
-func NewMarketItemAdminPostgresRepository(conn d.DBConn, dispatcher events.Dispatcher) MarketItemAdminPostgresRepository {
+func NewMarketItemAdminPostgresRepository(conn d.Storage, dispatcher events.Dispatcher) MarketItemAdminPostgresRepository {
 	return MarketItemAdminPostgresRepository{
 		conn:       conn,
 		dispatcher: dispatcher,
@@ -29,7 +30,7 @@ func (r MarketItemAdminPostgresRepository) GetMarketItems(ctx pagination.Paginat
 	db := r.conn.GetDB()
 
 	if db == nil {
-		return pagination.NewEmptyPage[*models.MarketItemAdmin](), &d.ErrConnectionLost
+		return pagination.NewEmptyPage[*models.MarketItemAdmin](), &postgres.ErrConnectionLost
 	}
 
 	var itemsDB []*entities.MarketItemPostgres
@@ -70,7 +71,7 @@ func (r MarketItemAdminPostgresRepository) GetMarketItems(ctx pagination.Paginat
 func (r MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, id int) (*models.MarketItemAdmin, *errors.AppError) {
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.MarketItemPostgres
@@ -94,14 +95,14 @@ func (r MarketItemAdminPostgresRepository) GetMarketItemByID(c context.Context, 
 func (r MarketItemAdminPostgresRepository) CreateMarketItem(c context.Context, vo *models.MarketItemAdminValueObject) *errors.AppError {
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()
 
 	entity := entities.FromMarketItemAdminValueObject(*vo)
 	if entity == nil {
-		return &d.ErrItemNotFound
+		return &postgres.ErrItemNotFound
 	}
 
 	if err := tx.Create(&entity).Error; err != nil {
@@ -121,7 +122,7 @@ func (r MarketItemAdminPostgresRepository) UpdateMarketItemByID(
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return nil, &d.ErrConnectionLost
+		return nil, &postgres.ErrConnectionLost
 	}
 
 	var entity *entities.MarketItemPostgres
@@ -150,7 +151,7 @@ func (r MarketItemAdminPostgresRepository) DeleteMarketItemByID(c context.Contex
 
 	db := r.conn.GetDB()
 	if db == nil {
-		return &d.ErrConnectionLost
+		return &postgres.ErrConnectionLost
 	}
 
 	tx := db.Begin()

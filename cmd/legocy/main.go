@@ -1,15 +1,19 @@
 package main
 
 import (
-	router "github.com/legocy-co/legocy/internal/delivery/http/router/v1"
+	"github.com/legocy-co/legocy/internal/delivery/http/server"
 	"github.com/legocy-co/legocy/internal/pkg/app"
+	"log"
 )
 
 func main() {
-	_app := app.New()
+	_app, err := app.New()
+	if err != nil {
+		log.Fatalf("Error while initializing application: %v", err)
+	}
 
-	srv := router.GetV1Router(_app)
+	srv := server.New(_app)
 	if err := srv.Run("8080"); err != nil {
-		panic(err)
+		log.Fatalf("Error while running server: %v", err)
 	}
 }

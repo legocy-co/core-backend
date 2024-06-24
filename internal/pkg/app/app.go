@@ -1,73 +1,37 @@
 package app
 
 import (
-	"context"
-	"fmt"
 	"github.com/joho/godotenv"
 	d "github.com/legocy-co/legocy/internal/data"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/kafka"
-	log "github.com/sirupsen/logrus"
-	"time"
 )
 
-func New() *App {
+type App struct {
+	database d.Storage
+}
+
+func New() (*App, error) {
 
 	godotenv.Load()
 
-	app := App{}
-
-	// Load config json
-	log.SetFormatter(&log.JSONFormatter{})
+	app := &App{}
 
 	// Load config
 	err := config.SetupFromEnv()
 	if err != nil {
-		log.Fatalln(fmt.Sprintf("[Config] %v", err.Error()))
+		return nil, err
 	}
 
 	cfg := config.GetAppConfig()
 	if cfg == nil {
-		log.Fatalln("Error getting app config")
+		return nil, config.ErrConfigNotFound
 	}
 
 	//Database
 	dbCfg := config.GetDBConfig()
-	if cfg == nil {
-		log.Fatalln("empty data config")
-	}
-	app.setDatabase(dbCfg)
-
-	// Check all deps
-	if !app.isReady() {
-		panic("Some dependencies failed to inject")
+	if err := app.setDatabase(dbCfg); err != nil {
+		return nil, err
 	}
 
-	return &app
-}
-
-type App struct {
-	database d.DBConn
-}
-
-func (a *App) isReady() bool {
-	dbReady := a.database.IsReady()
-
-	if !dbReady {
-		log.Error("DB Connection Failed...")
-		return false
-	}
-
-	log.Info("Checking Kafka...")
-
-	ctx, cf := context.WithTimeout(context.Background(), time.Second*3)
-	defer cf()
-
-	kafkaReady := kafka.IsKafkaConnected(ctx)
-	if !kafkaReady {
-		log.Error("Kafka Connection Failed...")
-		return false
-	}
-
-	return true
+	return app, nil
 }

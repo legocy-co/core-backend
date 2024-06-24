@@ -1,6 +1,8 @@
 package market_item
 
 import (
+	"github.com/legocy-co/legocy/internal/delivery/http/middleware/auth"
+	"github.com/legocy-co/legocy/lib/jwt"
 	"net/http"
 	"strconv"
 
@@ -11,8 +13,6 @@ import (
 	"github.com/legocy-co/legocy/internal/delivery/http/schemas/utils/pagination"
 	s "github.com/legocy-co/legocy/internal/domain/marketplace/service"
 	"github.com/legocy-co/legocy/internal/pkg/config"
-	"github.com/legocy-co/legocy/pkg/auth/jwt"
-	"github.com/legocy-co/legocy/pkg/auth/jwt/middleware"
 )
 
 type MarketItemHandler struct {
@@ -102,7 +102,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 		return
 	}
 
-	tokenPayload, err := middleware.GetUserPayload(c)
+	tokenPayload, err := auth.GetUserPayload(c)
 	if err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -147,7 +147,7 @@ func (h *MarketItemHandler) ListMarketItemsAuthorized(c *gin.Context) {
 //
 //	@Security	JWT
 func (h *MarketItemHandler) GetFavorites(ctx *gin.Context) {
-	tokenPayload, err := middleware.GetUserPayload(ctx)
+	tokenPayload, err := auth.GetUserPayload(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(
 			http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -227,7 +227,7 @@ func (h *MarketItemHandler) MarketItemDetail(c *gin.Context) {
 //	@Security	JWT
 func (h *MarketItemHandler) CreateMarketItem(c *gin.Context) {
 	// If we get here, then token payload is valid
-	tokenString := middleware.GetAuthTokenHeader(c)
+	tokenString := auth.GetAuthTokenHeader(c)
 	userPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 	if !ok {
 		c.AbortWithStatusJSON(
@@ -314,7 +314,7 @@ func (h *MarketItemHandler) UpdateMarketItemByID(c *gin.Context) {
 		return
 	}
 
-	tokenString := middleware.GetAuthTokenHeader(c)
+	tokenString := auth.GetAuthTokenHeader(c)
 	userPayload, ok := jwt.ParseTokenClaims(tokenString, config.GetAppConfig().JwtConf.SecretKey)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusUnauthorized,

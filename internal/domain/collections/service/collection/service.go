@@ -9,7 +9,7 @@ import (
 	"github.com/legocy-co/legocy/internal/domain/collections/repository"
 	users "github.com/legocy-co/legocy/internal/domain/users/models"
 	u "github.com/legocy-co/legocy/internal/domain/users/repository"
-	"github.com/legocy-co/legocy/internal/pkg/app/errors"
+	"github.com/legocy-co/legocy/internal/pkg/errors"
 )
 
 type UserCollectionService struct {
