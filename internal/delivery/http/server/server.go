@@ -41,8 +41,9 @@ func New(app *app.App) *Server {
 	// Use middleware
 	e.Use(
 		gin.Recovery(),
+		logging.ContextLoggerMiddleware(app.GetLogger()),
 		id.RequestIDMiddleware(),
-		logging.JSONLogMiddleware(app.GetLogger()),
+		logging.RequestLoggingMiddleware(),
 	)
 
 	// Add routes

@@ -2,6 +2,7 @@ package logging
 
 import (
 	"github.com/legocy-co/legocy/internal/pkg/config"
+	"golang.org/x/net/context"
 	"log/slog"
 	"os"
 )
@@ -21,5 +22,10 @@ func SetupLogger(env config.Environment) *slog.Logger {
 		)
 	}
 
+	return log
+}
+
+func MustGetLogger(ctx context.Context) *slog.Logger {
+	log, _ := ctx.Value("log").(*slog.Logger)
 	return log
 }

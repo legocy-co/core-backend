@@ -2,12 +2,16 @@ package logging
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/legocy-co/legocy/internal/pkg/logging"
 	"log/slog"
 	"time"
 )
 
-func JSONLogMiddleware(log *slog.Logger) gin.HandlerFunc {
+func RequestLoggingMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		log := logging.MustGetLogger(c)
+
 		// Start timer
 		startTime := time.Now()
 
@@ -23,7 +27,6 @@ func JSONLogMiddleware(log *slog.Logger) gin.HandlerFunc {
 			slog.Int64("response_time", duration),
 			slog.String("method", c.Request.Method),
 			slog.String("path", c.Request.RequestURI),
-			slog.String("request_id", c.GetHeader("X-Request-ID")),
 			slog.Int("response_status", c.Writer.Status()),
 		)
 
