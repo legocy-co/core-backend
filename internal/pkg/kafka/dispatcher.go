@@ -23,9 +23,6 @@ func (d *Dispatcher) ProduceJSONEvent(topicName string, data any) error {
 		return err
 	}
 
-	defer producer.Flush(1000)
-	defer producer.Close()
-
 	go func() {
 		for e := range producer.Events() {
 			switch ev := e.(type) {
@@ -46,7 +43,12 @@ func (d *Dispatcher) ProduceJSONEvent(topicName string, data any) error {
 		}
 	}()
 
-	return produceJSONEvent(producer, topicName, data)
+	err = produceJSONEvent(producer, topicName, data)
+
+	producer.Flush(1000)
+	producer.Close()
+
+	return err
 }
 
 func produceJSONEvent(producer *kafka.Producer, topicName string, data any) error {
