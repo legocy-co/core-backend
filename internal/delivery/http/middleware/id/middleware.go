@@ -9,10 +9,15 @@ import (
 
 func RequestIDMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Request.Header.Set("X-Request-ID", uuid.New().String())
+		requestID := uuid.New().String()
 
+		// Set Header
+		c.Request.Header.Set("X-Request-ID", requestID)
+
+		// Modify logger
 		log := logging.MustGetLogger(c)
-		log = log.With(slog.String("request_id", c.GetHeader("X-Request-ID")))
+		log = log.With(slog.String("request_id", requestID))
+		c.Set("log", log)
 
 		c.Next()
 	}

@@ -23,6 +23,7 @@ func RequestLoggingMiddleware() gin.HandlerFunc {
 
 		// Extract request attributes
 		logEntry := log.With(
+			slog.String("action", "request_processed"),
 			slog.String("client_ip", c.ClientIP()),
 			slog.Int64("response_time", duration),
 			slog.String("method", c.Request.Method),
