@@ -6,23 +6,19 @@ import (
 )
 
 func getLoggerConfig() logger.Config {
-	var cfg logger.Config
-
 	appCfg := config.GetAppConfig()
 	switch appCfg.Environment {
 	case config.EnvDevelopment:
-		cfg = logger.Config{
+		return logger.Config{
 			LogLevel: logger.Info,
 		}
 	case config.EnvProduction:
-		cfg = logger.Config{
+		return logger.Config{
 			LogLevel: logger.Error,
 		}
 	default:
-		cfg = logger.Config{
+		return logger.Config{
 			LogLevel: logger.Silent,
 		}
 	}
-
-	return cfg
 }

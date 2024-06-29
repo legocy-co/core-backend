@@ -45,7 +45,7 @@ func (l *Logger) Error(ctx context.Context, msg string, data ...interface{}) {
 }
 
 func (l *Logger) Trace(ctx context.Context, begin time.Time, fc func() (sql string, rowsAffected int64), err error) {
-	if l.config.LogLevel <= logger.Silent {
+	if l.config.LogLevel <= logger.Info {
 		return
 	}
 
