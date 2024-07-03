@@ -21,7 +21,7 @@
 go.work
 
 
-#idea 
+#idea
 .idea
 
 deploy/data/
@@ -30,3 +30,5 @@ deploy/data/
 .env
 
 .bin/
+
+.DS_Store
