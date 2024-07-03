@@ -75,8 +75,15 @@ func (up *UserPostgres) GetUpdatedUserAdmin(
 	up.Username = vo.Username
 	up.Email = vo.Email
 	up.Role = vo.Role
-	up.GoogleID = vo.GoogleID
-	up.FacebookID = vo.FacebookID
+
+	if vo.GoogleID != nil {
+		up.GoogleID = vo.GoogleID
+	}
+
+	if vo.FacebookID != nil {
+		up.FacebookID = vo.FacebookID
+	}
+
 	return up
 }
 
@@ -105,7 +112,14 @@ func (up *UserPostgres) ToUserAdmin() *models.UserAdmin {
 func GetUpdatedUserEntity(vo models.UserValueObject, up *UserPostgres) *UserPostgres {
 	up.Username = vo.Username
 	up.Email = vo.Email
-	up.GoogleID = vo.GoogleID
-	up.FacebookID = vo.FacebookID
+
+	if vo.GoogleID != nil {
+		up.GoogleID = vo.GoogleID
+	}
+
+	if vo.FacebookID != nil {
+		up.FacebookID = vo.FacebookID
+	}
+
 	return up
 }
